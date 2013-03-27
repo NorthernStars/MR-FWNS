@@ -1,9 +1,11 @@
 <?xml version="1.0"?>
 <project name="Ant-Test" default="main" basedir=".">
+    
+  <property name="jar.name" value="bot_network.jar" />
 
   <property name="src.dir" location="src" />
   <property name="build.dir" location="build" />
-  <property name="dist.dir" location="../Jars/bot_lib" />
+  <property name="dist.dir" location="../../mixedreality_bot/bot_lib" />
   <property name="docs.dir" location="docs" />
 
 
@@ -16,7 +18,7 @@
   <target name="clean">
     <delete dir="${build.dir}" />
     <delete dir="${docs.dir}" />
-    <delete  file="${dist.dir}/FWNS_Network.jar" />
+    <delete  file="${dist.dir}/${jar.name}" />
   </target>
 
   <!-- Creates the  build, docs and dist directory-->
@@ -43,7 +45,7 @@
 
   <!--Creates the deployable jar file  -->
   <target name="jar" depends="compile">
-    <jar destfile="${dist.dir}/FWNS_Network.jar" basedir="${build.dir}">
+    <jar destfile="${dist.dir}/${jar.name}" basedir="${build.dir}">
     <manifest>
     </manifest>
     </jar>

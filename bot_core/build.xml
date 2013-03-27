@@ -1,9 +1,11 @@
 <?xml version="1.0"?>
 <project name="Ant-Test" default="main" basedir=".">
+    
+	  <property name="jar.name" value="bot_nothernstars.jar" />
 
-	 <property name="src.dir" location="src" />
+	  <property name="src.dir" location="src" />
 	  <property name="build.dir" location="build" />
-	  <property name="dist.dir" location="../Jars" />
+	  <property name="dist.dir" location="../../mixedreality_bot/" />
 	  <property name="docs.dir" location="docs" />
 
 
@@ -16,7 +18,7 @@
 	  <target name="clean">
 	    <delete dir="${build.dir}" /> 
 	    <delete dir="${docs.dir}" />
-	    <delete  file="${dist.dir}/FWNS_Bot.jar" />
+	    <delete  file="${dist.dir}/${jar.name}" />
 	  </target>
 
 	  <!-- Creates the  build, docs and dist directory-->
@@ -43,9 +45,9 @@
 
 	  <!--Creates the deployable jar file  -->
 	  <target name="jar" depends="compile">
-	    <jar destfile="${dist.dir}/FWNS_Bot.jar" basedir="${build.dir}">
+	    <jar destfile="${dist.dir}/${jar.name}" basedir="${build.dir}">
 	    	<manifest>
-	    	  	<attribute name="Class-Path" value=". bot_lib/FWNS_Essentials.jar bot_lib/swt.jar bot_lib/FWNS_Network.jar bot_lib/commons-cli-1.2.jar"/>
+	    	  	<attribute name="Class-Path" value=". bot_lib/bot_essentials.jar bot_lib/swt.jar bot_lib/bot_network.jar bot_lib/commons-cli-1.2.jar"/>
 	    	    <attribute name="Main-Class" value="core.Main"/>
 	    	</manifest>
 	    	<fileset dir="${src.dir}">
