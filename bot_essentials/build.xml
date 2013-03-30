@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="Ant-Test" default="main" basedir=".">
+<project name="bot_essentials" default="main" basedir=".">
 	
   <property name="jar.name" value="bot_essentials.jar" />
 
