@@ -12,28 +12,8 @@ import fwns_network.universal.NetworkCommunication;
 
 public class FromServerManagement extends Thread{
 
-	private NetworkCommunication mFromServerCommunication = null;
 	private boolean mManageMessagesFromServer = false;
     private AtomicLong mLastReceivedMessage = new AtomicLong( 0 );
-	
-	private ArtificialIntelligence mCurrentBotAI = null;
-	
-	public FromServerManagement() {
-		
-	}
-	
-	public void setServerConnection( NetworkCommunication aServerCommunication ) {
-
-	    stopManagement();
-        mFromServerCommunication = aServerCommunication;
-        
-    }
-
-	public void setArtificialIntelligence( ArtificialIntelligence aBotAI ){
-		
-		mCurrentBotAI = aBotAI;
-		
-	}
 	
 	@Override
 	public void start(){
@@ -44,7 +24,7 @@ public class FromServerManagement extends Thread{
 	
 	public void startManagement() throws NullPointerException{
 
-		if( mFromServerCommunication != null && !isAlive() ) {
+		if( Core.getInstance().getServerConnection() != null && !isAlive() ) {
 			
 			mManageMessagesFromServer = true;
 			super.start();
@@ -76,11 +56,11 @@ public class FromServerManagement extends Thread{
 			
 			try {
 			
-				if( mCurrentBotAI != null ) {
+				if( Core.getInstance().getAI() != null ) {
 					
-					if( mFromServerCommunication != null ) {
+					if( Core.getInstance().getServerConnection() != null ) {
 						
-						mCurrentBotAI.putWorldState( RawWorldData.createRawWorldDataFromXML( mFromServerCommunication.getDatagramm( 1000 ) ) );
+					    Core.getInstance().getAI().putWorldState( RawWorldData.createRawWorldDataFromXML( Core.getInstance().getServerConnection().getDatagramm( 1000 ) ) );
 						mLastReceivedMessage.set( System.currentTimeMillis() );
 						
 					} else {

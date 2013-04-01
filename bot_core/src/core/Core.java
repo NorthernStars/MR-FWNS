@@ -172,12 +172,6 @@ public class Core {
         stopServermanagements();
         mFromServerManagement = new FromServerManagement();
         mToServerManagement = new ToServerManagement();
-        
-        mFromServerManagement.setServerConnection( mServerConnection );
-        mToServerManagement.setServerConnection( mServerConnection );
-        
-        mFromServerManagement.setArtificialIntelligence( mAI );
-        mToServerManagement.setArtificialIntelligence( mAI );
 
         mFromServerManagement.start();
         mToServerManagement.start();

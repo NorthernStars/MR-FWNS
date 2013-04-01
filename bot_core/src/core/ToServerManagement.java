@@ -9,29 +9,9 @@ import fwns_network.server_2008.NetworkCommunication;
 
 public class ToServerManagement extends Thread{
 
-	private NetworkCommunication mToServerCommunication = null;
 	private boolean mManageMessagesFromServer = false;
     private AtomicLong mLastSendMessage = new AtomicLong( 0 );
-	
-	private ArtificialIntelligence mCurrentBotAI = null;
-    
-    public ToServerManagement() {
-        
-    }
-    
-    public void setServerConnection( NetworkCommunication aServerCommunication ) {
-        
-        stopManagement();
-        mToServerCommunication = aServerCommunication;
-        
-    }
-
-	public void setArtificialIntelligence( ArtificialIntelligence aBotAI ){
-	    
-	    mCurrentBotAI = aBotAI;
-		
-	}
-	
+    	
 	@Override
 	public void start(){
 		
@@ -41,7 +21,7 @@ public class ToServerManagement extends Thread{
 	
 	public void startManagement() throws NullPointerException{
 		
-		if( mToServerCommunication != null && !isAlive() ) {
+		if( Core.getInstance().getServerConnection() != null && !isAlive() ) {
 		    
 		    mManageMessagesFromServer = true;
 			super.start();
@@ -77,18 +57,18 @@ public class ToServerManagement extends Thread{
 				
 				Thread.sleep(66); // besser machen!
 				
-				if( mToServerCommunication != null ) {
+				if( Core.getInstance().getServerConnection() != null ) {
 					
-					if( mCurrentBotAI != null ) {
+					if( Core.getInstance().getAI() != null ) {
 
-					    vCurrentAction = mCurrentBotAI.getAction();
-                        mToServerCommunication.sendDatagramm( vCurrentAction );
+					    vCurrentAction = Core.getInstance().getAI().getAction();
+					    Core.getInstance().getServerConnection().sendDatagramm( vCurrentAction );
                         mLastSendMessage.set( System.currentTimeMillis() );
                         
 						
 					} else {
 
-					    mToServerCommunication.sendDatagramm( (Action) Movement.NO_MOVEMENT );
+					    Core.getInstance().getServerConnection().sendDatagramm( (Action) Movement.NO_MOVEMENT );
 						throw new NullPointerException( "Without actual AI only empty messages will be sent to the Server." ); // Change Exception 
 												
 					}
