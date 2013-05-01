@@ -57,11 +57,25 @@ public class ReferencePoint {
     public ReferencePointName getPointName() {
         return mPointName;
     }
+    
     public double getDistanceToPoint() {
         return mDistanceToPoint;
     }
+    
     public double getAngleToPoint() {
         return mAngleToPoint;
+    }
+    
+    public void setPointName( ReferencePointName aPointName ) {
+    	mPointName = aPointName;
+    }
+    
+    public void setDistanceToPoint( double aDistance ) {
+    	mDistanceToPoint = aDistance;
+    }
+    
+    public void setAngelToPoint( double aAngle ) {
+    	mAngleToPoint = aAngle;
     }
     
 	
