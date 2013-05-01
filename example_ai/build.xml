@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<project name="bot_essentials" default="main" basedir=".">
-	
-  <property name="jar.name" value="bot_essentials.jar" />
+<project name="Ant-Test" default="main" basedir=".">
+    
+  <property name="jar.name" value="example_ai.jar" />
 
   <property name="src.dir" location="src" />
   <property name="build.dir" location="build" />
@@ -18,7 +18,7 @@
   <target name="clean">
     <delete dir="${build.dir}" />
     <delete dir="${docs.dir}" />
-    <delete file="${dist.dir}/${jar.name}" />
+    <delete  file="${dist.dir}/${jar.name}" />
   </target>
 
   <!-- Creates the  build, docs and dist directory-->
@@ -36,24 +36,22 @@
 
   <!-- Creates Javadoc -->
   <target name="docs" depends="compile">
-    <javadoc packagenames="src" sourcepath="${src.dir}" destdir="${docs.dir}" classpathref="build.classpath" author="true" version="true" use="true">
+    <javadoc packagenames="src" sourcepath="${src.dir}" destdir="${docs.dir}">
        <fileset dir="${src.dir}">
-        <include name="**" />
-       </fileset>
+                <include name="**" />
+           </fileset>
     </javadoc>
   </target>
 
   <!--Creates the deployable jar file  -->
   <target name="jar" depends="compile">
-    <jar destfile="${dist.dir}/${jar.name}">
-        <fileset dir="${build.dir}" />
-        <fileset dir="${docs.dir}" />
+    <jar destfile="${dist.dir}/${jar.name}" basedir="${build.dir}">
     <manifest>
     </manifest>
     </jar>
   </target>
 
-  <target name="main" depends="compile, docs, jar">
+  <target name="main" depends="compile, jar, docs">
     <description>Main target</description>
   </target>
 
