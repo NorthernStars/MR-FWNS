@@ -4,8 +4,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import essentials.communication.Action;
 import essentials.communication.action_server2008.Movement;
-import essentials.core.ArtificialIntelligence;
-import fwns_network.server_2008.NetworkCommunication;
 
 public class ToServerManagement extends Thread{
 

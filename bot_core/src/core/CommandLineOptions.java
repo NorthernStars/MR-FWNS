@@ -751,7 +751,7 @@ class CommandLineOptions {
         }
 
         @Override
-        protected void processOption(final String aArgument, final ListIterator aIter) throws ParseException {
+        protected void processOption(final String aArgument, @SuppressWarnings("rawtypes") final ListIterator aIter) throws ParseException {
             boolean hasOption = getOptions().hasOption( aArgument );
 
             if ( hasOption || !mIgnoreUnrecognizedOption ) {

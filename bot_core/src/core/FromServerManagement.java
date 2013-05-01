@@ -1,14 +1,9 @@
 package core;
 
 import java.net.SocketTimeoutException;
-import java.text.DateFormat;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.eclipse.swt.widgets.DateTime;
-
 import essentials.communication.worlddata_server2008.RawWorldData;
-import essentials.core.ArtificialIntelligence;
-import fwns_network.universal.NetworkCommunication;
 
 public class FromServerManagement extends Thread{
 
