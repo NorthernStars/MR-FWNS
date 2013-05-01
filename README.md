@@ -16,6 +16,7 @@ The repository includes several eclipse subprojects that can be imported automat
 2. Run build.xml in bot_essentials with ant (Right click on build.xml > Run as > Ant Build)
 3. Run build.xml in bot_network with ant 
 4. Run build.xml in bot_core with ant
+5. Run build.xml in bot_mrlib with ant
 
 How-To start example AI
 =======================
