@@ -7,7 +7,6 @@
   <property name="build.dir" location="build" />
   <property name="dist.dir" location="../bot_lib/ais" />
   <property name="lib.dir" location="../bot_lib/libraries" />
-	
   <property name="docs.dir" location="docs" />
 
 

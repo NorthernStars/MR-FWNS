@@ -6,11 +6,12 @@
 	  <property name="src.dir" location="src" />
 	  <property name="build.dir" location="build" />
 	  <property name="dist.dir" location="../bot_lib" />
+	  <property name="lib.dir" location="../bot_lib/libraries" />
 	  <property name="docs.dir" location="docs" />
 
 
 	  <path id="build.classpath">
-	    <fileset dir="${dist.dir}">
+	    <fileset dir="${lib.dir}">
 	      <include name="**/*.jar" />
 	    </fileset>
 	  </path>
@@ -47,7 +48,7 @@
 	  <target name="jar" depends="compile">
 	    <jar destfile="${dist.dir}/${jar.name}" basedir="${build.dir}">
 	    	<manifest>
-	    	  	<attribute name="Class-Path" value=". bot_lib/bot_essentials.jar bot_lib/swt.jar bot_lib/bot_network.jar bot_lib/commons-cli-1.2.jar"/>
+	    	  	<attribute name="Class-Path" value=". libraries/. libraries/bot_essentials.jar libraries/swt.jar libraries/bot_network.jar libraries/commons-cli-1.2.jar"/>
 	    	    <attribute name="Main-Class" value="core.Main"/>
 	    	</manifest>
 	    	<fileset dir="${src.dir}">
