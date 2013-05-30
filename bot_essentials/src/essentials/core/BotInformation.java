@@ -3,23 +3,27 @@ package essentials.core;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
 import essentials.constants.Default;
 
 // zu tun: final refactor comments singelton
 
+@ThreadSafe
 public class BotInformation {
 
-    private String mBotname;
+    @GuardedBy("this") private String mBotname;
 
-    private int mRcId;
-    private int mVtId;
+    @GuardedBy("this") private int mRcId;
+    @GuardedBy("this") private int mVtId;
 
-    private InetAddress mBotIP;
-    private int mBotPort;
-    private boolean mReconnect = false;
+    @GuardedBy("this") private InetAddress mBotIP;
+    @GuardedBy("this") private int mBotPort;
+    @GuardedBy("this") private boolean mReconnect = false;
 
-    private InetAddress mServerIP;
-    private int mServerPort;
+    @GuardedBy("this") private InetAddress mServerIP;
+    @GuardedBy("this") private int mServerPort;
 
     public enum Teams {
         
@@ -42,15 +46,15 @@ public class BotInformation {
         
     }
 
-    private Teams mTeam;
-    private String mTeamname;
+    @GuardedBy("this") private Teams mTeam;
+    @GuardedBy("this") private String mTeamname;
 
     
-    private String mAIArchive;
-    private String mAIClassname;
-    private String mAIArgs;
+    @GuardedBy("this") private String mAIArchive;
+    @GuardedBy("this") private String mAIClassname;
+    @GuardedBy("this") private String mAIArgs;
     
-    private Object mBotMemory;
+    @GuardedBy("this") private Object mBotMemory;
     
     public enum GamevalueNames {
         
@@ -63,19 +67,19 @@ public class BotInformation {
         Attrition( Default.Attrition ),
         VelocityPerPixel( Default.VelocityPerPixel );
    
-        private float mValue;
+        @GuardedBy("this") private float mValue;
         
         private GamevalueNames( float aValue ) {
             this.mValue = aValue;
         }
         
-        void setValue( float aValue ){
+        public synchronized void setValue( float aValue ){
             
             mValue = aValue;
             
         }
         
-        float getValue(){
+        public synchronized float getValue(){
             
             return mValue;
             
@@ -139,187 +143,187 @@ public class BotInformation {
 
     }
 
-    public String getBotname() {
+    public synchronized String getBotname() {
 
         return mBotname;
 
     }
 
-    public int getRcId() {
+    public synchronized int getRcId() {
 
         return mRcId;
 
     }
 
-    public int getVtId() {
+    public synchronized int getVtId() {
 
         return mVtId;
 
     }
 
-    public InetAddress getBotIP() {
+    public synchronized InetAddress getBotIP() {
 
         return mBotIP;
 
     }
 
-    public int getBotPort() {
+    public synchronized int getBotPort() {
 
         return mBotPort;
 
     }
 
-    public InetAddress getServerIP() {
+    public synchronized InetAddress getServerIP() {
 
         return mServerIP;
 
     }
 
-    public int getServerPort() {
+    public synchronized int getServerPort() {
 
         return mServerPort;
 
     }
 
-    public Teams getTeam() {
+    public synchronized Teams getTeam() {
         
         return mTeam;
 
     }
 
-    public String getTeamname() {
+    public synchronized String getTeamname() {
 
         return mTeamname;
 
     }
 
-    public float getGamevalue( GamevalueNames aGamevalueName ) {
+    public synchronized float getGamevalue( GamevalueNames aGamevalueName ) {
 
         return aGamevalueName.getValue();
         
     }
 
-    public boolean getReconnect() {
+    public synchronized boolean getReconnect() {
 
         return mReconnect;
         
     }
 
-    public String getAIArgs() {
+    public synchronized String getAIArgs() {
 
         return mAIArgs;
         
     }
 
-    public void setAIArgs( String aAiArgs ) {
+    public synchronized void setAIArgs( String aAiArgs ) {
 
         mAIArgs = aAiArgs;
 
     }
     
-    public String getAIArchive() {
+    public synchronized String getAIArchive() {
         
         return mAIArchive;
         
     }
 
-    public void setAIArchive( String aAIArchive ) {
+    public synchronized void setAIArchive( String aAIArchive ) {
         
         mAIArchive = aAIArchive;
         
     }
 
-    public String getAIClassname() {
+    public synchronized String getAIClassname() {
         
         return mAIClassname;
         
     }
     
-    public Object getBotMemory() {
+    public synchronized Object getBotMemory() {
         
         return mBotMemory;
         
     }
 
-    public void setBotMemory( Object aBotMemory ) {
+    public synchronized void setBotMemory( Object aBotMemory ) {
         
         mBotMemory = aBotMemory;
         
     }
 
-    public void setAIClassname( String aAIClassname ) {
+    public synchronized void setAIClassname( String aAIClassname ) {
         
         mAIClassname = aAIClassname;
         
     }
     
-    public void setReconnect( boolean aReconnect) {
+    public synchronized void setReconnect( boolean aReconnect) {
 
         mReconnect = aReconnect;
 
     }
     
-    public void setGamevalue( GamevalueNames aGamevalueName, float aGamevalue ) {
+    public synchronized void setGamevalue( GamevalueNames aGamevalueName, float aGamevalue ) {
 
         aGamevalueName.setValue( aGamevalue );
 
     }
 
-    public void setTeamname( String aTeamname ) {
+    public synchronized void setTeamname( String aTeamname ) {
 
         mTeamname = aTeamname;
 
     }
 
-    public void setTeam( Teams aTeam ) {
+    public synchronized void setTeam( Teams aTeam ) {
 
         mTeam = aTeam;
 
     }
 
-    public void setServerPort( int aServerPort ) {
+    public synchronized void setServerPort( int aServerPort ) {
 
         mServerPort = aServerPort;
 
     }
 
-    public void setServerIP( InetAddress aServerIP ) {
+    public synchronized void setServerIP( InetAddress aServerIP ) {
 
         mServerIP = aServerIP;
 
     }
 
-    public void setBotPort( int aBotPort ) {
+    public synchronized void setBotPort( int aBotPort ) {
 
         mBotPort = aBotPort;
 
     }
 
-    public void setBotIP( InetAddress aBotIP ) {
+    public synchronized void setBotIP( InetAddress aBotIP ) {
 
         mBotIP = aBotIP;
 
     }
 
-    public void setVtId( int aVtId ) {
+    public synchronized void setVtId( int aVtId ) {
 
         mVtId = aVtId;
 
     }
 
-    public void setRcId( int aRcId ) {
+    public synchronized void setRcId( int aRcId ) {
 
         mRcId = aRcId;
 
     }
 
-    public void setBotname( String aBotname ) {
+    public synchronized void setBotname( String aBotname ) {
 
         mBotname = aBotname;
 
     }
 
-    public String toString() {
+    public synchronized String toString() {
 
         String vBotInformationString = "Bot " + mBotname + "(" + mRcId + "/" + mVtId + ")\n";
         vBotInformationString += "with Address: " + mBotIP.toString() + " Port: " + mBotPort;
