@@ -3,11 +3,42 @@ package core;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.atomic.AtomicLong;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
 import essentials.communication.worlddata_server2008.RawWorldData;
 
+@ThreadSafe
 public class FromServerManagement extends Thread{
 
-	private boolean mManageMessagesFromServer = false;
+    private static FromServerManagement INSTANCE;
+    
+    private FromServerManagement(){
+        
+    }
+
+    public static FromServerManagement getInstance() {
+        
+        if( FromServerManagement.INSTANCE == null){
+            FromServerManagement.INSTANCE = new FromServerManagement();
+        }
+        
+        return FromServerManagement.INSTANCE;
+        
+    }
+    
+    public void close(){
+        
+        if(FromServerManagement.INSTANCE != null) {
+            
+            getInstance().stopManagement();
+            FromServerManagement.INSTANCE = null;
+            
+        }
+        
+    }
+    
+	@GuardedBy("this") private boolean mManageMessagesFromServer = false;
     private AtomicLong mLastReceivedMessage = new AtomicLong( 0 );
 	
 	@Override
@@ -20,8 +51,11 @@ public class FromServerManagement extends Thread{
 	public void startManagement() throws NullPointerException{
 
 		if( Core.getInstance().getServerConnection() != null && !isAlive() ) {
-			
-			mManageMessagesFromServer = true;
+			synchronized (this) {
+			    
+			    mManageMessagesFromServer = true;
+			    
+			}
 			super.start();
 			
 		} else {
@@ -33,8 +67,11 @@ public class FromServerManagement extends Thread{
 	}
 	
 	public void stopManagement(){
+	    synchronized (this) {
+            
+	        mManageMessagesFromServer = false;
 		
-		mManageMessagesFromServer = false;
+	    }
 		while(isAlive()){ 
 		    try {
                 Thread.sleep( 10 );

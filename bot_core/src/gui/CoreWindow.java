@@ -24,6 +24,9 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.VerifyEvent;
 
 import core.Core;
+import core.FromServerManagement;
+import core.ToServerManagement;
+
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.events.VerifyListener;
 
@@ -74,7 +77,7 @@ public class CoreWindow {
 
                 mStatusListener.stopListener();
                 SWTResourceManager.dispose();
-                Core.getInstance().closeBot();
+                Core.getInstance().close();
                 
             }
         });
@@ -679,16 +682,14 @@ public class CoreWindow {
                         
                     } 
                     
-                    if(    ( Core.getInstance().getToServerManagement() != null && Core.getInstance().getToServerManagement().isSendingMessages() != mNetworkOutgoing )
-                        || ( Core.getInstance().getToServerManagement() == null && mNetworkOutgoing ) ){
+                    if( ToServerManagement.getInstance().isSendingMessages() != mNetworkOutgoing ){
                         
                         mNetworkOutgoing= !mNetworkOutgoing;
                         changed = true;
                         
                     }
                     
-                    if(    ( Core.getInstance().getFromServerManagement() != null && Core.getInstance().getFromServerManagement().isReceivingMessages() != mNetworkIncoming )
-                        || ( Core.getInstance().getFromServerManagement() == null && mNetworkIncoming ) ){
+                    if( FromServerManagement.getInstance().isReceivingMessages() != mNetworkIncoming  ){
                         
                         mNetworkIncoming = !mNetworkIncoming;
                         changed = true;

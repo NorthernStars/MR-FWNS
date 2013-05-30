@@ -7,6 +7,9 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
 import essentials.core.ArtificialIntelligence;
 import essentials.core.BotInformation;
 import fwns_network.server_2008.NetworkCommunication;
@@ -15,18 +18,11 @@ import gui.CoreWindow;
 //ToDo: Logger mit Apache Commons Logging or log4j ersetzen
 
 //ToDo: Initialle Loggermeldung mit idents
-
+@ThreadSafe
 public class Core {
-
-    private final BotInformation mBotinformation;
-    private ArtificialIntelligence mAI;
-    private FromServerManagement mFromServerManagement;
-    private ToServerManagement mToServerManagement;
-    private CoreWindow mCoreWindow = null;
-
-    private static Core INSTANCE;
-    private NetworkCommunication mServerConnection;
     
+    private static Core INSTANCE;
+ 
     private Core(){
         
         mBotinformation = new BotInformation();
@@ -42,12 +38,32 @@ public class Core {
         return Core.INSTANCE;
         
     }
+    
+    public void close() {
 
+        stopAI();
+        stopServerConnection();
+        RestartAiManagement.getInstance().close();
+        
+        System.runFinalization();
+        
+    }
+    
+    @GuardedBy("this") private final BotInformation mBotinformation;
+    @GuardedBy("this") private ArtificialIntelligence mAI;
+    private CoreWindow mCoreWindow = null;
+
+    @GuardedBy("this") private NetworkCommunication mServerConnection;
+    
     public void startBot( String[] aCommandline ) {
 
         try {
             
-            CommandLineOptions.parseCommandLineArguments( aCommandline );
+            synchronized (this) {
+                
+                CommandLineOptions.parseCommandLineArguments( aCommandline );
+                
+            }
             
             if( getCoreWindow() != null ){
                 
@@ -59,7 +75,7 @@ public class Core {
                     @Override
                     public void run() {
                         
-                        closeBot();
+                        close();
                         System.out.println( mBotinformation.getBotname() + "(" + mBotinformation.getRcId() + "/" + mBotinformation.getVtId() + ") is dead!" );
                         
                     }
@@ -69,10 +85,7 @@ public class Core {
                 startAI();
                 startServerConnection();
                 
-                
             }
-            
-            
             
         } catch ( Exception vNormalException ) {
 
@@ -84,11 +97,15 @@ public class Core {
 
     public void startAI() {
         
-        if( mAI == null ){
+        synchronized (this) {
             
-        } else if( mAI.isRunning() ){
-            
-            stopAI();
+            if( mAI == null ){
+                
+            } else if( mAI.isRunning() ){
+                
+                stopAI();
+                
+            }
             
         }
 
@@ -96,7 +113,11 @@ public class Core {
             
             URL url = new File( mBotinformation.getAIArchive() ).toURI().toURL();
             URLClassLoader cl = new URLClassLoader( new URL[]{ url } );
-            mAI = (ArtificialIntelligence) cl.loadClass( mBotinformation.getAIClassname() ).newInstance();
+            synchronized (this) {
+                
+                mAI = (ArtificialIntelligence) cl.loadClass( mBotinformation.getAIClassname() ).newInstance();
+                
+            }
             // cl.close(); <- verursacht Fehler
             
         } catch ( Exception e) {
@@ -104,12 +125,17 @@ public class Core {
             e.printStackTrace();
             
         }
+        synchronized (this) {
+            
+            mAI.initializeAI( getBotinformation() );
         
-        mAI.initializeAI( getBotinformation() );
+        }
+        
+        RestartAiManagement.getInstance().startManagement();
         
     }
 
-    public void stopAI() {
+    synchronized public void stopAI() {
         
         if( mAI != null ){
             
@@ -130,19 +156,23 @@ public class Core {
             
             stopServerConnection();
             
-            if( mBotinformation.getBotPort() > -1 ){
-                   mServerConnection = new NetworkCommunication( mBotinformation.getServerIP(), 
-                                                                  mBotinformation.getServerPort(),
-                                                                  mBotinformation.getBotPort());
-             
-            } else {
-                mServerConnection = new NetworkCommunication( mBotinformation.getServerIP(), 
-                                                              mBotinformation.getServerPort());
+            synchronized (this) {
+                
+                if( mBotinformation.getBotPort() > -1 ){
+                       mServerConnection = new NetworkCommunication( mBotinformation.getServerIP(), 
+                                                                      mBotinformation.getServerPort(),
+                                                                      mBotinformation.getBotPort());
+                 
+                } else {
+                    mServerConnection = new NetworkCommunication( mBotinformation.getServerIP(), 
+                                                                  mBotinformation.getServerPort());
+                }
+                
+                if( !mBotinformation.getReconnect() ){
+                    mServerConnection.connectToServer( mBotinformation );
+                }   
+                
             }
-            
-            if( !mBotinformation.getReconnect() ){
-                mServerConnection.connectToServer( mBotinformation );
-            }   
             
             startServermanagements();
             
@@ -157,10 +187,15 @@ public class Core {
     public void stopServerConnection(){
         
         stopServermanagements();
-        if( mServerConnection != null ){
+        
+        synchronized (this) {
             
-            mServerConnection.closeConnection();
-            
+            if( mServerConnection != null ){
+                
+                mServerConnection.closeConnection();
+                
+            }
+        
         }
         
     }
@@ -170,12 +205,11 @@ public class Core {
      */
     public void startServermanagements() {
 
-        stopServermanagements();
-        mFromServerManagement = new FromServerManagement();
-        mToServerManagement = new ToServerManagement();
-
-        mFromServerManagement.start();
-        mToServerManagement.start();
+        stopServermanagements(); 
+        
+        FromServerManagement.getInstance().start();
+        ToServerManagement.getInstance().start();
+        
         
     }
     
@@ -184,23 +218,12 @@ public class Core {
      */
     public void stopServermanagements() {
 
-        if( mFromServerManagement != null ){
-            
-            mFromServerManagement.stopManagement();
-            mFromServerManagement = null;            
-            
-        }
-        
-        if( mToServerManagement != null ){
-            
-            mToServerManagement.stopManagement();
-            mToServerManagement = null;            
-            
-        }
+        FromServerManagement.getInstance().close();
+        ToServerManagement.getInstance().close();
         
     }
     
-    public BotInformation getBotinformation() {
+    synchronized public BotInformation getBotinformation() {
         
         return mBotinformation;
       
@@ -218,29 +241,12 @@ public class Core {
         
     }
 
-    public NetworkCommunication getServerConnection() {
+    synchronized public NetworkCommunication getServerConnection() {
         return mServerConnection;
     }
 
-    public ArtificialIntelligence getAI() {
+    synchronized public ArtificialIntelligence getAI() {
         return mAI;
-    }
-
-    public FromServerManagement getFromServerManagement() {
-        return mFromServerManagement;
-    }
-
-    public ToServerManagement getToServerManagement() {
-        return mToServerManagement;
-    }
-
-    public void closeBot() {
-
-        stopAI();
-        stopServerConnection();
-        
-        System.runFinalization();
-        
     }
     
     @Override
@@ -248,7 +254,7 @@ public class Core {
         
         try {
 
-            closeBot();
+            close();
             
         } finally {
             

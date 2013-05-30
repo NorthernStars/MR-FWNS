@@ -2,12 +2,43 @@ package core;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
 import essentials.communication.Action;
 import essentials.communication.action_server2008.Movement;
 
+@ThreadSafe
 public class ToServerManagement extends Thread{
 
-	private boolean mManageMessagesFromServer = false;
+    private static ToServerManagement INSTANCE;
+    
+    private ToServerManagement(){
+        
+    }
+
+    public static ToServerManagement getInstance() {
+        
+        if( ToServerManagement.INSTANCE == null){
+            ToServerManagement.INSTANCE = new ToServerManagement();
+        }
+        
+        return ToServerManagement.INSTANCE;
+        
+    }
+    
+    public void close(){
+        
+        if(ToServerManagement.INSTANCE != null) {
+            
+            getInstance().stopManagement();
+            ToServerManagement.INSTANCE = null;
+            
+        }
+        
+    }
+    
+	@GuardedBy("this") private boolean mManageMessagesFromServer = false;
     private AtomicLong mLastSendMessage = new AtomicLong( 0 );
     	
 	@Override
@@ -20,8 +51,12 @@ public class ToServerManagement extends Thread{
 	public void startManagement() throws NullPointerException{
 		
 		if( Core.getInstance().getServerConnection() != null && !isAlive() ) {
+		 
+		    synchronized (this) {
+	             
+		        mManageMessagesFromServer = true;
 		    
-		    mManageMessagesFromServer = true;
+		    }
 			super.start();
 			
 		} else {
@@ -33,8 +68,12 @@ public class ToServerManagement extends Thread{
 	}
 	
 	public void stopManagement(){
+	 
+	    synchronized (this) {
+            
+	        mManageMessagesFromServer = false;
 	    
-	    mManageMessagesFromServer = false;
+	    }
         while(isAlive()){ 
             try {
                 Thread.sleep( 10 );
