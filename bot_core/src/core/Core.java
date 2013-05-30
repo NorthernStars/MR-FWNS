@@ -97,7 +97,7 @@ public class Core {
             URL url = new File( mBotinformation.getAIArchive() ).toURI().toURL();
             URLClassLoader cl = new URLClassLoader( new URL[]{ url } );
             mAI = (ArtificialIntelligence) cl.loadClass( mBotinformation.getAIClassname() ).newInstance();
-            cl.close();
+            // cl.close(); <- verursacht Fehler
             
         } catch ( Exception e) {
             

@@ -50,6 +50,8 @@ public class BotInformation {
     private String mAIClassname;
     private String mAIArgs;
     
+    private Object mBotMemory;
+    
     public enum GamevalueNames {
         
         KickRange( Default.KickRange ), 
@@ -132,6 +134,8 @@ public class BotInformation {
         mAIArchive = "";
         mAIClassname = "";
         mAIArgs = "";
+        
+        mBotMemory = null;
 
     }
 
@@ -228,6 +232,18 @@ public class BotInformation {
     public String getAIClassname() {
         
         return mAIClassname;
+        
+    }
+    
+    public Object getBotMemory() {
+        
+        return mBotMemory;
+        
+    }
+
+    public void setBotMemory( Object aBotMemory ) {
+        
+        mBotMemory = aBotMemory;
         
     }
 
