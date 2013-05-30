@@ -2,6 +2,7 @@
 
 !.gitignore
 !.classpath
+!.project
 
 !*.txt
 

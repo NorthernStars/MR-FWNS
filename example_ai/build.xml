@@ -1,16 +1,18 @@
 <?xml version="1.0"?>
-<project name="Ant-Test" default="main" basedir=".">
+<project name="example_ai" default="main" basedir=".">
     
   <property name="jar.name" value="example_ai.jar" />
 
   <property name="src.dir" location="src" />
   <property name="build.dir" location="build" />
-  <property name="dist.dir" location="../bot_lib" />
+  <property name="dist.dir" location="../bot_lib/ais" />
+  <property name="lib.dir" location="../bot_lib/libraries" />
+	
   <property name="docs.dir" location="docs" />
 
 
   <path id="build.classpath">
-    <fileset dir="${dist.dir}">
+    <fileset dir="${lib.dir}">
       <include name="**/*.jar" />
     </fileset>
   </path>

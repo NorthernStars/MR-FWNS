@@ -2,8 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/bot_lib/bot_essentials.jar"/>
-	<classpathentry kind="lib" path="/bot_lib/swt.jar"/>
-	<classpathentry kind="lib" path="/bot_lib/bot_mrlib.jar" sourcepath="/bot_mrlib"/>
+	<classpathentry kind="lib" path="/MixedRealityBot/libraries/bot_essentials.jar"/>
+	<classpathentry kind="lib" path="/MixedRealityBot/libraries/swt.jar"/>
+	<classpathentry kind="lib" path="/MixedRealityBot/libraries/bot_mrlib.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
