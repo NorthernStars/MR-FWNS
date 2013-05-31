@@ -53,6 +53,7 @@
 	    	</manifest>
 	    	<fileset dir="${src.dir}">
 	    	    <include name="res/*.gif" />
+	    		<include name="log4j2.xml" />
 	    	</fileset>
 	    </jar>
 	  </target>
