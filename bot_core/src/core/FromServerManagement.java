@@ -39,7 +39,7 @@ public class FromServerManagement extends Thread{
     }
     
 	@GuardedBy("this") private boolean mManageMessagesFromServer = false;
-    private AtomicLong mLastReceivedMessage = new AtomicLong( 0 );
+    volatile private AtomicLong mLastReceivedMessage = new AtomicLong( 0 );
 	
 	@Override
 	public void start(){
