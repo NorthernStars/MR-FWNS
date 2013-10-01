@@ -750,7 +750,7 @@ class CommandLineOptions {
             mIgnoreUnrecognizedOption = ignoreUnrecognizedOption;
         }
 
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings("rawtypes")
 		@Override
         protected void processOption(final String aArgument, final ListIterator aIter) throws ParseException {
             boolean hasOption = getOptions().hasOption( aArgument );

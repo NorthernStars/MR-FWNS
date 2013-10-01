@@ -95,7 +95,8 @@ public class Core {
         
     }
 
-    public void startAI() {
+    @SuppressWarnings("resource")
+	public void startAI() {
         
         synchronized (this) {
             
