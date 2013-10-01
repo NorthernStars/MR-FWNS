@@ -1,1 +1,0 @@
-java -cp "libraries/*:bot_mr.jar" core.Main -bn "Eilers" -tn "The Examples" -t gelb -ids 0 -s 192.168.56.99:3311 -aiarc "ais/example_ai.jar" -aicl "exampleai.brain.AI"
