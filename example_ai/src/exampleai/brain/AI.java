@@ -1,18 +1,18 @@
 package exampleai.brain;
 
 
+import mrlib.core.KickLib;
+import mrlib.core.MoveLib;
+import mrlib.core.PositionLib;
+
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-import conditions.StateLib;
-
-import core.KickLib;
-import core.MoveLib;
-import core.PositionLib;
-
 import essentials.communication.Action;
 import essentials.communication.action_server2008.Movement;
+import essentials.communication.worlddata_server2008.BallPosition;
 import essentials.communication.worlddata_server2008.RawWorldData;
+import essentials.communication.worlddata_server2008.ReferencePoint;
 import essentials.core.ArtificialIntelligence;
 import essentials.core.BotInformation;
 import essentials.core.BotInformation.GamevalueNames;
@@ -65,64 +65,45 @@ public class AI extends Thread implements ArtificialIntelligence {
         RawWorldData vWorldState = null;
         Action vBotAction = null;
         
-        int vWasOutOfBounds = 0;
-        
         while ( mIsRunning ){
 
-            try {
-             
-                if( mNeedNewAction && mWorldState != null && mWorldState.getBallPosition() != null ){
-                    
+            try {             
+                if( mNeedNewAction && mWorldState != null  ){
                     synchronized ( this ) {
                         vWorldState = mWorldState;
                     }
+
+                    // --------------- START AI -------------------
                     
-                    if( mStatus == Getaggt.IstEs ){
-                        
-                        if( vWorldState.getBallPosition().getDistanceToBall() < mSelf.getGamevalue( GamevalueNames.KickRange ) ){
-
-                            vBotAction = KickLib.kickToNearest( vWorldState );
-
-                        } else {
-                            
-                            vBotAction = MoveLib.runTo( vWorldState.getBallPosition() );
-                            
-                        }
-                        
-                    } else {
-                        
-                        if( StateLib.isMeselfOutOfBounds( vWorldState )  || vWasOutOfBounds > 0){
-                            
-                            if( vWasOutOfBounds == 0){
-                                
-                                vWasOutOfBounds = 20;
-                                
-                            }
-                            vBotAction = MoveLib.runTo( PositionLib.getBestPointAwayFromBall( vWorldState ) );
-                            vWasOutOfBounds--;
-                            
-                        } else {
-                            
-                            vBotAction = MoveLib.runTo( vWorldState.getBallPosition().getAngleToBall() + 180 > 180? vWorldState.getBallPosition().getAngleToBall() - 180 : vWorldState.getBallPosition().getAngleToBall() + 180 );
-                            
-                        }
-                        
+                    if( vWorldState.getBallPosition() != null ){
+                    	
+                    	// get ball position
+                    	BallPosition ballPos = vWorldState.getBallPosition();
+                    	
+                    	if( ballPos.getDistanceToBall() < mSelf.getGamevalue( GamevalueNames.KickRange ) ){
+                    		// kick
+                    		ReferencePoint goalMid = PositionLib.getMiddleOfGoal( vWorldState, mSelf.getTeam() );
+                    		vBotAction = KickLib.kickTo( goalMid );
+                    		System.out.println("kick");
+                    	} else {
+                    		// move to ball
+                    		vBotAction = MoveLib.runTo( ballPos );
+                    		System.out.println("Move: " + vBotAction.getXMLString());
+                    	}
+                    	
                     }
+                    
+                    // ---------------- END AI --------------------
                     
                     synchronized ( this ) {
                         mAction = vBotAction;
                         mNeedNewAction = false;
-                    }
-                    
-                    
+                    }                  
                 }
-            
-                Thread.sleep( 1 );
-                
+                Thread.sleep( 1 );                
             } catch ( Exception e ) {
                 e.printStackTrace();
-            }
-            
+            }            
             
         }
         
