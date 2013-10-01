@@ -23,10 +23,6 @@ import essentials.core.BotInformation.GamevalueNames;
 public class AI extends Thread implements ArtificialIntelligence {
 
     BotInformation mSelf = null;
-    
-    enum Getaggt { IstEs, IstEsNicht; }
-    
-    Getaggt mStatus = Getaggt.IstEsNicht;
 
     RawWorldData mWorldState = null;
     Action mAction = null;
@@ -37,24 +33,7 @@ public class AI extends Thread implements ArtificialIntelligence {
     @Override
     public void initializeAI( BotInformation aOneSelf ) {
         
-        mSelf = aOneSelf;
-        
-        if( mSelf != null ){
-            int AiPara = 0;
-            try{
-                AiPara = Integer.parseInt( mSelf.getAIArgs() );
-            } catch ( Exception e ) {
-                
-            }
-            if ( AiPara == 1) {
-
-                mStatus = Getaggt.IstEs;
-                
-            }
-            
-            
-        }
-        
+        mSelf = aOneSelf;        
         mIsRunning = true;
         start();
         
