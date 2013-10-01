@@ -1,4 +1,4 @@
-package conditions;
+package mrlib.conditions;
 
 import essentials.communication.worlddata_server2008.RawWorldData;
 
