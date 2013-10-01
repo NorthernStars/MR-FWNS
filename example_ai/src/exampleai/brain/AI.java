@@ -23,11 +23,10 @@ import essentials.core.BotInformation.GamevalueNames;
 public class AI extends Thread implements ArtificialIntelligence {
 
     BotInformation mSelf = null;
-
     RawWorldData mWorldState = null;
     Action mAction = null;
-    boolean mNeedNewAction = true;
     
+    boolean mNeedNewAction = true;    
     boolean mIsRunning = false;
     
     @Override
