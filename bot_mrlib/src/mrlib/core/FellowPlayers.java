@@ -1,4 +1,4 @@
-package core;
+package mrlib.core;
 
 public enum FellowPlayers {
 

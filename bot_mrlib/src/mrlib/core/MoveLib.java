@@ -1,4 +1,4 @@
-package core;
+package mrlib.core;
 
 import essentials.communication.Action;
 import essentials.communication.action_server2008.Movement;

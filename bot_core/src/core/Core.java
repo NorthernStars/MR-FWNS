@@ -107,7 +107,8 @@ public class Core {
         
     }
 
-    public void startAI() {
+    @SuppressWarnings("resource")
+	public void startAI() {
         
         Core.getLogger().trace( "Starting Ai." );
         synchronized (this) {

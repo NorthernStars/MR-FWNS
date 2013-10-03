@@ -1,18 +1,18 @@
 package exampleai.brain;
 
 
+import mrlib.core.KickLib;
+import mrlib.core.MoveLib;
+import mrlib.core.PositionLib;
+
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-import conditions.StateLib;
-
-import core.KickLib;
-import core.MoveLib;
-import core.PositionLib;
-
 import essentials.communication.Action;
 import essentials.communication.action_server2008.Movement;
+import essentials.communication.worlddata_server2008.BallPosition;
 import essentials.communication.worlddata_server2008.RawWorldData;
+import essentials.communication.worlddata_server2008.ReferencePoint;
 import essentials.core.ArtificialIntelligence;
 import essentials.core.BotInformation;
 import essentials.core.BotInformation.GamevalueNames;
@@ -20,43 +20,19 @@ import essentials.core.BotInformation.GamevalueNames;
 
 // -bn 3 -tn "Northern Stars" -t blau -ids 3 -s 192.168.178.22:3310 -aiarc "${workspace_loc:FWNS_ExampleAI}/bin" -aicl "exampleai.brain.AI" -aiarg 0
 
-// -jar "FWNS_Bot.jar"
-
 public class AI extends Thread implements ArtificialIntelligence {
 
     BotInformation mSelf = null;
-    
-    enum Getaggt { IstEs, IstEsNicht; }
-    
-    Getaggt mStatus = Getaggt.IstEsNicht;
-
     RawWorldData mWorldState = null;
     Action mAction = null;
-    boolean mNeedNewAction = true;
     
+    boolean mNeedNewAction = true;    
     boolean mIsRunning = false;
     
     @Override
     public void initializeAI( BotInformation aOneSelf ) {
         
-        mSelf = aOneSelf;
-        
-        if( mSelf != null ){
-            int AiPara = 0;
-            try{
-                AiPara = Integer.parseInt( mSelf.getAIArgs() );
-            } catch ( Exception e ) {
-                
-            }
-            if ( AiPara == 1) {
-
-                mStatus = Getaggt.IstEs;
-                
-            }
-            
-            
-        }
-        
+        mSelf = aOneSelf;        
         mIsRunning = true;
         start();
         
@@ -67,64 +43,45 @@ public class AI extends Thread implements ArtificialIntelligence {
         RawWorldData vWorldState = null;
         Action vBotAction = null;
         
-        int vWasOutOfBounds = 0;
-        
         while ( mIsRunning ){
 
-            try {
-             
-                if( mNeedNewAction && mWorldState != null && mWorldState.getBallPosition() != null ){
-                    
+            try {             
+                if( mNeedNewAction && mWorldState != null  ){
                     synchronized ( this ) {
                         vWorldState = mWorldState;
                     }
+
+                    // --------------- START AI -------------------
                     
-                    if( mStatus == Getaggt.IstEs ){
-                        
-                        if( vWorldState.getBallPosition().getDistanceToBall() < mSelf.getGamevalue( GamevalueNames.KickRange ) ){
-
-                            vBotAction = KickLib.kickToNearest( vWorldState );
-
-                        } else {
-                            
-                            vBotAction = MoveLib.runTo( vWorldState.getBallPosition() );
-                            
-                        }
-                        
-                    } else {
-                        
-                        if( StateLib.isMeselfOutOfBounds( vWorldState )  || vWasOutOfBounds > 0){
-                            
-                            if( vWasOutOfBounds == 0){
-                                
-                                vWasOutOfBounds = 20;
-                                
-                            }
-                            vBotAction = MoveLib.runTo( PositionLib.getBestPointAwayFromBall( vWorldState ) );
-                            vWasOutOfBounds--;
-                            
-                        } else {
-                            
-                            vBotAction = MoveLib.runTo( vWorldState.getBallPosition().getAngleToBall() + 180 > 180? vWorldState.getBallPosition().getAngleToBall() - 180 : vWorldState.getBallPosition().getAngleToBall() + 180 );
-                            
-                        }
-                        
+                    if( vWorldState.getBallPosition() != null ){
+                    	
+                    	// get ball position
+                    	BallPosition ballPos = vWorldState.getBallPosition();
+                    	
+                    	if( ballPos.getDistanceToBall() < mSelf.getGamevalue( GamevalueNames.KickRange ) ){
+                    		// kick
+                    		ReferencePoint goalMid = PositionLib.getMiddleOfGoal( vWorldState, mSelf.getTeam() );
+                    		vBotAction = KickLib.kickTo( goalMid );
+                    		System.out.println("kick");
+                    	} else {
+                    		// move to ball
+                    		vBotAction = MoveLib.runTo( ballPos );
+                    		System.out.println("Move: " + vBotAction.getXMLString());
+                    	}
+                    	
                     }
+                    
+                    // ---------------- END AI --------------------
                     
                     synchronized ( this ) {
                         mAction = vBotAction;
                         mNeedNewAction = false;
-                    }
-                    
-                    
+                    }                  
                 }
-            
-                Thread.sleep( 1 );
-                
+                Thread.sleep( 1 );                
             } catch ( Exception e ) {
                 e.printStackTrace();
-            }
-            
+            }            
             
         }
         
