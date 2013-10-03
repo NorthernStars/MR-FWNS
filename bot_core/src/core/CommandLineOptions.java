@@ -37,10 +37,6 @@ class CommandLineOptions {
     private Option mAiArchiveOption = null;
     private Option mAiClassnameOption = null;
     private Option mAiArgsOption = null;
-    private Option mLoggingLevelOption = null;
-    private Option mLoggingConsoleOption = null;
-    private Option mLoggingFileOption = null;
-    private Option mLoggingNetworkOption = null;
     
     public CommandLineOptions(){
         
@@ -66,11 +62,6 @@ class CommandLineOptions {
         this.setAiArchiveOption();
         this.setAiClassnameOption();
         this.setAiArgsOption();
-
-        this.setLoggingLevelOption();
-        this.setLoggingConsoleOption();
-        this.setLoggingFileOption();
-        this.setLoggingNetworkOption();
         
     }
     
@@ -342,86 +333,10 @@ class CommandLineOptions {
         
     }
     
-    @SuppressWarnings("static-access")
-    public void setLoggingLevelOption(){
-        
-        mLoggingLevelOption = OptionBuilder    .withArgName( "Loglevel" )
-                                            .hasArg()
-                                            .withDescription( "Das LoggingLevel des Bots." + 
-                                                    "Dabei wird das java util.logging Packet genutzt und die entsprechenden Level sind:" +
-                                                    "[SEVERE, WARNING, INFO, CONFIG, FINE, FINER, FINEST]. Grundeinstellung ist INFO")
-                                            .create( "ll" );
-        mLoggingLevelOption.setLongOpt( "logginglevel" );
-        
-        mOptions.addOption( mLoggingLevelOption );
-        
-    }
-    
-    public Option getLoggingLevelOption(){
-        
-        return mLoggingLevelOption;
-        
-    }
-    
-    @SuppressWarnings("static-access")
-    public void setLoggingConsoleOption(){
-        
-        mLoggingConsoleOption = OptionBuilder.withDescription( "Zeigt die Logs in der Console an. Normal aus." )
-                                             .create( "lc" );
-        mLoggingConsoleOption.setLongOpt( "logconsole" );
-        
-        mOptions.addOption( mLoggingConsoleOption );
-        
-    }
-    
-    public Option getLoggingConsoleOption(){
-        
-        return mLoggingConsoleOption;
-        
-    }
-    
-    @SuppressWarnings("static-access")
-    public void setLoggingFileOption(){
-        
-        mLoggingFileOption = OptionBuilder    .withArgName( "LogFile" )
-                                            .hasArg()
-                                            .withDescription( "File in die geloggt werden soll. Normal wird in keine File geloggt." +
-                                                    " Falls kein Argument übergeben wird, wird in eine Datei mit dem aktellen datum und der aktuellen Systemzeit als Filenamen geloggt. [, filename]")
-                                            .create( "lf" );
-        mLoggingFileOption.setLongOpt( "logfile" );
-        
-        mOptions.addOption( mLoggingFileOption );
-        
-    }
-    
-    public Option getLoggingFileOption(){
-        
-        return mLoggingFileOption;
-        
-    }
-    
-    @SuppressWarnings("static-access")
-    public void setLoggingNetworkOption(){
-
-        mLoggingNetworkOption = OptionBuilder    .withArgName( "IP:Port" )
-                                                .hasArgs()
-                                                .withValueSeparator(':')
-                                                .withDescription( "Die Ip- und Portadresse des LogServers [IP:Port]" )
-                                                .create( "ls" );
-        mLoggingNetworkOption.setLongOpt( "logserver" );
-        
-        mOptions.addOption( mLoggingNetworkOption );
-        
-    }
-    
-    public Option getLoggingNetworkOption(){
-        
-        return mLoggingNetworkOption;
-        
-    }
     
     static void parseCommandLineArguments( String[] aArguments ) {
 
+        Core.getLogger().info( "Parsing commandline." );
         CommandLineOptions vCommandLineOptions = new CommandLineOptions();
 
         try {
@@ -429,8 +344,6 @@ class CommandLineOptions {
             CommandLine cmd = vCommandLineOptions.parseOptions( aArguments );
 
             vCommandLineOptions.parseAndShowHelp( cmd );
-            
-            vCommandLineOptions.checkForAndSetLogging( cmd );
 
             vCommandLineOptions.checkArgumentsForEssentialOptions( cmd );
 
@@ -463,11 +376,11 @@ class CommandLineOptions {
 
         } catch ( ParseException vParseExceptions ) {
             
-            vParseExceptions.printStackTrace();
+            Core.getLogger().error( "Close servermanagements.", vParseExceptions );
 
         } catch ( Exception vAllExceptions ) {
 
-            vAllExceptions.printStackTrace();
+            Core.getLogger().error( "Close servermanagements.", vAllExceptions );
 
         }
 
@@ -481,39 +394,6 @@ class CommandLineOptions {
             
         }
         
-    }
-
-    /**
-     * @param aCommandLineOptions
-     * @param aCommandLine
-     */
-    private void checkForAndSetLogging( CommandLine aCommandLine ) {
-        // logging
-        if( aCommandLine.hasOption( getLoggingFileOption().getOpt() ) ||
-            aCommandLine.hasOption( getLoggingNetworkOption().getOpt() ) ||
-            aCommandLine.hasOption( getLoggingConsoleOption().getOpt() ) ){
-           
-            //consolelogging
-            if ( aCommandLine.hasOption( getLoggingConsoleOption().getOpt() ) ) {
-      
-            }
-            // networklogging
-            if ( aCommandLine.hasOption( getLoggingNetworkOption().getOpt() ) ) {
-      
-            }
-            // filelogging
-            if ( aCommandLine.hasOption( getLoggingFileOption().getOpt() ) ) {
-      
-            }
-            
-            if ( aCommandLine.hasOption( getLoggingLevelOption().getOpt() ) ) {
-                
-                // String vLogLevelArg = aCommandLine.getOptionValue( getLoggingLevelOption().getOpt() );
-   
- 
-            } 
-            
-        }
     }
 
     /**

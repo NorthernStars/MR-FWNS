@@ -5,17 +5,9 @@ import org.apache.logging.log4j.Logger;
 
 public class Main {
     
-    private static Logger BOTCORELOGGER = LogManager.getLogger("CORE");
-    
-    public static Logger getCORELogger(){
-        
-        return BOTCORELOGGER;
-        
-    }
-    
     public static void main( String[] aCommandline ) {
 
-        getCORELogger().info("Starting Bot(" + Thread.currentThread().getId() + ")" );
+        Core.getLogger().info("Starting Bot(" + Thread.currentThread().getId() + ")" );
         
         {
             String vParameters = "";
@@ -26,7 +18,7 @@ public class Main {
                 
             }
             
-            getCORELogger().info("Parameters: " + vParameters);
+            Core.getLogger().info("Parameters: " + vParameters);
         }
         
         Core Botcore;
@@ -38,7 +30,7 @@ public class Main {
             
         } catch ( Exception e ) {
 
-            getCORELogger().error( "Fatal error! Bot terminates. ", e );
+            Core.getLogger().fatal( "Fatal error! Bot terminates. ", e );
             
         }
        

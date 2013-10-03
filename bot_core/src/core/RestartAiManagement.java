@@ -26,6 +26,7 @@ public class RestartAiManagement extends Thread{
             RestartAiManagement.INSTANCE = null;
             
         }
+        Core.getLogger().info( "RestartAiServerManagement closed." );
         
     }
     
@@ -44,6 +45,7 @@ public class RestartAiManagement extends Thread{
 	    
 	        mAiActive = true;
 	        super.start();
+	        Core.getLogger().info( "RestartAiServerManagement started." );
 	    
 	    }
         
@@ -56,9 +58,12 @@ public class RestartAiManagement extends Thread{
 		    try {
                 Thread.sleep( 10 );
             } catch ( InterruptedException e ) {
-                e.printStackTrace();
+
+                Core.getLogger().error( "Error stopping RestartAiServerManagement.", e );
+                
             } 
         }
+        Core.getLogger().info( "RestartAiServerManagement stopped." );
 		
 	}
 	
@@ -75,7 +80,9 @@ public class RestartAiManagement extends Thread{
 		    try {
 		        Thread.sleep( 100 );
 		    } catch ( InterruptedException e ) {
-                e.printStackTrace();
+		        
+		        Core.getLogger().error( "Error while waiting in RestartAiServerManagement.", e );
+                
             } 
 		}
 		
