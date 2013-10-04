@@ -6,11 +6,10 @@
     </Console>
   </appenders>
   <loggers>
-    <logger name="CORE" level="all">
+    <logger name="CORE" level="info">
       <appender-ref ref="Console"/>
     </logger>
-    <root level="all">
-      <appender-ref ref="Console"/>
+    <root level="error">
     </root>
   </loggers>
 </configuration>

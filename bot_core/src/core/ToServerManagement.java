@@ -35,6 +35,7 @@ public class ToServerManagement extends Thread{
             ToServerManagement.INSTANCE = null;
             
         }
+        Core.getLogger().info( "ToServerManagement closed." );
         
     }
     
@@ -58,6 +59,7 @@ public class ToServerManagement extends Thread{
 		    
 		    }
 			super.start();
+            Core.getLogger().info( "ToServerManagement started." );
 			
 		} else {
 		    
@@ -74,13 +76,22 @@ public class ToServerManagement extends Thread{
 	        mManageMessagesFromServer = false;
 	    
 	    }
-        while(isAlive()){ 
-            try {
-                Thread.sleep( 10 );
-            } catch ( InterruptedException e ) {
-                e.printStackTrace();
-            } 
-        }
+	    
+	    if( isAlive()){
+	      
+            while(isAlive()){ 
+                try {
+                    Thread.sleep( 10 );
+                } catch ( InterruptedException e ) {
+    
+                    Core.getLogger().error( "Error stopping ToServerManagement.", e );
+                    
+                } 
+            }
+            
+            Core.getLogger().info( "ToServerManagement stopped." );
+	    
+	    }
 		
 	}
 	
@@ -118,8 +129,7 @@ public class ToServerManagement extends Thread{
 				
 			} catch ( Exception e ) {
 				
-				// Logging einbauen besser!!!
-			    e.printStackTrace();
+                Core.getLogger().error( "Error sending messages to server ", e );
 				
 			}
 			

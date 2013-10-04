@@ -6,6 +6,10 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Scanner;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
@@ -15,9 +19,6 @@ import essentials.core.BotInformation;
 import fwns_network.server_2008.NetworkCommunication;
 import gui.CoreWindow;
 
-//ToDo: Logger mit Apache Commons Logging or log4j ersetzen
-
-//ToDo: Initialle Loggermeldung mit idents
 @ThreadSafe
 public class Core {
     
@@ -32,10 +33,20 @@ public class Core {
     public static Core getInstance() {
         
         if( Core.INSTANCE == null){
+            Core.getLogger().trace( "Creating Core-instance." );
             Core.INSTANCE = new Core();
         }
-        
+
+        Core.getLogger().trace( "Retrieving Core-instance." );
         return Core.INSTANCE;
+        
+    }
+    
+    private static Logger BOTCORELOGGER = LogManager.getLogger("CORE");
+    
+    public static Logger getLogger(){
+        
+        return BOTCORELOGGER;
         
     }
     
@@ -47,10 +58,12 @@ public class Core {
         
         System.runFinalization();
         
+        Core.getLogger().info( mBotinformation.getBotname() + "(" + mBotinformation.getRcId() + "/" + mBotinformation.getVtId() + ") closed!" );
+        
     }
     
     @GuardedBy("this") private final BotInformation mBotinformation;
-    @GuardedBy("this") private ArtificialIntelligence mAI;
+    @GuardedBy("this") volatile private ArtificialIntelligence mAI;
     private CoreWindow mCoreWindow = null;
 
     @GuardedBy("this") private NetworkCommunication mServerConnection;
@@ -76,7 +89,6 @@ public class Core {
                     public void run() {
                         
                         close();
-                        System.out.println( mBotinformation.getBotname() + "(" + mBotinformation.getRcId() + "/" + mBotinformation.getVtId() + ") is dead!" );
                         
                     }
                     
@@ -95,36 +107,44 @@ public class Core {
         
     }
 
-    public void startAI() {
+    @SuppressWarnings("resource")
+	public void startAI() {
         
+        Core.getLogger().trace( "Starting Ai." );
         synchronized (this) {
             
             if( mAI == null ){
                 
             } else if( mAI.isRunning() ){
-                
+
                 stopAI();
                 
             }
             
         }
 
-        try {
-            
-            URL url = new File( mBotinformation.getAIArchive() ).toURI().toURL();
-            URLClassLoader cl = new URLClassLoader( new URL[]{ url } );
-            synchronized (this) {
+        while( mAI == null){
+           
+            try {
+    
+                Core.getLogger().info( "Loading AI " + mBotinformation.getAIClassname() + " from " + mBotinformation.getAIArchive() );
+                URL url = new File( mBotinformation.getAIArchive() ).toURI().toURL();
+                URLClassLoader cl = new URLClassLoader( new URL[]{ url } );
+                synchronized (this) {
+                    
+                    mAI = (ArtificialIntelligence) cl.loadClass( mBotinformation.getAIClassname() ).newInstance();
+                    
+                }
+                // cl.close(); <- verursacht Fehler
                 
-                mAI = (ArtificialIntelligence) cl.loadClass( mBotinformation.getAIClassname() ).newInstance();
+            } catch ( Exception e) {
+                
+                Core.getLogger().error( "Error loading AI ", e );
                 
             }
-            // cl.close(); <- verursacht Fehler
-            
-        } catch ( Exception e) {
-            
-            e.printStackTrace();
-            
+        
         }
+        
         synchronized (this) {
             
             mAI.initializeAI( getBotinformation() );
@@ -137,6 +157,7 @@ public class Core {
 
     synchronized public void stopAI() {
         
+        Core.getLogger().info( "Stopping AI " + mBotinformation.getAIClassname() + " from " + mBotinformation.getAIArchive() );
         if( mAI != null ){
             
             mAI.disposeAI();
@@ -152,36 +173,47 @@ public class Core {
      * @throws SocketException
      */
     public void startServerConnection() {
-        try {
+        
+        while( !(mServerConnection != null && mServerConnection.isConnected()) ){
+        
+            Core.getLogger().info( mBotinformation.getReconnect()?"Reconnecting":"Connecting" + " to server" );
             
-            stopServerConnection();
+            try {
             
-            synchronized (this) {
+                stopServerConnection();
                 
-                if( mBotinformation.getBotPort() > -1 ){
-                       mServerConnection = new NetworkCommunication( mBotinformation.getServerIP(), 
-                                                                      mBotinformation.getServerPort(),
-                                                                      mBotinformation.getBotPort());
-                 
-                } else {
-                    mServerConnection = new NetworkCommunication( mBotinformation.getServerIP(), 
-                                                                  mBotinformation.getServerPort());
+                synchronized (this) {
+                    
+                    if( mBotinformation.getBotPort() > -1 ){
+                        
+                        mServerConnection = new NetworkCommunication( mBotinformation.getServerIP(), 
+                                                                          mBotinformation.getServerPort(),
+                                                                          mBotinformation.getBotPort());
+                        
+                     
+                    } else {
+                        
+                        mServerConnection = new NetworkCommunication( mBotinformation.getServerIP(), 
+                                                                      mBotinformation.getServerPort());
+                        
+                    }
+                    
+                    if( !mBotinformation.getReconnect() ){
+                        
+                        mServerConnection.connectToServer( mBotinformation );
+                        
+                    }
+                    
                 }
                 
-                if( !mBotinformation.getReconnect() ){
-                    mServerConnection.connectToServer( mBotinformation );
-                }   
+                startServermanagements();
                 
-            }
-            
-            startServermanagements();
-            
-        } catch ( IOException e ) {
-
-            e.printStackTrace();
-            
-        } 
-        
+            } catch ( IOException e ) {
+    
+                Core.getLogger().error( "Error starting serverconnection ", e );
+                
+            } 
+        }
     }
     
     public void stopServerConnection(){
@@ -193,6 +225,7 @@ public class Core {
             if( mServerConnection != null ){
                 
                 mServerConnection.closeConnection();
+                Core.getLogger().info( "Closed serverconnection." );
                 
             }
         
@@ -206,7 +239,8 @@ public class Core {
     public void startServermanagements() {
 
         stopServermanagements(); 
-        
+
+        Core.getLogger().info( "Start Servermanagements." );
         FromServerManagement.getInstance().start();
         ToServerManagement.getInstance().start();
         
@@ -218,6 +252,7 @@ public class Core {
      */
     public void stopServermanagements() {
 
+        Core.getLogger().info( "Closed servermanagements." );
         FromServerManagement.getInstance().close();
         ToServerManagement.getInstance().close();
         
@@ -253,7 +288,8 @@ public class Core {
     protected void finalize() throws Throwable{
         
         try {
-
+            
+            Core.getLogger().info( "Final death." );
             close();
             
         } finally {

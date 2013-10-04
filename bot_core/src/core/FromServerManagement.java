@@ -33,6 +33,7 @@ public class FromServerManagement extends Thread{
             
             getInstance().stopManagement();
             FromServerManagement.INSTANCE = null;
+            Core.getLogger().info( "FromServerManagement closed." );
             
         }
         
@@ -57,6 +58,7 @@ public class FromServerManagement extends Thread{
 			    
 			}
 			super.start();
+	        Core.getLogger().info( "FromServerManagement started." );
 			
 		} else {
 			
@@ -72,13 +74,21 @@ public class FromServerManagement extends Thread{
 	        mManageMessagesFromServer = false;
 		
 	    }
-		while(isAlive()){ 
-		    try {
-                Thread.sleep( 10 );
-            } catch ( InterruptedException e ) {
-                e.printStackTrace();
-            } 
-        }
+	    if( isAlive()){
+	          
+	        while(isAlive()){ 
+    		    try {
+                    Thread.sleep( 10 );
+                } catch ( InterruptedException e ) {
+    
+                    Core.getLogger().error( "Error stopping FromServerManagement.", e );
+    
+                } 
+	        }
+	        
+	        Core.getLogger().info( "FromServerManagement stopped." );
+	        
+	    }
 		
 	}
 	
@@ -109,13 +119,11 @@ public class FromServerManagement extends Thread{
 				
 			} catch ( SocketTimeoutException e ) {
                 
-                // Logging einbauen!!!
-			    System.out.println("Keine Nachrichten vom Server! " + System.currentTimeMillis() );
+			    Core.getLogger().error( "Receiving no messages from server ", e );
                 
             } catch ( Exception e ) {
                 
-                // Logging einbauen!!!
-                e.printStackTrace();
+                Core.getLogger().error( "Error receiving messages from server ", e );
                 
             }
 			
