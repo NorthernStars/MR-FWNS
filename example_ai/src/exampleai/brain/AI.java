@@ -62,11 +62,11 @@ public class AI extends Thread implements ArtificialIntelligence {
                     		// kick
                     		ReferencePoint goalMid = PositionLib.getMiddleOfGoal( vWorldState, mSelf.getTeam() );
                     		vBotAction = KickLib.kickTo( goalMid );
-                    		System.out.println("kick");
+                    		System.out.println("kick to: " + goalMid.getAngleToPoint());
                     	} else {
                     		// move to ball
                     		vBotAction = MoveLib.runTo( ballPos );
-                    		System.out.println("Move: " + vBotAction.getXMLString());
+                    		System.out.println("move to: " + vBotAction.getXMLString());
                     	}
                     	
                     }
