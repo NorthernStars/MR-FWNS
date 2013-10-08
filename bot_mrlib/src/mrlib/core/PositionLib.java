@@ -23,7 +23,10 @@ public class PositionLib {
 		ReferencePoint rGoalMiddle = new ReferencePoint();
 		ReferencePoint vGoalTop = null;
 		ReferencePoint vGoalBottom = null;
+		ReferencePoint vGoalMax = null;
+		ReferencePoint vGoalMin = null;
 		
+		// get goal
 		if( aTeam == Teams.Blue ) {
 			vGoalTop = aWorldData.getBlueGoalCornerTop();
 			vGoalBottom = aWorldData.getBlueGoalCornerBottom();
@@ -33,9 +36,21 @@ public class PositionLib {
 			vGoalBottom = aWorldData.getYellowGoalCornerBottom();
 		}
 		
+		// get min und max angle
+		if( Math.abs(vGoalTop.getAngleToPoint())
+				> Math.abs(vGoalBottom.getAngleToPoint()) ){
+			vGoalMax = vGoalTop;
+			vGoalMin = vGoalBottom;
+		}
+		else{
+			vGoalMax = vGoalBottom;
+			vGoalMin = vGoalTop;
+		}
+		
 		// TODO: Calculate distance to goal
 		
-		rGoalMiddle.setAngelToPoint( vGoalTop.getAngleToPoint() - vGoalBottom.getAngleToPoint() );		
+		rGoalMiddle.setAngelToPoint( vGoalMin.getAngleToPoint()
+				+ (vGoalMax.getAngleToPoint() - vGoalMin.getAngleToPoint()) );		
 		return rGoalMiddle;
 	}
 	

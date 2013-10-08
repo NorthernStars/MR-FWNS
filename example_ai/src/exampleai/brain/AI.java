@@ -16,6 +16,7 @@ import essentials.communication.worlddata_server2008.ReferencePoint;
 import essentials.core.ArtificialIntelligence;
 import essentials.core.BotInformation;
 import essentials.core.BotInformation.GamevalueNames;
+import essentials.core.BotInformation.Teams;
 
 
 // -bn 3 -tn "Northern Stars" -t blau -ids 3 -s 192.168.178.22:3310 -aiarc "${workspace_loc:FWNS_ExampleAI}/bin" -aicl "exampleai.brain.AI" -aiarg 0
@@ -58,15 +59,13 @@ public class AI extends Thread implements ArtificialIntelligence {
                     	// get ball position
                     	BallPosition ballPos = vWorldState.getBallPosition();
                     	
-                    	if( ballPos.getDistanceToBall() < mSelf.getGamevalue( GamevalueNames.KickRange ) ){
+                    	if( ballPos.getDistanceToBall() < mSelf.getGamevalue( GamevalueNames.KickRange ) ){                 
                     		// kick
-                    		ReferencePoint goalMid = PositionLib.getMiddleOfGoal( vWorldState, mSelf.getTeam() );
-                    		vBotAction = KickLib.kickTo( goalMid );
-                    		System.out.println("kick to: " + goalMid.getAngleToPoint());
+                    		ReferencePoint goalMid = PositionLib.getMiddleOfGoal( vWorldState, Teams.Blue );
+                    		vBotAction = KickLib.kickTo( goalMid );                    		
                     	} else {
                     		// move to ball
                     		vBotAction = MoveLib.runTo( ballPos );
-                    		System.out.println("move to: " + vBotAction.getXMLString());
                     	}
                     	
                     }
