@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/MixedRealityBot/libraries/bot_essentials.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Louis/git/MR-FWNS/bot_lib/libraries/bot_essentials.jar"/>
 	<classpathentry kind="lib" path="/MixedRealityBot/libraries/swt.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/bot_mrlib"/>
 	<classpathentry kind="output" path="bin"/>
