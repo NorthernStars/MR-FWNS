@@ -2,8 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Users/Louis/git/MR-FWNS/bot_lib/libraries/bot_essentials.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Louis/git/MR-FWNS/bot_lib/libraries/bot_network.jar"/>
 	<classpathentry kind="lib" path="/MixedRealityBot/libraries/commons-cli-1.2.jar"/>
 	<classpathentry kind="lib" path="/MixedRealityBot/libraries/swt.jar"/>
 	<classpathentry kind="lib" path="/MixedRealityBot/libraries/jcip-annotations.jar" sourcepath="/MixedRealityBot/libraries/jcip-annotations-src.jar"/>
@@ -17,5 +15,7 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/MixedRealityBot/libraries/log4j-core-2.0-beta6-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/MixedRealityBot/libraries/bot_essentials.jar"/>
+	<classpathentry kind="lib" path="/MixedRealityBot/libraries/bot_network.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
