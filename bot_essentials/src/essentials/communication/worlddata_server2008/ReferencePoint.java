@@ -11,6 +11,7 @@ public class ReferencePoint {
     @XmlEnum
     public enum ReferencePointName {
         
+        @XmlEnumValue("bottom_center") NoFixedName( -1 ),
         @XmlEnumValue("bottom_center") CenterLineBottom( 0 ),
         @XmlEnumValue("bottom_left_corner") YellowFieldCornerBottom( 1 ),
         @XmlEnumValue("bottom_left_goal") YellowPenaltyAreaFrontBottom( 2 ),
@@ -53,6 +54,33 @@ public class ReferencePoint {
 	double mDistanceToPoint;
 	@XmlElement(name="angle")
 	double mAngleToPoint;
+    
+	/**
+     * Der Constructor fuer einen Referenzpunkt auf dem Spielfeld.
+     * 
+     * Dieser Referenzpunkt wird immer mit dem Namen "NoFixedName" und dem Winkel und der Distanz
+     * zu dem Bot erstellt. Dabei ist zu beachten, das der Winkel zwischen -180 und 180 Grad liegt und
+     * die Distanz nicht kleiner als 0 sein darf.
+     * 
+     * @since 0.9
+     * @param aDistanceToPoint Die Entfernung des Bots zum Refernzpunkt. Kann nicht kleiner als Null sein.
+     * @param aAngleToPoint Der Winkel des Referenzpunktes zum Bot. Muss zwischen -180 und +180 liegen.
+     * @exception IllegalArgumentException
+     *              Wenn die Parameter nicht in den erlaubten Bereichen liegen.
+     */
+	public ReferencePoint( double aDistanceToPoint, double aAngleToPoint ) throws IllegalArgumentException{
+	    
+	    this.mPointName = ReferencePointName.NoFixedName;
+	    if( aDistanceToPoint < 0 ){
+	        throw new IllegalArgumentException(" Distance can not be smaller than 0! Distance:" + aDistanceToPoint + " Angle: " + aAngleToPoint);
+	    }
+	    this.mDistanceToPoint = aDistanceToPoint;
+	    if( mAngleToPoint < -180 || mAngleToPoint > 180 ){
+            throw new IllegalArgumentException(" Angle must be between -180 and +180! Distance:" + aDistanceToPoint + " Angle: " + aAngleToPoint);
+        }
+	    this.mAngleToPoint = aAngleToPoint;
+	    
+	}
 	
     public ReferencePointName getPointName() {
         return mPointName;

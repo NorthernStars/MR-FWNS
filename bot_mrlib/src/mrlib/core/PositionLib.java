@@ -7,12 +7,69 @@ import essentials.communication.worlddata_server2008.ReferencePoint;
 import essentials.core.BotInformation.Teams;
 
 /**
- * Includes static functions to get or calculate positions
- * @author Hannes Eilers
+ * Includes static functions to get or calculate positions on the playing field.
+ * Diese Funktionen sind in den beiliegenden UnitTests verifiziert worden.
+ * 
+ * @author Hannes Eilers, Louis Jorswieck, Eike Petersen
+ * @since 0.5
+ * @version 0.9
  *
  */
 public class PositionLib {
 
+    /**
+     * Gibt den Punkt in der Mitte von zwei Referenzpunkten als neuen Referenzpunkt zurueck.
+     * 
+     * Dabei wird zwischen den beiden Punkten eine Line errechnet und 
+     * in der Mitte dieser ein neuer Refenzpunkt erstellt. 
+     * 
+     * @since 0.9
+     * @param aFirstReferencePoint der erste Referenzpunkt
+     * @param aSecondReferencePoint der zweite Referenzpunkt
+     * 
+     * @return einen ReferencePoint mit den Koordinaten des Mittelpunkts der Parameter
+     */
+    public static ReferencePoint getMiddleOfTwoReferencePoints( ReferencePoint aFirstReferencePoint, ReferencePoint aSecondReferencePoint ){
+        
+        double vMaxDegree, vMinDegree, vResultDegree;
+        
+        if( aFirstReferencePoint.getAngleToPoint() > aSecondReferencePoint.getAngleToPoint() ){
+            vMaxDegree = aFirstReferencePoint.getAngleToPoint() + 180.0;
+            vMinDegree = aSecondReferencePoint.getAngleToPoint() + 180.0;
+        }
+        else{
+            vMaxDegree = aSecondReferencePoint.getAngleToPoint() + 180.0;
+            vMinDegree = aFirstReferencePoint.getAngleToPoint() + 180.0;
+        }
+        
+        vResultDegree = vMaxDegree - vMinDegree;
+        
+        if( vResultDegree > 180 ) {
+            
+            vResultDegree = 360 - vResultDegree;
+            
+        }
+
+        if(vMaxDegree > 180 && vMinDegree < 90){
+            
+            vResultDegree = ( vMaxDegree + vResultDegree / 2 ) - 180;
+            if ( vResultDegree > 180 ) {
+                
+                vResultDegree = vResultDegree - 360;
+                
+            }
+              
+        } else {
+           
+            vResultDegree = ( vMinDegree + vResultDegree / 2 ) - 180;
+            
+        }
+        
+        return new ReferencePoint( 10.0 , vResultDegree );
+        
+    }
+    
+    
 	/**
 	 * Returns the middle of a goal
 	 * @param aWorldData
@@ -20,7 +77,7 @@ public class PositionLib {
 	 * @return ReferencePoint
 	 */
 	public static ReferencePoint getMiddleOfGoal( RawWorldData aWorldData, Teams aTeam ){		
-		ReferencePoint rGoalMiddle = new ReferencePoint();
+		ReferencePoint rGoalMiddle = null;
 		ReferencePoint vGoalTop = null;
 		ReferencePoint vGoalBottom = null;
 		ReferencePoint vGoalMax = null;
