@@ -56,6 +56,22 @@ public class ReferencePoint {
 	double mAngleToPoint;
     
 	/**
+     * Der Default-Constructor fuer einen Referenzpunkt auf dem Spielfeld.
+     * 
+     * Dieser Constructor ist package-private und sollte nie direkt genutzt werden. Er ist fuer
+     * das dekodieren von XML mit JAXB gedacht.
+     * 
+     * @since 0.9
+     */
+    ReferencePoint( ) {
+        
+        this.mPointName = ReferencePointName.NoFixedName;
+        this.mDistanceToPoint = 0.0;
+        this.mAngleToPoint = 0.0;
+        
+    }
+	
+	/**
      * Der Constructor fuer einen Referenzpunkt auf dem Spielfeld.
      * 
      * Dieser Referenzpunkt wird immer mit dem Namen "NoFixedName" und dem Winkel und der Distanz

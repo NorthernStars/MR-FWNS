@@ -7,6 +7,16 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
+
+/**
+ * Die grundlegende Netzwerkverbindung zum MRServer. Es wird das UDP-
+ * Protokoll genutzt.
+ * 
+ * @author Hannes Eilers, Louis Jorswieck, Eike Petersen
+ * @since 0.1
+ * @version 0.9
+ *
+ */
 public class NetworkCommunication {
 
     protected boolean mConnected = false;
@@ -28,10 +38,10 @@ public class NetworkCommunication {
 	/**
 	 * Richtet eine UDP-Verbindung zu einem Server ein.
 	 * 
-	 * @param aServerAdress
+	 * @param aServerAddress
 	 * - Adresse des Servers oder "localhost", wenn sich der Server auf dem
 	 * gleichen Rechner befindet.
-	 * @param aServerPortNr
+	 * @param aServerPort
 	 * - Portnummer über die der Server seine Datagramme versendet.
 	 * @throws IOException
 	 * Verbindung konnte nicht eingerichtet werden.
@@ -121,6 +131,27 @@ public class NetworkCommunication {
     public boolean isConnected() {
         
         return mConnected;
+        
+    }
+    
+    /**
+     * Gibt die Serveradresse, den Serverport, die Clientadresse und den Clientport in einem
+     * vorformatierten String aus.
+     * 
+     * @since 0.9
+     * 
+     * @return String in der Form: (Clientip):(Clientport) zu (Serverip):(Serverport)
+     */
+    public String toString(){
+        if ( mToServerSocket != null ) {
+            
+            return mToServerSocket.getLocalAddress().toString() + ":" + mToServerSocket.getLocalPort() + " zu " + mToServerSocket.getInetAddress().toString() + ":" + mToServerSocket.getPort();
+            
+        } else {
+            
+            return "Es besteht keine Serververbindung";
+            
+        }
         
     }
 	

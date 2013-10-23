@@ -18,6 +18,16 @@ import essentials.core.BotInformation;
 import fwns_network.server_2008.NetworkCommunication;
 import gui.CoreWindow;
 
+
+/**
+ * Bildet das Herzstueck des MixedRealityBot-Framework. Hier werden alle Metaprozesse Threads verwaltet
+ * und gesteuert.
+ * 
+ * @author Eike Petersen
+ * @since 0.1
+ * @version 0.9
+ *
+ */
 @ThreadSafe
 public class Core {
     
@@ -77,22 +87,22 @@ public class Core {
                 
             }
             
+            Runtime.getRuntime().addShutdownHook(new Thread() {
+                @Override
+                public void run() {
+                    
+                    close();
+                    
+                }
+                
+            });
+            
             if( getCoreWindow() != null ){
                 
                 getCoreWindow().open();
                 
             }else{
                 
-                Runtime.getRuntime().addShutdownHook(new Thread() {
-                    @Override
-                    public void run() {
-                        
-                        close();
-                        
-                    }
-                    
-                });
-
                 startAI();
                 startServerConnection();
                 
@@ -215,14 +225,22 @@ public class Core {
         }
     }
     
+    
+    /**
+     * Beendet die Verbindung zum MRServer. 
+     * Dazu werden auch eventuelle Servermanagements pausiert, um Fehler bei dem Verarbeiten zu verhindern. 
+     * 
+     * @since 0.1
+     */
     public void stopServerConnection(){
-        
-        stopServermanagements();
         
         synchronized (this) {
             
             if( mServerConnection != null ){
                 
+                stopServermanagements();
+                
+                Core.getLogger().info( "Closing serverconnection (" + mServerConnection.toString() + ")" );
                 mServerConnection.closeConnection();
                 Core.getLogger().info( "Closed serverconnection." );
                 
@@ -251,9 +269,13 @@ public class Core {
      */
     public void stopServermanagements() {
 
-        Core.getLogger().info( "Closed servermanagements." );
-        FromServerManagement.getInstance().close();
-        ToServerManagement.getInstance().close();
+        if( FromServerManagement.getInstance().isAlive() || ToServerManagement.getInstance().isAlive() ){
+            
+            Core.getLogger().info( "Stopping servermanagements." );
+            FromServerManagement.getInstance().stopManagement();
+            ToServerManagement.getInstance().stopManagement();
+            
+        }
         
     }
     
