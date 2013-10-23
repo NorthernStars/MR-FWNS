@@ -1,17 +1,22 @@
 package essentials.core;
 
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
-
 import essentials.constants.Default;
 
 // zu tun: final refactor comments singelton
 
 @ThreadSafe
-public class BotInformation {
+public class BotInformation implements Serializable{
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -7956774328001848340L;
 
     @GuardedBy("this") private String mBotname;
 
@@ -343,4 +348,5 @@ public class BotInformation {
         return vBotInformationString;
 
     }
+    
 }

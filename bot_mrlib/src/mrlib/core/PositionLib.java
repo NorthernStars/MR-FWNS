@@ -31,6 +31,7 @@ public class PositionLib {
      */
     public static ReferencePoint getMiddleOfTwoReferencePoints( ReferencePoint aFirstReferencePoint, ReferencePoint aSecondReferencePoint ){
        
+        //TODO: implementieren!
         // Merke Seitenhalbierende hat nix! mit Winkelhalbiernder zu tun! Geogebra nutzen...
         
         //c = Math.sqrt( a*a + b*b - 2 * a * b * Math.cos( wa - wb )

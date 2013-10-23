@@ -19,6 +19,14 @@ import org.apache.commons.cli.ParseException;
 import essentials.core.BotInformation.GamevalueNames;
 import essentials.core.BotInformation.Teams;
 
+/**
+ * Klasse zum parsen und weiterverarbeiten der Commandline. Nutzt Apache-Cli. 
+ * 
+ * @author Eike Petersen
+ * @since 0.4
+ * @version 0.9
+ *
+ */
 class CommandLineOptions {
 
     private Options mOptions = null;
@@ -116,7 +124,7 @@ class CommandLineOptions {
     @SuppressWarnings("static-access")
     public void setRcAndVtIdOption(){
         
-        mRcAndVtIdOption = OptionBuilder.withArgName( "RcId:VtId" )
+        mRcAndVtIdOption = OptionBuilder.withArgName( "RcId:VtId" ) //TODO: Vc oder Vt
                                         .hasArgs()
                                         .withValueSeparator(':')
                                         .withDescription( "Die Rc- und VtId des Bots.\n" +
@@ -262,9 +270,9 @@ class CommandLineOptions {
     public void setRemoteStartOption(){
         
         this.mRemoteStartOption = OptionBuilder.withDescription( " Verhindert das automatische Starten des Bots." +
-                                                                    " Die Verbindung zum Bot wird über die Bot-IP und" +
+                                                                    " Die Verbindung zum Bot wird ueber die Bot-IP und" +
                                                                     " den Namen zusammen mit der RcID und VcID hergestellt." +
-                                                                    " Bsp.: 127.0.0.1/MyBot-0-0 für den Bot MyBot mir RcId = 0 " +
+                                                                    " Bsp.: 127.0.0.1/MyBot-0-0 fuer den Bot MyBot mir RcId = 0 " +
                                                                     " und VcId = 0") //TODO: Ueberpruefen 
                                         .create( "rs" );
         this.mRemoteStartOption.setLongOpt( "remote-start" );
@@ -336,10 +344,19 @@ class CommandLineOptions {
         
     }
     
-    
-    static void parseCommandLineArguments( String[] aArguments ) {
+    /**
+     * Verarbeitet die einzelnen Commandlineargumente. Dabei wird auch überprüft ob alle
+     * essentiellen Argumente vorhanden sind. Die einzelnen argumete wurden vorher in ihren
+     * respectiven Optionen definiert.
+     * 
+     * @since 0.4
+     * @param aArgumente die Commandline als Stringarray
+     * 
+     * @return ob der Bot direkt starten oder auf den Startbefehl warten soll
+     */
+    static boolean parseCommandLineArguments( String[] aArguments ) {
 
-        Core.getLogger().info( "Parsing commandline." );
+        Core.getLogger().trace( "Parsing commandline." );
         CommandLineOptions vCommandLineOptions = new CommandLineOptions();
 
         try {
@@ -363,7 +380,7 @@ class CommandLineOptions {
             vCommandLineOptions.checkForAndSetAIClassname( cmd );
             vCommandLineOptions.checkForAndSetAIArguments( cmd );
             
-            vCommandLineOptions.checkForAndSetRemoteStart( cmd );
+            return vCommandLineOptions.checkForAndSetRemoteStart( cmd );
 
         } catch ( MissingOptionException vMissingOptionExceptions ) {
 
@@ -379,23 +396,28 @@ class CommandLineOptions {
 
         } catch ( ParseException vParseExceptions ) {
             
-            Core.getLogger().error( "Close servermanagements.", vParseExceptions );
+            Core.getLogger().error( "Fehler beim Parsen der CommandLine", vParseExceptions );
 
         } catch ( Exception vAllExceptions ) {
 
-            Core.getLogger().error( "Close servermanagements.", vAllExceptions );
+            Core.getLogger().error( "Unerwarteter Fehler", vAllExceptions );
 
         }
+        
+        Core.getInstance().close();
+        return false;
 
     }
 
-    private void checkForAndSetRemoteStart( CommandLine aCommandLine ) throws Exception {
+    private boolean checkForAndSetRemoteStart( CommandLine aCommandLine ) throws Exception {
         // Remotestart
         if ( aCommandLine.hasOption( getRemoteStartOption().getOpt() ) ) {
 
-            //TODO: Dinge
+            return true;
             
         }
+        
+        return false;
         
     }
 
@@ -564,11 +586,13 @@ class CommandLineOptions {
     private void checkArgumentsForEssentialOptions( CommandLine aCommandLine )
             throws MissingOptionException {
         // essentielle cmdlineargumente Ã¼berprÃ¼fen
-        if ( !(aCommandLine.hasOption( getRemoteStartOption().getOpt() ) || 
-                (aCommandLine.hasOption( getServerAddressOption().getOpt() ) 
-                && aCommandLine.hasOption( getRcAndVtIdOption().getOpt() )
-                && aCommandLine.hasOption( getAiArchiveOption().getOpt() ))
-                && aCommandLine.hasOption( getAiClassnameOption().getOpt() )) ) {
+            if ( !aCommandLine.hasOption( getRcAndVtIdOption().getOpt() ) && 
+                 !(aCommandLine.hasOption( getRemoteStartOption().getOpt() ) || 
+                   (aCommandLine.hasOption( getServerAddressOption().getOpt() )
+                    && aCommandLine.hasOption( getAiArchiveOption().getOpt() ))
+                    && aCommandLine.hasOption( getAiClassnameOption().getOpt() )
+                  ) 
+               ) {
 
             List<String> vMissingOptions = new ArrayList<String>();
 

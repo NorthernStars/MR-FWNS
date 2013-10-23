@@ -23,10 +23,6 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.VerifyEvent;
 
-import core.Core;
-import core.FromServerManagement;
-import core.ToServerManagement;
-
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.events.VerifyListener;
 

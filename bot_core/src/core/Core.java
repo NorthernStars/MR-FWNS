@@ -6,13 +6,14 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.rmi.RemoteException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import remotecontrol.RemoteControlServer;
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
-
 import essentials.core.ArtificialIntelligence;
 import essentials.core.BotInformation;
 import fwns_network.server_2008.NetworkCommunication;
@@ -33,7 +34,7 @@ public class Core {
     private static Core INSTANCE;
  
     private Core(){
-        
+            
         mBotinformation = new BotInformation();
         
     }
@@ -68,21 +69,24 @@ public class Core {
         
         Core.getLogger().info( mBotinformation.getBotname() + "(" + mBotinformation.getRcId() + "/" + mBotinformation.getVtId() + ") closed!" );
         
+        System.exit(0);
+        
     }
     
-    @GuardedBy("this") private final BotInformation mBotinformation;
+    @GuardedBy("this") private BotInformation mBotinformation;
     @GuardedBy("this") volatile private ArtificialIntelligence mAI;
     @GuardedBy("this") private NetworkCommunication mServerConnection;
     
+    /**
+     * Initialisiert die Grundfunktionen des Bots. 
+     * 
+     * @since 0.1
+     * 
+     * @param aCommandline die Commandline als Stringarray
+     */
     public void startBot( String[] aCommandline ) {
 
         try {
-            
-            synchronized (this) {
-                
-                CommandLineOptions.parseCommandLineArguments( aCommandline );
-                
-            }
             
             Runtime.getRuntime().addShutdownHook(new Thread() {
                 @Override
@@ -93,13 +97,14 @@ public class Core {
                 }
                 
             });
-            
-            if( false ){
+                        
+            if( CommandLineOptions.parseCommandLineArguments( aCommandline ) ){
                 
-                //TODO:Dinge
+                RemoteControlServer.getInstance().startRemoteServer();
                 
             }else{
                 
+                RemoteControlServer.getInstance().startRemoteServer();
                 startAI();
                 startServerConnection();
                 
@@ -107,7 +112,7 @@ public class Core {
             
         } catch ( Exception vNormalException ) {
 
-            vNormalException.printStackTrace();
+            Core.getLogger().error( "Fehler beim initialisiern der Grundfunktionen", vNormalException );
 
         }
         
@@ -282,6 +287,12 @@ public class Core {
       
     }
 
+    synchronized public void setBotinformation( BotInformation aBotinformation ) {
+        
+        mBotinformation = aBotinformation;
+        
+    }
+    
     synchronized public NetworkCommunication getServerConnection() {
         return mServerConnection;
     }
@@ -305,5 +316,4 @@ public class Core {
         }
         
     }
-    
 }
