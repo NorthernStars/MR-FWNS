@@ -18,7 +18,6 @@ import org.apache.commons.cli.ParseException;
 
 import essentials.core.BotInformation.GamevalueNames;
 import essentials.core.BotInformation.Teams;
-import gui.CoreWindow;
 
 class CommandLineOptions {
 
@@ -33,7 +32,7 @@ class CommandLineOptions {
     private Option mTeamOption = null;
     private Option mGamevaluesOption = null;
     private Option mTeamNameOption = null;
-    private Option mGuiOption = null;
+    private Option mRemoteStartOption = null;
     private Option mAiArchiveOption = null;
     private Option mAiClassnameOption = null;
     private Option mAiArgsOption = null;
@@ -58,7 +57,7 @@ class CommandLineOptions {
         this.setServerAddressOption();
         
         this.setGamevaluesOptions();
-        this.setGuiOption();
+        this.setRemoteStartOption();
         this.setAiArchiveOption();
         this.setAiClassnameOption();
         this.setAiArgsOption();
@@ -260,19 +259,23 @@ class CommandLineOptions {
     }
     
     @SuppressWarnings("static-access")
-    public void setGuiOption(){
+    public void setRemoteStartOption(){
         
-        this.mGuiOption = OptionBuilder.withDescription( "Startet den Bot mit graphischem Userinterface." )
-                                        .create( "gui" );
-        this.mGuiOption.setLongOpt( "graphical-userinterface" );
+        this.mRemoteStartOption = OptionBuilder.withDescription( " Verhindert das automatische Starten des Bots." +
+                                                                    " Die Verbindung zum Bot wird über die Bot-IP und" +
+                                                                    " den Namen zusammen mit der RcID und VcID hergestellt." +
+                                                                    " Bsp.: 127.0.0.1/MyBot-0-0 für den Bot MyBot mir RcId = 0 " +
+                                                                    " und VcId = 0") //TODO: Ueberpruefen 
+                                        .create( "rs" );
+        this.mRemoteStartOption.setLongOpt( "remote-start" );
         
-        this.mOptions.addOption( mGuiOption );
+        this.mOptions.addOption( mRemoteStartOption );
         
     }
     
-    public Option getGuiOption(){
+    public Option getRemoteStartOption(){
         
-        return this.mGuiOption;
+        return this.mRemoteStartOption;
         
     }    
 
@@ -360,7 +363,7 @@ class CommandLineOptions {
             vCommandLineOptions.checkForAndSetAIClassname( cmd );
             vCommandLineOptions.checkForAndSetAIArguments( cmd );
             
-            vCommandLineOptions.checkForAndSetGui( cmd );
+            vCommandLineOptions.checkForAndSetRemoteStart( cmd );
 
         } catch ( MissingOptionException vMissingOptionExceptions ) {
 
@@ -386,11 +389,11 @@ class CommandLineOptions {
 
     }
 
-    private void checkForAndSetGui( CommandLine aCommandLine ) throws Exception {
-        // gui
-        if ( aCommandLine.hasOption( getGuiOption().getOpt() ) ) {
+    private void checkForAndSetRemoteStart( CommandLine aCommandLine ) throws Exception {
+        // Remotestart
+        if ( aCommandLine.hasOption( getRemoteStartOption().getOpt() ) ) {
 
-            Core.getInstance().setCoreWindow( new CoreWindow() );
+            //TODO: Dinge
             
         }
         
@@ -561,7 +564,7 @@ class CommandLineOptions {
     private void checkArgumentsForEssentialOptions( CommandLine aCommandLine )
             throws MissingOptionException {
         // essentielle cmdlineargumente Ã¼berprÃ¼fen
-        if ( !(aCommandLine.hasOption( getGuiOption().getOpt() ) || 
+        if ( !(aCommandLine.hasOption( getRemoteStartOption().getOpt() ) || 
                 (aCommandLine.hasOption( getServerAddressOption().getOpt() ) 
                 && aCommandLine.hasOption( getRcAndVtIdOption().getOpt() )
                 && aCommandLine.hasOption( getAiArchiveOption().getOpt() ))

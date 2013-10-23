@@ -16,7 +16,6 @@ import net.jcip.annotations.ThreadSafe;
 import essentials.core.ArtificialIntelligence;
 import essentials.core.BotInformation;
 import fwns_network.server_2008.NetworkCommunication;
-import gui.CoreWindow;
 
 
 /**
@@ -73,8 +72,6 @@ public class Core {
     
     @GuardedBy("this") private final BotInformation mBotinformation;
     @GuardedBy("this") volatile private ArtificialIntelligence mAI;
-    private CoreWindow mCoreWindow = null;
-
     @GuardedBy("this") private NetworkCommunication mServerConnection;
     
     public void startBot( String[] aCommandline ) {
@@ -97,9 +94,9 @@ public class Core {
                 
             });
             
-            if( getCoreWindow() != null ){
+            if( false ){
                 
-                getCoreWindow().open();
+                //TODO:Dinge
                 
             }else{
                 
@@ -283,18 +280,6 @@ public class Core {
         
         return mBotinformation;
       
-    }
-    
-    public CoreWindow getCoreWindow() {
-        
-        return mCoreWindow;
-        
-    }
-
-    void setCoreWindow( CoreWindow aCoreWindow ) {
-        
-        mCoreWindow = aCoreWindow;
-        
     }
 
     synchronized public NetworkCommunication getServerConnection() {
