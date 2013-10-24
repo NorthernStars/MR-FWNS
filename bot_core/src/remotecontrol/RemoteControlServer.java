@@ -11,6 +11,23 @@ import essentials.core.BotInformation;
 public class RemoteControlServer implements RemoteControlInterface{
 
     private static RemoteControlServer INSTANCE;
+    private LogListener mLogListener;
+    
+    public void writeToLoglistener( String aString ){
+        
+        if(mLogListener != null){
+            try {
+                
+                mLogListener.logEvent( "Client " + aString );
+                
+            } catch ( RemoteException vRemoteException ) {
+
+                Core.getLogger().error( "RemoteControlClient exception", vRemoteException );
+                
+            }
+        }
+        
+    }
     
     private RemoteControlServer(){
         
@@ -47,6 +64,14 @@ public class RemoteControlServer implements RemoteControlInterface{
         
     }
     
+    @Override
+    public boolean registerLogListener(LogListener aLoglistener) throws RemoteException {
+        
+        mLogListener = aLoglistener;
+        return true;
+        
+    }
+    
     public void startRemoteServer() {
         
         //TODO: Besser sicher machen, jetzt noch nicht wichtig... :)
@@ -74,6 +99,13 @@ public class RemoteControlServer implements RemoteControlInterface{
             Registry vRMIServerRegistry = LocateRegistry.getRegistry();
             vRMIServerRegistry.rebind( Core.getInstance().getBotinformation().getBotname() + "-" + Core.getInstance().getBotinformation().getRcId() + "-" + Core.getInstance().getBotinformation().getVtId() , vRemoteControlServerStub);
             Core.getLogger().info( "RemoteControlServer gestartet und an " +  Core.getInstance().getBotinformation().getBotname() + "-" + Core.getInstance().getBotinformation().getRcId() + "-" + Core.getInstance().getBotinformation().getVtId() + " gebunden." );
+            int i = 1;
+            while( true ){
+                
+                Core.getLogger().info("Server " + i);
+                Thread.sleep( 1000 );
+                i++;
+            }
             
         } catch ( Exception vException ) {
             

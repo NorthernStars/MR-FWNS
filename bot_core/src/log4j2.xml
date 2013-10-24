@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration>
+<Configuration monitorInterval="30" packages="remotecontrol,core,">
   <appenders>
     <Console name="Console" target="SYSTEM_OUT">
       <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
     </Console>
+    <StubAppender name="StubAppender">
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+    </StubAppender>
   </appenders>
   <loggers>
     <logger name="CORE" level="info">
       <appender-ref ref="Console"/>
+      <appender-ref ref="StubAppender"/>
     </logger>
     <root level="error">
     </root>
   </loggers>
-</configuration>
+</Configuration>

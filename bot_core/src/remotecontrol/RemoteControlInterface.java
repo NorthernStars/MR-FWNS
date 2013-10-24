@@ -32,6 +32,23 @@ public interface RemoteControlInterface extends Remote {
      */
     public BotInformation getBotInformation() throws RemoteException;
     
+    /*
+    public boolean[] getStatus() throws RemoteException;
+    
+    public boolean connectBot() throws RemoteException;
+    
+    public boolean reconnectBot() throws RemoteException;
+    
+    public boolean disconnectBot() throws RemoteException;
+    
+    public boolean initialiseAI() throws RemoteException;
+    
+    public boolean startAI() throws RemoteException;
+    
+    public boolean stopAI() throws RemoteException;
+    */
+    public boolean registerLogListener(LogListener aLoglistener) throws RemoteException;
+    
     /**
      * Gibt den Punkt in der Mitte von zwei Referenzpunkten als neuen Referenzpunkt zurueck.
      * 
