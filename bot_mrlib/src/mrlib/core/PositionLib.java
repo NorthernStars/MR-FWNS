@@ -30,14 +30,51 @@ public class PositionLib {
      * @return einen ReferencePoint mit den Koordinaten des Mittelpunkts der Parameter
      */
     public static ReferencePoint getMiddleOfTwoReferencePoints( ReferencePoint aFirstReferencePoint, ReferencePoint aSecondReferencePoint ){
-       
+    	
+    	    	
         //TODO: implementieren!
         // Merke Seitenhalbierende hat nix! mit Winkelhalbiernder zu tun! Geogebra nutzen...
+        double a = aFirstReferencePoint.getDistanceToPoint();
+        double wa = aFirstReferencePoint.getAngleToPoint();
+        double b = aSecondReferencePoint.getDistanceToPoint();
+        double wb =aSecondReferencePoint.getAngleToPoint();
+        double c = Math.sqrt( a*a + b*b - 2 * a * b * Math.cos(Math.toRadians(Math.abs(wa - wb))));
+        double sc = Math.sqrt( (2 * ( a*a + b*b )) - c*c ) / 2;
         
-        //c = Math.sqrt( a*a + b*b - 2 * a * b * Math.cos( wa - wb )
-        //sc = Math.sqrt( 2 ( a*a + b*b ) - c*c ) / 2;
-                
-        return null;
+        System.out.println("SC: " + sc);
+        double gamma = Math.toDegrees(Math.acos((sc*sc + b*b - 0.25*c*c) / (2*sc*b)));
+        
+        System.out.println("gamma: " + gamma);		
+        if(wa > wb){
+        	if(wa > 0 && wb < -90) {
+        		gamma = wb - gamma;
+        	}
+        	else if ( wb < 0 && wa > 90){
+        		gamma = wb + gamma;
+        	}
+        	else{
+        		gamma = wa + gamma;
+        	}
+        }	
+        else{
+        	if(wb > 0 && wa < -90){
+        		gamma = wa + gamma;
+        	}
+        	else if(wa < 0 && wb > 90){
+        		gamma = wb + gamma;
+        	}
+        	else{
+        		gamma = wb - gamma;
+        	}
+        }
+        if (gamma > 180 ){
+        	gamma = gamma - 360;
+        }
+        if (gamma < -180){
+        	gamma = gamma + 360;
+        }
+        System.out.println("gamma: " + gamma);
+        return new ReferencePoint(sc,gamma);
      
     }
     
