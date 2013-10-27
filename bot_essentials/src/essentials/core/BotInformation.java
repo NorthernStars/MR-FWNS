@@ -1,5 +1,7 @@
 package essentials.core;
 
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -8,15 +10,24 @@ import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 import essentials.constants.Default;
 
-// zu tun: final refactor comments singelton
+// TODO: final refactor comments singelton
 
+
+/**
+ * Speichert alle wichtigen Daten des Bots. 
+ * Enthaelt zusaetzlich ein Objekt-"Speicherplatz" um die Kommunikation zwischen AIs zu erleichtern 
+ * Das Serialisieren ignoriert den Objekt-"Speicherplatz".
+ * 
+ * Beachte das die Serialisation ueber einen SerialisationsProxy geschieht, der bei Aenderungen an der 
+ * Ursprungsklasse auch angepasst werden muss.
+ * 
+ * @author Eike Petersen
+ * @since 0.1
+ * @version 0.9
+ *
+ */
 @ThreadSafe
 public class BotInformation implements Serializable{
-
-    /**
-     * 
-     */
-    private static final long serialVersionUID = -7956774328001848340L;
 
     @GuardedBy("this") private String mBotname;
 
@@ -346,6 +357,90 @@ public class BotInformation implements Serializable{
         vBotInformationString += mAIArgs + "\n";
 
         return vBotInformationString;
+
+    }
+    
+    /**
+     *  Serialisation
+     */
+    private static final long serialVersionUID = -7956774328001848340L;
+    
+    private Object writeReplace() {
+        
+        return new BotInformationSerialisationProxy(this);
+        
+    }
+    
+    private void readObject( ObjectInputStream aStream ) throws InvalidObjectException{
+        
+        throw new InvalidObjectException( " Need a Proxy for Serialisation" );
+        
+    }
+    
+    private static class BotInformationSerialisationProxy implements Serializable {
+
+        private static final long serialVersionUID = -2371276572775298909L;
+
+        private final String mBotname;
+
+        private final int mRcId;
+        private final int mVtId;
+
+        private final InetAddress mBotIP;
+        private final int mBotPort;
+        private final boolean mReconnect;
+
+        private final InetAddress mServerIP;
+        private final int mServerPort;
+
+        private final Teams mTeam;
+        private final String mTeamname;
+
+        private final String mAIArchive;
+        private final String mAIClassname;
+        private final String mAIArgs;
+        
+        //No! private Object mBotMemory;
+        
+        BotInformationSerialisationProxy( BotInformation aBotInformation ) {
+            
+            mBotname = aBotInformation.mBotname;
+            mRcId = aBotInformation.mRcId;
+            mVtId = aBotInformation.mVtId;
+            mBotIP = aBotInformation.mBotIP;
+            mBotPort = aBotInformation.mBotPort;
+            mReconnect = aBotInformation.mReconnect;
+            mServerIP = aBotInformation.mServerIP;
+            mServerPort = aBotInformation.mServerPort;
+            mTeam = aBotInformation.mTeam;
+            mTeamname = aBotInformation.mTeamname;
+            mAIArchive = aBotInformation.mAIArchive;
+            mAIClassname = aBotInformation.mAIClassname;
+            mAIArgs = aBotInformation.mAIArgs;
+            
+        }
+        
+        private Object readResolve(){
+            
+            BotInformation vBotInformation = new BotInformation();
+            
+            vBotInformation.mBotname = mBotname;
+            vBotInformation.mRcId = mRcId;
+            vBotInformation.mVtId = mVtId;
+            vBotInformation.mBotIP = mBotIP;
+            vBotInformation.mBotPort = mBotPort;
+            vBotInformation.mReconnect = mReconnect;
+            vBotInformation.mServerIP = mServerIP;
+            vBotInformation.mServerPort = mServerPort;
+            vBotInformation.mTeam = mTeam;
+            vBotInformation.mTeamname = mTeamname;
+            vBotInformation.mAIArchive = mAIArchive;
+            vBotInformation.mAIClassname = mAIClassname;
+            vBotInformation.mAIArgs = mAIArgs;
+            
+            return vBotInformation;
+            
+        }
 
     }
     
