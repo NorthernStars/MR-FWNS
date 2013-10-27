@@ -5,6 +5,12 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.config.LoggerConfig;
+
 import core.Core;
 import essentials.core.BotInformation;
 
@@ -71,6 +77,19 @@ public class RemoteControlServer implements RemoteControlInterface{
         return true;
         
     }
+
+    @Override
+    public boolean setLogLevel( Level aLogLevel ) throws RemoteException {
+                
+        LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+        Configuration config = ctx.getConfiguration();
+        LoggerConfig loggerConfig = config.getLoggerConfig( Core.getLogger().getName() );
+        
+        loggerConfig.setLevel( aLogLevel );
+        ctx.updateLoggers(); 
+        
+        return false;
+    }
     
     public void startRemoteServer() {
         
@@ -99,7 +118,6 @@ public class RemoteControlServer implements RemoteControlInterface{
             Registry vRMIServerRegistry = LocateRegistry.getRegistry();
             vRMIServerRegistry.rebind( Core.getInstance().getBotinformation().getBotname() + "-" + Core.getInstance().getBotinformation().getRcId() + "-" + Core.getInstance().getBotinformation().getVtId() , vRemoteControlServerStub);
             Core.getLogger().info( "RemoteControlServer gestartet und an " +  Core.getInstance().getBotinformation().getBotname() + "-" + Core.getInstance().getBotinformation().getRcId() + "-" + Core.getInstance().getBotinformation().getVtId() + " gebunden." );
-            
             
         } catch ( Exception vException ) {
             

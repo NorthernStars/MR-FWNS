@@ -1,9 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration monitorInterval="30" packages="remotecontrol,core,">
+<Configuration packages="remotecontrol,core,">
+      <properties>
+  		<property name="filters">org.junit,org.apache.maven,sun.reflect,java.lang.reflect</property>
+      </properties>
   <appenders>
     <Console name="Console" target="SYSTEM_OUT">
-      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+      <PatternLayout pattern="%d{HH:mm:ss.SSS}(%r) [%t] %-5level %logger{36} - %msg%n"/>
+      <filters>
+        <MarkerFilter marker="EXCEPTION" onMatch="DENY" onMismatch="ACCEPT"/>
+      </filters>
     </Console>
+    <RandomAccessFile name="ERROR" fileName="logs/error(${sys:Bot}).log" >
+      <PatternLayout pattern="%d{HH:mm:ss.SSS}(%r) [%t] %-5level %logger{36} %C{1}.%M %m %ex%n"/>
+      <filters>
+        <MarkerFilter marker="EXCEPTION" onMatch="ACCEPT" onMismatch="DENY"/>
+      </filters>
+    </RandomAccessFile>
+       
+    
     <StubAppender name="StubAppender">
       <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
     </StubAppender>
@@ -12,6 +26,7 @@
     <logger name="CORE" level="info">
       <appender-ref ref="Console"/>
       <appender-ref ref="StubAppender"/>
+      <appender-ref ref="ERROR" />
     </logger>
     <root level="error">
     </root>

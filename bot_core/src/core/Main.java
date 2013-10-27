@@ -1,10 +1,13 @@
 package core;
 
+import java.lang.management.ManagementFactory;
+
 public class Main {
     
     public static void main( String[] aCommandline ) {
-
-        Core.getLogger().info("Starting Bot(" + Thread.currentThread().getId() + ")" );
+        
+        System.setProperty("Bot", ManagementFactory.getRuntimeMXBean().getName() + "" );
+        Core.getLogger().info("Starting Bot(" + ManagementFactory.getRuntimeMXBean().getName() + ")" );
         
         {
             String vParameters = "";

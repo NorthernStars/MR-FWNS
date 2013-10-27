@@ -6,8 +6,8 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.rmi.RemoteException;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -187,7 +187,7 @@ public class Core {
         
         while( !(mServerConnection != null && mServerConnection.isConnected()) ){
         
-            Core.getLogger().info( mBotinformation.getReconnect()?"Reconnecting":"Connecting" + " to server" );
+            Core.getLogger().info( mBotinformation.getReconnect()?"Reconnecting":"Connecting" + " to server " + mBotinformation.getServerIP() + ":" + mBotinformation.getServerPort() );
             
             try {
             
@@ -221,7 +221,8 @@ public class Core {
                 
             } catch ( IOException e ) {
     
-                Core.getLogger().error( "Error starting serverconnection ", e );
+                Core.getLogger().error( "Error starting serverconnection: " + e.getLocalizedMessage() );
+                Core.getLogger().catching( Level.ERROR, e );
                 
             } 
         }

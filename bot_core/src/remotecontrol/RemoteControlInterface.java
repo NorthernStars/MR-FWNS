@@ -3,6 +3,8 @@ package remotecontrol;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+import org.apache.logging.log4j.Level;
+
 import essentials.core.BotInformation;
 
 /**
@@ -47,7 +49,26 @@ public interface RemoteControlInterface extends Remote {
     
     public boolean stopAI() throws RemoteException;
     */
-    public boolean registerLogListener(LogListener aLoglistener) throws RemoteException;
+    
+    /**
+     * Meldet einen LogListener an dem Server an um die Logeintraege gesendet zu bekommen 
+     * 
+     * @since 0.9
+     * @param aLogListener der anzumeldende LogListener
+     * 
+     * @return ob der Listener erfolgreich angemeldet werden konnte oder nicht
+     */
+    public boolean registerLogListener( LogListener aLogListener ) throws RemoteException;
+    
+    /**
+     * Stellt das Loglevels des Servers ein 
+     * 
+     * @since 0.9
+     * @param aLogLevel das gewünschte LogLevel
+     * 
+     * @return ob das LogLevel erfolgreich eingestellt werden konnte oder nicht
+     */
+    public boolean setLogLevel( Level aLogLevel ) throws RemoteException;
     
     /**
      * Gibt den Punkt in der Mitte von zwei Referenzpunkten als neuen Referenzpunkt zurueck.
@@ -61,5 +82,4 @@ public interface RemoteControlInterface extends Remote {
      * 
      * @return einen ReferencePoint mit den Koordinaten des Mittelpunkts der Parameter
      */
-    
 }
