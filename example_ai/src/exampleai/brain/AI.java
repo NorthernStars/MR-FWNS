@@ -33,9 +33,22 @@ public class AI extends Thread implements ArtificialIntelligence {
     @Override
     public void initializeAI( BotInformation aOneSelf ) {
         
-        mSelf = aOneSelf;        
+        mSelf = aOneSelf;     
+        
+    }
+
+    @Override
+    public void startAI() {
+        
         mIsRunning = true;
         start();
+        
+    }
+    
+    @Override
+    public void pauseAI() {
+        
+        mIsRunning = false;   
         
     }
     
@@ -114,13 +127,6 @@ public class AI extends Thread implements ArtificialIntelligence {
         mIsRunning = false;
         
     }
-
-    @Override
-    public Shell getConfigurationWindow( Display aDisplay ) {
-        
-        return null;
-        
-    }
     
     @Override
     public boolean isRunning() {
@@ -134,5 +140,11 @@ public class AI extends Thread implements ArtificialIntelligence {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+    @Override
+    public void executeCommand( String arg0 ) {
+        // TODO Auto-generated method stub
+        
+    }
 
 }

@@ -1,14 +1,26 @@
 package essentials.core;
 
 public interface ArtificialIntelligence {
-    
+
     /**
-     * Function to initialize and start the AI. The BotInformation-parameter 
+     * Function to initialize the AI. The BotInformation-parameter 
      * is the most recent with all possible Values. 
      * 
-     * @param BotInformation The full information about the Bot
+     * @param aBotInformation The full information about the Bot
      */
-    public void initializeAI( BotInformation BotInformation );
+    public void initializeAI( BotInformation aBotInformation );
+    
+    /**
+     * Function to start the AI. 
+     * 
+     */
+    public void startAI();
+    
+    /**
+     * Function to pause the AI. All execution of logic should be stopped 
+     * 
+     */
+    public void pauseAI();
     
     /**
      * Disables and disposes the AI. Afterward the AI will be garbage-collected.
@@ -22,9 +34,9 @@ public interface ArtificialIntelligence {
 	 * The excecution is not guaranteed, because a new Worldstate can only be generated, if
 	 * the server sends the data.
 	 * 
-	 * @param WorldData The Worldstate as an RawWorldDataobject
+	 * @param aWorldData The Worldstate as an RawWorldDataobject
 	 */
-	public void putWorldState( essentials.communication.worlddata_server2008.RawWorldData WorldData );
+	public void putWorldState( essentials.communication.worlddata_server2008.RawWorldData aWorldData );
 
 	/**
 	 * Gets an Actionobject to send to the server. This method will 
@@ -53,15 +65,14 @@ public interface ArtificialIntelligence {
 	 * @return TRUE to reload and restart the ai, FALSE to do nothing
 	 */
 	public boolean wantRestart();
-
+	
 	/**
-	 * For diagnose- or configuration-purposes the AI can implement its own eclipse.swt based GUI
-	 * to be displayed. This method executes when the AIConfiguration-Button in
-	 * the CoreAIGui is pressed. As the Parameter it gets the parent Display. 
-	 * 
-	 * @param Display The parent Display
-	 * @return The shell to display
-	 */
-	public org.eclipse.swt.widgets.Shell getConfigurationWindow( org.eclipse.swt.widgets.Display Display);
+     * For diagnostic and debugging purposes the AI can get commands in form of strings
+     * 
+     * @param aCommandString the command for the AI
+     * 
+     */
+	public void executeCommand( String aCommandString );
+	
 
 }
