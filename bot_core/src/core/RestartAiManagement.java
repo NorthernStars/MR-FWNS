@@ -6,6 +6,8 @@ public class RestartAiManagement extends Thread{
     
     private RestartAiManagement(){
         
+        this.setName( "RestartAiManagement" );
+        
     }
 
     public static RestartAiManagement getInstance() {
@@ -20,9 +22,10 @@ public class RestartAiManagement extends Thread{
     
     public void close(){
         
-        if(RestartAiManagement.INSTANCE != null) {
+        Core.getLogger().info( "RestartAiServerManagement closing." );
+        if( RestartAiManagement.INSTANCE != null ) {
             
-            getInstance().stopManagement();
+            stopManagement();
             RestartAiManagement.INSTANCE = null;
             
         }
@@ -54,16 +57,25 @@ public class RestartAiManagement extends Thread{
 	public void stopManagement(){
 		
 		mAiActive = false;
-		while(isAlive()){ 
-		    try {
-                Thread.sleep( 10 );
-            } catch ( InterruptedException e ) {
-
-                Core.getLogger().error( "Error stopping RestartAiServerManagement.", e );
-                
-            } 
-        }
-        Core.getLogger().info( "RestartAiServerManagement stopped." );
+		
+		if( isAlive()){
+		    
+		    Core.getLogger().info( "RestartAiServerManagement stopping." );
+		
+		    while(isAlive()){
+		        
+    		    try {
+                    Thread.sleep( 10 );
+                } catch ( InterruptedException e ) {
+    
+                    Core.getLogger().error( "Error stopping RestartAiServerManagement.", e );
+                    
+                } 
+            }
+		    
+		    Core.getLogger().info( "RestartAiServerManagement stopped." );
+		    
+		}
 		
 	}
 	

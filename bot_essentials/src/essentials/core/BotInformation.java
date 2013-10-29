@@ -355,6 +355,7 @@ public class BotInformation implements Serializable{
         }
         vBotInformationString += "Die AI " + mAIClassname + " startet von " + mAIArchive + " mit den Argumenten: \n";
         vBotInformationString += mAIArgs + "\n";
+        vBotInformationString += mBotMemory!=null?mBotMemory.toString() + "\n":"";
 
         return vBotInformationString;
 

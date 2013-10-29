@@ -15,6 +15,8 @@ public class FromServerManagement extends Thread{
     
     private FromServerManagement(){
         
+        this.setName( "FromServerManagement" );
+        
     }
 
     public static FromServerManagement getInstance() {
@@ -102,6 +104,7 @@ public class FromServerManagement extends Thread{
 					
 					if( Core.getInstance().getServerConnection() != null ) {
 						
+					    Core.getLogger().info( "www" );
 					    Core.getInstance().getAI().putWorldState( RawWorldData.createRawWorldDataFromXML( Core.getInstance().getServerConnection().getDatagramm( 1000 ) ) );
 						mLastReceivedMessage.set( System.currentTimeMillis() );
 						

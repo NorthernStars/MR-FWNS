@@ -6,6 +6,9 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -58,18 +61,41 @@ public class Core {
         return BOTCORELOGGER;
         
     }
+
+    private static ExecutorService BOTEXECUTOR = Executors.newSingleThreadExecutor();
+    
+    public static ExecutorService getExecutor(){
+        
+        return BOTEXECUTOR;
+        
+    }
     
     public void close() {
 
-        stopAI();
-        stopServerConnection();
-        RestartAiManagement.getInstance().close();
+        if( INSTANCE != null ){
+            Core.getLogger().info( mBotinformation.getBotname() + "(" + mBotinformation.getRcId() + "/" + mBotinformation.getVtId() + ") closeing!" );
+            stopAI();
+            stopServermanagements();
+            stopServerConnection();
+            RestartAiManagement.getInstance().close();
+            RemoteControlServer.getInstance().close();
+            
+            BOTEXECUTOR.shutdown();
+            BOTEXECUTOR = null;
+            
+            Core.getLogger().info( mBotinformation.getBotname() + "(" + mBotinformation.getRcId() + "/" + mBotinformation.getVtId() + ") closed!" );
+            INSTANCE = null;
+        }
         
-        System.runFinalization();
+        Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+
+        Thread[] threadArray = threadSet.toArray(new Thread[threadSet.size()]);
         
-        Core.getLogger().info( mBotinformation.getBotname() + "(" + mBotinformation.getRcId() + "/" + mBotinformation.getVtId() + ") closed!" );
-        
-        System.exit(0);
+        for (int i = 0; i < threadArray.length; i++){
+            System.out.println("->" + threadArray[i].toString());
+        }
+        System.out.println(" hullo ");
+        //System.exit(0);
         
     }
     
@@ -277,6 +303,7 @@ public class Core {
             Core.getLogger().info( "Stopping servermanagements." );
             FromServerManagement.getInstance().stopManagement();
             ToServerManagement.getInstance().stopManagement();
+            Core.getLogger().info( "Stopped servermanagements." );
             
         }
         
@@ -284,12 +311,14 @@ public class Core {
     
     synchronized public BotInformation getBotinformation() {
         
+        Core.getLogger().debug( "Retriving Botinformation: \n" + mBotinformation.toString() );
         return mBotinformation;
       
     }
 
     synchronized public void setBotinformation( BotInformation aBotinformation ) {
         
+        Core.getLogger().info( "Setting Botinformation: \n" + mBotinformation.toString() );
         mBotinformation = aBotinformation;
         
     }
@@ -301,20 +330,5 @@ public class Core {
     synchronized public ArtificialIntelligence getAI() {
         return mAI;
     }
-    
-    @Override
-    protected void finalize() throws Throwable{
-        
-        try {
-            
-            Core.getLogger().info( "Final death." );
-            close();
-            
-        } finally {
-            
-            super.finalize();
-            
-        }
-        
-    }
+
 }

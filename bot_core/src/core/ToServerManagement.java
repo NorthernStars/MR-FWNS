@@ -15,6 +15,8 @@ public class ToServerManagement extends Thread{
     
     private ToServerManagement(){
         
+        this.setName( "ToServerManagement" );
+        
     }
 
     public static ToServerManagement getInstance() {

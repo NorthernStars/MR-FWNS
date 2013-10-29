@@ -1,11 +1,10 @@
-package remotecontrol;
+package core;
 
 import java.rmi.Naming;
 import java.rmi.server.UnicastRemoteObject;
 
-import org.apache.logging.log4j.Level;
-
 import essentials.core.BotInformation;
+import fwns_network.botremotecontrol.RemoteControlInterface;
 
 public class RemoteControlClient {
  
@@ -30,30 +29,18 @@ public class RemoteControlClient {
         
         obj.registerLogListener( listener );
 
-        System.out.println();
-        obj.setLogLevel( Level.ALL );
-        Thread.sleep( 3000 );
-        System.out.println();
-        obj.setLogLevel( Level.DEBUG );
-        Thread.sleep( 3000 );
-        System.out.println();
-        obj.setLogLevel( Level.TRACE );
-        Thread.sleep( 3000 );
-        System.out.println();
-        obj.setLogLevel( Level.ERROR );
-        Thread.sleep( 3000 );
-        System.out.println();
-        obj.setLogLevel( Level.INFO );
-        Thread.sleep( 3000 );
-        System.out.println();
-        obj.setLogLevel( Level.WARN );
-        Thread.sleep( 3000 );
-
         names = Naming.list("//localhost:1099/");
         for (int i = 0; i < names.length; i++)
             System.out.println(names[i]);
         
-        while( true ){ Thread.sleep( 1 ); }
+        obj.unregisterLogListener( null );
+        obj.closeBot();
+
+        names = Naming.list("//localhost:1099/");
+        for (int i = 0; i < names.length; i++)
+            System.out.println("->" + names[i]);
+        
+        UnicastRemoteObject.unexportObject(listener, true);
         
     }
 

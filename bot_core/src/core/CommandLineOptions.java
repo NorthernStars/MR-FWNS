@@ -345,7 +345,7 @@ class CommandLineOptions {
     }
     
     /**
-     * Verarbeitet die einzelnen Commandlineargumente. Dabei wird auch überprüft ob alle
+     * Verarbeitet die einzelnen Commandlineargumente. Dabei wird auch ueberprueft ob alle
      * essentiellen Argumente vorhanden sind. Die einzelnen argumete wurden vorher in ihren
      * respectiven Optionen definiert.
      * 
