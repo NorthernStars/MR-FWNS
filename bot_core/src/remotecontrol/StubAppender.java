@@ -19,7 +19,7 @@ public final class StubAppender extends AbstractAppender {
     }
 
     public void append(LogEvent event) {
-        RemoteControlServer.getInstance().writeToLoglistener( event.getMessage().getFormattedMessage() );
+        RemoteControlServer.getInstance().writeToLoglistener( event );
     }
 
     @PluginFactory

@@ -85,7 +85,7 @@ public class RestartAiManagement extends Thread{
 			
 		    if(Core.getInstance().getAI() != null && Core.getInstance().getAI().wantRestart()){
 		        
-		        Core.getInstance().startAI();
+		        Core.getInstance().initializeAI();
 		        
 		    }
 		    

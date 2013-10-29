@@ -3,10 +3,13 @@ package core;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.apache.logging.log4j.Level;
+
+import remotecontrol.RemoteControlServer;
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
-
 import essentials.communication.worlddata_server2008.RawWorldData;
+import fwns_network.botremotecontrol.BotStatusType;
 
 @ThreadSafe
 public class FromServerManagement extends Thread{
@@ -120,13 +123,23 @@ public class FromServerManagement extends Thread{
 					
 				}
 				
-			} catch ( SocketTimeoutException e ) {
+			} catch ( SocketTimeoutException vSocketTimeoutException ) {
                 
-			    Core.getLogger().error( "Receiving no messages from server ", e );
+			    Core.getLogger().error( "Receiving no messages from server " + vSocketTimeoutException.getLocalizedMessage() );
+	            Core.getLogger().catching( Level.ERROR, vSocketTimeoutException );
+	            
+		        RemoteControlServer.getInstance().changedStatus( BotStatusType.NetworkIncomingTraffic );
                 
-            } catch ( Exception e ) {
+            } catch ( Exception vException ) {
                 
-                Core.getLogger().error( "Error receiving messages from server ", e );
+                Core.getLogger().error( "Error receiving messages from server " + vException.getLocalizedMessage() );
+                Core.getLogger().catching( Level.ERROR, vException );
+                
+            }
+			
+			if( (System.currentTimeMillis() - mLastReceivedMessage.get() ) > 132 ){ //TODO: dynamisch mit der Zeit eines Ticks verbinden
+                
+                RemoteControlServer.getInstance().changedStatus( BotStatusType.NetworkIncomingTraffic );
                 
             }
 			

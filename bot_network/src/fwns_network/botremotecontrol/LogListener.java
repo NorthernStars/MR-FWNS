@@ -4,6 +4,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.LogEvent;
 
 /**
  * LogListener zum uebertragen der Logevents des Bots an die Remotekontrolle. 
@@ -25,6 +26,6 @@ public interface LogListener extends Remote{
      * @exception RemoteException
      *          falls die Verbindung in irgendeiner Weise gestoert wird 
      */
-    public void logEvent( String aLogEvent, Level aLogLevel ) throws RemoteException;
+    public void logEvent( LogEvent aLogEvent) throws RemoteException;
     
 }

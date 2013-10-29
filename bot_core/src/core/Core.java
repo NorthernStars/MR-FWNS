@@ -16,6 +16,7 @@ import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 import essentials.core.ArtificialIntelligence;
 import essentials.core.BotInformation;
+import fwns_network.botremotecontrol.BotStatusType;
 import fwns_network.server_2008.NetworkCommunication;
 
 
@@ -63,7 +64,7 @@ public class Core {
 
         if( INSTANCE != null ){
             Core.getLogger().info( mBotinformation.getBotname() + "(" + mBotinformation.getRcId() + "/" + mBotinformation.getVtId() + ") closeing!" );
-            stopAI();
+            disposeAI();
             stopServermanagements();
             stopServerConnection();
             RestartAiManagement.getInstance().close();
@@ -109,8 +110,10 @@ public class Core {
             }else{
                 
                 RemoteControlServer.getInstance().startRemoteServer();
-                startAI();
+                initializeAI();
+                RestartAiManagement.getInstance().startManagement();
                 startServerConnection();
+                mAI.startAI();
                 
             }
             
@@ -123,62 +126,82 @@ public class Core {
     }
 
     @SuppressWarnings("resource")
-	public void startAI() {
+	public boolean initializeAI() {
         
-        Core.getLogger().trace( "Starting Ai." );
         synchronized (this) {
             
             if( mAI == null ){
                 
             } else if( mAI.isRunning() ){
 
-                stopAI();
+                disposeAI();
                 
             }
             
         }
-
-        while( mAI == null){
            
-            try {
-    
-                Core.getLogger().info( "Loading AI " + mBotinformation.getAIClassname() + " from " + mBotinformation.getAIArchive() );
-                URL url = new File( mBotinformation.getAIArchive() ).toURI().toURL();
-                URLClassLoader cl = new URLClassLoader( new URL[]{ url } );
-                synchronized (this) {
-                    
-                    mAI = (ArtificialIntelligence) cl.loadClass( mBotinformation.getAIClassname() ).newInstance();
-                    
-                }
-                // cl.close(); <- verursacht Fehler
+        try {
+
+            Core.getLogger().trace( "Loading AI " + mBotinformation.getAIClassname() + " from " + mBotinformation.getAIArchive() );
+            URL vUniformResourceLocator = new File( mBotinformation.getAIArchive() ).toURI().toURL();
+            URLClassLoader vClassloader = new URLClassLoader( new URL[]{ vUniformResourceLocator } );
+            synchronized (this) {
                 
-            } catch ( Exception e) {
-                
-                Core.getLogger().error( "Error loading AI ", e );
+                mAI = (ArtificialIntelligence) vClassloader.loadClass( mBotinformation.getAIClassname() ).newInstance();
                 
             }
-        
+            Core.getLogger().info( "Loaded AI " + mBotinformation.getAIClassname() + " from " + mBotinformation.getAIArchive() );
+            // vClassloader.close(); <- verursacht Fehler
+            
+        } catch ( Exception vException ) {
+            
+            Core.getLogger().error( "Error loading AI " + mBotinformation.getAIClassname() + " from " + mBotinformation.getAIArchive() + " " + vException.getLocalizedMessage() );
+            Core.getLogger().catching( Level.ERROR, vException );
+            
+            return false;
+            
         }
-        
+         
         synchronized (this) {
             
             mAI.initializeAI( getBotinformation() );
         
         }
         
-        RestartAiManagement.getInstance().startManagement();
+        RemoteControlServer.getInstance().changedStatus( BotStatusType.AILoaded );
+        
+        return true;
         
     }
 
-    synchronized public void stopAI() {
+    synchronized public void disposeAI() {
         
-        Core.getLogger().info( "Stopping AI " + mBotinformation.getAIClassname() + " from " + mBotinformation.getAIArchive() );
         if( mAI != null ){
             
+            Core.getLogger().trace( "Disposing AI " + mBotinformation.getAIClassname() + " from " + mBotinformation.getAIArchive() );
             mAI.disposeAI();
             mAI = null;
+            Core.getLogger().info( "Disposed AI " + mBotinformation.getAIClassname() + " from " + mBotinformation.getAIArchive() );
+
+            RemoteControlServer.getInstance().changedStatus( BotStatusType.AILoaded );
+            RemoteControlServer.getInstance().changedStatus( BotStatusType.AIRunning );
             
         }
+        
+    }
+    
+    synchronized public boolean startAI(){
+
+        mAI.startAI();
+        RemoteControlServer.getInstance().changedStatus( BotStatusType.AIRunning );
+        return Core.getInstance().getAI().isRunning();
+        
+    }
+    
+    synchronized public void pauseAI(){
+
+        mAI.pauseAI();
+        RemoteControlServer.getInstance().changedStatus( BotStatusType.AIRunning );
         
     }
 
@@ -187,7 +210,7 @@ public class Core {
      * @throws SocketTimeoutException
      * @throws SocketException
      */
-    public void startServerConnection() {
+    public void startServerConnection() { //TODO: return boolean, connect successful?
         
         while( !(mServerConnection != null && mServerConnection.isConnected()) ){
         
@@ -221,6 +244,9 @@ public class Core {
                     
                 }
                 
+
+                RemoteControlServer.getInstance().changedStatus( BotStatusType.NetworkConnection );
+                
                 startServermanagements();
                 
             } catch ( IOException e ) {
@@ -250,6 +276,9 @@ public class Core {
                 Core.getLogger().info( "Closing serverconnection (" + mServerConnection.toString() + ")" );
                 mServerConnection.closeConnection();
                 Core.getLogger().info( "Closed serverconnection." );
+                
+
+                RemoteControlServer.getInstance().changedStatus( BotStatusType.NetworkConnection );
                 
             }
         

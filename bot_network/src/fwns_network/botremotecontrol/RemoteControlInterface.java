@@ -103,7 +103,19 @@ public interface RemoteControlInterface extends Remote {
     public boolean startAI() throws RemoteException;
     
     /**
-     * Beendet die laufende AI.
+     * Pausiert die laufende AI.
+     * 
+     * @since 0.9
+     * 
+     * @return ob die AI erfolgreich pausiert werden konnte
+     * 
+     * @exception RemoteException
+     *          falls die Verbindung in irgendeiner Weise gestoert wird
+     */
+    public void pauseAI() throws RemoteException;
+
+    /**
+     * Beendet und entfernt die laufende AI.
      * 
      * @since 0.9
      * 
@@ -112,7 +124,19 @@ public interface RemoteControlInterface extends Remote {
      * @exception RemoteException
      *          falls die Verbindung in irgendeiner Weise gestoert wird
      */
-    public boolean stopAI() throws RemoteException;
+    public void disposeAI() throws RemoteException;
+    
+    /**
+     * Uebergibt den Befehl an die AI zum ausfuehren.
+     * 
+     * @since 0.9
+     * 
+     * @param aCommandString der auszufuehrende Befehl 
+     * 
+     * @exception RemoteException
+     *          falls die Verbindung in irgendeiner Weise gestoert wird
+     */
+    public void executeCommandOnAI( String aCommandString ) throws RemoteException;
     
     /**
      * Meldet einen LogListener an dem Server an um die Logeintraege gesendet zu bekommen 
@@ -120,27 +144,27 @@ public interface RemoteControlInterface extends Remote {
      * @since 0.9
      * @param aLogListener der anzumeldende LogListener
      * 
-     * @return falls null -> Listener nicht angemeldet
-     *         falls !null -> Listener angemeldet, bytearray ist ein Identifier um Listener abzumelden
+     * @return falls 0 -> Listener nicht angemeldet
+     *         falls !0 -> Listener angemeldet, bytearray ist ein Identifier um Listener abzumelden
      *         
      * @exception RemoteException
      *          falls die Verbindung in irgendeiner Weise gestoert wird 
      */
-    public byte[] registerLogListener( LogListener aLogListener ) throws RemoteException;
+    public int registerLogListener( LogListener aLogListener ) throws RemoteException;
     
     /**
      * Meldet einen LogListener von dem Server ab 
      * 
      * @since 0.9
      * @param aListenerIdent Identifier des abzumeldenden LogListeners oder
-     *                       null wenn alle Listener abgemeldet werden sollen
+     *                       0 wenn alle Listener abgemeldet werden sollen
      * 
      * @return ob der listener erfolgreich abgemeldet werden konnte
      *         
      * @exception RemoteException
      *          falls die Verbindung in irgendeiner Weise gestoert wird  
      */
-    public boolean unregisterLogListener( byte[] aListenerIdent ) throws RemoteException;
+    public boolean unregisterLogListener( int aListenerIdent ) throws RemoteException;
     
     /**
      * Stellt das Loglevels des Servers ein 
@@ -167,7 +191,7 @@ public interface RemoteControlInterface extends Remote {
      * @exception RemoteException
      *          falls die Verbindung in irgendeiner Weise gestoert wird 
      */
-    public byte[] registerStatusListener( StatusListener aStatusListener ) throws RemoteException;
+    public int registerStatusListener( StatusListener aStatusListener ) throws RemoteException;
     
     /**
      * Meldet einen StatusListener von dem Server ab 
@@ -181,7 +205,7 @@ public interface RemoteControlInterface extends Remote {
      * @exception RemoteException
      *          falls die Verbindung in irgendeiner Weise gestoert wird 
      */
-    public boolean unregisterStatusListener( byte[] aListenerIdent ) throws RemoteException;
+    public boolean unregisterStatusListener( int aListenerIdent ) throws RemoteException;
     
     /**
      * Gibt den gewuenschten Status wenn moeglich als boolean zurueck 

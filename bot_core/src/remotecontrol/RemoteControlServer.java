@@ -6,15 +6,22 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.security.MessageDigest;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 
 import core.Core;
+import core.FromServerManagement;
+import core.ToServerManagement;
 import essentials.core.BotInformation;
 import fwns_network.botremotecontrol.BotStatusType;
 import fwns_network.botremotecontrol.LogListener;
@@ -24,7 +31,8 @@ import fwns_network.botremotecontrol.StatusListener;
 public class RemoteControlServer implements RemoteControlInterface{
 
     private static RemoteControlServer INSTANCE;
-    private LogListener mLogListener;
+    private Map<Integer, LogListener> mLogListener = Collections.synchronizedMap(new HashMap<Integer, LogListener>());
+    private Map<Integer, StatusListener> mStatusListener = Collections.synchronizedMap(new HashMap<Integer, StatusListener>());
     private String mRemoteControlServerName;
     private RemoteControlInterface mRemoteControlServerStub;
     private Registry mRMIServerRegistry;
@@ -66,13 +74,22 @@ public class RemoteControlServer implements RemoteControlInterface{
             
         } catch (RemoteException vRemoteException ) {
 
+            Core.getLogger().catching( Level.ERROR, vRemoteException );
+            
             try {
+                
                 mRMIServerRegistry = LocateRegistry.getRegistry();
-            } catch ( RemoteException e ) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                Core.getLogger().info( "RMI registry already exists " + mRMIServerRegistry.toString()  );
+                
+            } catch ( RemoteException vExtraRemoteException ) {
+                
+                Core.getLogger().info( "RMI-registry is unavalible " + vExtraRemoteException.getLocalizedMessage() );
+                Core.getLogger().catching( Level.ERROR, vExtraRemoteException );
+                
+                Core.getLogger().info( "Cannot create RemoteControlServer" );
+                return;
+                
             }
-            Core.getLogger().info( "RMI registry already exists ", vRemoteException );
             
         }
         
@@ -87,7 +104,8 @@ public class RemoteControlServer implements RemoteControlInterface{
           
         } catch ( Exception vException ) {
             
-            Core.getLogger().error( "RemoteControlServer exception", vException);
+            Core.getLogger().error( "RemoteControlServer exception " + vException.getLocalizedMessage() );
+            Core.getLogger().catching( Level.ERROR, vException );
             
         }
         
@@ -98,8 +116,8 @@ public class RemoteControlServer implements RemoteControlInterface{
         try {
             
             
-            unregisterStatusListener( null );
-            unregisterLogListener( null );
+            unregisterStatusListener( 0 );
+            unregisterLogListener( 0 );
 
             Core.getLogger().info( "Unbinding RemoteControlServer " + mRemoteControlServerName );
             mRMIServerRegistry.unbind( mRemoteControlServerName );
@@ -110,7 +128,8 @@ public class RemoteControlServer implements RemoteControlInterface{
             
         } catch( Exception vException ) {
             
-            Core.getLogger().error( "Error closing RemoteControlServer", vException);
+            Core.getLogger().error( "Error closing RemoteControlServer " + vException.getLocalizedMessage() );
+            Core.getLogger().catching( Level.ERROR, vException );
             
         }
         
@@ -137,74 +156,103 @@ public class RemoteControlServer implements RemoteControlInterface{
     @Override
     public boolean connectBot() throws RemoteException {
 
+        Core.getInstance().startServerConnection();
+        return Core.getInstance().getServerConnection().isConnected();
         
-        
-        return false;
     }
 
     @Override
     public boolean reconnectBot() throws RemoteException {
-        // TODO Auto-generated method stub
-        return false;
+        
+        Core.getInstance().getBotinformation().setReconnect( true );
+        Core.getInstance().startServerConnection();
+        return Core.getInstance().getServerConnection().isConnected();
     }
 
     @Override
     public boolean disconnectBot() throws RemoteException {
-        // TODO Auto-generated method stub
-        return false;
+        
+        Core.getInstance().stopServerConnection();
+        return Core.getInstance().getServerConnection().isConnected();
+        
     }
 
     @Override
     public boolean initialiseAI() throws RemoteException {
-        // TODO Auto-generated method stub
-        return false;
+
+        return Core.getInstance().initializeAI();
+        
     }
 
     @Override
     public boolean startAI() throws RemoteException {
-        // TODO Auto-generated method stub
-        return false;
+
+        return Core.getInstance().startAI();
+        
     }
 
     @Override
-    public boolean stopAI() throws RemoteException {
-        // TODO Auto-generated method stub
-        return false;
+    public void pauseAI() throws RemoteException {
+        
+        Core.getInstance().getAI().pauseAI();
+        
+    }
+
+    @Override
+    public void disposeAI() throws RemoteException {
+
+        Core.getInstance().getAI().disposeAI();
+        
+    }
+
+    @Override
+    public void executeCommandOnAI( String vCommandString ) throws RemoteException {
+
+        Core.getInstance().getAI().executeCommand( vCommandString );
+        
     }
     
     //Logging
     
     @Override
-    public byte[] registerLogListener( LogListener aLogListener ) throws RemoteException {
+    public int registerLogListener( LogListener aLogListener ) throws RemoteException {
         
-        mLogListener = aLogListener;
-        return null;
+        Core.getLogger().info( "Registering LogListener " + aLogListener.hashCode() );
+        mLogListener.put( aLogListener.hashCode(), aLogListener );
+        
+        return aLogListener.hashCode();
         
     }
 
     @Override
     public boolean setLogLevel( Level aLogLevel ) throws RemoteException {
                 
-        LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
-        Configuration config = ctx.getConfiguration();
-        LoggerConfig loggerConfig = config.getLoggerConfig( Core.getLogger().getName() );
+        LoggerContext vLoggerContext = (LoggerContext) LogManager.getContext(false);
+        Configuration vGlobalConfig = vLoggerContext.getConfiguration();
+        LoggerConfig vLoggerConfig = vGlobalConfig.getLoggerConfig( Core.getLogger().getName() );
         
-        loggerConfig.setLevel( aLogLevel );
-        ctx.updateLoggers(); 
+        vLoggerConfig.setLevel( aLogLevel );
+        vLoggerContext.updateLoggers(); 
         
-        return false;
+        return true;
     }
 
     @Override
-    public boolean unregisterLogListener( byte[] aListenerIdent ) throws RemoteException {
+    public boolean unregisterLogListener( int aListenerIdent ) throws RemoteException {
         
-        if( aListenerIdent == null && mLogListener != null){
+        if( aListenerIdent == 0 ){
 
-            Core.getLogger().info( "Unregistering all LogListeners" );
-
-            mLogListener = null;
+            Core.getLogger().trace( "Unregistering all LogListeners" );
+            mLogListener.clear();
             Core.getLogger().info( "Unregistered all LogListeners" );
+            return true;
             
+        }
+        if( mLogListener.containsKey( aListenerIdent ) ){
+            
+            Core.getLogger().trace( "Unregistering LogListener " + aListenerIdent );
+            mLogListener.remove( aListenerIdent );
+            Core.getLogger().info( "Unregistered all LogListeners " + aListenerIdent );
             return true;
             
         }
@@ -212,41 +260,54 @@ public class RemoteControlServer implements RemoteControlInterface{
         return false;
     }
 
-    public void writeToLoglistener( String aString ){
+    public void writeToLoglistener( LogEvent aLogEvent ){
         
-        if( mLogListener != null ){
+        for ( int vLogListenerKey : mLogListener.keySet() ){
             try {
                 
-                mLogListener.logEvent( "Client " + aString, Level.ALL );
-                
+                mLogListener.get( vLogListenerKey ).logEvent( aLogEvent );
+            
             } catch ( RemoteException vRemoteException ) {
 
-                Core.getLogger().error( "RemoteControlClient exception" );
-                mLogListener = null;
+                //TODO: recursives loggen loesen
+                Core.getLogger().error( "RemoteControlClient exception " + vRemoteException.getLocalizedMessage() );
+                Core.getLogger().catching( Level.ERROR, vRemoteException );
+                Core.getLogger().trace( "Unregistering LogListener " + vLogListenerKey );
+                mLogListener.remove( vLogListenerKey );
+                Core.getLogger().info( "UnregisteredLogListener " + vLogListenerKey );
+                
             }
         }
-        
+
     }
     
     //Status
     
     @Override
-    public byte[] registerStatusListener( StatusListener aStatusListener ) throws RemoteException {
-        // TODO Auto-generated method stub
-        return null;
+    public int registerStatusListener( StatusListener aStatusListener ) throws RemoteException {
+        
+        Core.getLogger().info( "Registering StatusListener " + aStatusListener.hashCode() );
+        mStatusListener.put( aStatusListener.hashCode(), aStatusListener );
+        
+        return aStatusListener.hashCode();
     }
 
     @Override
-    public boolean unregisterStatusListener( byte[] aListenerIdent ) throws RemoteException {
-        
-        if( aListenerIdent == null){
+    public boolean unregisterStatusListener( int aListenerIdent ) throws RemoteException {
 
-            Core.getLogger().info( "Unregistering all StatusListeners" );
+        if( aListenerIdent == 0 ){
 
-            //TODO: Dinge
-            
+            Core.getLogger().trace( "Unregistering all StatusListeners" );
+            mStatusListener.clear();
             Core.getLogger().info( "Unregistered all StatusListeners" );
+            return true;
             
+        }
+        if( mStatusListener.containsKey( aListenerIdent ) ){
+            
+            Core.getLogger().trace( "Unregistering StatusListener " + aListenerIdent );
+            mStatusListener.remove( aListenerIdent );
+            Core.getLogger().info( "Unregistered all StatusListeners " + aListenerIdent );
             return true;
             
         }
@@ -256,8 +317,43 @@ public class RemoteControlServer implements RemoteControlInterface{
 
     @Override
     public boolean getBooleanStatus( BotStatusType aBotStatus ) throws RemoteException {
-        // TODO Auto-generated method stub
+
+        switch( aBotStatus ){
+        
+            case NetworkConnection:
+                return Core.getInstance().getServerConnection() != null && Core.getInstance().getServerConnection().isConnected();
+            case NetworkIncomingTraffic:
+                return FromServerManagement.getInstance().isReceivingMessages(); 
+            case NetworkOutgoingTraffic:
+                return ToServerManagement.getInstance().isSendingMessages(); 
+            case AIRunning:
+                return Core.getInstance().getAI() != null && Core.getInstance().getAI().isRunning();
+            case AILoaded:
+                return Core.getInstance().getAI() != null;
+                
+        }
+        
         return false;
+    }
+    
+    public void changedStatus( BotStatusType aBotStatus ){
+        
+        for ( int vStatusListenerKey : mStatusListener.keySet() ){
+            try {
+                
+                mStatusListener.get( vStatusListenerKey ).changedStatus( aBotStatus );
+            
+            } catch ( RemoteException vRemoteException ) {
+
+                Core.getLogger().error( "RemoteControlClient exception " + vRemoteException.getLocalizedMessage() );
+                Core.getLogger().catching( Level.ERROR, vRemoteException );
+                Core.getLogger().trace( "Unregistering StatusListener " + vStatusListenerKey );
+                mStatusListener.remove( vStatusListenerKey );
+                Core.getLogger().info( "Unregistered StatusListeners " + vStatusListenerKey );
+                
+            }
+        }
+
     }
     
     // Kill

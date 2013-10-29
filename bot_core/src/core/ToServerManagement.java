@@ -2,11 +2,15 @@ package core;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.apache.logging.log4j.Level;
+
+import remotecontrol.RemoteControlServer;
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
-
 import essentials.communication.Action;
 import essentials.communication.action_server2008.Movement;
+import essentials.core.BotInformation.GamevalueNames;
+import fwns_network.botremotecontrol.BotStatusType;
 
 @ThreadSafe
 public class ToServerManagement extends Thread{
@@ -41,7 +45,7 @@ public class ToServerManagement extends Thread{
         
     }
     
-	@GuardedBy("this") private boolean mManageMessagesFromServer = false;
+	@GuardedBy("this") private boolean mManageMessagesToServer = false;
     volatile private AtomicLong mLastSendMessage = new AtomicLong( 0 );
     	
 	@Override
@@ -57,7 +61,7 @@ public class ToServerManagement extends Thread{
 		 
 		    synchronized (this) {
 	             
-		        mManageMessagesFromServer = true;
+		        mManageMessagesToServer = true;
 		    
 		    }
 			super.start();
@@ -75,7 +79,7 @@ public class ToServerManagement extends Thread{
 	 
 	    synchronized (this) {
             
-	        mManageMessagesFromServer = false;
+	        mManageMessagesToServer = false;
 	    
 	    }
 	    
@@ -101,7 +105,7 @@ public class ToServerManagement extends Thread{
 	    
 	    Action vCurrentAction = null;
 	    
-		while( mManageMessagesFromServer ){
+		while( mManageMessagesToServer ){
 			
 			try {
 				
@@ -119,20 +123,27 @@ public class ToServerManagement extends Thread{
 					} else {
 
 					    Core.getInstance().getServerConnection().sendDatagramm( (Action) Movement.NO_MOVEMENT );
-						throw new NullPointerException( "Without actual AI only empty messages will be sent to the Server." ); // Change Exception 
+						Core.getLogger().info( "Without actual AI only empty messages will be sent to the Server." );
 												
 					}
 					
 				} else {
-					
+				    
 					throw new NullPointerException( "NetworkCommunication cannot be NULL when running ToServerManagement." ) ;
 					
 				}
 				
-			} catch ( Exception e ) {
+			} catch ( Exception vException ) {
 				
-                Core.getLogger().error( "Error sending messages to server ", e );
-				
+                Core.getLogger().error( "Error sending messages to server " + vException.getLocalizedMessage() );
+                Core.getLogger().catching( Level.ERROR, vException );
+                				
+			}
+			
+			if( (System.currentTimeMillis() - mLastSendMessage.get() ) > 132 ){ //TODO: dynamisch mit der Zeit eines Ticks verbinden
+			    
+			    RemoteControlServer.getInstance().changedStatus( BotStatusType.NetworkOutgoingTraffic );
+			    
 			}
 			
 		}
