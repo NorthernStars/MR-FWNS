@@ -97,25 +97,15 @@ public class RemoteControlServer implements RemoteControlInterface{
         
         try {
             
-            Remote remote;
-            
-            for ( String vBoundName : LocateRegistry.getRegistry().list() ){
-                
-                remote = mRMIServerRegistry.lookup(vBoundName);
-                Core.getLogger().info( "Unbinding RemoteControlServer " + vBoundName );
-                mRMIServerRegistry.unbind( vBoundName );
-                
-                if (remote instanceof UnicastRemoteObject) {
-                    Core.getLogger().info( "Unexporting RemoteControlServer " + vBoundName );
-                    UnicastRemoteObject.unexportObject(remote, true);
-                }
-                
-            }
             
             unregisterStatusListener( null );
             unregisterLogListener( null );
+
+            Core.getLogger().info( "Unbinding RemoteControlServer " + mRemoteControlServerName );
+            mRMIServerRegistry.unbind( mRemoteControlServerName );
             
-            System.out.println( UnicastRemoteObject.unexportObject(getInstance(), true) );
+            Core.getLogger().info( "Unexporting RemoteControlServer " + mRemoteControlServerName );
+            UnicastRemoteObject.unexportObject( getInstance(), true);
             INSTANCE = null;
             
         } catch( Exception vException ) {
@@ -274,22 +264,8 @@ public class RemoteControlServer implements RemoteControlInterface{
 
     @Override
     public void closeBot() throws RemoteException {
-        
-        Core.getExecutor().execute( new Runnable() {
-            
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep( 1000 );
-                } catch ( InterruptedException e ) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                Core.getInstance().close();
-                
-            }
-            
-        } );
+  
+        Core.getInstance().close();
         
     }
     

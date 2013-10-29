@@ -6,9 +6,6 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -61,14 +58,6 @@ public class Core {
         return BOTCORELOGGER;
         
     }
-
-    private static ExecutorService BOTEXECUTOR = Executors.newSingleThreadExecutor();
-    
-    public static ExecutorService getExecutor(){
-        
-        return BOTEXECUTOR;
-        
-    }
     
     public void close() {
 
@@ -80,22 +69,11 @@ public class Core {
             RestartAiManagement.getInstance().close();
             RemoteControlServer.getInstance().close();
             
-            BOTEXECUTOR.shutdown();
-            BOTEXECUTOR = null;
-            
             Core.getLogger().info( mBotinformation.getBotname() + "(" + mBotinformation.getRcId() + "/" + mBotinformation.getVtId() + ") closed!" );
             INSTANCE = null;
         }
         
-        Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-
-        Thread[] threadArray = threadSet.toArray(new Thread[threadSet.size()]);
-        
-        for (int i = 0; i < threadArray.length; i++){
-            System.out.println("->" + threadArray[i].toString());
-        }
-        System.out.println(" hullo ");
-        //System.exit(0);
+        // Hier kein System.exit( status ) das das das beenden des Bots verhindert
         
     }
     
