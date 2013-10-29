@@ -113,7 +113,7 @@ public class Core {
                 initializeAI();
                 RestartAiManagement.getInstance().startManagement();
                 startServerConnection();
-                mAI.startAI();
+                startAI();
                 
             }
             

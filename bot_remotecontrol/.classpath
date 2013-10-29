@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="gui/" kind="src" path="src"/>
+	<classpathentry excluding="gui/CoreWindow.java|org/eclipse/wb/swt/SWTResourceManager.java|core/RemoteControlClient.java|core/LogListenerImplementation.java" kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/MixedRealityBot/libraries/swt64.jar"/>
 	<classpathentry kind="lib" path="/MixedRealityBot/libraries/bot_essentials.jar"/>
 	<classpathentry kind="lib" path="/MixedRealityBot/libraries/bot_network.jar"/>
 	<classpathentry kind="lib" path="/MixedRealityBot/libraries/log4j-api-2.0-beta9.jar">
@@ -15,5 +14,6 @@
 			<attribute name="javadoc_location" value="jar:file:/E:/Robotik/MRBot/MR-FWNS/bot_lib/libraries/log4j-core-2.0-beta9-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="miglayout15-swing.jar" sourcepath="miglayout-src.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
