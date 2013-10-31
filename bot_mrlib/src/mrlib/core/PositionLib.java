@@ -2,6 +2,7 @@ package mrlib.core;
 
 import java.util.ArrayList;
 
+import essentials.communication.worlddata_server2008.BallPosition;
 import essentials.communication.worlddata_server2008.RawWorldData;
 import essentials.communication.worlddata_server2008.ReferencePoint;
 import essentials.core.BotInformation.Teams;
@@ -138,6 +139,35 @@ public class PositionLib {
     	ReferencePoint DMFpoint = getMiddleOfTwoReferencePoints(getMiddleOfTwoReferencePoints(PenaltyTop, PenaltyBottom), aWorldData.getFieldCenter());
     	    	
     	return DMFpoint;
+    }
+    
+    public static boolean isBallInRangeOfRefPoint(BallPosition ballPos, ReferencePoint RefPoint,double range){
+    	
+    	double a, b, wa, wb;
+        
+        if( ballPos.getAngleToBall() > RefPoint.getAngleToPoint() ){
+            
+            a = ballPos.getDistanceToBall();
+            wa = ballPos.getAngleToBall();
+            b = RefPoint.getDistanceToPoint();
+            wb = RefPoint.getAngleToPoint();
+            
+        } else {
+
+            a = RefPoint.getDistanceToPoint();
+            wa = RefPoint.getAngleToPoint(); 
+            b = ballPos.getDistanceToBall();
+            wb = ballPos.getAngleToBall();
+            
+        }
+        double c = Math.sqrt( a*a + b*b - 2 * a * b * Math.cos(Math.toRadians(Math.abs(wa - wb))));
+    	
+        if(range < c){
+        	return true;
+        }
+        else{
+        	return false;
+        }
     }
     
     /**
