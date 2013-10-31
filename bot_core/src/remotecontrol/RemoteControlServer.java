@@ -156,6 +156,7 @@ public class RemoteControlServer implements RemoteControlInterface{
     @Override
     public boolean connectBot() throws RemoteException {
 
+        Core.getInstance().getBotinformation().setReconnect( false );
         Core.getInstance().startServerConnection();
         return Core.getInstance().getServerConnection().isConnected();
         
