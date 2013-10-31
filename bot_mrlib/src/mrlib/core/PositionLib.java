@@ -83,17 +83,39 @@ public class PositionLib {
     
     
     /**
-     * Returns the middle of a goal
+     * Returns the middle of enemy goal
      * @param aWorldData
-     * @param aTeam Team color of the goal
+     * @param aTeam own team color BotInformation -> getTeam()
      * @return ReferencePoint
      */
     public static ReferencePoint getMiddleOfGoal( RawWorldData aWorldData, Teams aTeam ){       
         ReferencePoint rGoalMiddle = new ReferencePoint( 0.0 , 0.0 );
         ReferencePoint vGoalTop = null;
         ReferencePoint vGoalBottom = null;
-        ReferencePoint vGoalMax = null;
-        ReferencePoint vGoalMin = null;
+        
+        // get goal
+        if( aTeam == Teams.Yellow ) {
+            vGoalTop = aWorldData.getBlueGoalCornerTop();
+            vGoalBottom = aWorldData.getBlueGoalCornerBottom();
+        }
+        else{
+            vGoalTop = aWorldData.getYellowGoalCornerTop();
+            vGoalBottom = aWorldData.getYellowGoalCornerBottom();
+        }
+        
+        rGoalMiddle = PositionLib.getMiddleOfTwoReferencePoints(vGoalTop, vGoalBottom);     
+        return rGoalMiddle;
+    }
+    /**
+     * Returns the middle of own goal
+     * @param aWorldData
+     * @param aTeam own team color BotInformation -> getTeam()
+     * @return ReferencePoint
+     */
+    public static ReferencePoint getMiddleOfOwnGoal( RawWorldData aWorldData, Teams aTeam ){       
+        ReferencePoint rOwnGoalMiddle = new ReferencePoint( 0.0 , 0.0 );
+        ReferencePoint vGoalTop = null;
+        ReferencePoint vGoalBottom = null;
         
         // get goal
         if( aTeam == Teams.Blue ) {
@@ -105,23 +127,10 @@ public class PositionLib {
             vGoalBottom = aWorldData.getYellowGoalCornerBottom();
         }
         
-        // get min und max angle
-        if( Math.abs(vGoalTop.getAngleToPoint())
-                > Math.abs(vGoalBottom.getAngleToPoint()) ){
-            vGoalMax = vGoalTop;
-            vGoalMin = vGoalBottom;
-        }
-        else{
-            vGoalMax = vGoalBottom;
-            vGoalMin = vGoalTop;
-        }
-        
-        // TODO: Calculate distance to goal
-        
-        rGoalMiddle.setAngelToPoint( vGoalMin.getAngleToPoint()
-                + (vGoalMax.getAngleToPoint() - vGoalMin.getAngleToPoint()) );      
-        return rGoalMiddle;
+        rOwnGoalMiddle = PositionLib.getMiddleOfTwoReferencePoints(vGoalTop, vGoalBottom);     
+        return rOwnGoalMiddle;
     }
+    
     
     public static ReferencePoint getDMFposition( RawWorldData aWorldData, Teams aTeam ){
     	ReferencePoint PenaltyTop;
