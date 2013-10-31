@@ -122,8 +122,26 @@ public class PositionLib {
         return rGoalMiddle;
     }
     
+    public static ReferencePoint getDMFposition( RawWorldData aWorldData, Teams aTeam ){
+    	ReferencePoint PenaltyTop;
+    	ReferencePoint PenaltyBottom;
+    	
+    	if ( aTeam == Teams.Blue){
+    		PenaltyTop = aWorldData.getBluePenaltyAreaFrontTop();
+    		PenaltyBottom = aWorldData.getBluePenaltyAreaFrontBottom();
+    	}else
+    	{
+    		PenaltyTop = aWorldData.getYellowPenaltyAreaFrontTop();
+    		PenaltyBottom = aWorldData.getYellowPenaltyAreaFrontBottom();
+    	}
+    	
+    	ReferencePoint DMFpoint = getMiddleOfTwoReferencePoints(getMiddleOfTwoReferencePoints(PenaltyTop, PenaltyBottom), aWorldData.getFieldCenter());
+    	    	
+    	return DMFpoint;
+    }
+    
     /**
-     * Get's the field position that's furthest away from ball
+     * Get's the Defensive Midfielder position
      * @param aWorldData
      * @return ReferencePoint
      */
