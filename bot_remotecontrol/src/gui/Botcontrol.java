@@ -28,13 +28,53 @@ import java.awt.GridBagLayout;
 import javax.swing.JPanel;
 import javax.swing.BoxLayout;
 
+import core.Core;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
+import javax.swing.JButton;
+
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.RowSpec;
+
+import java.awt.CardLayout;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridLayout;
 
 public class Botcontrol {
 
     private JFrame mFrameBotcontrol;
 
+    private static Botcontrol INSTANCE;
+    private JPanel vPanelContent;
+    private JPanel vPanelFiller = new JPanel();
+    
+    private Botcontrol(){
+        initialize();
+            
+    }
+
+    public static Botcontrol getInstance() {
+        
+        if( Botcontrol.INSTANCE == null){
+            Core.getLogger().trace( "Creating Botcontrol-instance." );
+            Botcontrol.INSTANCE = new Botcontrol();
+        }
+
+        Core.getLogger().trace( "Retrieving Botcontrol-instance." );
+        return Botcontrol.INSTANCE;
+        
+    }
+    
+    public void revalidate(){
+
+        mFrameBotcontrol.revalidate();       
+        
+    }
+    
     /**
      * Launch the application.
      */
@@ -42,22 +82,14 @@ public class Botcontrol {
         EventQueue.invokeLater( new Runnable() {
             public void run() {
                 try {
-                    Botcontrol window = new Botcontrol();
-                    window.mFrameBotcontrol.setVisible( true );
+                    getInstance().mFrameBotcontrol.setVisible( true );
                 } catch ( Exception e ) {
                     e.printStackTrace();
                 }
             }
         } );
     }
-
-    /**
-     * Create the application.
-     */
-    public Botcontrol() {
-        initialize();
-    }
-
+    
     /**
      * Initialize the contents of the frame.
      */
@@ -104,13 +136,42 @@ public class Botcontrol {
             }
         });
         vFileMenue.add(vMenueItemExit);
+        mFrameBotcontrol.getContentPane().setLayout(new BorderLayout() );
 
-        JPanel vPanelContent = new JPanel();
+        vPanelContent = new JPanel();
         
-        JScrollPane vScrollPane = new JScrollPane(vPanelContent, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-        vPanelContent.setLayout(new BoxLayout(vPanelContent, BoxLayout.Y_AXIS));
+        JScrollPane vScrollPane = new JScrollPane(vPanelContent, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        GridBagLayout gbl_vPanelContent = new GridBagLayout();
+        gbl_vPanelContent.columnWidths = new int[]{0};
+        gbl_vPanelContent.rowHeights = new int[]{0};
+        gbl_vPanelContent.columnWeights = new double[]{Double.MIN_VALUE};
+        gbl_vPanelContent.rowWeights = new double[]{Double.MIN_VALUE};
+        vPanelContent.setLayout(gbl_vPanelContent);
         mFrameBotcontrol.getContentPane().add(vScrollPane, BorderLayout.CENTER);
+
+        vPanelFiller.setMinimumSize( new Dimension(0,0) );
+        vPanelFiller.setPreferredSize( new Dimension(0,0) );
         
+        
+    }
+
+    
+    public void addBotFrame( BotFrame botFrame ) {
+
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = GridBagConstraints.RELATIVE;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.anchor = GridBagConstraints.FIRST_LINE_START;
+        c.weighty = 0.0;
+        
+        vPanelContent.remove( vPanelFiller );
+        vPanelContent.add( botFrame, c );
+        
+        c.weighty = 1.0;
+        vPanelContent.add( vPanelFiller, c );
+        
+        mFrameBotcontrol.revalidate();
         
     }
 

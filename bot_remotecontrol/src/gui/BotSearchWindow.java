@@ -100,6 +100,13 @@ public class BotSearchWindow extends JFrame {
         panelOptions2.add(btnClose);
         
         JButton btnConnectToBot = new JButton("Connect to bot");
+        btnConnectToBot.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                
+                Botcontrol.getInstance().addBotFrame( new BotFrame() );
+                
+            }
+        });
         btnConnectToBot.setBounds(10, 3, 112, 23);
         panelOptions2.add(btnConnectToBot);
 
