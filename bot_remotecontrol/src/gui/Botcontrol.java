@@ -40,6 +40,7 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 
 import java.awt.CardLayout;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
@@ -72,6 +73,12 @@ public class Botcontrol {
     public void revalidate(){
 
         mFrameBotcontrol.revalidate();       
+        
+    }
+    
+    public JFrame getMainFrame(){
+        
+        return mFrameBotcontrol;
         
     }
     
@@ -172,6 +179,12 @@ public class Botcontrol {
         vPanelContent.add( vPanelFiller, c );
         
         mFrameBotcontrol.revalidate();
+        
+    }
+
+    public void removeBotframe( BotFrame aBotFrame ) {
+        
+        vPanelContent.remove( aBotFrame );
         
     }
 
