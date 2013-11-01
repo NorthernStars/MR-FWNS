@@ -1,6 +1,8 @@
 package exampleai.brain;
 
 
+import java.util.ArrayList;
+
 import mrlib.core.KickLib;
 import mrlib.core.MoveLib;
 import mrlib.core.PositionLib;
@@ -11,6 +13,7 @@ import org.eclipse.swt.widgets.Shell;
 import essentials.communication.Action;
 import essentials.communication.action_server2008.Movement;
 import essentials.communication.worlddata_server2008.BallPosition;
+import essentials.communication.worlddata_server2008.FellowPlayer;
 import essentials.communication.worlddata_server2008.RawWorldData;
 import essentials.communication.worlddata_server2008.ReferencePoint;
 import essentials.core.ArtificialIntelligence;
@@ -64,7 +67,9 @@ public class DMF extends Thread implements ArtificialIntelligence {
                     synchronized ( this ) {
                         vWorldState = mWorldState;
                     }
-
+                    
+                    ArrayList<FellowPlayer> vOpponents = vWorldState.getListOfOpponents();
+                    ArrayList<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
                     // --------------- START AI -------------------
                     
                     if( vWorldState.getBallPosition() != null ){
@@ -72,10 +77,33 @@ public class DMF extends Thread implements ArtificialIntelligence {
                     	// get ball position
                     	BallPosition ballPos = vWorldState.getBallPosition();
                     	ReferencePoint DMF = PositionLib.getDMFposition(vWorldState, mSelf.getTeam());
+                    	//Ist Gegner in der Nähe?
+                    	
+                    	
+                    	
                     	if( ballPos.getDistanceToBall() < mSelf.getGamevalue( GamevalueNames.KickRange ) ){                 
                     		// kick
-                    		ReferencePoint goalMid = PositionLib.getMiddleOfGoal( vWorldState, mSelf.getTeam() );
-                    		vBotAction = KickLib.kickTo( goalMid );                    		
+                    		FellowPlayer nearestMate = null;
+                        	boolean enemyNear = false;
+                        	for( FellowPlayer p : vOpponents){
+                        		if(p.getDistanceToPlayer() < 75){
+                        			enemyNear = true;
+                        			for( FellowPlayer a : vTeamMates){
+                        				if( nearestMate == null || a.getDistanceToPlayer() < nearestMate.getDistanceToPlayer()){
+                        					nearestMate = a;
+                        				}                    				
+                        			break;
+                        			}
+                        			
+                        		}
+                        	}
+                        	if(enemyNear == true){
+                        		vBotAction = KickLib.kickTo(nearestMate);
+                        		enemyNear = false;
+                        	}else{
+                        		ReferencePoint goalMid = PositionLib.getMiddleOfGoal( vWorldState, mSelf.getTeam() );
+                        		vBotAction = KickLib.kickTo( goalMid );  
+                    		}                  		
                     	} else if(PositionLib.isBallInRangeOfRefPoint(ballPos, DMF, 200)){
                     		// move to ball
                     		vBotAction = MoveLib.runTo( ballPos );
