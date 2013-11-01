@@ -265,7 +265,7 @@ public class RemoteControlServer implements RemoteControlInterface{
             
             Core.getLogger().trace( "Unregistering LogListener " + aListenerIdent );
             mLogListener.remove( aListenerIdent );
-            Core.getLogger().info( "Unregistered all LogListeners " + aListenerIdent );
+            Core.getLogger().info( "Unregistered LogListener " + aListenerIdent );
             return true;
             
         }

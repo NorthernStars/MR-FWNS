@@ -29,9 +29,13 @@ import javax.swing.ListSelectionModel;
 import javax.swing.AbstractListModel;
 
 import core.Core;
+import core.RemoteBot;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.net.MalformedURLException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 
 public class BotSearchWindow extends JFrame {
 
@@ -110,7 +114,22 @@ public class BotSearchWindow extends JFrame {
         vPanelContentPanelMainPanelOptionsButtonConnectToBot.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 
-                Botcontrol.getInstance().addBotFrame( new BotFrame() );
+                BotFrame vNewBotFrame = new BotFrame();
+                RemoteBot vNewRemoteBot = null;
+                try {
+                    
+                    if( mPanelContentPanelMainPanelBotlistListBots.getSelectedValue() != null ){
+                        vNewRemoteBot = new RemoteBot( mPanelContentPanelMainPanelBotlistListBots.getSelectedValue(), vNewBotFrame);
+                        Botcontrol.getInstance().addBotFrame( vNewBotFrame );
+                    }
+                    
+                } catch ( RemoteException | MalformedURLException | NotBoundException e1 ) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                    vNewRemoteBot.close();
+                    vNewBotFrame.close();
+                }
+                
                 
             }
         });
