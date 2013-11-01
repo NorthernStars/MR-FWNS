@@ -32,6 +32,8 @@ import core.Core;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 
@@ -50,8 +52,8 @@ public class Botcontrol {
     private JFrame mFrameBotcontrol;
 
     private static Botcontrol INSTANCE;
-    private JPanel vPanelContent;
-    private JPanel vPanelFiller = new JPanel();
+    private JPanel mPanelContent;
+    private JPanel mPanelFiller = new JPanel();
     
     private Botcontrol(){
         initialize();
@@ -138,27 +140,55 @@ public class Botcontrol {
         vMenueItemExit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 
-                System.exit( 0 );
+                mFrameBotcontrol.dispose();
                 
             }
         });
         vFileMenue.add(vMenueItemExit);
         mFrameBotcontrol.getContentPane().setLayout(new BorderLayout() );
 
-        vPanelContent = new JPanel();
+        mPanelContent = new JPanel();
         
-        JScrollPane vScrollPane = new JScrollPane(vPanelContent, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        GridBagLayout gbl_vPanelContent = new GridBagLayout();
-        gbl_vPanelContent.columnWidths = new int[]{0};
-        gbl_vPanelContent.rowHeights = new int[]{0};
-        gbl_vPanelContent.columnWeights = new double[]{Double.MIN_VALUE};
-        gbl_vPanelContent.rowWeights = new double[]{Double.MIN_VALUE};
-        vPanelContent.setLayout(gbl_vPanelContent);
+        JScrollPane vScrollPane = new JScrollPane(mPanelContent, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        GridBagLayout gbl_mPanelContent = new GridBagLayout();
+        gbl_mPanelContent.columnWidths = new int[]{0};
+        gbl_mPanelContent.rowHeights = new int[]{0};
+        gbl_mPanelContent.columnWeights = new double[]{Double.MIN_VALUE};
+        gbl_mPanelContent.rowWeights = new double[]{Double.MIN_VALUE};
+        mPanelContent.setLayout(gbl_mPanelContent);
         mFrameBotcontrol.getContentPane().add(vScrollPane, BorderLayout.CENTER);
 
-        vPanelFiller.setMinimumSize( new Dimension(0,0) );
-        vPanelFiller.setPreferredSize( new Dimension(0,0) );
+        mPanelFiller.setMinimumSize( new Dimension(0,0) );
+        mPanelFiller.setPreferredSize( new Dimension(0,0) );
         
+        mFrameBotcontrol.addWindowListener( new WindowAdapter()
+        {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                
+                super.windowClosed( e );
+                windowClosing( e );
+                
+            }
+            
+            public void windowClosing( WindowEvent e )
+            {
+                
+                super.windowClosing( e );
+                for( Component vComponent : mPanelContent.getComponents()){
+                    
+                    System.out.println("---" + vComponent.getClass() );
+                    if( vComponent.getClass() == BotFrame.class ){
+                        
+                        ((BotFrame)vComponent).close();
+                        
+                    }
+                    
+                }
+                
+            }
+        }
+        );
         
     }
 
@@ -172,11 +202,11 @@ public class Botcontrol {
         c.anchor = GridBagConstraints.FIRST_LINE_START;
         c.weighty = 0.0;
         
-        vPanelContent.remove( vPanelFiller );
-        vPanelContent.add( botFrame, c );
+        mPanelContent.remove( mPanelFiller );
+        mPanelContent.add( botFrame, c );
         
         c.weighty = 1.0;
-        vPanelContent.add( vPanelFiller, c );
+        mPanelContent.add( mPanelFiller, c );
         
         mFrameBotcontrol.revalidate();
         
@@ -184,7 +214,7 @@ public class Botcontrol {
 
     public void removeBotframe( BotFrame aBotFrame ) {
         
-        vPanelContent.remove( aBotFrame );
+        mPanelContent.remove( aBotFrame );
         
     }
 
