@@ -74,7 +74,7 @@ public class AI extends Thread implements ArtificialIntelligence {
                     	
                     	if( ballPos.getDistanceToBall() < mSelf.getGamevalue( GamevalueNames.KickRange ) ){                 
                     		// kick
-                    		ReferencePoint goalMid = PositionLib.getMiddleOfGoal( vWorldState, Teams.Blue );
+                    		ReferencePoint goalMid = PositionLib.getMiddleOfGoal( vWorldState, mSelf.getTeam() );
                     		vBotAction = KickLib.kickTo( goalMid );                    		
                     	} else {
                     		// move to ball

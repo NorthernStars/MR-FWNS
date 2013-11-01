@@ -68,15 +68,15 @@ public class DMF extends Thread implements ArtificialIntelligence {
                     // --------------- START AI -------------------
                     
                     if( vWorldState.getBallPosition() != null ){
-                    	
+                    	System.out.println("DMF spieler");
                     	// get ball position
                     	BallPosition ballPos = vWorldState.getBallPosition();
                     	ReferencePoint DMF = PositionLib.getDMFposition(vWorldState, mSelf.getTeam());
                     	if( ballPos.getDistanceToBall() < mSelf.getGamevalue( GamevalueNames.KickRange ) ){                 
                     		// kick
-                    		ReferencePoint goalMid = PositionLib.getMiddleOfGoal( vWorldState, Teams.Blue );
+                    		ReferencePoint goalMid = PositionLib.getMiddleOfGoal( vWorldState, mSelf.getTeam() );
                     		vBotAction = KickLib.kickTo( goalMid );                    		
-                    	} else if(PositionLib.isBallInRangeOfRefPoint(ballPos, DMF, 100)){
+                    	} else if(PositionLib.isBallInRangeOfRefPoint(ballPos, DMF, 200)){
                     		// move to ball
                     		vBotAction = MoveLib.runTo( ballPos );
                     	} 
