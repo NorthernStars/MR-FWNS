@@ -225,6 +225,18 @@ public class RemoteControlServer implements RemoteControlInterface{
         
     }
 
+
+    @Override
+    public Level getLogLevel() throws RemoteException {
+        
+        LoggerContext vLoggerContext = (LoggerContext) LogManager.getContext(false);
+        Configuration vGlobalConfig = vLoggerContext.getConfiguration();
+        LoggerConfig vLoggerConfig = vGlobalConfig.getLoggerConfig( Core.getLogger().getName() );
+        
+        return vLoggerConfig.getLevel();
+        
+    }
+
     @Override
     public boolean setLogLevel( Level aLogLevel ) throws RemoteException {
                 

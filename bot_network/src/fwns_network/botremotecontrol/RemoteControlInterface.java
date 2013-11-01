@@ -167,6 +167,17 @@ public interface RemoteControlInterface extends Remote {
     public boolean unregisterLogListener( int aListenerIdent ) throws RemoteException;
     
     /**
+     * Fragt das momentane Loglevel des Servers ab 
+     * 
+     * @since 0.9
+     * 
+     * @return das LogLevel des Servers
+     *         
+     * @exception RemoteException
+     *          falls die Verbindung in irgendeiner Weise gestoert wird 
+     */
+    public Level getLogLevel() throws RemoteException;
+    /**
      * Stellt das Loglevels des Servers ein 
      * 
      * @since 0.9
