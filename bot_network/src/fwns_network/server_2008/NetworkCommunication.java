@@ -15,6 +15,8 @@ import essentials.core.BotInformation;
 
 public class NetworkCommunication extends fwns_network.universal.NetworkCommunication{
 
+    private boolean mEstablishedServerConnection = false;
+    
     public NetworkCommunication(InetAddress aServerAddress, int aServerPort) throws IOException 
     {
 
@@ -28,7 +30,7 @@ public class NetworkCommunication extends fwns_network.universal.NetworkCommunic
 
     }
 	
-	public String connectToServer( BotInformation aBot) throws IOException, SocketTimeoutException, SocketException
+	public void connectToServer( BotInformation aBot) throws IOException, SocketTimeoutException, SocketException
 	{
 		
 	    
@@ -48,17 +50,25 @@ public class NetworkCommunication extends fwns_network.universal.NetworkCommunic
 				
 				sendDatagramm( vString );
 				
-		        mConnected = true;
+				mEstablishedServerConnection = true;
 				
-				return getDatagramm( 1000 );
+				getDatagramm( 1000 );
+				
+				return;
 				
 			}
 		}
 
-        mConnected = false;
+        mEstablishedServerConnection = false;
 		
-		return null;
+		return;
 		
+	}
+	
+	public void reconnectToServer(){
+	    
+	    mEstablishedServerConnection = true;
+	    
 	}
 	
 	public void sendDatagramm( Action aAction ) throws IOException{
@@ -66,5 +76,12 @@ public class NetworkCommunication extends fwns_network.universal.NetworkCommunic
 		this.sendDatagramm( aAction.getXMLString() );		
 		
 	}
+	
+	@Override
+    public boolean isConnected() {
+        
+        return mSocketInitialized && mEstablishedServerConnection;
+        
+    }
 	
 }

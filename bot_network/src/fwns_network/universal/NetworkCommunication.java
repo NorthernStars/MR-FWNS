@@ -19,7 +19,7 @@ import java.net.SocketTimeoutException;
  */
 public class NetworkCommunication {
 
-    protected boolean mConnected = false;
+    protected boolean mSocketInitialized = false;
     
 	/**
 	 * Maximale Länge eines UDP-Datagramms in Byte.
@@ -49,27 +49,32 @@ public class NetworkCommunication {
 	public NetworkCommunication( InetAddress aServerAddress, int aServerPort ) throws IOException
 	{		
 
-		mDataPaket = new DatagramPacket( new byte[NetworkCommunication.MAX_DATAGRAM_LENGTH], NetworkCommunication.MAX_DATAGRAM_LENGTH );
-		mDataPaket.setAddress( aServerAddress );
-		mDataPaket.setPort( aServerPort );
+		initialiseDatagram( aServerAddress, aServerPort );
 		
 		mToServerSocket = new DatagramSocket();
 		mToServerSocket.connect( aServerAddress, aServerPort );
 		
-		mConnected = true;
+		mSocketInitialized = true;
 		
 	}
+
+    private void initialiseDatagram( InetAddress aServerAddress, int aServerPort ) {
+        
+        mDataPaket = new DatagramPacket( new byte[NetworkCommunication.MAX_DATAGRAM_LENGTH], NetworkCommunication.MAX_DATAGRAM_LENGTH );
+		mDataPaket.setAddress( aServerAddress );
+		mDataPaket.setPort( aServerPort );
+		
+    }
 	
 	public NetworkCommunication( InetAddress aServerAddress, int aServerPort, int aClientPort) throws IOException
     {       
 
-        this( aServerAddress, aServerPort );
-
-        mToServerSocket.close();
+	    initialiseDatagram( aServerAddress, aServerPort );
+	    
         mToServerSocket = new DatagramSocket( aClientPort );
         mToServerSocket.connect( aServerAddress, aServerPort );
 
-        mConnected = true;
+        mSocketInitialized = true;
         
     }
 
@@ -124,13 +129,13 @@ public class NetworkCommunication {
 			mToServerSocket = null;
 		}
 		
-		mConnected = false;
+		mSocketInitialized = false;
 		
 	}
     
     public boolean isConnected() {
         
-        return mConnected;
+        return mSocketInitialized;
         
     }
     

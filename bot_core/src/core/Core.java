@@ -112,8 +112,15 @@ public class Core {
                 RemoteControlServer.getInstance().startRemoteServer();
                 initializeAI();
                 RestartAiManagement.getInstance().startManagement();
-                startServerConnection();
-                startAI();
+                if( startServerConnection() ){
+                    
+                    startAI();
+                
+                } else {
+                    
+                    Core.getLogger().error( "Could not connect to Server. AI not started" );
+                    
+                }
                 
             }
             
@@ -192,7 +199,9 @@ public class Core {
     
     synchronized public boolean startAI(){
 
+        Core.getLogger().trace( "Starting AI" );
         mAI.startAI();
+        Core.getLogger().info( "Started AI" );
         RemoteControlServer.getInstance().changedStatus( BotStatusType.AIRunning );
         return Core.getInstance().getAI().isRunning();
         
@@ -200,7 +209,9 @@ public class Core {
     
     synchronized public void pauseAI(){
 
+        Core.getLogger().info( "Pausing AI" );
         mAI.pauseAI();
+        Core.getLogger().info( "Paused AI" );
         RemoteControlServer.getInstance().changedStatus( BotStatusType.AIRunning );
         
     }
@@ -210,11 +221,13 @@ public class Core {
      * @throws SocketTimeoutException
      * @throws SocketException
      */
-    public void startServerConnection() { //TODO: return boolean, connect successful?
+    public boolean startServerConnection() { //TODO: return boolean, connect successful?
         
-        while( !(mServerConnection != null && mServerConnection.isConnected()) ){
+        int mTrysToConnect = 0;
         
-            Core.getLogger().info( mBotinformation.getReconnect()?"Reconnecting":"Connecting" + " to server " + mBotinformation.getServerIP() + ":" + mBotinformation.getServerPort() );
+        while( !(mServerConnection != null && mServerConnection.isConnected()) && ++mTrysToConnect <= 3 ){
+        
+            Core.getLogger().info( "(" + mTrysToConnect + ") Trying to " + (mBotinformation.getReconnect()?"reconnect":"connect") + " to server " + mBotinformation.getServerIP() + ":" + mBotinformation.getServerPort() );
             
             try {
             
@@ -240,6 +253,10 @@ public class Core {
                         
                         mServerConnection.connectToServer( mBotinformation );
                         
+                    } else {
+                        
+                        mServerConnection.reconnectToServer();
+                        
                     }
                     
                 }
@@ -251,11 +268,37 @@ public class Core {
                 
             } catch ( IOException e ) {
     
-                Core.getLogger().error( "Error starting serverconnection: " + e.getLocalizedMessage() );
+                Core.getLogger().error( "(" + mTrysToConnect + ") Error starting serverconnection: " + e.getLocalizedMessage() );
                 Core.getLogger().catching( Level.ERROR, e );
                 
+                if( mServerConnection != null ){
+                    
+                    mServerConnection.closeConnection();
+                    mServerConnection = null;
+                    
+                }
+                
             } 
+            
+            if ( mServerConnection != null && mServerConnection.isConnected() ){
+                
+                Core.getLogger().info( "(" + mTrysToConnect + ") Connected to server (" + mServerConnection.toString() + ")" );
+                break;
+                
+            } else {
+                
+                try {
+                    Thread.sleep( 5000 ); //TODO: Besser
+                } catch ( InterruptedException e ) {
+                    e.printStackTrace();
+                } 
+                
+            }
+            
         }
+        
+        return mServerConnection != null && mServerConnection.isConnected();
+        
     }
     
     
@@ -273,11 +316,10 @@ public class Core {
                 
                 stopServermanagements();
                 
-                Core.getLogger().info( "Closing serverconnection (" + mServerConnection.toString() + ")" );
+                Core.getLogger().info( "Closing serversocket (" + mServerConnection.toString() + ")" );
                 mServerConnection.closeConnection();
-                Core.getLogger().info( "Closed serverconnection." );
+                Core.getLogger().info( "Closed serversocket." );
                 
-
                 RemoteControlServer.getInstance().changedStatus( BotStatusType.NetworkConnection );
                 
             }
