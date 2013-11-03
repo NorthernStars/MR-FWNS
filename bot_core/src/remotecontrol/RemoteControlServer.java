@@ -157,7 +157,7 @@ public class RemoteControlServer implements RemoteControlInterface{
     public boolean connectBot() throws RemoteException {
 
         Core.getInstance().getBotinformation().setReconnect( false );
-        Core.getInstance().startServerConnection();
+        Core.getInstance().startServerConnection(1);
         return Core.getInstance().getServerConnection().isConnected();
         
     }
@@ -166,7 +166,7 @@ public class RemoteControlServer implements RemoteControlInterface{
     public boolean reconnectBot() throws RemoteException {
         
         Core.getInstance().getBotinformation().setReconnect( true );
-        Core.getInstance().startServerConnection();
+        Core.getInstance().startServerConnection(1);
         return Core.getInstance().getServerConnection().isConnected();
     }
 
@@ -174,7 +174,7 @@ public class RemoteControlServer implements RemoteControlInterface{
     public boolean disconnectBot() throws RemoteException {
         
         Core.getInstance().stopServerConnection();
-        return Core.getInstance().getServerConnection().isConnected();
+        return !Core.getInstance().getServerConnection().isConnected();
         
     }
 
@@ -195,14 +195,14 @@ public class RemoteControlServer implements RemoteControlInterface{
     @Override
     public void pauseAI() throws RemoteException {
         
-        Core.getInstance().getAI().pauseAI();
+        Core.getInstance().pauseAI();
         
     }
 
     @Override
     public void disposeAI() throws RemoteException {
 
-        Core.getInstance().getAI().disposeAI();
+        Core.getInstance().disposeAI();
         
     }
 

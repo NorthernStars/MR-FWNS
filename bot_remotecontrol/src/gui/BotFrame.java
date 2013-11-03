@@ -39,6 +39,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import org.apache.logging.log4j.Level;
 
@@ -54,8 +55,12 @@ import javax.swing.JPopupMenu;
 import javax.swing.JMenuItem;
 
 import java.awt.Component;
+import java.net.InetAddress;
 import java.rmi.RemoteException;
 import java.util.Arrays;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.swing.Box;
 import javax.swing.JSplitPane;
@@ -77,6 +82,7 @@ public class BotFrame extends JPanel {
     private JPanel mPanelHeadPanelFront;
     private boolean mExpanded = true;
     private int mMaxLinesInLog = 1000;
+    private final Executor mExecutor = Executors.newFixedThreadPool( 1 );
     private JButton mPanelHeadPanelBackLabelButtonExpandContract;
     private JPanel mPanelHead;
     private JTabbedPane mTabbedPane;
@@ -118,10 +124,10 @@ public class BotFrame extends JPanel {
     private JButton mTabbedPanePanelConnectionButtonConnect;
     private JButton mTabbedPanePanelConnectionButtonReconnect;
     private JButton mTabbedPanePanelConnectionButtonDisconnect;
-    private JButton mTabbedPanePanelAIPanelArgumentsButtonSend;
+    private JButton mTabbedPanePanelAIPanelArgumentsButtonExecute;
     private JTextArea mTabbedPanePanelAIPanelArgumentsTextareaAiarguments;
     private JButton mTabbedPanePanelAIPanelExecutionButtonAiinitialise;
-    private JButton mTabbedPanePanelAIPanelExecutionButtonAistart;
+    private JButton mTabbedPanePanelAIPanelExecutionButtonAiunpause;
     private JButton mTabbedPanePanelAIPanelExecutionButtonAidispose;
     private JButton mTabbedPanePanelAIPanelExecutionButtonAipause;
 
@@ -137,7 +143,7 @@ public class BotFrame extends JPanel {
         
         setBorder(new LineBorder(new Color(0, 0, 0), 3));
         setLayout(new BorderLayout(0, 0));
-        setPreferredSize(new Dimension(451, 241));
+        setPreferredSize(new Dimension(214, 241));
         setMinimumSize(new Dimension(400, 45));
         setMaximumSize(new Dimension(10000, 45));
         
@@ -196,6 +202,7 @@ public class BotFrame extends JPanel {
         mPanelHead.add(vPanelHeadPanelBack, BorderLayout.EAST);
         
         mPanelHeadPanelBackLabelNetworkConnected = new JLabel("");
+        mPanelHeadPanelBackLabelNetworkConnected.setToolTipText("Networkconnection");
         mPanelHeadPanelBackLabelNetworkConnected.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
         mPanelHeadPanelBackLabelNetworkConnected.setPreferredSize(new Dimension(28, 28));
         mPanelHeadPanelBackLabelNetworkConnected.setIconTextGap(0);
@@ -204,6 +211,7 @@ public class BotFrame extends JPanel {
         vPanelHeadPanelBack.add(mPanelHeadPanelBackLabelNetworkConnected);
         
         mPanelHeadPanelBackLabelNetworkTrafficIncoming = new JLabel("");
+        mPanelHeadPanelBackLabelNetworkTrafficIncoming.setToolTipText("Incoming Traffic");
         mPanelHeadPanelBackLabelNetworkTrafficIncoming.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
         mPanelHeadPanelBackLabelNetworkTrafficIncoming.setPreferredSize(new Dimension(28, 28));
         mPanelHeadPanelBackLabelNetworkTrafficIncoming.setIconTextGap(0);
@@ -212,6 +220,7 @@ public class BotFrame extends JPanel {
         vPanelHeadPanelBack.add(mPanelHeadPanelBackLabelNetworkTrafficIncoming);
         
         mPanelHeadPanelBackLabelNetworkTrafficOutgoing = new JLabel("");
+        mPanelHeadPanelBackLabelNetworkTrafficOutgoing.setToolTipText("Outgoing Traffic");
         mPanelHeadPanelBackLabelNetworkTrafficOutgoing.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
         mPanelHeadPanelBackLabelNetworkTrafficOutgoing.setPreferredSize(new Dimension(28, 28));
         mPanelHeadPanelBackLabelNetworkTrafficOutgoing.setIconTextGap(0);
@@ -220,6 +229,7 @@ public class BotFrame extends JPanel {
         vPanelHeadPanelBack.add(mPanelHeadPanelBackLabelNetworkTrafficOutgoing);
         
         mPanelHeadPanelBackLabelAIRunning = new JLabel("");
+        mPanelHeadPanelBackLabelAIRunning.setToolTipText("AI Running");
         mPanelHeadPanelBackLabelAIRunning.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
         mPanelHeadPanelBackLabelAIRunning.setPreferredSize(new Dimension(28, 28));
         mPanelHeadPanelBackLabelAIRunning.setIconTextGap(0);
@@ -228,6 +238,7 @@ public class BotFrame extends JPanel {
         vPanelHeadPanelBack.add(mPanelHeadPanelBackLabelAIRunning);
         
         mPanelHeadPanelBackLabelAILoaded = new JLabel("");
+        mPanelHeadPanelBackLabelAILoaded.setToolTipText("AI Loaded");
         mPanelHeadPanelBackLabelAILoaded.setHorizontalAlignment(SwingConstants.CENTER);
         mPanelHeadPanelBackLabelAILoaded.setIconTextGap(0);
         mPanelHeadPanelBackLabelAILoaded.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -308,6 +319,18 @@ public class BotFrame extends JPanel {
         vTabbedPanePanelStatusPanelAi.add(mTabbedPanePanelStatusPanelAiLabelLoadedstatus);
         
         JButton vTabbedPanePanelStatusButtonManuallystatuscheck = new JButton("Manually check status");
+        vTabbedPanePanelStatusButtonManuallystatuscheck.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                
+                try {
+                    updateStatus( null );
+                } catch ( RemoteException e1 ) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+                
+            }
+        });
         vTabbedPanePanelStatusButtonManuallystatuscheck.setBounds(10, 122, 310, 23);
         vTabbedPanePanelStatus.add(vTabbedPanePanelStatusButtonManuallystatuscheck);
         
@@ -367,6 +390,13 @@ public class BotFrame extends JPanel {
         vTabbedPanePanelDataPanelGeneral.add(mTabbedPanePanelDataPanelGeneralComboBoxTeam);
         
         mTabbedPanePanelDataPanelGeneralButtonChangeData = new JButton("Change Data");
+        mTabbedPanePanelDataPanelGeneralButtonChangeData.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                
+                updateTheRemoteBot();
+                
+            }
+        });
         mTabbedPanePanelDataPanelGeneralButtonChangeData.setBounds(10, 135, 180, 23);
         vTabbedPanePanelDataPanelGeneral.add(mTabbedPanePanelDataPanelGeneralButtonChangeData);
         
@@ -413,7 +443,7 @@ public class BotFrame extends JPanel {
         vTabbedPanePanelConnectionPanel2.add(mTabbedPanePanelConnectionTextfieldServerteamport);
         mTabbedPanePanelConnectionTextfieldServerteamport.setColumns(10);
         
-        JLabel vTabbedPanePanelConnectionLabelServerteamport = new JLabel("Server Teamport");
+        JLabel vTabbedPanePanelConnectionLabelServerteamport = new JLabel("Teamport");
         vTabbedPanePanelConnectionLabelServerteamport.setBounds(170, 11, 86, 14);
         vTabbedPanePanelConnectionPanel2.add(vTabbedPanePanelConnectionLabelServerteamport);
         
@@ -422,6 +452,7 @@ public class BotFrame extends JPanel {
         vTabbedPanePanelConnectionPanel2.add(vTabbedPanePanelConnectionLabelBotaddress);
         
         mTabbedPanePanelConnectionTextfieldBotaddress = new JTextField();
+        mTabbedPanePanelConnectionTextfieldBotaddress.setEditable(false);
         mTabbedPanePanelConnectionTextfieldBotaddress.setBounds(10, 75, 150, 20);
         vTabbedPanePanelConnectionPanel2.add(mTabbedPanePanelConnectionTextfieldBotaddress);
         mTabbedPanePanelConnectionTextfieldBotaddress.setColumns(10);
@@ -436,14 +467,128 @@ public class BotFrame extends JPanel {
         mTabbedPanePanelConnectionTextfieldBotport.setColumns(10);
         
         mTabbedPanePanelConnectionButtonConnect = new JButton("Connect");
+        mTabbedPanePanelConnectionButtonConnect.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                
+                updateTheRemoteBot();
+                
+                 mExecutor.execute( new Runnable() { //TODO: nachdenken
+                    public void run() {
+                        
+                        try {
+                            
+                            if( !mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.NetworkConnection ) && mTheRemoteBot.getTheBot().connectBot() ){
+                                
+                                SwingUtilities.invokeLater( new Runnable() { //TODO: nachdenken
+                                    public void run() {
+                                        
+                                        try {
+                                            changeConnectionButtons( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.NetworkConnection ) );
+                                        } catch ( RemoteException e ) {
+                                            // TODO Auto-generated catch block
+                                            e.printStackTrace();
+                                        }
+                                        
+                                    }
+                                });
+                                
+                                
+                            }
+                            
+                        } catch ( RemoteException e1 ) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
+                        
+                    }
+                });
+                
+                
+            }
+        });
         mTabbedPanePanelConnectionButtonConnect.setBounds(10, 106, 118, 23);
         vTabbedPanePanelConnectionPanel2.add(mTabbedPanePanelConnectionButtonConnect);
         
         mTabbedPanePanelConnectionButtonReconnect = new JButton("Reconnect");
+        mTabbedPanePanelConnectionButtonReconnect.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                
+                updateTheRemoteBot();
+
+                mExecutor.execute( new Runnable() { //TODO: nachdenken
+                    public void run() {
+                        
+                        try {
+                            if( !mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.NetworkConnection ) && mTheRemoteBot.getTheBot().reconnectBot() ){
+                                
+                                SwingUtilities.invokeLater( new Runnable() { //TODO: nachdenken
+                                    public void run() {
+                                        
+                                        try {
+                                            changeConnectionButtons( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.NetworkConnection ) );
+                                        } catch ( RemoteException e ) {
+                                            // TODO Auto-generated catch block
+                                            e.printStackTrace();
+                                        }
+                                        
+                                    }
+                                });
+                                
+                                
+                            }
+                            
+                        } catch ( RemoteException e1 ) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
+                        
+                    }
+                });
+                
+            }
+        });
         mTabbedPanePanelConnectionButtonReconnect.setBounds(138, 106, 118, 23);
         vTabbedPanePanelConnectionPanel2.add(mTabbedPanePanelConnectionButtonReconnect);
         
         mTabbedPanePanelConnectionButtonDisconnect = new JButton("Disconnect");
+        mTabbedPanePanelConnectionButtonDisconnect.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+                updateTheRemoteBot();
+                
+                mExecutor.execute( new Runnable() { //TODO: nachdenken
+                    public void run() {
+
+                        try {
+                            if( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.NetworkConnection ) && mTheRemoteBot.getTheBot().disconnectBot() ){
+
+                                SwingUtilities.invokeLater( new Runnable() { //TODO: nachdenken
+                                    public void run() {
+                                        
+                                        try {
+
+                                            changeConnectionButtons( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.NetworkConnection ) );
+                                        } catch ( RemoteException e ) {
+                                            // TODO Auto-generated catch block
+                                            e.printStackTrace();
+                                        }
+                                        
+                                    }
+                                });
+                                
+                                
+                            }
+                            
+                        } catch ( RemoteException e1 ) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
+                        
+                    }
+                });
+                
+            }
+        });
         mTabbedPanePanelConnectionButtonDisconnect.setVisible(false);
         mTabbedPanePanelConnectionButtonDisconnect.setEnabled(false);
         mTabbedPanePanelConnectionButtonDisconnect.setBounds(10, 106, 246, 23);
@@ -479,21 +624,167 @@ public class BotFrame extends JPanel {
         mTabbedPanePanelAIPanelExecutionTextfieldAiclass.setColumns(10);
         
         mTabbedPanePanelAIPanelExecutionButtonAiinitialise = new JButton("Initialise");
+        mTabbedPanePanelAIPanelExecutionButtonAiinitialise.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                
+                updateTheRemoteBot();
+                
+                mExecutor.execute( new Runnable() { //TODO: nachdenken
+                    public void run() {
+
+                        try {
+                            
+                            if( mTheRemoteBot.getTheBot().initialiseAI() ){
+
+                                SwingUtilities.invokeLater( new Runnable() { //TODO: nachdenken
+                                    public void run() {
+                                        
+                                        try {
+                                            changeAIButtons( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AILoaded ), mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AIRunning ) );
+                                        } catch ( RemoteException e ) {
+                                            // TODO Auto-generated catch block
+                                            e.printStackTrace();
+                                        }
+                                        
+                                    }
+                                });
+                                
+                                
+                            }
+                            
+                        } catch ( RemoteException e1 ) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
+                        
+                    }
+                });
+                
+            }
+        });
         mTabbedPanePanelAIPanelExecutionButtonAiinitialise.setBounds(10, 108, 180, 23);
         vTabbedPanePanelAIPanelExecution.add(mTabbedPanePanelAIPanelExecutionButtonAiinitialise);
         
-        mTabbedPanePanelAIPanelExecutionButtonAistart = new JButton("Start");
-        mTabbedPanePanelAIPanelExecutionButtonAistart.setEnabled(false);
-        mTabbedPanePanelAIPanelExecutionButtonAistart.setBounds(10, 142, 180, 23);
-        vTabbedPanePanelAIPanelExecution.add(mTabbedPanePanelAIPanelExecutionButtonAistart);
+        mTabbedPanePanelAIPanelExecutionButtonAiunpause = new JButton("Unpause");
+        mTabbedPanePanelAIPanelExecutionButtonAiunpause.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                
+                updateTheRemoteBot();
+                
+                mExecutor.execute( new Runnable() { //TODO: nachdenken
+                    public void run() {
+
+                        try {
+                            
+                            if( mTheRemoteBot.getTheBot().startAI() ){
+
+                                SwingUtilities.invokeLater( new Runnable() { //TODO: nachdenken
+                                    public void run() {
+                                        
+                                        try {
+                                            changeAIButtons( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AILoaded ), mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AIRunning ) );
+                                        } catch ( RemoteException e ) {
+                                            // TODO Auto-generated catch block
+                                            e.printStackTrace();
+                                        }
+                                        
+                                    }
+                                });
+                                
+                                
+                            }
+                            
+                        } catch ( RemoteException e1 ) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
+                        
+                    }
+                });
+                
+            }
+        });
+        mTabbedPanePanelAIPanelExecutionButtonAiunpause.setEnabled(false);
+        mTabbedPanePanelAIPanelExecutionButtonAiunpause.setBounds(10, 142, 180, 23);
+        vTabbedPanePanelAIPanelExecution.add(mTabbedPanePanelAIPanelExecutionButtonAiunpause);
         
         mTabbedPanePanelAIPanelExecutionButtonAidispose = new JButton("Dispose");
+        mTabbedPanePanelAIPanelExecutionButtonAidispose.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                
+                updateTheRemoteBot();
+                
+                mExecutor.execute( new Runnable() { //TODO: nachdenken
+                    public void run() {
+
+                        try {
+                            
+                            mTheRemoteBot.getTheBot().disposeAI();
+                                    
+                            SwingUtilities.invokeLater( new Runnable() { //TODO: nachdenken
+                                public void run() {
+                                    
+                                    try {
+                                        changeAIButtons( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AILoaded ), mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AIRunning ) );
+                                    } catch ( RemoteException e ) {
+                                        // TODO Auto-generated catch block
+                                        e.printStackTrace();
+                                    }
+                                    
+                                }
+                            });
+                            
+                        } catch ( RemoteException e1 ) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
+                        
+                    }
+                });
+                
+            }
+        });
         mTabbedPanePanelAIPanelExecutionButtonAidispose.setEnabled(false);
         mTabbedPanePanelAIPanelExecutionButtonAidispose.setVisible(false);
         mTabbedPanePanelAIPanelExecutionButtonAidispose.setBounds(10, 108, 180, 23);
         vTabbedPanePanelAIPanelExecution.add(mTabbedPanePanelAIPanelExecutionButtonAidispose);
         
         mTabbedPanePanelAIPanelExecutionButtonAipause = new JButton("Pause");
+        mTabbedPanePanelAIPanelExecutionButtonAipause.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                
+                updateTheRemoteBot();
+                
+                mExecutor.execute( new Runnable() { //TODO: nachdenken
+                    public void run() {
+
+                        try {
+                            
+                            mTheRemoteBot.getTheBot().pauseAI();
+
+                            SwingUtilities.invokeLater( new Runnable() { //TODO: nachdenken
+                                public void run() {
+                                    
+                                    try {
+                                        changeAIButtons( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AILoaded ), mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AIRunning ) );
+                                    } catch ( RemoteException e ) {
+                                        // TODO Auto-generated catch block
+                                        e.printStackTrace();
+                                    }
+                                    
+                                }
+                            });
+                                
+                        } catch ( RemoteException e1 ) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
+                        
+                    }
+                });
+                
+            }
+        });
         mTabbedPanePanelAIPanelExecutionButtonAipause.setVisible(false);
         mTabbedPanePanelAIPanelExecutionButtonAipause.setEnabled(false);
         mTabbedPanePanelAIPanelExecutionButtonAipause.setBounds(10, 142, 180, 23);
@@ -503,9 +794,42 @@ public class BotFrame extends JPanel {
         vTabbedPanePanelAI.add(vTabbedPanePanelAIPanelArguments, BorderLayout.CENTER);
         vTabbedPanePanelAIPanelArguments.setLayout(new BorderLayout(0, 0));
         
-        mTabbedPanePanelAIPanelArgumentsButtonSend = new JButton("Send Arguments");
-        mTabbedPanePanelAIPanelArgumentsButtonSend.setEnabled(false);
-        vTabbedPanePanelAIPanelArguments.add(mTabbedPanePanelAIPanelArgumentsButtonSend, BorderLayout.SOUTH);
+        mTabbedPanePanelAIPanelArgumentsButtonExecute = new JButton("Execute Arguments");
+        mTabbedPanePanelAIPanelArgumentsButtonExecute.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                
+                mExecutor.execute( new Runnable() { //TODO: nachdenken
+                    public void run() {
+
+                        try {
+                            
+                            mTheRemoteBot.getTheBot().executeCommandOnAI( mTabbedPanePanelAIPanelArgumentsTextareaAiarguments.getText() );
+
+                            SwingUtilities.invokeLater( new Runnable() { //TODO: nachdenken
+                                public void run() {
+                                    
+                                    try {
+                                        changeAIButtons( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AILoaded ), mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AIRunning ) );
+                                    } catch ( RemoteException e ) {
+                                        // TODO Auto-generated catch block
+                                        e.printStackTrace();
+                                    }
+                                    
+                                }
+                            });
+                                
+                        } catch ( RemoteException e1 ) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
+                        
+                    }
+                });
+                
+            }
+        });
+        mTabbedPanePanelAIPanelArgumentsButtonExecute.setEnabled(false);
+        vTabbedPanePanelAIPanelArguments.add(mTabbedPanePanelAIPanelArgumentsButtonExecute, BorderLayout.SOUTH);
         
         JScrollPane scrollPane_aiarguments = new JScrollPane();
         vTabbedPanePanelAIPanelArguments.add(scrollPane_aiarguments, BorderLayout.CENTER);
@@ -533,11 +857,18 @@ public class BotFrame extends JPanel {
         mTabbedPanePanelLoggingPanelControlButtonConnectlogger.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 
-                //TODO
-                mTabbedPanePanelLoggingPanelControlButtonConnectlogger.setEnabled(false);
-                mTabbedPanePanelLoggingPanelControlButtonConnectlogger.setVisible(false);
-                mTabbedPanePanelLoggingPanelControlButtonDisconnectlogger.setEnabled(true);
-                mTabbedPanePanelLoggingPanelControlButtonDisconnectlogger.setVisible(true);
+                try {
+                    
+                    mTheRemoteBot.connectLogListener();
+                    mTabbedPanePanelLoggingPanelControlButtonConnectlogger.setEnabled(false);
+                    mTabbedPanePanelLoggingPanelControlButtonConnectlogger.setVisible(false);
+                    mTabbedPanePanelLoggingPanelControlButtonDisconnectlogger.setEnabled(true);
+                    mTabbedPanePanelLoggingPanelControlButtonDisconnectlogger.setVisible(true);
+                    
+                } catch ( RemoteException e1 ) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
                 
             }
         });
@@ -551,11 +882,18 @@ public class BotFrame extends JPanel {
         mTabbedPanePanelLoggingPanelControlButtonDisconnectlogger.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                //TODO
-                mTabbedPanePanelLoggingPanelControlButtonDisconnectlogger.setEnabled(false);
-                mTabbedPanePanelLoggingPanelControlButtonDisconnectlogger.setVisible(false);
-                mTabbedPanePanelLoggingPanelControlButtonConnectlogger.setEnabled(true);
-                mTabbedPanePanelLoggingPanelControlButtonConnectlogger.setVisible(true);
+                try {
+                    
+                    mTheRemoteBot.disconnectLogListener();
+                    mTabbedPanePanelLoggingPanelControlButtonDisconnectlogger.setEnabled(false);
+                    mTabbedPanePanelLoggingPanelControlButtonDisconnectlogger.setVisible(false);
+                    mTabbedPanePanelLoggingPanelControlButtonConnectlogger.setEnabled(true);
+                    mTabbedPanePanelLoggingPanelControlButtonConnectlogger.setVisible(true);
+
+                } catch ( RemoteException e1 ) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
                 
             }
         });
@@ -575,8 +913,12 @@ public class BotFrame extends JPanel {
         mTabbedPanePanelLoggingPanelControlComboBoxLoglevel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 
-                //TODO
-                System.out.println( mTabbedPanePanelLoggingPanelControlComboBoxLoglevel.getSelectedItem() );
+                try {
+                    mTheRemoteBot.getTheBot().setLogLevel( (Level) mTabbedPanePanelLoggingPanelControlComboBoxLoglevel.getSelectedItem() );
+                } catch ( RemoteException e1 ) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
                 
             }
         });
@@ -715,6 +1057,16 @@ public class BotFrame extends JPanel {
                     setPreferredSize( new Dimension( 200, 240 ) );
                     mExpanded = true;
                     
+                    try {
+                        
+                        updateData();
+                        updateStatus( null );
+                        
+                    } catch ( RemoteException e1 ) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                    
                 }
                 
                 revalidate();
@@ -725,6 +1077,66 @@ public class BotFrame extends JPanel {
 
     }
     
+    protected void updateTheRemoteBot() {
+
+        
+        mBotInformation.setBotname( mPanelHeadPanelFrontLabelBotname.getText() );
+        
+        mBotInformation.setTeam( (Teams) mTabbedPanePanelDataPanelGeneralComboBoxTeam.getSelectedItem() );
+        mBotInformation.setBotname( mTabbedPanePanelDataPanelGeneralTextfieldBotname.getText() );
+        mBotInformation.setTeamname( mTabbedPanePanelDataPanelGeneralTextFieldBotteamname.getText() );
+        try{
+            mBotInformation.setRcId( Integer.decode( mTabbedPanePanelDataPanelGeneralTextfieldRcid.getText() ) );
+        }catch( Exception vException ){
+            
+        }
+        try{
+            mBotInformation.setVtId( Integer.decode( mTabbedPanePanelDataPanelGeneralTextfieldVtid.getText() ) );
+        }catch( Exception vException ){
+            
+        }
+        try {
+            
+            if( !mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.NetworkConnection ) ){
+                
+                try{
+                    mBotInformation.setBotPort( Integer.decode( mTabbedPanePanelConnectionTextfieldBotport.getText() ) );
+                }catch( Exception vException ){
+                    
+                }
+                try{
+                    mBotInformation.setServerIP(  InetAddress.getByName( mTabbedPanePanelConnectionTextfieldServeraddress.getText() ) );
+                }catch( Exception vException ){
+                    
+                }
+                try{
+                    mBotInformation.setServerPort( Integer.decode( mTabbedPanePanelConnectionTextfieldServerteamport.getText() ) );
+                }catch( Exception vException ){
+                    
+                }
+                
+            }
+            
+        } catch ( RemoteException e ) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        mBotInformation.setAIArchive( mTabbedPanePanelAIPanelExecutionTextfieldAiarchive.getText() );
+        mBotInformation.setAIArgs( mTabbedPanePanelAIPanelArgumentsTextareaAiarguments.getText() );
+        mBotInformation.setAIClassname( mTabbedPanePanelAIPanelExecutionTextfieldAiclass.getText() );
+        
+        try {
+            mTheRemoteBot.getTheBot().setBotInformation( mBotInformation );
+            updateData();
+        } catch ( RemoteException e ) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        
+    }
+
     public void addToLog( String aString ){
         
         while( mTabbedPanePanelLoggingTextarea.getLineCount() > mMaxLinesInLog ){
@@ -753,7 +1165,6 @@ public class BotFrame extends JPanel {
         }
         mTheRemoteBot = null;
         
-        System.out.println("---");
         
     }
 
@@ -762,7 +1173,10 @@ public class BotFrame extends JPanel {
         mTheRemoteBot = aRemoteBot;
         
         updateData();
-        updateStatus();
+        updateStatus( null );
+        
+        changeConnectionButtons( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.NetworkConnection ) );
+        changeAIButtons( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AILoaded ), mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AIRunning ) );
         
         //mTabbedPanePanelConnectionButtonConnect;
         //mTabbedPanePanelConnectionButtonDisconnect;
@@ -782,9 +1196,9 @@ public class BotFrame extends JPanel {
         mTabbedPanePanelDataPanelGeneralTextfieldRcid.setText( Integer.toString( mBotInformation.getRcId() ) );
         mTabbedPanePanelDataPanelGeneralTextfieldVtid.setText( Integer.toString( mBotInformation.getVtId() ) );
         
-        mTabbedPanePanelConnectionTextfieldBotaddress.setText( mBotInformation.getBotIP().toString() );
+        mTabbedPanePanelConnectionTextfieldBotaddress.setText( mBotInformation.getBotIP().getHostAddress() );
         mTabbedPanePanelConnectionTextfieldBotport.setText( Integer.toString( mBotInformation.getBotPort() ) );
-        mTabbedPanePanelConnectionTextfieldServeraddress.setText( mBotInformation.getServerIP().toString() );
+        mTabbedPanePanelConnectionTextfieldServeraddress.setText( mBotInformation.getServerIP().getHostAddress() );
         mTabbedPanePanelConnectionTextfieldServerteamport.setText( Integer.toString( mBotInformation.getServerPort() ) );
         
         mTabbedPanePanelAIPanelExecutionTextfieldAiarchive.setText( mBotInformation.getAIArchive() );
@@ -795,67 +1209,114 @@ public class BotFrame extends JPanel {
         
     }
     
-    private void updateStatus() throws RemoteException{
+    public void updateStatus( BotStatusType aStatus ) throws RemoteException{
         
-        if( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AILoaded ) ){
-            
-            mTabbedPanePanelStatusPanelAiLabelLoadedstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
-            mPanelHeadPanelBackLabelAILoaded.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
-            
-        } else {
-            
-            mTabbedPanePanelStatusPanelAiLabelLoadedstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
-            mPanelHeadPanelBackLabelAILoaded.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
+        if( aStatus == null || aStatus == BotStatusType.AILoaded ) {
+         
+            if( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AILoaded ) ){
+                
+                mTabbedPanePanelStatusPanelAiLabelLoadedstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
+                mPanelHeadPanelBackLabelAILoaded.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
+                
+            } else {
+                
+                mTabbedPanePanelStatusPanelAiLabelLoadedstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
+                mPanelHeadPanelBackLabelAILoaded.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
+                
+            }
             
         }
-        
-        if( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AIRunning) ){
-            
-            mTabbedPanePanelStatusPanelAiLabelRunningstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
-            mPanelHeadPanelBackLabelAIRunning.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
-            
-        } else {
-            
-            mTabbedPanePanelStatusPanelAiLabelRunningstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
-            mPanelHeadPanelBackLabelAIRunning.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
-            
-        }
-        
-        if( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.NetworkConnection ) ){
-            
-            mTabbedPanePanelStatusPanelNetworkstatusLabelConnectedstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
-            mPanelHeadPanelBackLabelNetworkConnected.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
-            
-        } else {
-            
-            mTabbedPanePanelStatusPanelNetworkstatusLabelConnectedstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
-            mPanelHeadPanelBackLabelNetworkConnected.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
+    
+        if( aStatus == null || aStatus == BotStatusType.AIRunning) {
+         
+            if( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AIRunning) ){
+                
+                mTabbedPanePanelStatusPanelAiLabelRunningstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
+                mPanelHeadPanelBackLabelAIRunning.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
+                
+            } else {
+                
+                mTabbedPanePanelStatusPanelAiLabelRunningstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
+                mPanelHeadPanelBackLabelAIRunning.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
+                
+            }
             
         }
-        
-        if( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.NetworkIncomingTraffic ) ){
-            
-            mTabbedPanePanelStatusPanelNetworkstatusLabelTrafficincomingstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
-            mPanelHeadPanelBackLabelNetworkTrafficIncoming.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
-            
-        } else {
-            
-            mTabbedPanePanelStatusPanelNetworkstatusLabelTrafficincomingstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
-            mPanelHeadPanelBackLabelNetworkTrafficIncoming.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
-            
-        }
-        
-        if( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.NetworkOutgoingTraffic) ){
-            
-            mTabbedPanePanelStatusPanelNetworkstatusLabelTrafficoutgoingstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
-            mPanelHeadPanelBackLabelNetworkTrafficOutgoing.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
-            
-        } else {
-            
-            mTabbedPanePanelStatusPanelNetworkstatusLabelTrafficoutgoingstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
-            mPanelHeadPanelBackLabelNetworkTrafficOutgoing.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
+    
+        if( aStatus == null || aStatus == BotStatusType.NetworkConnection) {
+                 
+            if( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.NetworkConnection ) ){
+                
+                mTabbedPanePanelStatusPanelNetworkstatusLabelConnectedstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
+                mPanelHeadPanelBackLabelNetworkConnected.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
+                
+            } else {
+                
+                mTabbedPanePanelStatusPanelNetworkstatusLabelConnectedstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
+                mPanelHeadPanelBackLabelNetworkConnected.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
+                
+            }
             
         }
+    
+        if( aStatus == null || aStatus == BotStatusType.NetworkIncomingTraffic) {
+         
+            if( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.NetworkIncomingTraffic ) ){
+                
+                mTabbedPanePanelStatusPanelNetworkstatusLabelTrafficincomingstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
+                mPanelHeadPanelBackLabelNetworkTrafficIncoming.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
+                
+            } else {
+                
+                mTabbedPanePanelStatusPanelNetworkstatusLabelTrafficincomingstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
+                mPanelHeadPanelBackLabelNetworkTrafficIncoming.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
+                
+            }
+            
+        }
+    
+        if( aStatus == null || aStatus == BotStatusType.NetworkOutgoingTraffic ) {
+         
+            if( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.NetworkOutgoingTraffic ) ){
+                
+                mTabbedPanePanelStatusPanelNetworkstatusLabelTrafficoutgoingstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
+                mPanelHeadPanelBackLabelNetworkTrafficOutgoing.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
+                
+            } else {
+                
+                mTabbedPanePanelStatusPanelNetworkstatusLabelTrafficoutgoingstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
+                mPanelHeadPanelBackLabelNetworkTrafficOutgoing.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
+                
+            }
+        
+        }
+    }
+
+    public void changeConnectionButtons( boolean aConnected ) {
+        
+        mTabbedPanePanelConnectionButtonConnect.setEnabled( !aConnected );
+        mTabbedPanePanelConnectionButtonConnect.setVisible( !aConnected );
+        mTabbedPanePanelConnectionButtonReconnect.setEnabled( !aConnected );
+        mTabbedPanePanelConnectionButtonReconnect.setVisible( !aConnected );
+        mTabbedPanePanelConnectionButtonDisconnect.setEnabled( aConnected );
+        mTabbedPanePanelConnectionButtonDisconnect.setVisible( aConnected);
+        
+    }
+    
+    public void changeAIButtons( boolean aInitalised, boolean aRunning ){
+
+        mTabbedPanePanelAIPanelArgumentsButtonExecute.setEnabled( aInitalised & aRunning );
+
+        mTabbedPanePanelAIPanelExecutionButtonAipause.setEnabled( aInitalised & aRunning );
+        mTabbedPanePanelAIPanelExecutionButtonAipause.setVisible( aInitalised & aRunning );
+        mTabbedPanePanelAIPanelExecutionButtonAiunpause.setEnabled( aInitalised & !aRunning );
+        mTabbedPanePanelAIPanelExecutionButtonAiunpause.setVisible( aInitalised & !aRunning );
+
+        mTabbedPanePanelAIPanelExecutionButtonAidispose.setEnabled( aInitalised );
+        mTabbedPanePanelAIPanelExecutionButtonAidispose.setVisible( aInitalised );
+        mTabbedPanePanelAIPanelExecutionButtonAiinitialise.setEnabled( !aInitalised );
+        mTabbedPanePanelAIPanelExecutionButtonAiinitialise.setVisible( !aInitalised );
+        
         
     }
 }

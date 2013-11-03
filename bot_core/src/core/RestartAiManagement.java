@@ -84,13 +84,14 @@ public class RestartAiManagement extends Thread{
 		while( mAiActive ){
 			
 		    if(Core.getInstance().getAI() != null && Core.getInstance().getAI().wantRestart()){
-		        
-		        Core.getInstance().initializeAI();
+
+                Core.getInstance().initializeAI();
+                Core.getInstance().startAI();
 		        
 		    }
 		    
 		    try {
-		        Thread.sleep( 100 );
+		        Thread.sleep( 1000 );
 		    } catch ( InterruptedException e ) {
 		        
 		        Core.getLogger().error( "Error while waiting in RestartAiServerManagement.", e );

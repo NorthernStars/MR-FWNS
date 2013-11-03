@@ -100,7 +100,7 @@ public interface RemoteControlInterface extends Remote {
      * @exception RemoteException
      *          falls die Verbindung in irgendeiner Weise gestoert wird
      */
-    public boolean startAI() throws RemoteException;
+    public boolean unpauseAI() throws RemoteException;
     
     /**
      * Pausiert die laufende AI.
