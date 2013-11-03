@@ -665,7 +665,7 @@ public class BotFrame extends JPanel {
         mTabbedPanePanelAIPanelExecutionButtonAiinitialise.setBounds(10, 108, 180, 23);
         vTabbedPanePanelAIPanelExecution.add(mTabbedPanePanelAIPanelExecutionButtonAiinitialise);
         
-        mTabbedPanePanelAIPanelExecutionButtonAiunpause = new JButton("Unpause");
+        mTabbedPanePanelAIPanelExecutionButtonAiunpause = new JButton("Resume");
         mTabbedPanePanelAIPanelExecutionButtonAiunpause.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 
@@ -676,7 +676,7 @@ public class BotFrame extends JPanel {
 
                         try {
                             
-                            if( mTheRemoteBot.getTheBot().startAI() ){
+                            if( mTheRemoteBot.getTheBot().resumeAI() ){
 
                                 SwingUtilities.invokeLater( new Runnable() { //TODO: nachdenken
                                     public void run() {
@@ -749,7 +749,7 @@ public class BotFrame extends JPanel {
         mTabbedPanePanelAIPanelExecutionButtonAidispose.setBounds(10, 108, 180, 23);
         vTabbedPanePanelAIPanelExecution.add(mTabbedPanePanelAIPanelExecutionButtonAidispose);
         
-        mTabbedPanePanelAIPanelExecutionButtonAipause = new JButton("Pause");
+        mTabbedPanePanelAIPanelExecutionButtonAipause = new JButton("Suspend");
         mTabbedPanePanelAIPanelExecutionButtonAipause.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 
@@ -760,7 +760,7 @@ public class BotFrame extends JPanel {
 
                         try {
                             
-                            mTheRemoteBot.getTheBot().pauseAI();
+                            mTheRemoteBot.getTheBot().suspendAI();
 
                             SwingUtilities.invokeLater( new Runnable() { //TODO: nachdenken
                                 public void run() {
@@ -1292,7 +1292,7 @@ public class BotFrame extends JPanel {
         }
     }
 
-    public void changeConnectionButtons( boolean aConnected ) {
+    public void changeConnectionButtons( boolean aConnected ) throws RemoteException {
         
         mTabbedPanePanelConnectionButtonConnect.setEnabled( !aConnected );
         mTabbedPanePanelConnectionButtonConnect.setVisible( !aConnected );
@@ -1301,9 +1301,10 @@ public class BotFrame extends JPanel {
         mTabbedPanePanelConnectionButtonDisconnect.setEnabled( aConnected );
         mTabbedPanePanelConnectionButtonDisconnect.setVisible( aConnected);
         
+        updateStatus( null );
     }
     
-    public void changeAIButtons( boolean aInitalised, boolean aRunning ){
+    public void changeAIButtons( boolean aInitalised, boolean aRunning ) throws RemoteException{
 
         mTabbedPanePanelAIPanelArgumentsButtonExecute.setEnabled( aInitalised & aRunning );
 
@@ -1317,6 +1318,7 @@ public class BotFrame extends JPanel {
         mTabbedPanePanelAIPanelExecutionButtonAiinitialise.setEnabled( !aInitalised );
         mTabbedPanePanelAIPanelExecutionButtonAiinitialise.setVisible( !aInitalised );
         
+        updateStatus( null );
         
     }
 }

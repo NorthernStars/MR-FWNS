@@ -186,16 +186,16 @@ public class RemoteControlServer implements RemoteControlInterface{
     }
 
     @Override
-    public boolean startAI() throws RemoteException {
+    public boolean resumeAI() throws RemoteException {
 
-        return Core.getInstance().startAI();
+        return Core.getInstance().resumeAI();
         
     }
 
     @Override
-    public void pauseAI() throws RemoteException {
+    public void suspendAI() throws RemoteException {
         
-        Core.getInstance().pauseAI();
+        Core.getInstance().suspendAI();
         
     }
 

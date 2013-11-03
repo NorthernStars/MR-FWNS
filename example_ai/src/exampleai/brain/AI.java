@@ -5,9 +5,6 @@ import mrlib.core.KickLib;
 import mrlib.core.MoveLib;
 import mrlib.core.PositionLib;
 
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
-
 import essentials.communication.Action;
 import essentials.communication.action_server2008.Movement;
 import essentials.communication.worlddata_server2008.BallPosition;
@@ -28,27 +25,29 @@ public class AI extends Thread implements ArtificialIntelligence {
     Action mAction = null;
     
     boolean mNeedNewAction = true;    
-    boolean mIsRunning = false;
+    boolean mIsStarted = false;
+    boolean mIsPaused = false;
     
     @Override
     public void initializeAI( BotInformation aOneSelf ) {
         
-        mSelf = aOneSelf;     
+        mSelf = aOneSelf; 
+        mIsStarted = true;
+        start();
         
     }
 
     @Override
-    public void startAI() {
+    public void resumeAI() {
         
-        mIsRunning = true;
-        start();
+        mIsPaused = false;
         
     }
     
     @Override
-    public void pauseAI() {
+    public void suspendAI() {
         
-        mIsRunning = false;   
+        mIsPaused = true;   
         
     }
     
@@ -57,7 +56,9 @@ public class AI extends Thread implements ArtificialIntelligence {
         RawWorldData vWorldState = null;
         Action vBotAction = null;
         
-        while ( mIsRunning ){
+        while ( mIsStarted ){
+            
+            while( mIsPaused ){ try { this.wait( 10 ); } catch ( InterruptedException e ) { e.printStackTrace(); } }
 
             try {             
                 if( mNeedNewAction && mWorldState != null  ){
@@ -124,14 +125,15 @@ public class AI extends Thread implements ArtificialIntelligence {
     @Override
     public void disposeAI() {
         
-        mIsRunning = false;
+        mIsStarted = false;
+        mIsPaused = false;
         
     }
     
     @Override
     public boolean isRunning() {
 
-        return mIsRunning;
+        return mIsStarted && !mIsPaused;
         
     }
 

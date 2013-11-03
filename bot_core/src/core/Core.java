@@ -67,7 +67,7 @@ public class Core {
             disposeAI();
             stopServermanagements();
             stopServerConnection();
-            RestartAiManagement.getInstance().close();
+            ReloadAiManagement.getInstance().close();
             RemoteControlServer.getInstance().close();
             
             Core.getLogger().info( mBotinformation.getBotname() + "(" + mBotinformation.getRcId() + "/" + mBotinformation.getVtId() + ") closed!" );
@@ -111,14 +111,15 @@ public class Core {
                 
                 RemoteControlServer.getInstance().startRemoteServer();
                 initializeAI();
-                RestartAiManagement.getInstance().startManagement();
+                ReloadAiManagement.getInstance().startManagement();
                 if( startServerConnection( 3 ) ){
                     
                     //startAI();
                 
                 } else {
                     
-                    Core.getLogger().error( "Could not connect to Server. AI not started" );
+                    suspendAI();
+                    Core.getLogger().error( "Could not connect to Server. AI suspended" );
                     
                 }
                 
@@ -149,6 +150,8 @@ public class Core {
            
         try {
 
+            suspendServermanagements();
+            
             Core.getLogger().trace( "Loading AI " + mBotinformation.getAIClassname() + " from " + mBotinformation.getAIArchive() );
             URL vUniformResourceLocator = new File( mBotinformation.getAIArchive() ).toURI().toURL();
             URLClassLoader vClassloader = new URLClassLoader( new URL[]{ vUniformResourceLocator } );
@@ -175,21 +178,26 @@ public class Core {
         
         }
         
+        resumeServermanagements();
+
         RemoteControlServer.getInstance().changedStatus( BotStatusType.AILoaded );
+        RemoteControlServer.getInstance().changedStatus( BotStatusType.AIRunning );
         
         return true;
         
     }
 
-    synchronized public void disposeAI() {
+    public void disposeAI() {
         
         if( mAI != null ){
             
+            suspendServermanagements();
             Core.getLogger().trace( "Disposing AI " + mBotinformation.getAIClassname() + " from " + mBotinformation.getAIArchive() );
             mAI.disposeAI();
             mAI = null;
             Core.getLogger().info( "Disposed AI " + mBotinformation.getAIClassname() + " from " + mBotinformation.getAIArchive() );
-
+            resumeServermanagements();
+            
             RemoteControlServer.getInstance().changedStatus( BotStatusType.AILoaded );
             RemoteControlServer.getInstance().changedStatus( BotStatusType.AIRunning );
             
@@ -197,21 +205,21 @@ public class Core {
         
     }
     
-    synchronized public boolean startAI(){
+    synchronized public boolean resumeAI(){
 
-        Core.getLogger().trace( "Starting AI" );
-        mAI.startAI();
-        Core.getLogger().info( "Started AI" );
+        Core.getLogger().trace( "Resuming AI" );
+        mAI.resumeAI();
+        Core.getLogger().info( "Resumed AI" );
         RemoteControlServer.getInstance().changedStatus( BotStatusType.AIRunning );
         return Core.getInstance().getAI().isRunning();
         
     }
     
-    synchronized public void pauseAI(){
+    synchronized public void suspendAI(){
 
-        Core.getLogger().info( "Pausing AI" );
-        mAI.pauseAI();
-        Core.getLogger().info( "Paused AI" );
+        Core.getLogger().info( "Suspending AI" );
+        mAI.suspendAI();
+        Core.getLogger().info( "Suspended AI" );
         RemoteControlServer.getInstance().changedStatus( BotStatusType.AIRunning );
         
     }
@@ -353,6 +361,46 @@ public class Core {
         }
         
     }
+    
+    /**
+     * 
+     */
+    public void resumeServermanagements() {
+
+        if( FromServerManagement.getInstance().isAlive() || ToServerManagement.getInstance().isAlive() ){
+            
+            Core.getLogger().info( "Resuming servermanagements." );
+            FromServerManagement.getInstance().resumeManagement();
+            ToServerManagement.getInstance().resumeManagement();
+            Core.getLogger().info( "Resumed servermanagements." );
+
+            RemoteControlServer.getInstance().changedStatus( BotStatusType.NetworkIncomingTraffic );
+            RemoteControlServer.getInstance().changedStatus( BotStatusType.NetworkOutgoingTraffic );
+            
+        }
+        
+    }
+    
+    /**
+     * 
+     */
+    public void suspendServermanagements() {
+
+        if( FromServerManagement.getInstance().isAlive() || ToServerManagement.getInstance().isAlive() ){
+            
+            Core.getLogger().info( "Suspending servermanagements." );
+            FromServerManagement.getInstance().suspendManagement();
+            ToServerManagement.getInstance().suspendManagement();
+            Core.getLogger().info( "Suspending servermanagements." );
+
+            RemoteControlServer.getInstance().changedStatus( BotStatusType.NetworkIncomingTraffic );
+            RemoteControlServer.getInstance().changedStatus( BotStatusType.NetworkOutgoingTraffic );
+            
+        }
+        
+    }
+    
+    
     
     synchronized public BotInformation getBotinformation() {
         

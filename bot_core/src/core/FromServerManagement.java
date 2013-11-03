@@ -43,9 +43,24 @@ public class FromServerManagement extends Thread{
         }
         
     }
-    
-	@GuardedBy("this") private boolean mManageMessagesFromServer = false;
+
+    @GuardedBy("this") private boolean mManageMessagesFromServer = false;
+    @GuardedBy("this") private boolean mSuspended = false;
     volatile private AtomicLong mLastReceivedMessage = new AtomicLong( 0 );
+
+    public void resumeManagement(){
+        
+        Core.getLogger().info( "FromServerManagement resumed." );
+        mSuspended = false;
+        
+    }
+    
+    public void suspendManagement(){
+        
+        Core.getLogger().info( "FromServerManagement suspended." );
+        mSuspended = true;
+        
+    }
 	
 	@Override
 	public void start(){
@@ -99,8 +114,12 @@ public class FromServerManagement extends Thread{
 	
 	public void run(){
 		
+        boolean vStatusChanged = false;
+	    
 		while( mManageMessagesFromServer ){
 			
+		    while( mSuspended ){ try { this.wait( 10 ); } catch ( InterruptedException e ) { e.printStackTrace(); } }
+		    
 			try {
 			
 				if( Core.getInstance().getAI() != null ) {
@@ -109,16 +128,17 @@ public class FromServerManagement extends Thread{
 						
 					    Core.getInstance().getAI().putWorldState( RawWorldData.createRawWorldDataFromXML( Core.getInstance().getServerConnection().getDatagramm( 1000 ) ) );
 						mLastReceivedMessage.set( System.currentTimeMillis() );
+						vStatusChanged = false;
 						
 					} else {
 						
-						throw new NullPointerException( "NetworkCommunication cannot be NULL when running FromServerManagement." ) ;
+					    Core.getLogger().debug( "NetworkCommunication cannot be NULL when running FromServerManagement." ) ;
 						
 					}
 					
 				} else {
 					
-					throw new NullPointerException( "Without actual AI all messages from the server will be discarded." ); // Change Exception 
+				    Core.getLogger().debug( "Without actual AI all messages from the server will be discarded." );
 					
 				}
 				
@@ -138,7 +158,7 @@ public class FromServerManagement extends Thread{
 			
 			if( (System.currentTimeMillis() - mLastReceivedMessage.get() ) > 132 ){ //TODO: dynamisch mit der Zeit eines Ticks verbinden
                 
-                RemoteControlServer.getInstance().changedStatus( BotStatusType.NetworkIncomingTraffic );
+                if( !vStatusChanged ){RemoteControlServer.getInstance().changedStatus( BotStatusType.NetworkOutgoingTraffic ); vStatusChanged = true;}
                 
             }
 			

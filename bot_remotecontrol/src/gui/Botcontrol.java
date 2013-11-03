@@ -41,6 +41,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 
+import java.awt.AWTEvent;
 import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -140,6 +141,7 @@ public class Botcontrol {
         vMenueItemExit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 
+                mFrameBotcontrol.dispatchEvent( new WindowEvent( mFrameBotcontrol, WindowEvent.WINDOW_CLOSING ));
                 mFrameBotcontrol.dispose();
                 
             }

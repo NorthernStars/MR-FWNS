@@ -91,7 +91,7 @@ public interface RemoteControlInterface extends Remote {
     public boolean initialiseAI() throws RemoteException;
     
     /**
-     * Startet die AI. Vorher sollte die AI initalisiert werden. 
+     * Unpausiert die AI. Vorher sollte die AI initalisiert werden. 
      * 
      * @since 0.9
      * 
@@ -100,7 +100,7 @@ public interface RemoteControlInterface extends Remote {
      * @exception RemoteException
      *          falls die Verbindung in irgendeiner Weise gestoert wird
      */
-    public boolean unpauseAI() throws RemoteException;
+    public boolean resumeAI() throws RemoteException;
     
     /**
      * Pausiert die laufende AI.
@@ -112,7 +112,7 @@ public interface RemoteControlInterface extends Remote {
      * @exception RemoteException
      *          falls die Verbindung in irgendeiner Weise gestoert wird
      */
-    public void pauseAI() throws RemoteException;
+    public void suspendAI() throws RemoteException;
 
     /**
      * Beendet und entfernt die laufende AI.
