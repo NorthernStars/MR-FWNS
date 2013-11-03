@@ -182,7 +182,7 @@ public class Botcontrol {
                     System.out.println("---" + vComponent.getClass() );
                     if( vComponent.getClass() == BotFrame.class ){
                         
-                        ((BotFrame)vComponent).close();
+                        ((BotFrame)vComponent).close( false );
                         
                     }
                     

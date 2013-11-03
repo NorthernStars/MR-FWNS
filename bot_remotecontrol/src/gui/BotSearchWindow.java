@@ -126,8 +126,8 @@ public class BotSearchWindow extends JFrame {
                 } catch ( RemoteException | MalformedURLException | NotBoundException e1 ) {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
-                    vNewRemoteBot.close();
-                    vNewBotFrame.close();
+                    vNewRemoteBot.close( false);
+                    vNewBotFrame.close( false);
                 }
                 
                 

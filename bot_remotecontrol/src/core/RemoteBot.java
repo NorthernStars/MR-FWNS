@@ -8,6 +8,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.text.SimpleDateFormat;
 
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
@@ -23,8 +24,9 @@ public class RemoteBot implements LogListener, StatusListener {
 
     private final RemoteControlInterface mTheBot;
     private BotFrame mTheBotFrame = null;
-    
-    private int mListenerIdent = -1;
+
+    private int mLogListenerIdent = 0;
+    private int mStatusListenerIdent = 0;
     
     public RemoteBot( String aBotURL, BotFrame aBotFrame ) throws RemoteException, MalformedURLException, NotBoundException {
         
@@ -32,25 +34,34 @@ public class RemoteBot implements LogListener, StatusListener {
         
         UnicastRemoteObject.exportObject( this, 0 );
         connectLogListener();
-        mListenerIdent = mTheBot.registerStatusListener( this );
+        connectStatusListener();
         
         mTheBotFrame = aBotFrame;
         mTheBotFrame.registerBot( this );
         
     }
 
+    public void connectStatusListener() throws RemoteException {
+        mLogListenerIdent = mTheBot.registerStatusListener( this );
+    }
+
     public void connectLogListener() throws RemoteException {
         
-        mListenerIdent = mTheBot.registerLogListener( this );
+        mStatusListenerIdent = mTheBot.registerLogListener( this );
         
     }
     
-    public void close(){
+    public void close( boolean aCloseBot ){
         
         try {
-
+            
             disconnectLogListener();
-            mTheBot.unregisterStatusListener( mListenerIdent );
+            disconnectStatusListener();
+            if( aCloseBot ){
+                
+                mTheBot.closeBot();
+                
+            }
             UnicastRemoteObject.unexportObject( this, true );
             
         } catch ( RemoteException e ) {
@@ -62,9 +73,13 @@ public class RemoteBot implements LogListener, StatusListener {
         
     }
 
+    public void disconnectStatusListener() throws RemoteException {
+        mTheBot.unregisterStatusListener( mStatusListenerIdent );
+    }
+
     public void disconnectLogListener() throws RemoteException {
         
-        mTheBot.unregisterLogListener( mListenerIdent );
+        mTheBot.unregisterLogListener( mLogListenerIdent );
         
     }
     

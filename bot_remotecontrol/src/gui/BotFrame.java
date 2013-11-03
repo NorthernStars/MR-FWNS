@@ -34,6 +34,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.JComboBox;
@@ -164,13 +165,22 @@ public class BotFrame extends JPanel {
         vPanelHeadPanelFrontButtonExit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                setEnabled( false );
-                setVisible( false );
+                int vSelection = JOptionPane.showConfirmDialog(
+                        Botcontrol.getInstance().getMainFrame(),
+                        "Would you like to close the Bot?",
+                        "Closing the Bot",
+                        JOptionPane.YES_NO_CANCEL_OPTION);
                 
-                Botcontrol.getInstance().removeBotframe( (BotFrame) mPanelHead.getParent() );
-                close();
+                System.out.println(vSelection);
+                if ( vSelection == 0 || vSelection == 1 ){
+                    
+                    setEnabled( false );
+                    setVisible( false );
+                    
+                    Botcontrol.getInstance().removeBotframe( (BotFrame) mPanelHead.getParent() );
+                    close( vSelection == 0 );
                 
-                //TODO
+                }
                                 
             }
         });
@@ -1154,13 +1164,13 @@ public class BotFrame extends JPanel {
         
     }
     
-    public void close(){
+    public void close( boolean aCloseBot ){
         
         //TODO
 
         if( mTheRemoteBot != null ){
             
-            mTheRemoteBot.close();
+            mTheRemoteBot.close( aCloseBot );
             
         }
         mTheRemoteBot = null;
