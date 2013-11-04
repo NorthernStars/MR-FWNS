@@ -79,7 +79,7 @@ public class Goalie extends Thread implements ArtificialIntelligence {
                     		vBotAction = KickLib.kickTo( goalMid );                    		
                     	} else if(PositionLib.isBallInRangeOfRefPoint(ballPos, GoalMid, 200)){
                     		// move to ball
-                    		vBotAction = null;//MoveLib.runTo( ballPos );
+                    		MoveLib.runTo( ballPos );
                     	} 
                     	else {
                     		if(GoalMid.getDistanceToPoint() > 10){
