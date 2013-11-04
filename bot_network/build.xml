@@ -31,27 +31,29 @@
   <target name="compile" depends="clean, makedir">
     <javac srcdir="${src.dir}" destdir="${build.dir}"  classpathref="build.classpath">
     </javac>
-
   </target>
 
   <!-- Creates Javadoc -->
   <target name="docs" depends="compile">
     <javadoc packagenames="src" sourcepath="${src.dir}" destdir="${docs.dir}">
-       <fileset dir="${src.dir}">
-                <include name="**" />
-           </fileset>
+       	<fileset dir="${src.dir}">
+       		<include name="**" />
+       	</fileset>
     </javadoc>
   </target>
 
   <!--Creates the deployable jar file  -->
-  <target name="jar" depends="compile">
-    <jar destfile="${dist.dir}/${jar.name}" basedir="${build.dir}">
-    <manifest>
-    </manifest>
+  <target name="jar" depends="compile, docs">
+    <jar destfile="${dist.dir}/${jar.name}">
+    	<manifest>
+    	</manifest>
+    	<fileset dir="${build.dir}" />
+    	<fileset dir="${src.dir}" includes="**/*.java"/>
+    	<fileset dir="${docs.dir}" />
     </jar>
   </target>
 
-  <target name="main" depends="compile, jar, docs">
+  <target name="main" depends="compile, docs, jar">
     <description>Main target</description>
   </target>
 
