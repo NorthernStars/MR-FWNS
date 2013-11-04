@@ -73,11 +73,11 @@ public class Goalie extends Thread implements ArtificialIntelligence {
                     	// get ball position
                     	BallPosition ballPos = vWorldState.getBallPosition();
                     	ReferencePoint GoalMid = PositionLib.getMiddleOfOwnGoal(vWorldState, mSelf.getTeam());
-                    	if( ballPos.getDistanceToBall() < mSelf.getGamevalue( GamevalueNames.KickRange ) ){                 
+                    	if( ballPos.getDistanceToBall() < mSelf.getGamevalue( GamevalueNames.KickRange )){                 
                     		// kick
-                    		ReferencePoint goalMid = PositionLib.getMiddleOfGoal( vWorldState, Teams.Blue );
+                    		ReferencePoint goalMid = PositionLib.getMiddleOfGoal( vWorldState, mSelf.getTeam() );
                     		vBotAction = KickLib.kickTo( goalMid );                    		
-                    	} else if(PositionLib.isBallInRangeOfRefPoint(ballPos, GoalMid, 50)){
+                    	} else if(PositionLib.isBallInRangeOfRefPoint(ballPos, GoalMid, 200)){
                     		// move to ball
                     		vBotAction = null;//MoveLib.runTo( ballPos );
                     	} 

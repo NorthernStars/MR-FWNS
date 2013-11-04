@@ -135,6 +135,7 @@ public class PositionLib {
     public static ReferencePoint getDMFposition( RawWorldData aWorldData, Teams aTeam ){
     	ReferencePoint PenaltyTop;
     	ReferencePoint PenaltyBottom;
+    	ReferencePoint PenaltyMid;
     	
     	if ( aTeam == Teams.Blue){
     		PenaltyTop = aWorldData.getBluePenaltyAreaFrontTop();
@@ -145,7 +146,8 @@ public class PositionLib {
     		PenaltyBottom = aWorldData.getYellowPenaltyAreaFrontBottom();
     	}
     	
-    	ReferencePoint DMFpoint = getMiddleOfTwoReferencePoints(getMiddleOfTwoReferencePoints(PenaltyTop, PenaltyBottom), aWorldData.getFieldCenter());
+    	PenaltyMid = getMiddleOfTwoReferencePoints(PenaltyTop, PenaltyBottom);
+    	ReferencePoint DMFpoint = getMiddleOfTwoReferencePoints(PenaltyMid, aWorldData.getFieldCenter());
     	    	
     	return DMFpoint;
     }
@@ -171,7 +173,7 @@ public class PositionLib {
         }
         double c = Math.sqrt( a*a + b*b - 2 * a * b * Math.cos(Math.toRadians(Math.abs(wa - wb))));
     	
-        if(range < c){
+        if(c < range){
         	return true;
         }
         else{
