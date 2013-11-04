@@ -46,8 +46,23 @@ public class ToServerManagement extends Thread{
     }
     
 	@GuardedBy("this") private boolean mManageMessagesToServer = false;
+    @GuardedBy("this") private boolean mSuspended = false;
     volatile private AtomicLong mLastSendMessage = new AtomicLong( 0 );
-    	
+
+    public void resumeManagement(){
+        
+        Core.getLogger().info( "ToServerManagement resumed." );
+        mSuspended = false;
+        
+    }
+    
+    public void suspendManagement(){
+        
+        Core.getLogger().info( "ToServerManagement suspended." );
+        mSuspended = true;
+        
+    }
+    
 	@Override
 	public void start(){
 		
@@ -104,8 +119,11 @@ public class ToServerManagement extends Thread{
 	public void run(){
 	    
 	    Action vCurrentAction = null;
+	    boolean vStatusChanged = false; //TODO: musch
 	    
 		while( mManageMessagesToServer ){
+            
+            while( mSuspended ){ try { this.wait( 10 ); } catch ( InterruptedException e ) { e.printStackTrace(); } }
 			
 			try {
 				
@@ -118,18 +136,20 @@ public class ToServerManagement extends Thread{
 					    vCurrentAction = Core.getInstance().getAI().getAction();
 					    Core.getInstance().getServerConnection().sendDatagramm( vCurrentAction );
                         mLastSendMessage.set( System.currentTimeMillis() );
+                        vStatusChanged = false;
                         
 						
 					} else {
 
 					    Core.getInstance().getServerConnection().sendDatagramm( (Action) Movement.NO_MOVEMENT );
-						Core.getLogger().info( "Without actual AI only empty messages will be sent to the Server." );
+						Core.getLogger().debug( "Without actual AI only empty messages will be sent to the Server." );
+						if( !vStatusChanged ){RemoteControlServer.getInstance().changedStatus( BotStatusType.NetworkOutgoingTraffic ); vStatusChanged = true;}
 												
 					}
 					
 				} else {
 				    
-					throw new NullPointerException( "NetworkCommunication cannot be NULL when running ToServerManagement." ) ;
+				    Core.getLogger().debug( "NetworkCommunication cannot be NULL when running ToServerManagement." ) ;
 					
 				}
 				
@@ -142,8 +162,8 @@ public class ToServerManagement extends Thread{
 			
 			if( (System.currentTimeMillis() - mLastSendMessage.get() ) > 132 ){ //TODO: dynamisch mit der Zeit eines Ticks verbinden
 			    
-			    RemoteControlServer.getInstance().changedStatus( BotStatusType.NetworkOutgoingTraffic );
-			    
+			    if( !vStatusChanged ){RemoteControlServer.getInstance().changedStatus( BotStatusType.NetworkOutgoingTraffic ); vStatusChanged = true;}
+                
 			}
 			
 		}

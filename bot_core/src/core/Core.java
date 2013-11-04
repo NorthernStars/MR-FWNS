@@ -67,7 +67,7 @@ public class Core {
             disposeAI();
             stopServermanagements();
             stopServerConnection();
-            RestartAiManagement.getInstance().close();
+            ReloadAiManagement.getInstance().close();
             RemoteControlServer.getInstance().close();
             
             Core.getLogger().info( mBotinformation.getBotname() + "(" + mBotinformation.getRcId() + "/" + mBotinformation.getVtId() + ") closed!" );
@@ -111,9 +111,17 @@ public class Core {
                 
                 RemoteControlServer.getInstance().startRemoteServer();
                 initializeAI();
-                RestartAiManagement.getInstance().startManagement();
-                startServerConnection();
-                startAI();
+                ReloadAiManagement.getInstance().startManagement();
+                if( startServerConnection( 3 ) ){
+                    
+                    //startAI();
+                
+                } else {
+                    
+                    suspendAI();
+                    Core.getLogger().error( "Could not connect to Server. AI suspended" );
+                    
+                }
                 
             }
             
@@ -142,6 +150,8 @@ public class Core {
            
         try {
 
+            suspendServermanagements();
+            
             Core.getLogger().trace( "Loading AI " + mBotinformation.getAIClassname() + " from " + mBotinformation.getAIArchive() );
             URL vUniformResourceLocator = new File( mBotinformation.getAIArchive() ).toURI().toURL();
             URLClassLoader vClassloader = new URLClassLoader( new URL[]{ vUniformResourceLocator } );
@@ -168,21 +178,26 @@ public class Core {
         
         }
         
+        resumeServermanagements();
+
         RemoteControlServer.getInstance().changedStatus( BotStatusType.AILoaded );
+        RemoteControlServer.getInstance().changedStatus( BotStatusType.AIRunning );
         
         return true;
         
     }
 
-    synchronized public void disposeAI() {
+    public void disposeAI() {
         
         if( mAI != null ){
             
+            suspendServermanagements();
             Core.getLogger().trace( "Disposing AI " + mBotinformation.getAIClassname() + " from " + mBotinformation.getAIArchive() );
             mAI.disposeAI();
             mAI = null;
             Core.getLogger().info( "Disposed AI " + mBotinformation.getAIClassname() + " from " + mBotinformation.getAIArchive() );
-
+            resumeServermanagements();
+            
             RemoteControlServer.getInstance().changedStatus( BotStatusType.AILoaded );
             RemoteControlServer.getInstance().changedStatus( BotStatusType.AIRunning );
             
@@ -190,17 +205,21 @@ public class Core {
         
     }
     
-    synchronized public boolean startAI(){
+    synchronized public boolean resumeAI(){
 
-        mAI.startAI();
+        Core.getLogger().trace( "Resuming AI" );
+        mAI.resumeAI();
+        Core.getLogger().info( "Resumed AI" );
         RemoteControlServer.getInstance().changedStatus( BotStatusType.AIRunning );
         return Core.getInstance().getAI().isRunning();
         
     }
     
-    synchronized public void pauseAI(){
+    synchronized public void suspendAI(){
 
-        mAI.pauseAI();
+        Core.getLogger().info( "Suspending AI" );
+        mAI.suspendAI();
+        Core.getLogger().info( "Suspended AI" );
         RemoteControlServer.getInstance().changedStatus( BotStatusType.AIRunning );
         
     }
@@ -210,11 +229,13 @@ public class Core {
      * @throws SocketTimeoutException
      * @throws SocketException
      */
-    public void startServerConnection() { //TODO: return boolean, connect successful?
+    public boolean startServerConnection( int aNumberOfTries ) { //TODO: return boolean, connect successful?
         
-        while( !(mServerConnection != null && mServerConnection.isConnected()) ){
+        int mTrysToConnect = 0;
         
-            Core.getLogger().info( mBotinformation.getReconnect()?"Reconnecting":"Connecting" + " to server " + mBotinformation.getServerIP() + ":" + mBotinformation.getServerPort() );
+        while( !(mServerConnection != null && mServerConnection.isConnected()) && ++mTrysToConnect <= aNumberOfTries ){
+        
+            Core.getLogger().info( "(" + mTrysToConnect + ") Trying to " + (mBotinformation.getReconnect()?"reconnect":"connect") + " to server " + mBotinformation.getServerIP() + ":" + mBotinformation.getServerPort() );
             
             try {
             
@@ -240,6 +261,10 @@ public class Core {
                         
                         mServerConnection.connectToServer( mBotinformation );
                         
+                    } else {
+                        
+                        mServerConnection.reconnectToServer();
+                        
                     }
                     
                 }
@@ -251,11 +276,37 @@ public class Core {
                 
             } catch ( IOException e ) {
     
-                Core.getLogger().error( "Error starting serverconnection: " + e.getLocalizedMessage() );
+                Core.getLogger().error( "(" + mTrysToConnect + ") Error starting serverconnection: " + e.getLocalizedMessage() );
                 Core.getLogger().catching( Level.ERROR, e );
                 
+                if( mServerConnection != null ){
+                    
+                    mServerConnection.closeConnection();
+                    mServerConnection = null;
+                    
+                }
+                
             } 
+            
+            if ( mServerConnection != null && mServerConnection.isConnected() ){
+                
+                Core.getLogger().info( "(" + mTrysToConnect + ") Connected to server (" + mServerConnection.toString() + ")" );
+                break;
+                
+            } else {
+                
+                try {
+                    Thread.sleep( 5000 ); //TODO: Besser
+                } catch ( InterruptedException e ) {
+                    e.printStackTrace();
+                } 
+                
+            }
+            
         }
+        
+        return mServerConnection != null && mServerConnection.isConnected();
+        
     }
     
     
@@ -266,22 +317,17 @@ public class Core {
      * @since 0.1
      */
     public void stopServerConnection(){
-        
-        synchronized (this) {
+         
+        if( mServerConnection != null ){
             
-            if( mServerConnection != null ){
-                
-                stopServermanagements();
-                
-                Core.getLogger().info( "Closing serverconnection (" + mServerConnection.toString() + ")" );
-                mServerConnection.closeConnection();
-                Core.getLogger().info( "Closed serverconnection." );
-                
-
-                RemoteControlServer.getInstance().changedStatus( BotStatusType.NetworkConnection );
-                
-            }
-        
+            stopServermanagements();
+            
+            Core.getLogger().info( "Closing serversocket (" + mServerConnection.toString() + ")" );
+            mServerConnection.closeConnection();
+            Core.getLogger().info( "Closed serversocket." );
+            
+            RemoteControlServer.getInstance().changedStatus( BotStatusType.NetworkConnection );
+            
         }
         
     }
@@ -308,13 +354,53 @@ public class Core {
         if( FromServerManagement.getInstance().isAlive() || ToServerManagement.getInstance().isAlive() ){
             
             Core.getLogger().info( "Stopping servermanagements." );
-            FromServerManagement.getInstance().stopManagement();
-            ToServerManagement.getInstance().stopManagement();
+            FromServerManagement.getInstance().close();
+            ToServerManagement.getInstance().close();
             Core.getLogger().info( "Stopped servermanagements." );
             
         }
         
     }
+    
+    /**
+     * 
+     */
+    public void resumeServermanagements() {
+
+        if( FromServerManagement.getInstance().isAlive() || ToServerManagement.getInstance().isAlive() ){
+            
+            Core.getLogger().info( "Resuming servermanagements." );
+            FromServerManagement.getInstance().resumeManagement();
+            ToServerManagement.getInstance().resumeManagement();
+            Core.getLogger().info( "Resumed servermanagements." );
+
+            RemoteControlServer.getInstance().changedStatus( BotStatusType.NetworkIncomingTraffic );
+            RemoteControlServer.getInstance().changedStatus( BotStatusType.NetworkOutgoingTraffic );
+            
+        }
+        
+    }
+    
+    /**
+     * 
+     */
+    public void suspendServermanagements() {
+
+        if( FromServerManagement.getInstance().isAlive() || ToServerManagement.getInstance().isAlive() ){
+            
+            Core.getLogger().info( "Suspending servermanagements." );
+            FromServerManagement.getInstance().suspendManagement();
+            ToServerManagement.getInstance().suspendManagement();
+            Core.getLogger().info( "Suspending servermanagements." );
+
+            RemoteControlServer.getInstance().changedStatus( BotStatusType.NetworkIncomingTraffic );
+            RemoteControlServer.getInstance().changedStatus( BotStatusType.NetworkOutgoingTraffic );
+            
+        }
+        
+    }
+    
+    
     
     synchronized public BotInformation getBotinformation() {
         
@@ -325,7 +411,7 @@ public class Core {
 
     synchronized public void setBotinformation( BotInformation aBotinformation ) {
         
-        Core.getLogger().info( "Setting Botinformation: \n" + mBotinformation.toString() );
+        Core.getLogger().debug( "Setting Botinformation: \n" + mBotinformation.toString() );
         mBotinformation = aBotinformation;
         
     }

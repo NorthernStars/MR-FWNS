@@ -1,32 +1,32 @@
 package core;
 
-public class RestartAiManagement extends Thread{
+public class ReloadAiManagement extends Thread{
 
-    private static RestartAiManagement INSTANCE;
+    private static ReloadAiManagement INSTANCE;
     
-    private RestartAiManagement(){
+    private ReloadAiManagement(){
         
         this.setName( "RestartAiManagement" );
         
     }
 
-    public static RestartAiManagement getInstance() {
+    public static ReloadAiManagement getInstance() {
         
-        if( RestartAiManagement.INSTANCE == null){
-            RestartAiManagement.INSTANCE = new RestartAiManagement();
+        if( ReloadAiManagement.INSTANCE == null){
+            ReloadAiManagement.INSTANCE = new ReloadAiManagement();
         }
         
-        return RestartAiManagement.INSTANCE;
+        return ReloadAiManagement.INSTANCE;
         
     }
     
     public void close(){
         
         Core.getLogger().info( "RestartAiServerManagement closing." );
-        if( RestartAiManagement.INSTANCE != null ) {
+        if( ReloadAiManagement.INSTANCE != null ) {
             
             stopManagement();
-            RestartAiManagement.INSTANCE = null;
+            ReloadAiManagement.INSTANCE = null;
             
         }
         Core.getLogger().info( "RestartAiServerManagement closed." );
@@ -84,13 +84,14 @@ public class RestartAiManagement extends Thread{
 		while( mAiActive ){
 			
 		    if(Core.getInstance().getAI() != null && Core.getInstance().getAI().wantRestart()){
-		        
-		        Core.getInstance().initializeAI();
+
+                Core.getInstance().initializeAI();
+                Core.getInstance().resumeAI();
 		        
 		    }
 		    
 		    try {
-		        Thread.sleep( 100 );
+		        Thread.sleep( 1000 );
 		    } catch ( InterruptedException e ) {
 		        
 		        Core.getLogger().error( "Error while waiting in RestartAiServerManagement.", e );

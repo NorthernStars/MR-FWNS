@@ -29,15 +29,19 @@ import javax.swing.ListSelectionModel;
 import javax.swing.AbstractListModel;
 
 import core.Core;
+import core.RemoteBot;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.net.MalformedURLException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 
 public class BotSearchWindow extends JFrame {
 
-    private JPanel contentPane;
-    private JTextField txtlocalhost;
-    private JList<String> list;
+    private JPanel vPanelContent;
+    private JTextField vPanelContentPanelMainPanelConnectToRegistryTextfeldRegistry;
+    private JList<String> mPanelContentPanelMainPanelBotlistListBots;
 
     /**
      * Create the frame.
@@ -45,73 +49,102 @@ public class BotSearchWindow extends JFrame {
     public BotSearchWindow() {
         setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE);
         setBounds( 100, 100, 486, 362 );
-        contentPane = new JPanel();
-        contentPane.setBorder( new EmptyBorder( 5, 5, 5, 5 ) );
-        contentPane.setLayout( new BorderLayout( 0, 0 ) );
-        setContentPane( contentPane );
+        vPanelContent = new JPanel();
+        vPanelContent.setBorder( new EmptyBorder( 5, 5, 5, 5 ) );
+        vPanelContent.setLayout( new BorderLayout( 0, 0 ) );
+        setContentPane( vPanelContent );
         
-        JScrollPane scrollPane = new JScrollPane();
-        contentPane.add(scrollPane, BorderLayout.CENTER);
+        JScrollPane scrollPane_Main = new JScrollPane();
+        vPanelContent.add(scrollPane_Main, BorderLayout.CENTER);
         
-        JPanel panel = new JPanel();
-        panel.setMinimumSize(new Dimension(400, 300));
-        panel.setPreferredSize(new Dimension(400, 300));
-        scrollPane.setViewportView(panel);
-        panel.setLayout(new BorderLayout(0, 0));
+        JPanel vPanelContentPanelMain = new JPanel();
+        vPanelContentPanelMain.setMinimumSize(new Dimension(400, 300));
+        vPanelContentPanelMain.setPreferredSize(new Dimension(400, 300));
+        scrollPane_Main.setViewportView(vPanelContentPanelMain);
+        vPanelContentPanelMain.setLayout(new BorderLayout(0, 0));
         
-        JPanel panelConnectToRegistry = new JPanel();
-        panel.add(panelConnectToRegistry, BorderLayout.NORTH);
-        panelConnectToRegistry.setLayout(new BorderLayout(0, 0));
+        JPanel vPanelContentPanelMainPanelConnectToRegistry = new JPanel();
+        vPanelContentPanelMain.add(vPanelContentPanelMainPanelConnectToRegistry, BorderLayout.NORTH);
+        vPanelContentPanelMainPanelConnectToRegistry.setLayout(new BorderLayout(0, 0));
         
-        JButton btnConnectToRegistry = new JButton("Connect to registry");
-        btnConnectToRegistry.addActionListener(new ActionListener() {
+        JButton vPanelContentPanelMainPanelConnectToRegistryButtonConnectToRegistry = new JButton("Connect to registry");
+        vPanelContentPanelMainPanelConnectToRegistryButtonConnectToRegistry.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 
-                String[] vListOfBots = Core.getInstance().getListOfBots( txtlocalhost.getText() );
+                String[] vListOfBots = Core.getInstance().getListOfBots( vPanelContentPanelMainPanelConnectToRegistryTextfeldRegistry.getText() );
                 
                 if( vListOfBots != null ){
                     
-                    list.setListData( vListOfBots );
+                    mPanelContentPanelMainPanelBotlistListBots.setListData( vListOfBots );
                     
                 }
                 
             }
         });
-        panelConnectToRegistry.add(btnConnectToRegistry, BorderLayout.EAST);
+        vPanelContentPanelMainPanelConnectToRegistry.add(vPanelContentPanelMainPanelConnectToRegistryButtonConnectToRegistry, BorderLayout.EAST);
         
-        txtlocalhost = new JTextField();
-        txtlocalhost.setText("//localhost:1099/");
-        panelConnectToRegistry.add(txtlocalhost, BorderLayout.CENTER);
-        txtlocalhost.setColumns(10);
+        vPanelContentPanelMainPanelConnectToRegistryTextfeldRegistry = new JTextField();
+        vPanelContentPanelMainPanelConnectToRegistryTextfeldRegistry.setText("//localhost:1099/");
+        vPanelContentPanelMainPanelConnectToRegistry.add(vPanelContentPanelMainPanelConnectToRegistryTextfeldRegistry, BorderLayout.CENTER);
+        vPanelContentPanelMainPanelConnectToRegistryTextfeldRegistry.setColumns(10);
         
-        JPanel panelOptions = new JPanel();
-        panel.add(panelOptions, BorderLayout.SOUTH);
-        panelOptions.setLayout(new BorderLayout(0, 0));
+        JPanel vPanelContentPanelMainPanelOptions = new JPanel();
+        vPanelContentPanelMain.add(vPanelContentPanelMainPanelOptions, BorderLayout.SOUTH);
+        vPanelContentPanelMainPanelOptions.setLayout(new BorderLayout(0, 0));
         
-        JPanel panelOptions2 = new JPanel();
-        panelOptions2.setMaximumSize(new Dimension(200, 28));
-        panelOptions2.setPreferredSize(new Dimension(200, 28));
-        panelOptions2.setMinimumSize(new Dimension(200, 28));
-        panelOptions.add(panelOptions2, BorderLayout.EAST);
-        panelOptions2.setLayout(null);
+        JPanel vPanelContentPanelMainPanelOptionsPanelOptions2 = new JPanel();
+        vPanelContentPanelMainPanelOptionsPanelOptions2.setMaximumSize(new Dimension(200, 28));
+        vPanelContentPanelMainPanelOptionsPanelOptions2.setPreferredSize(new Dimension(200, 28));
+        vPanelContentPanelMainPanelOptionsPanelOptions2.setMinimumSize(new Dimension(200, 28));
+        vPanelContentPanelMainPanelOptions.add(vPanelContentPanelMainPanelOptionsPanelOptions2, BorderLayout.EAST);
+        vPanelContentPanelMainPanelOptionsPanelOptions2.setLayout(null);
         
-        JButton btnClose = new JButton("Close");
-        btnClose.setBounds(132, 3, 68, 23);
-        panelOptions2.add(btnClose);
+        JButton vPanelContentPanelMainPanelOptionsButtonClose = new JButton("Close");
+        vPanelContentPanelMainPanelOptionsButtonClose.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                
+                dispose();
+                
+            }
+        });
+        vPanelContentPanelMainPanelOptionsButtonClose.setBounds(132, 3, 68, 23);
+        vPanelContentPanelMainPanelOptionsPanelOptions2.add(vPanelContentPanelMainPanelOptionsButtonClose);
         
-        JButton btnConnectToBot = new JButton("Connect to bot");
-        btnConnectToBot.setBounds(10, 3, 112, 23);
-        panelOptions2.add(btnConnectToBot);
+        JButton vPanelContentPanelMainPanelOptionsButtonConnectToBot = new JButton("Connect to bot");
+        vPanelContentPanelMainPanelOptionsButtonConnectToBot.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                
+                BotFrame vNewBotFrame = new BotFrame();
+                RemoteBot vNewRemoteBot = null;
+                try {
+                    
+                    if( mPanelContentPanelMainPanelBotlistListBots.getSelectedValue() != null ){
+                        vNewRemoteBot = new RemoteBot( mPanelContentPanelMainPanelBotlistListBots.getSelectedValue(), vNewBotFrame);
+                        Botcontrol.getInstance().addBotFrame( vNewBotFrame );
+                    }
+                    
+                } catch ( RemoteException | MalformedURLException | NotBoundException e1 ) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                    vNewRemoteBot.close( false);
+                    vNewBotFrame.close( false);
+                }
+                
+                
+            }
+        });
+        vPanelContentPanelMainPanelOptionsButtonConnectToBot.setBounds(10, 3, 112, 23);
+        vPanelContentPanelMainPanelOptionsPanelOptions2.add(vPanelContentPanelMainPanelOptionsButtonConnectToBot);
 
-        list = new JList<String>();
+        mPanelContentPanelMainPanelBotlistListBots = new JList<String>();
         
-        JScrollPane scrollPane_1 = new JScrollPane();
-        scrollPane_1.setViewportView(list);
+        JScrollPane scrollPane_List = new JScrollPane();
+        scrollPane_List.setViewportView(mPanelContentPanelMainPanelBotlistListBots);
         
-        JPanel panel_4 = new JPanel();
-        panel.add(panel_4, BorderLayout.CENTER);
-        panel_4.setLayout(new BorderLayout());
-        panel_4.add(scrollPane_1, BorderLayout.CENTER);
+        JPanel vPanelContentPanelMainPanelBotlist = new JPanel();
+        vPanelContentPanelMain.add(vPanelContentPanelMainPanelBotlist, BorderLayout.CENTER);
+        vPanelContentPanelMainPanelBotlist.setLayout(new BorderLayout());
+        vPanelContentPanelMainPanelBotlist.add(scrollPane_List, BorderLayout.CENTER);
         
     }
 }

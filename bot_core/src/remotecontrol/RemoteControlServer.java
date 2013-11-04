@@ -156,7 +156,8 @@ public class RemoteControlServer implements RemoteControlInterface{
     @Override
     public boolean connectBot() throws RemoteException {
 
-        Core.getInstance().startServerConnection();
+        Core.getInstance().getBotinformation().setReconnect( false );
+        Core.getInstance().startServerConnection(1);
         return Core.getInstance().getServerConnection().isConnected();
         
     }
@@ -165,7 +166,7 @@ public class RemoteControlServer implements RemoteControlInterface{
     public boolean reconnectBot() throws RemoteException {
         
         Core.getInstance().getBotinformation().setReconnect( true );
-        Core.getInstance().startServerConnection();
+        Core.getInstance().startServerConnection(1);
         return Core.getInstance().getServerConnection().isConnected();
     }
 
@@ -173,7 +174,7 @@ public class RemoteControlServer implements RemoteControlInterface{
     public boolean disconnectBot() throws RemoteException {
         
         Core.getInstance().stopServerConnection();
-        return Core.getInstance().getServerConnection().isConnected();
+        return !Core.getInstance().getServerConnection().isConnected();
         
     }
 
@@ -185,23 +186,23 @@ public class RemoteControlServer implements RemoteControlInterface{
     }
 
     @Override
-    public boolean startAI() throws RemoteException {
+    public boolean resumeAI() throws RemoteException {
 
-        return Core.getInstance().startAI();
+        return Core.getInstance().resumeAI();
         
     }
 
     @Override
-    public void pauseAI() throws RemoteException {
+    public void suspendAI() throws RemoteException {
         
-        Core.getInstance().getAI().pauseAI();
+        Core.getInstance().suspendAI();
         
     }
 
     @Override
     public void disposeAI() throws RemoteException {
 
-        Core.getInstance().getAI().disposeAI();
+        Core.getInstance().disposeAI();
         
     }
 
@@ -221,6 +222,18 @@ public class RemoteControlServer implements RemoteControlInterface{
         mLogListener.put( aLogListener.hashCode(), aLogListener );
         
         return aLogListener.hashCode();
+        
+    }
+
+
+    @Override
+    public Level getLogLevel() throws RemoteException {
+        
+        LoggerContext vLoggerContext = (LoggerContext) LogManager.getContext(false);
+        Configuration vGlobalConfig = vLoggerContext.getConfiguration();
+        LoggerConfig vLoggerConfig = vGlobalConfig.getLoggerConfig( Core.getLogger().getName() );
+        
+        return vLoggerConfig.getLevel();
         
     }
 
@@ -252,7 +265,7 @@ public class RemoteControlServer implements RemoteControlInterface{
             
             Core.getLogger().trace( "Unregistering LogListener " + aListenerIdent );
             mLogListener.remove( aListenerIdent );
-            Core.getLogger().info( "Unregistered all LogListeners " + aListenerIdent );
+            Core.getLogger().info( "Unregistered LogListener " + aListenerIdent );
             return true;
             
         }

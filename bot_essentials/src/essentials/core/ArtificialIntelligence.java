@@ -3,7 +3,7 @@ package essentials.core;
 public interface ArtificialIntelligence {
 
     /**
-     * Function to initialize the AI. The BotInformation-parameter 
+     * Function to initialise the AI. The BotInformation-parameter 
      * is the most recent with all possible Values. 
      * 
      * @param aBotInformation The full information about the Bot
@@ -11,16 +11,16 @@ public interface ArtificialIntelligence {
     public void initializeAI( BotInformation aBotInformation );
     
     /**
-     * Function to start the AI. 
+     * Function to resume a suspended AI. 
      * 
      */
-    public void startAI();
+    public void resumeAI();
     
     /**
-     * Function to pause the AI. All execution of logic should be stopped 
+     * Function to suspend the AI. All execution of logic should be stopped 
      * 
      */
-    public void pauseAI();
+    public void suspendAI();
     
     /**
      * Disables and disposes the AI. Afterward the AI will be garbage-collected.
