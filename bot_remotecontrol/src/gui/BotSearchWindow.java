@@ -41,7 +41,7 @@ public class BotSearchWindow extends JFrame {
 
     private JPanel vPanelContent;
     private JTextField vPanelContentPanelMainPanelConnectToRegistryTextfeldRegistry;
-    private JList<String> mPanelContentPanelMainPanelBotlistListBots;
+    private JList mPanelContentPanelMainPanelBotlistListBots;
 
     /**
      * Create the frame.
@@ -119,7 +119,7 @@ public class BotSearchWindow extends JFrame {
                 try {
                     
                     if( mPanelContentPanelMainPanelBotlistListBots.getSelectedValue() != null ){
-                        vNewRemoteBot = new RemoteBot( mPanelContentPanelMainPanelBotlistListBots.getSelectedValue(), vNewBotFrame);
+                        vNewRemoteBot = new RemoteBot( (String) mPanelContentPanelMainPanelBotlistListBots.getSelectedValue(), vNewBotFrame);
                         Botcontrol.getInstance().addBotFrame( vNewBotFrame );
                     }
                     
@@ -136,7 +136,7 @@ public class BotSearchWindow extends JFrame {
         vPanelContentPanelMainPanelOptionsButtonConnectToBot.setBounds(10, 3, 112, 23);
         vPanelContentPanelMainPanelOptionsPanelOptions2.add(vPanelContentPanelMainPanelOptionsButtonConnectToBot);
 
-        mPanelContentPanelMainPanelBotlistListBots = new JList<String>();
+        mPanelContentPanelMainPanelBotlistListBots = new JList();
         
         JScrollPane scrollPane_List = new JScrollPane();
         scrollPane_List.setViewportView(mPanelContentPanelMainPanelBotlistListBots);

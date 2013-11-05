@@ -113,10 +113,8 @@ public class Core {
                 initializeAI();
                 ReloadAiManagement.getInstance().startManagement();
                 if( startServerConnection( 3 ) ){
-                    
-                    //startAI();
-                
-                } else {
+                                    
+                } else if( mAI != null ){
                     
                     suspendAI();
                     Core.getLogger().error( "Could not connect to Server. AI suspended" );

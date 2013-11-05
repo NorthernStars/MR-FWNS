@@ -3,11 +3,8 @@ package gui;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import javax.swing.JToolBar;
-
 import java.awt.BorderLayout;
 
-import javax.swing.JScrollBar;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -16,18 +13,11 @@ import javax.swing.ScrollPaneConstants;
 
 import java.awt.Component;
 
-import javax.swing.Box;
 import javax.swing.JSeparator;
-
-import java.awt.FlowLayout;
-
-import net.miginfocom.swing.MigLayout;
 
 import java.awt.GridBagLayout;
 
 import javax.swing.JPanel;
-import javax.swing.BoxLayout;
-
 import core.Core;
 
 import java.awt.event.ActionListener;
@@ -35,18 +25,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import javax.swing.JButton;
-
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
-
-import java.awt.AWTEvent;
-import java.awt.CardLayout;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
-import java.awt.GridLayout;
 
 public class Botcontrol {
 
@@ -75,7 +55,7 @@ public class Botcontrol {
     
     public void revalidate(){
 
-        mFrameBotcontrol.revalidate();       
+        mFrameBotcontrol.validate();       
         
     }
     
@@ -90,7 +70,8 @@ public class Botcontrol {
      */
     public static void startGUI( ) {
         EventQueue.invokeLater( new Runnable() {
-            public void run() {
+            @Override
+			public void run() {
                 try {
                     getInstance().mFrameBotcontrol.setVisible( true );
                 } catch ( Exception e ) {
@@ -117,10 +98,12 @@ public class Botcontrol {
         
         JMenuItem vMenueItemConnectToBot = new JMenuItem("Connect to Bot");
         vMenueItemConnectToBot.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 
                 EventQueue.invokeLater( new Runnable() {
-                    public void run() {
+                    @Override
+					public void run() {
                         try {
                             BotSearchWindow frame = new BotSearchWindow();
                             frame.setVisible( true );
@@ -139,7 +122,8 @@ public class Botcontrol {
         
         JMenuItem vMenueItemExit = new JMenuItem("Exit");
         vMenueItemExit.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 
                 mFrameBotcontrol.dispatchEvent( new WindowEvent( mFrameBotcontrol, WindowEvent.WINDOW_CLOSING ));
                 mFrameBotcontrol.dispose();
@@ -173,7 +157,8 @@ public class Botcontrol {
                 
             }
             
-            public void windowClosing( WindowEvent e )
+            @Override
+			public void windowClosing( WindowEvent e )
             {
                 
                 super.windowClosing( e );
@@ -210,7 +195,7 @@ public class Botcontrol {
         c.weighty = 1.0;
         mPanelContent.add( mPanelFiller, c );
         
-        mFrameBotcontrol.revalidate();
+        mFrameBotcontrol.validate();
         
     }
 

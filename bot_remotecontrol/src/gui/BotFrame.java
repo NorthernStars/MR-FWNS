@@ -5,9 +5,6 @@ import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.Dialog;
 import java.awt.FlowLayout;
-import java.awt.TextField;
-import java.awt.Window;
-
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 
@@ -24,7 +21,6 @@ import java.awt.Color;
 
 import javax.swing.border.MatteBorder;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.Element;
 import javax.swing.JLabel;
 
 import java.awt.event.ComponentAdapter;
@@ -41,6 +37,7 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
 
 import org.apache.logging.log4j.Level;
 
@@ -55,16 +52,10 @@ import java.awt.event.MouseEvent;
 import javax.swing.JPopupMenu;
 import javax.swing.JMenuItem;
 
-import java.awt.Component;
 import java.net.InetAddress;
 import java.rmi.RemoteException;
-import java.util.Arrays;
 import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import javax.swing.Box;
-import javax.swing.JSplitPane;
 
 import essentials.core.BotInformation;
 import essentials.core.BotInformation.Teams;
@@ -74,6 +65,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.UIManager;
 
 public class BotFrame extends JPanel {
 
@@ -142,16 +134,16 @@ public class BotFrame extends JPanel {
      */
     public BotFrame() {
         
-        setBorder(new LineBorder(new Color(0, 0, 0), 3));
+        setBorder(new LineBorder(UIManager.getColor("TabbedPane.selected"), 3));
         setLayout(new BorderLayout(0, 0));
-        setPreferredSize(new Dimension(214, 241));
+        setPreferredSize(new Dimension(363, 221));
         setMinimumSize(new Dimension(400, 45));
         setMaximumSize(new Dimension(10000, 45));
         
         mPanelHead = new JPanel();
         mPanelHead.setPreferredSize(new Dimension(200, 40));
         mPanelHead.setMinimumSize(new Dimension(200, 40));
-        mPanelHead.setBorder(new MatteBorder(0, 0, 2, 0, (Color) new Color(0, 0, 0)));
+        mPanelHead.setBorder(new MatteBorder(0, 0, 2, 0, new Color(0, 0, 0)));
         add(mPanelHead, BorderLayout.NORTH);
         mPanelHead.setLayout(new BorderLayout(0, 0));
         
@@ -163,7 +155,8 @@ public class BotFrame extends JPanel {
         
         JButton vPanelHeadPanelFrontButtonExit = new JButton("");
         vPanelHeadPanelFrontButtonExit.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
 
                 int vSelection = JOptionPane.showConfirmDialog(
                         Botcontrol.getInstance().getMainFrame(),
@@ -264,7 +257,7 @@ public class BotFrame extends JPanel {
         mPanelHeadPanelBackLabelButtonExpandContract.setIcon(new ImageIcon(BotFrame.class.getResource("/res/contract.gif")));
         vPanelHeadPanelBack.add(mPanelHeadPanelBackLabelButtonExpandContract);
         
-        mTabbedPane = new JTabbedPane(JTabbedPane.TOP);
+        mTabbedPane = new JTabbedPane(SwingConstants.TOP);
         add(mTabbedPane, BorderLayout.CENTER);
         
         vTabbedPanePanelStatus = new JPanel();
@@ -330,7 +323,8 @@ public class BotFrame extends JPanel {
         
         JButton vTabbedPanePanelStatusButtonManuallystatuscheck = new JButton("Manually check status");
         vTabbedPanePanelStatusButtonManuallystatuscheck.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 
                 try {
                     updateStatus( null );
@@ -401,7 +395,8 @@ public class BotFrame extends JPanel {
         
         mTabbedPanePanelDataPanelGeneralButtonChangeData = new JButton("Change Data");
         mTabbedPanePanelDataPanelGeneralButtonChangeData.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 
                 updateTheRemoteBot();
                 
@@ -478,19 +473,22 @@ public class BotFrame extends JPanel {
         
         mTabbedPanePanelConnectionButtonConnect = new JButton("Connect");
         mTabbedPanePanelConnectionButtonConnect.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 
                 updateTheRemoteBot();
                 
                  mExecutor.execute( new Runnable() { //TODO: nachdenken
-                    public void run() {
+                    @Override
+					public void run() {
                         
                         try {
                             
                             if( !mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.NetworkConnection ) && mTheRemoteBot.getTheBot().connectBot() ){
                                 
                                 SwingUtilities.invokeLater( new Runnable() { //TODO: nachdenken
-                                    public void run() {
+                                    @Override
+									public void run() {
                                         
                                         try {
                                             changeConnectionButtons( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.NetworkConnection ) );
@@ -521,18 +519,21 @@ public class BotFrame extends JPanel {
         
         mTabbedPanePanelConnectionButtonReconnect = new JButton("Reconnect");
         mTabbedPanePanelConnectionButtonReconnect.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 
                 updateTheRemoteBot();
 
                 mExecutor.execute( new Runnable() { //TODO: nachdenken
-                    public void run() {
+                    @Override
+					public void run() {
                         
                         try {
                             if( !mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.NetworkConnection ) && mTheRemoteBot.getTheBot().reconnectBot() ){
                                 
                                 SwingUtilities.invokeLater( new Runnable() { //TODO: nachdenken
-                                    public void run() {
+                                    @Override
+									public void run() {
                                         
                                         try {
                                             changeConnectionButtons( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.NetworkConnection ) );
@@ -562,18 +563,21 @@ public class BotFrame extends JPanel {
         
         mTabbedPanePanelConnectionButtonDisconnect = new JButton("Disconnect");
         mTabbedPanePanelConnectionButtonDisconnect.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
 
                 updateTheRemoteBot();
                 
                 mExecutor.execute( new Runnable() { //TODO: nachdenken
-                    public void run() {
+                    @Override
+					public void run() {
 
                         try {
                             if( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.NetworkConnection ) && mTheRemoteBot.getTheBot().disconnectBot() ){
 
                                 SwingUtilities.invokeLater( new Runnable() { //TODO: nachdenken
-                                    public void run() {
+                                    @Override
+									public void run() {
                                         
                                         try {
 
@@ -635,19 +639,22 @@ public class BotFrame extends JPanel {
         
         mTabbedPanePanelAIPanelExecutionButtonAiinitialise = new JButton("Initialise");
         mTabbedPanePanelAIPanelExecutionButtonAiinitialise.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 
                 updateTheRemoteBot();
                 
                 mExecutor.execute( new Runnable() { //TODO: nachdenken
-                    public void run() {
+                    @Override
+					public void run() {
 
                         try {
                             
                             if( mTheRemoteBot.getTheBot().initialiseAI() ){
 
                                 SwingUtilities.invokeLater( new Runnable() { //TODO: nachdenken
-                                    public void run() {
+                                    @Override
+									public void run() {
                                         
                                         try {
                                             changeAIButtons( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AILoaded ), mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AIRunning ) );
@@ -677,19 +684,22 @@ public class BotFrame extends JPanel {
         
         mTabbedPanePanelAIPanelExecutionButtonAiunpause = new JButton("Resume");
         mTabbedPanePanelAIPanelExecutionButtonAiunpause.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 
                 updateTheRemoteBot();
                 
                 mExecutor.execute( new Runnable() { //TODO: nachdenken
-                    public void run() {
+                    @Override
+					public void run() {
 
                         try {
                             
                             if( mTheRemoteBot.getTheBot().resumeAI() ){
 
                                 SwingUtilities.invokeLater( new Runnable() { //TODO: nachdenken
-                                    public void run() {
+                                    @Override
+									public void run() {
                                         
                                         try {
                                             changeAIButtons( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AILoaded ), mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AIRunning ) );
@@ -720,19 +730,22 @@ public class BotFrame extends JPanel {
         
         mTabbedPanePanelAIPanelExecutionButtonAidispose = new JButton("Dispose");
         mTabbedPanePanelAIPanelExecutionButtonAidispose.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 
                 updateTheRemoteBot();
                 
                 mExecutor.execute( new Runnable() { //TODO: nachdenken
-                    public void run() {
+                    @Override
+					public void run() {
 
                         try {
                             
                             mTheRemoteBot.getTheBot().disposeAI();
                                     
                             SwingUtilities.invokeLater( new Runnable() { //TODO: nachdenken
-                                public void run() {
+                                @Override
+								public void run() {
                                     
                                     try {
                                         changeAIButtons( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AILoaded ), mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AIRunning ) );
@@ -761,19 +774,22 @@ public class BotFrame extends JPanel {
         
         mTabbedPanePanelAIPanelExecutionButtonAipause = new JButton("Suspend");
         mTabbedPanePanelAIPanelExecutionButtonAipause.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 
                 updateTheRemoteBot();
                 
                 mExecutor.execute( new Runnable() { //TODO: nachdenken
-                    public void run() {
+                    @Override
+					public void run() {
 
                         try {
                             
                             mTheRemoteBot.getTheBot().suspendAI();
 
                             SwingUtilities.invokeLater( new Runnable() { //TODO: nachdenken
-                                public void run() {
+                                @Override
+								public void run() {
                                     
                                     try {
                                         changeAIButtons( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AILoaded ), mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AIRunning ) );
@@ -806,17 +822,20 @@ public class BotFrame extends JPanel {
         
         mTabbedPanePanelAIPanelArgumentsButtonExecute = new JButton("Execute Arguments");
         mTabbedPanePanelAIPanelArgumentsButtonExecute.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 
                 mExecutor.execute( new Runnable() { //TODO: nachdenken
-                    public void run() {
+                    @Override
+					public void run() {
 
                         try {
                             
                             mTheRemoteBot.getTheBot().executeCommandOnAI( mTabbedPanePanelAIPanelArgumentsTextareaAiarguments.getText() );
 
                             SwingUtilities.invokeLater( new Runnable() { //TODO: nachdenken
-                                public void run() {
+                                @Override
+								public void run() {
                                     
                                     try {
                                         changeAIButtons( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AILoaded ), mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AIRunning ) );
@@ -865,7 +884,8 @@ public class BotFrame extends JPanel {
         
         mTabbedPanePanelLoggingPanelControlButtonConnectlogger = new JButton("Connect Logger");
         mTabbedPanePanelLoggingPanelControlButtonConnectlogger.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 
                 try {
                     
@@ -890,7 +910,8 @@ public class BotFrame extends JPanel {
         mTabbedPanePanelLoggingPanelControlButtonDisconnectlogger = new JButton("Disconnect Logger");
         
         mTabbedPanePanelLoggingPanelControlButtonDisconnectlogger.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
 
                 try {
                     
@@ -921,7 +942,8 @@ public class BotFrame extends JPanel {
         
         mTabbedPanePanelLoggingPanelControlComboBoxLoglevel = new JComboBox();
         mTabbedPanePanelLoggingPanelControlComboBoxLoglevel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 
                 try {
                     mTheRemoteBot.getTheBot().setLogLevel( (Level) mTabbedPanePanelLoggingPanelControlComboBoxLoglevel.getSelectedItem() );
@@ -960,7 +982,8 @@ public class BotFrame extends JPanel {
         
         mntmCopy = new JMenuItem("Copy");
         mntmCopy.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 
                 mTabbedPanePanelLoggingTextarea.copy();
                 
@@ -973,7 +996,8 @@ public class BotFrame extends JPanel {
                 
                 mntmSetMaxLines = new JMenuItem("Set Max Lines");
                 mntmSetMaxLines.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
+                    @Override
+					public void actionPerformed(ActionEvent e) {
                         
                         final JDialog vMaxLines = new JDialog( Botcontrol.getInstance().getMainFrame() , "", Dialog.ModalityType.DOCUMENT_MODAL);
                         JPanel vContentPanel = new JPanel();
@@ -1003,7 +1027,8 @@ public class BotFrame extends JPanel {
                             {
                                 JButton okButton = new JButton( "OK" );
                                 okButton.addActionListener(new ActionListener() {
-                                    public void actionPerformed(ActionEvent e) {
+                                    @Override
+									public void actionPerformed(ActionEvent e) {
 
                                         mMaxLinesInLog = Integer.parseInt( textField.getText() );
                                         vMaxLines.dispatchEvent(new WindowEvent( 
@@ -1019,7 +1044,8 @@ public class BotFrame extends JPanel {
                             {
                                 JButton cancelButton = new JButton( "Cancel" );
                                 cancelButton.addActionListener(new ActionListener() {
-                                    public void actionPerformed(ActionEvent e) {
+                                    @Override
+									public void actionPerformed(ActionEvent e) {
                                         
                                         vMaxLines.dispatchEvent(new WindowEvent( 
                                                 vMaxLines, WindowEvent.WINDOW_CLOSING 
@@ -1032,7 +1058,7 @@ public class BotFrame extends JPanel {
                             }
                         }
                         
-                        vMaxLines.setDefaultCloseOperation( JDialog.DISPOSE_ON_CLOSE );
+                        vMaxLines.setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
                         vMaxLines.setVisible( true );
                         
                     }
@@ -1043,7 +1069,8 @@ public class BotFrame extends JPanel {
             
             private int i = 0;
             
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 
                 if( mExpanded == true ){
 
@@ -1080,7 +1107,7 @@ public class BotFrame extends JPanel {
                 }
                 
                 revalidate();
-                getParent().revalidate();
+                getParent().validate();
                 
             }
         });
