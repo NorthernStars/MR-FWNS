@@ -24,7 +24,22 @@ public class FellowPlayer {
 	@XmlElement(name="orientation")
 	double mOrientation;
 	
-    public int getId() {
+	public FellowPlayer() {
+		
+	}
+	
+    public FellowPlayer(int mId, String mNickname, Boolean mStatus,
+			double mDistanceToPlayer, double mAngleToPlayer, double mOrientation) {
+		
+		this.mId = mId;
+		this.mNickname = mNickname;
+		this.mStatus = mStatus;
+		this.mDistanceToPlayer = mDistanceToPlayer;
+		this.mAngleToPlayer = mAngleToPlayer;
+		this.mOrientation = mOrientation;
+	}
+    
+	public int getId() {
         return mId;
     }
     public String getNickname() {

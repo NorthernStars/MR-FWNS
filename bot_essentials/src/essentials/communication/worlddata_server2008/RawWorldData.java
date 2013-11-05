@@ -3,6 +3,7 @@ package essentials.communication.worlddata_server2008;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.bind.JAXB;
 import javax.xml.bind.annotation.XmlElement;
@@ -123,12 +124,12 @@ public class RawWorldData implements WorldData{
         return mBallPosition;
     }
 
-    public ArrayList<FellowPlayer> getListOfTeamMates() {
-        return mListOfTeamMates;
+    public List<FellowPlayer> getListOfTeamMates() {
+        return mListOfTeamMates != null ? mListOfTeamMates : new ArrayList<FellowPlayer>();
     }
 
-    public ArrayList<FellowPlayer> getListOfOpponents() {
-        return mListOfOpponents;
+    public List<FellowPlayer> getListOfOpponents() {
+        return mListOfOpponents != null ? mListOfOpponents : new ArrayList<FellowPlayer>();
     }
     
     public ReferencePoint getCenterLineBottom(){
