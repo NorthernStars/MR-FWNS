@@ -1,12 +1,11 @@
 package exampleai.brain;
 
 
-import java.util.ArrayList;
+import java.util.List;
 
 import mrlib.core.KickLib;
 import mrlib.core.MoveLib;
 import mrlib.core.PositionLib;
-
 import essentials.communication.Action;
 import essentials.communication.action_server2008.Movement;
 import essentials.communication.worlddata_server2008.BallPosition;
@@ -16,7 +15,6 @@ import essentials.communication.worlddata_server2008.ReferencePoint;
 import essentials.core.ArtificialIntelligence;
 import essentials.core.BotInformation;
 import essentials.core.BotInformation.GamevalueNames;
-import essentials.core.BotInformation.Teams;
 
 
 // -bn 3 -tn "Northern Stars" -t blau -ids 3 -s 192.168.178.22:3310 -aiarc "${workspace_loc:FWNS_ExampleAI}/bin" -aicl "exampleai.brain.AI" -aiarg 0
@@ -69,8 +67,8 @@ public class DMF extends Thread implements ArtificialIntelligence {
                         vWorldState = mWorldState;
                     }
                     
-                    ArrayList<FellowPlayer> vOpponents = vWorldState.getListOfOpponents();
-                    ArrayList<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
+                    List<FellowPlayer> vOpponents = vWorldState.getListOfOpponents();
+                    List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
                     // --------------- START AI -------------------
                     
                     if( vWorldState.getBallPosition() != null ){
