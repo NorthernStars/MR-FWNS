@@ -2,6 +2,7 @@ package exampleai.brain;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import mrlib.core.KickLib;
 import mrlib.core.MoveLib;
@@ -69,12 +70,12 @@ public class DMF extends Thread implements ArtificialIntelligence {
                         vWorldState = mWorldState;
                     }
                     
-                    ArrayList<FellowPlayer> vOpponents = vWorldState.getListOfOpponents();
-                    ArrayList<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
+                    List<FellowPlayer> vOpponents = vWorldState.getListOfOpponents();
+                    List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
                     // --------------- START AI -------------------
                     
                     if( vWorldState.getBallPosition() != null ){
-                    	System.out.println("DMF spieler");
+                    	
                     	// get ball position
                     	BallPosition ballPos = vWorldState.getBallPosition();
                     	ReferencePoint DMF = PositionLib.getDMFposition(vWorldState, mSelf.getTeam());

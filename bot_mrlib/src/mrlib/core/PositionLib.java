@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import essentials.communication.worlddata_server2008.BallPosition;
 import essentials.communication.worlddata_server2008.RawWorldData;
 import essentials.communication.worlddata_server2008.ReferencePoint;
+import essentials.core.BotInformation;
 import essentials.core.BotInformation.Teams;
 
 /**
@@ -180,7 +181,22 @@ public class PositionLib {
         	return false;
         }
     }
-    
+    public static double getDistanceBetweenTwoRefPoints(ReferencePoint RefPoint0, ReferencePoint RefPoint){
+    	
+    	double a, b, wa, wb;
+        
+            
+        a = RefPoint0.getDistanceToPoint();
+        wa = RefPoint0.getAngleToPoint();
+        b = RefPoint.getDistanceToPoint();
+        wb = RefPoint.getAngleToPoint();
+         
+       
+        double c = Math.sqrt( a*a + b*b - 2 * a * b * Math.cos(Math.toRadians(Math.abs(wa - wb))));
+    	
+       return c;
+    }
+
     /**
      * Get's the Defensive Midfielder position
      * @param aWorldData
@@ -224,4 +240,51 @@ public class PositionLib {
         return vBestPoint;        
     }
     
+
+public static double getAngleOfTwoReferencePoints( ReferencePoint aFirstReferencePoint, ReferencePoint aSecondReferencePoint ){
+	
+	
+    //TODO: vieleicht noch mehr testen!
+    //TODO: schoener machen
+    //TODO: Funktionen auslagern
+    // Merke Seitenhalbierende hat nix! mit Winkelhalbiernder zu tun! Geogebra nutzen...
+    
+    double a, b, wa, wb;
+    
+    if( aFirstReferencePoint.getAngleToPoint() > aSecondReferencePoint.getAngleToPoint() ){
+        
+        a = aFirstReferencePoint.getDistanceToPoint();
+        wa = aFirstReferencePoint.getAngleToPoint();
+        b = aSecondReferencePoint.getDistanceToPoint();
+        wb =aSecondReferencePoint.getAngleToPoint();
+        
+    } else {
+
+        a = aSecondReferencePoint.getDistanceToPoint();
+        wa =aSecondReferencePoint.getAngleToPoint(); 
+        b = aFirstReferencePoint.getDistanceToPoint();
+        wb = aFirstReferencePoint.getAngleToPoint();
+        
+    }
+    double c = Math.sqrt( a*a + b*b - 2 * a * b * Math.cos(Math.toRadians(Math.abs(wa - wb))));
+    double sc = Math.sqrt( (2 * ( a*a + b*b )) - c*c ) / 2;
+    
+    double gamma = Math.abs( Math.toDegrees(Math.acos((sc*sc + b*b - 0.25*c*c) / (2*sc*b))));
+    
+    return gamma;
+	}
+
+
+public static boolean isBotInFieldOfFourReferencePoints(ReferencePoint aFirstReferencePoint, ReferencePoint aSecondReferencePoint, ReferencePoint aThirdReferencePoint, ReferencePoint aFourthReferencePoint){
+	double angle1, angle2, angle3, angle4;
+	angle1= PositionLib.getAngleOfTwoReferencePoints(aFirstReferencePoint, aSecondReferencePoint);
+	angle2= PositionLib.getAngleOfTwoReferencePoints(aSecondReferencePoint, aThirdReferencePoint);
+	angle3= PositionLib.getAngleOfTwoReferencePoints(aThirdReferencePoint, aFourthReferencePoint);
+	angle4= PositionLib.getAngleOfTwoReferencePoints(aFourthReferencePoint, aFirstReferencePoint);
+	if(angle1+angle2+angle3+angle4 == 360){
+		return true;
+	}else {
+		return false;
+	}
+	}
 }

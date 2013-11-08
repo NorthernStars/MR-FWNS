@@ -3,6 +3,7 @@ package exampleai.brain;
 
 import mrlib.core.KickLib;
 import mrlib.core.MoveLib;
+import mrlib.core.PlayersLib;
 import mrlib.core.PositionLib;
 
 import essentials.communication.Action;
@@ -27,6 +28,7 @@ public class AI extends Thread implements ArtificialIntelligence {
     boolean mNeedNewAction = true;    
     boolean mIsStarted = false;
     boolean mIsPaused = false;
+	private boolean mRestart = false;
     
     @Override
     public void initializeAI( BotInformation aOneSelf ) {
@@ -69,7 +71,11 @@ public class AI extends Thread implements ArtificialIntelligence {
                     // --------------- START AI -------------------
                     
                     if( vWorldState.getBallPosition() != null ){
-                    	
+                    	if(PositionLib.getDistanceBetweenTwoRefPoints(vWorldState.getFieldCenter(), new ReferencePoint(0,0))< 10){
+                    		mSelf.setAIClassname("exampleai.brain.DMF");
+                    		mRestart = true;
+                    		mAction = (Action) Movement.NO_MOVEMENT;
+                    	}
                     	// get ball position
                     	BallPosition ballPos = vWorldState.getBallPosition();
                     	
@@ -140,7 +146,7 @@ public class AI extends Thread implements ArtificialIntelligence {
 	@Override
 	public boolean wantRestart() {
 		// TODO Auto-generated method stub
-		return false;
+		return mRestart ;
 	}
 
     @Override
