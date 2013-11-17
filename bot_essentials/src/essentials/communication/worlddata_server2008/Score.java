@@ -16,6 +16,11 @@ public class Score {
     public int ofBlueTeam() {
         return mBlueTeam;
     }
+    
+    @Override
+    public String toString() {
+        return "Score [mYellowTeam=" + mYellowTeam + ", mBlueTeam=" + mBlueTeam + "]";
+    }
 	
 	
 }

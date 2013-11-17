@@ -9,19 +9,19 @@ public class ReferencePoint{
     /** 
      * die Länge des ReferencePoints im polaren Koordinatensystem 
      */
-	private double mDistanceToPoint = 0;
+	private double mDistanceToPoint = Double.NaN;
 	/** 
      * der Winkel des ReferencePoints im polaren Koordinatensystem
      */
-	private double mAngleToPoint = 0;
+	private double mAngleToPoint = Double.NaN;
     /** 
      * der X-Wert des ReferencePoints im kartesischen Koordinatensystem 
      */
-    private double mX = 0;
+    private double mX = Double.NaN;
     /** 
      * der X-Wert des ReferencePoints im kartesischen Koordinatensystem 
      */
-    private double mY = 0;
+    private double mY = Double.NaN;
     
 	/**
      * Der Default-Constructor für einen Referenzpunkt auf dem Spielfeld.
@@ -102,7 +102,9 @@ public class ReferencePoint{
     public void setDistanceToPoint( double aDistance ) {
 
         mDistanceToPoint = aDistance;
-        set( mDistanceToPoint, mAngleToPoint, true );
+        if( mAngleToPoint != Double.NaN && mDistanceToPoint != Double.NaN ){
+            set( mDistanceToPoint, mAngleToPoint, true );
+        }
         
     }
     
@@ -116,7 +118,9 @@ public class ReferencePoint{
     public void setAngleToPoint( double aAngle ) {
 
         mAngleToPoint = aAngle;
-        set( mDistanceToPoint, mAngleToPoint, true );
+        if( mDistanceToPoint != Double.NaN && mAngleToPoint != Double.NaN ){
+            set( mDistanceToPoint, mAngleToPoint, true );
+        }
         
     }
     

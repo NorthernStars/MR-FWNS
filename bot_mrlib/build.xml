@@ -29,7 +29,7 @@
 
   <!-- Compiles the java code (including the usage of library for JUnit -->
   <target name="compile" depends="clean, makedir">
-    <javac srcdir="${src.dir}" destdir="${build.dir}"  classpathref="build.classpath">
+    <javac srcdir="${src.dir}" destdir="${build.dir}" encoding="UTF-8" classpathref="build.classpath">
     </javac>
 
   </target>
@@ -44,12 +44,13 @@
   </target>
 
   <!--Creates the deployable jar file  -->
-  <target name="jar" depends="compile">
+  <target name="jar" depends="compile, docs">
     <jar destfile="${dist.dir}/${jar.name}">
-        <fileset dir="${build.dir}" />
-        <fileset dir="${docs.dir}" />
-    <manifest>
-    </manifest>
+    	<manifest>
+    	</manifest>
+    	<fileset dir="${build.dir}" />
+    	<fileset dir="${src.dir}" includes="**/*.java"/>
+    	<fileset dir="${docs.dir}" />
     </jar>
   </target>
 

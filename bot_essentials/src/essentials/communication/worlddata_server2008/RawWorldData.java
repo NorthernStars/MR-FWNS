@@ -56,18 +56,6 @@ public class RawWorldData implements WorldData{
     @XmlElement(name="flag")
     List<ReferencePoint> mReferencePoints;
     
-	@Override
-	public String toString(){
-	    
-		StringWriter vXMLDataStream = new StringWriter();
-		JAXB.marshal( this, vXMLDataStream );
-		
-		String vXMLDataString = vXMLDataStream.toString();
-		vXMLDataString = vXMLDataString.substring( vXMLDataString.indexOf('>') + 2 );
-		
-		return vXMLDataString;
-		
-	}
 	@XmlTransient
     public double getPlayTime() {
         return mPlayTime;
@@ -244,6 +232,29 @@ public class RawWorldData implements WorldData{
         return null;
         
     }
+    
+    public String toXMLString(){
+        
+        StringWriter vXMLDataStream = new StringWriter();
+        JAXB.marshal( this, vXMLDataStream );
+        
+        String vXMLDataString = vXMLDataStream.toString();
+        vXMLDataString = vXMLDataString.substring( vXMLDataString.indexOf('>') + 2 );
+        
+        return vXMLDataString;
+        
+    }
+    
+    @Override
+    public String toString() {
+        return "RawWorldData [mPlayTime=" + mPlayTime + ", mPlayMode=" + mPlayMode + ", mScore=" + mScore
+                + ", mAgentId=" + mAgentId + ", mAgentNickname=" + mAgentNickname + ", mAgentStatus=" + mAgentStatus
+                + ", mMaxNumberOfAgents=" + mMaxNumberOfAgents + ", mBallPosition=" + mBallPosition
+                + ", mListOfTeamMates=" + mListOfTeamMates + ", mListOfOpponents=" + mListOfOpponents
+                + ", mReferencePoints=" + mReferencePoints + "]";
+    }
+    
+    
 	
 }
 /*
