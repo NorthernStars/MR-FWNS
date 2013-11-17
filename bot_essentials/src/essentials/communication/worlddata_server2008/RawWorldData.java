@@ -7,14 +7,11 @@ import java.util.List;
 
 import javax.xml.bind.JAXB;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import essentials.communication.WorldData;
-import essentials.communication.worlddata_server2008.ReferencePoint.ReferencePointName;
 
 
 @XmlRootElement(name="WorldData")
@@ -22,35 +19,15 @@ public class RawWorldData implements WorldData{
 
 	public static RawWorldData createRawWorldDataFromXML( String aXMLData ){
 		
+	    FellowPlayer.IDCOUNTER = 0;
+	    
 		RawWorldData vWorldData = JAXB.unmarshal( new StringReader( aXMLData ), RawWorldData.class );
 		
 		return vWorldData;
 		
 	}
     
-    @XmlType(name = "playMode")
-    @XmlEnum
-    public enum PlayMode {
-
-        @XmlEnumValue("kick off") KickOff,
-        @XmlEnumValue("play on") PlayOn,
-        @XmlEnumValue("corner kick blue") CornerKickBlue,
-        @XmlEnumValue("corner kick yellow") CornerKickYellow,
-        @XmlEnumValue("goal kick blue") GoalKickBlue,
-        @XmlEnumValue("goal kick yellow") GoalKickYellow,
-        @XmlEnumValue("time out blue") TimeOutBlue,
-        @XmlEnumValue("time out yellow") TimeOutYellow,
-        @XmlEnumValue("frozen operator") FrozenOperator,
-        @XmlEnumValue("frozen match") FrozenMatch,
-        @XmlEnumValue("penalty") Penalty,
-        @XmlEnumValue("warn ending") WarnEnding,
-        @XmlEnumValue("warming up") WarmingUp,
-        @XmlEnumValue("time over") TimeOver,
-        @XmlEnumValue("team adjustmest") TeamAdjustment;
-        
-    }
-	
-	@XmlElement(name="time")
+    @XmlElement(name="time")
 	double mPlayTime;
 	@XmlElement(name="playMode")
 	PlayMode mPlayMode;
@@ -72,12 +49,12 @@ public class RawWorldData implements WorldData{
 	BallPosition mBallPosition;
 
 	@XmlElement(name="teamMate")
-	ArrayList<FellowPlayer> mListOfTeamMates;
+	List<FellowPlayer> mListOfTeamMates;
 	@XmlElement(name="opponent")
-	ArrayList<FellowPlayer> mListOfOpponents;
+	List<FellowPlayer> mListOfOpponents;
 
     @XmlElement(name="flag")
-    ArrayList<ReferencePoint> mReferencePoints;
+    List<ReferencePoint> mReferencePoints;
     
 	@Override
 	public String toString(){
@@ -91,155 +68,155 @@ public class RawWorldData implements WorldData{
 		return vXMLDataString;
 		
 	}
-
+	@XmlTransient
     public double getPlayTime() {
         return mPlayTime;
     }
-
+	@XmlTransient
     public PlayMode getPlayMode() {
         return mPlayMode;
     }
-
+	@XmlTransient
     public Score getScore() {
         return mScore;
     }
-
+	@XmlTransient
     public int getAgentId() {
         return mAgentId;
     }
-
+	@XmlTransient
     public String getAgentNickname() {
         return mAgentNickname;
     }
-
+	@XmlTransient
     public Boolean getAgentStatus() {
         return mAgentStatus;
     }
-
+	@XmlTransient
     public int getMaxNumberOfAgents() {
         return mMaxNumberOfAgents;
     }
-
+	@XmlTransient
     public BallPosition getBallPosition() {
         return mBallPosition;
     }
-
+	@XmlTransient
     public List<FellowPlayer> getListOfTeamMates() {
         return mListOfTeamMates != null ? mListOfTeamMates : new ArrayList<FellowPlayer>();
     }
-
+	@XmlTransient
     public List<FellowPlayer> getListOfOpponents() {
         return mListOfOpponents != null ? mListOfOpponents : new ArrayList<FellowPlayer>();
     }
-    
+	@XmlTransient
     public ReferencePoint getCenterLineBottom(){
         
         return getReferencePoint( ReferencePointName.CenterLineBottom );
         
     }
-    
+	@XmlTransient
     public ReferencePoint getYellowFieldCornerBottom(){
         
         return getReferencePoint( ReferencePointName.YellowFieldCornerBottom );
         
     }
-    
+	@XmlTransient
     public ReferencePoint getYellowPenaltyAreaFrontBottom(){
         
         return getReferencePoint( ReferencePointName.YellowPenaltyAreaFrontBottom );
         
     }
-    
+	@XmlTransient
     public ReferencePoint getYellowGoalCornerBottom(){
         
         return getReferencePoint( ReferencePointName.YellowGoalCornerBottom );
         
     }
-    
+	@XmlTransient
     public ReferencePoint getYellowGoalAreaFrontBottom(){
         
         return getReferencePoint( ReferencePointName.YellowGoalAreaFrontBottom );
         
     }
-    
+	@XmlTransient
     public ReferencePoint getBlueFieldCornerBottom(){
         
         return getReferencePoint( ReferencePointName.BlueFieldCornerBottom );
         
     }
-    
+	@XmlTransient
     public ReferencePoint getBluePenaltyAreaFrontBottom(){
         
         return getReferencePoint( ReferencePointName.BluePenaltyAreaFrontBottom );
         
     }
-    
+	@XmlTransient
     public ReferencePoint getBlueGoalCornerBottom(){
         
         return getReferencePoint( ReferencePointName.BlueGoalCornerBottom );
         
     }
-    
+	@XmlTransient
     public ReferencePoint getBlueGoalAreaFrontBottom(){
         
         return getReferencePoint( ReferencePointName.BlueGoalAreaFrontBottom );
         
     }
-    
+	@XmlTransient
     public ReferencePoint getFieldCenter(){
         
         return getReferencePoint( ReferencePointName.FieldCenter );
         
     }
-    
+	@XmlTransient
     public ReferencePoint getCenterLineTop(){
         
         return getReferencePoint( ReferencePointName.CenterLineTop );
         
     }
-    
+	@XmlTransient
     public ReferencePoint getYellowFieldCornerTop(){
         
         return getReferencePoint( ReferencePointName.YellowFieldCornerTop );
         
     }
-    
+	@XmlTransient
     public ReferencePoint getYellowPenaltyAreaFrontTop(){
         
         return getReferencePoint( ReferencePointName.YellowPenaltyAreaFrontTop );
         
     }
-    
+	@XmlTransient
     public ReferencePoint getYellowGoalCornerTop(){
         
         return getReferencePoint( ReferencePointName.YellowGoalCornerTop );
         
     }
-    
+	@XmlTransient
     public ReferencePoint getYellowGoalAreaFrontTop(){
         
         return getReferencePoint( ReferencePointName.YellowGoalAreaFrontTop );
         
     }
-    
+	@XmlTransient
     public ReferencePoint getBlueFieldCornerTop(){
         
         return getReferencePoint( ReferencePointName.BlueFieldCornerTop );
         
     }
-    
+	@XmlTransient
     public ReferencePoint getBluePenaltyAreaFrontTop(){
         
         return getReferencePoint( ReferencePointName.BluePenaltyAreaFrontTop );
         
     }
-    
+	@XmlTransient
     public ReferencePoint getBlueGoalCornerTop(){
         
         return getReferencePoint( ReferencePointName.BlueGoalCornerTop );
         
     }
-    
+	@XmlTransient
     public ReferencePoint getBlueGoalAreaFrontTop(){
         
         return getReferencePoint( ReferencePointName.BlueGoalAreaFrontTop );
