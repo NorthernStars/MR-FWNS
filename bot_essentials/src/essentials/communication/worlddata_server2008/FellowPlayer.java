@@ -1,13 +1,14 @@
 package essentials.communication.worlddata_server2008;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-public class FellowPlayer {
+public class FellowPlayer extends ReferencePoint{
+
+    private int mId;
     
-	@XmlElement(name="id")
-	int mId;
-	
 	@XmlElement(name="nickname")
 	String mNickname;
 	
@@ -15,47 +16,67 @@ public class FellowPlayer {
     @XmlJavaTypeAdapter(StringToBooleanAdapter.class)
 	Boolean mStatus;
 	
-	@XmlElement(name="dist")
-	double mDistanceToPlayer;
-	
-	@XmlElement(name="angle")
-	double mAngleToPlayer;
-	
 	@XmlElement(name="orientation")
 	double mOrientation;
 	
 	public FellowPlayer() {
-		
+	    //mPointName = ReferencePointName.Player;
 	}
 	
-    public FellowPlayer(int mId, String mNickname, Boolean mStatus,
-			double mDistanceToPlayer, double mAngleToPlayer, double mOrientation) {
+    public FellowPlayer(int aId, String aNickname, Boolean aStatus, double aDistanceToPlayer, double aAngleToPlayer, double aOrientation) {
+		super(aDistanceToPlayer, aAngleToPlayer, true);        
+        
+		mId = aId;
+		mNickname = aNickname;
+		mStatus = aStatus;
+		mOrientation = aOrientation;
+		//mPointName = ReferencePointName.Player;
 		
-		this.mId = mId;
-		this.mNickname = mNickname;
-		this.mStatus = mStatus;
-		this.mDistanceToPlayer = mDistanceToPlayer;
-		this.mAngleToPlayer = mAngleToPlayer;
-		this.mOrientation = mOrientation;
 	}
     
+    @XmlElement(name="id")
 	public int getId() {
         return mId;
     }
+    
+    // Da unser Serverxmldocument scheiße ist, und ich keine schnelle bessere lösung finden konnte isses nu so
+    static int IDCOUNTER = 0;
+    
+    @Override
+    void setPointName( ReferencePointName aPointName ) {
+        
+        super.setPointName( ReferencePointName.Player );
+        mId = IDCOUNTER++;
+        
+    };
+    
+    @XmlTransient
     public String getNickname() {
         return mNickname;
     }
+    @XmlTransient
     public Boolean getStatus() {
         return mStatus;
     }
+    @XmlTransient
     public double getDistanceToPlayer() {
-        return mDistanceToPlayer;
+        return getDistanceToPoint();
     }
+    @XmlTransient
     public double getAngleToPlayer() {
-        return mAngleToPlayer;
+        return getAngleToPoint();
     }
+    @XmlTransient
     public double getOrientation() {
         return mOrientation;
     }
+
+    @Override
+    public String toString() {
+        return "FellowPlayer [mId=" + mId + ", mNickname=" + mNickname + ", mStatus=" + mStatus + ", mOrientation="
+                + mOrientation + " " + super.toString() + "]";
+    }
 	
+    
+    
 }

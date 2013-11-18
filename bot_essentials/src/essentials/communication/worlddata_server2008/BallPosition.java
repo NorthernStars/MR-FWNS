@@ -1,22 +1,26 @@
 package essentials.communication.worlddata_server2008;
 
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 
-public class BallPosition {
-
-    @XmlElement(name="dist")
-	double mDistanceToBall;
-
-    @XmlElement(name="angle")
-	double mAngleToBall;
+public class BallPosition extends ReferencePoint {
 	
+    public BallPosition() {
+        //mPointName = ReferencePointName.Ball;
+    }
+    
+    @XmlTransient
     public double getDistanceToBall() {
-        return mDistanceToBall;
+        return getDistanceToPoint();
     }
+    
+    @XmlTransient
     public double getAngleToBall() {
-        return mAngleToBall;
+        return getAngleToPoint();
+    }
+
+    @Override
+    public String toString() {
+        return "BallPosition [" + super.toString() + "]";
     }
 	
-	
-
 }

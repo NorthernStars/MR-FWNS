@@ -35,7 +35,6 @@ public class InitialConnectionData implements Action{
 		mConnection.type = "Client";
 		mConnection.protocol_version = 1.0;
         mConnection.nickname = aBot.getBotname();
-        mConnection.nickname = aBot.getTeamname();
 		mConnection.rc_id = aBot.getRcId();
 		mConnection.vt_id = aBot.getVtId();
 		

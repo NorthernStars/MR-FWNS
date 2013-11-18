@@ -112,7 +112,13 @@ public class NetworkCommunication {
 		
 		mToServerSocket.receive( vDatagrammPacketFromServer );
 		if ( vDatagrammPacketFromServer.getAddress().equals( mDataPaket.getAddress() ) ) {
-			vData = new String( vDatagrammPacketFromServer.getData(), 0, vDatagrammPacketFromServer.getLength() - 1 );
+			vData = new String( vDatagrammPacketFromServer.getData(), 0, vDatagrammPacketFromServer.getLength() );
+			// Alter Footballserver sendet ein "|" am Ende des XMLStrings und das hier ist der Fix :(
+			if( !vData.endsWith( ">" ) ){
+			    
+			    vData = new String( vData.getBytes(), 0, vData.length() - 1 );
+			    
+			}
 		}
 			
 		return vData;
