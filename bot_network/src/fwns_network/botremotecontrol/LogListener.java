@@ -3,7 +3,6 @@ package fwns_network.botremotecontrol;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.LogEvent;
 
 /**

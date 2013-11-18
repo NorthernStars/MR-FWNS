@@ -7,10 +7,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.text.SimpleDateFormat;
 
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
 
 import org.apache.logging.log4j.core.LogEvent;
 

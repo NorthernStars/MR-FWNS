@@ -2,14 +2,14 @@ package core;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
 import org.apache.logging.log4j.Level;
 
 import remotecontrol.RemoteControlServer;
-import net.jcip.annotations.GuardedBy;
-import net.jcip.annotations.ThreadSafe;
 import essentials.communication.Action;
 import essentials.communication.action_server2008.Movement;
-import essentials.core.BotInformation.GamevalueNames;
 import fwns_network.botremotecontrol.BotStatusType;
 
 @ThreadSafe

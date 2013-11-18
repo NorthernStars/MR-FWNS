@@ -2,14 +2,7 @@ package core;
 
 import gui.Botcontrol;
 
-import java.awt.EventQueue;
-import java.io.File;
-import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 

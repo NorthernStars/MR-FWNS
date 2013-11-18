@@ -1,7 +1,6 @@
 package essentials.communication.worlddata_server2008;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 public class ReferencePoint{
 	

@@ -1,45 +1,31 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.BoxLayout;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
-
-import java.awt.GridLayout;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-
-import javax.swing.ScrollPaneConstants;
-import javax.swing.JSpinner;
-
-import java.awt.FlowLayout;
-
-import javax.swing.JList;
-import javax.swing.ListSelectionModel;
-import javax.swing.AbstractListModel;
-
-import core.Core;
-import core.RemoteBot;
-
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+
+import core.Core;
+import core.RemoteBot;
+
 public class BotSearchWindow extends JFrame {
 
-    private JPanel vPanelContent;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -5241367853755110573L;
+	private JPanel vPanelContent;
     private JTextField vPanelContentPanelMainPanelConnectToRegistryTextfeldRegistry;
     private JList mPanelContentPanelMainPanelBotlistListBots;
 

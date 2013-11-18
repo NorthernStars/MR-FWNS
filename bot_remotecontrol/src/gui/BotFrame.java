@@ -1,71 +1,57 @@
 package gui;
 
-import javax.swing.JPanel;
-
 import java.awt.BorderLayout;
-import java.awt.Dialog;
-import java.awt.FlowLayout;
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
-
-import java.awt.Dimension;
-
-import javax.swing.SwingConstants;
-
-import java.awt.Insets;
-
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-
 import java.awt.Color;
-
-import javax.swing.border.MatteBorder;
-import javax.swing.text.BadLocationException;
-import javax.swing.JLabel;
-
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.WindowEvent;
-
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
-import javax.swing.JSeparator;
-import javax.swing.JTabbedPane;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
-
-import org.apache.logging.log4j.Level;
-
-import core.RemoteBot;
-
-import javax.swing.JTextArea;
-import javax.swing.JScrollPane;
-
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
-import javax.swing.JPopupMenu;
-import javax.swing.JMenuItem;
-
+import java.awt.event.WindowEvent;
 import java.net.InetAddress;
 import java.rmi.RemoteException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.WindowConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.border.MatteBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.text.BadLocationException;
+
+import org.apache.logging.log4j.Level;
+
+import core.RemoteBot;
 import essentials.core.BotInformation;
 import essentials.core.BotInformation.Teams;
 import fwns_network.botremotecontrol.BotStatusType;
-
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.border.TitledBorder;
-import javax.swing.border.EtchedBorder;
-import javax.swing.UIManager;
 
 public class BotFrame extends JPanel {
 
