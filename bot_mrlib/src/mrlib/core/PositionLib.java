@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import essentials.communication.worlddata_server2008.BallPosition;
 import essentials.communication.worlddata_server2008.RawWorldData;
 import essentials.communication.worlddata_server2008.ReferencePoint;
-import essentials.core.BotInformation;
 import essentials.core.BotInformation.Teams;
 
 /**
@@ -78,7 +77,7 @@ public class PositionLib {
         	gamma = gamma + 360;
         }
 
-        return new ReferencePoint(sc,gamma);
+        return new ReferencePoint(sc,gamma, true);
      
     }
     
@@ -90,7 +89,7 @@ public class PositionLib {
      * @return ReferencePoint
      */
     public static ReferencePoint getMiddleOfGoal( RawWorldData aWorldData, Teams aTeam ){       
-        ReferencePoint rGoalMiddle = new ReferencePoint( 0.0 , 0.0 );
+        ReferencePoint rGoalMiddle = new ReferencePoint( 0.0 , 0.0, true );
         ReferencePoint vGoalTop = null;
         ReferencePoint vGoalBottom = null;
         
@@ -114,7 +113,7 @@ public class PositionLib {
      * @return ReferencePoint
      */
     public static ReferencePoint getMiddleOfOwnGoal( RawWorldData aWorldData, Teams aTeam ){       
-        ReferencePoint rOwnGoalMiddle = new ReferencePoint( 0.0 , 0.0 );
+        ReferencePoint rOwnGoalMiddle = new ReferencePoint( 0.0 , 0.0, true );
         ReferencePoint vGoalTop = null;
         ReferencePoint vGoalBottom = null;
         
