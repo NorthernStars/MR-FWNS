@@ -241,14 +241,8 @@ public class PositionLib {
     
 
 public static double getAngleOfTwoReferencePoints( ReferencePoint aFirstReferencePoint, ReferencePoint aSecondReferencePoint ){
-	
-	
-    //TODO: vieleicht noch mehr testen!
-    //TODO: schoener machen
-    //TODO: Funktionen auslagern
-    // Merke Seitenhalbierende hat nix! mit Winkelhalbiernder zu tun! Geogebra nutzen...
-    
-    double a, b, wa, wb;
+	   
+    double wa, wb;
     
     if( aFirstReferencePoint.getAngleToPoint() > aSecondReferencePoint.getAngleToPoint() ){
         
@@ -290,7 +284,12 @@ public static boolean isBotInFieldOfFourReferencePoints(ReferencePoint aFirstRef
 
 public static boolean isBallinFieldOfFourRefPoints(ReferencePoint aFirstReferencePoint, ReferencePoint aSecondPoint, ReferencePoint aThirdReferencePoint, ReferencePoint aFourthReferencePoint){
 	
-	
+	aFirstReferencePoint.setXOfPoint(aFirstReferencePoint.getDistanceToPoint()*Math.sin(Math.toRadians(aFirstReferencePoint.getAngleToPoint())));
+	aFirstReferencePoint.setYOfPoint(aFirstReferencePoint.getDistanceToPoint()*Math.cos(Math.toRadians(aFirstReferencePoint.getAngleToPoint())));
+	aSecondPoint.setXOfPoint(aSecondPoint.getDistanceToPoint()*Math.sin(Math.toRadians(aSecondPoint.getAngleToPoint())));
+	aSecondPoint.setYOfPoint(aSecondPoint.getDistanceToPoint()*Math.cos(Math.toRadians(aSecondPoint.getAngleToPoint())));
+	aThirdReferencePoint.setXOfPoint(aThirdReferencePoint.getDistanceToPoint()*Math.sin(Math.toRadians(aSecondPoint.getAngleToPoint())));
+	aSecondPoint.setYOfPoint(aSecondPoint.getDistanceToPoint()*Math.cos(Math.toRadians(aSecondPoint.getAngleToPoint())));
 	
 	return true;
 	
