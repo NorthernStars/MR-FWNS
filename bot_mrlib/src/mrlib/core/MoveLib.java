@@ -96,9 +96,9 @@ public class MoveLib {
 	
 	public static Action turnTo(double vAngle){
 		
-		if(vAngle > 0 && vAngle <= 180)
+		if(vAngle >= 0 && vAngle <= 180)
 			return (Action) new Movement(100,-100);
-		if(vAngle < 0 && vAngle >= 179.99)
+		if(vAngle < 0 && vAngle >= -179.99)
 			return (Action) new Movement(-100,100);
 		return (Action) Movement.NO_MOVEMENT;
 	}
