@@ -81,6 +81,19 @@ public class MoveLib {
 
         return (Action) Movement.NO_MOVEMENT;
     }
+	
+	public static Action turnTo(ReferencePoint vAngle){
+		return turnTo(vAngle.getAngleToPoint());
+	}
+	
+	public static Action turnTo(FellowPlayer vAngle){
+		return turnTo(vAngle.getAngleToPlayer());
+	}
+	
+	public static Action turnTo(BallPosition vAngle){
+		return turnTo(vAngle.getAngleToBall());
+	}
+	
 	public static Action turnTo(double vAngle){
 		
 		if(vAngle > 0 && vAngle <= 180)
