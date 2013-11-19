@@ -2,7 +2,7 @@ package exampleai.brain;
 
 
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 import mrlib.core.KickLib;
@@ -18,7 +18,7 @@ import essentials.communication.worlddata_server2008.ReferencePoint;
 import essentials.core.ArtificialIntelligence;
 import essentials.core.BotInformation;
 import essentials.core.BotInformation.GamevalueNames;
-import essentials.core.BotInformation.Teams;
+
 
 
 // -bn 3 -tn "Northern Stars" -t blau -ids 3 -s 192.168.178.22:3310 -aiarc "${workspace_loc:FWNS_ExampleAI}/bin" -aicl "exampleai.brain.AI" -aiarg 0

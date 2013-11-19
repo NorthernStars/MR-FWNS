@@ -3,7 +3,6 @@ package exampleai.brain;
 
 import mrlib.core.KickLib;
 import mrlib.core.MoveLib;
-import mrlib.core.PlayersLib;
 import mrlib.core.PositionLib;
 
 import essentials.communication.Action;
@@ -14,7 +13,7 @@ import essentials.communication.worlddata_server2008.ReferencePoint;
 import essentials.core.ArtificialIntelligence;
 import essentials.core.BotInformation;
 import essentials.core.BotInformation.GamevalueNames;
-import essentials.core.BotInformation.Teams;
+
 
 
 // -bn 3 -tn "Northern Stars" -t blau -ids 3 -s 192.168.178.22:3310 -aiarc "${workspace_loc:FWNS_ExampleAI}/bin" -aicl "exampleai.brain.AI" -aiarg 0
@@ -71,7 +70,7 @@ public class AI extends Thread implements ArtificialIntelligence {
                     // --------------- START AI -------------------
                     
                     if( vWorldState.getBallPosition() != null ){
-                    	if(PositionLib.getDistanceBetweenTwoRefPoints(vWorldState.getFieldCenter(), new ReferencePoint(0,0))< 10){
+                    	if(PositionLib.getDistanceBetweenTwoRefPoints(vWorldState.getFieldCenter(), new ReferencePoint(0,0,true))< 10){
                     		mSelf.setAIClassname("exampleai.brain.DMF");
                     		mRestart = true;
                     		mAction = (Action) Movement.NO_MOVEMENT;
