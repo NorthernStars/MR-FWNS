@@ -252,38 +252,47 @@ public static double getAngleOfTwoReferencePoints( ReferencePoint aFirstReferenc
     
     if( aFirstReferencePoint.getAngleToPoint() > aSecondReferencePoint.getAngleToPoint() ){
         
-        a = aFirstReferencePoint.getDistanceToPoint();
+        
         wa = aFirstReferencePoint.getAngleToPoint();
-        b = aSecondReferencePoint.getDistanceToPoint();
+       
         wb =aSecondReferencePoint.getAngleToPoint();
         
     } else {
 
-        a = aSecondReferencePoint.getDistanceToPoint();
+        
         wa =aSecondReferencePoint.getAngleToPoint(); 
-        b = aFirstReferencePoint.getDistanceToPoint();
+       
         wb = aFirstReferencePoint.getAngleToPoint();
         
     }
-    double c = Math.sqrt( a*a + b*b - 2 * a * b * Math.cos(Math.toRadians(Math.abs(wa - wb))));
-    double sc = Math.sqrt( (2 * ( a*a + b*b )) - c*c ) / 2;
+    double gamma = 0;
     
-    double gamma = Math.abs( Math.toDegrees(Math.acos((sc*sc + b*b - 0.25*c*c) / (2*sc*b))));
+    gamma = Math.abs(wa - wb);
+    if (gamma > 180)
+    	gamma = 360 - gamma;
     
     return gamma;
 	}
 
 
 public static boolean isBotInFieldOfFourReferencePoints(ReferencePoint aFirstReferencePoint, ReferencePoint aSecondReferencePoint, ReferencePoint aThirdReferencePoint, ReferencePoint aFourthReferencePoint){
-	double angle1, angle2, angle3, angle4;
-	angle1= PositionLib.getAngleOfTwoReferencePoints(aFirstReferencePoint, aSecondReferencePoint);
-	angle2= PositionLib.getAngleOfTwoReferencePoints(aSecondReferencePoint, aThirdReferencePoint);
-	angle3= PositionLib.getAngleOfTwoReferencePoints(aThirdReferencePoint, aFourthReferencePoint);
-	angle4= PositionLib.getAngleOfTwoReferencePoints(aFourthReferencePoint, aFirstReferencePoint);
-	if(angle1+angle2+angle3+angle4 == 360){
-		return true;
-	}else {
-		return false;
+		double angle1, angle2, angle3, angle4;
+		angle1= PositionLib.getAngleOfTwoReferencePoints(aFirstReferencePoint, aSecondReferencePoint);
+		angle2= PositionLib.getAngleOfTwoReferencePoints(aSecondReferencePoint, aThirdReferencePoint);
+		angle3= PositionLib.getAngleOfTwoReferencePoints(aThirdReferencePoint, aFourthReferencePoint);
+		angle4= PositionLib.getAngleOfTwoReferencePoints(aFourthReferencePoint, aFirstReferencePoint);
+		if(angle1+angle2+angle3+angle4 < 361 && angle1+angle2+angle3+angle4 > 359){
+			return true;
+		}else {
+			return false;
+		}
 	}
-	}
+
+public static boolean isBallinFieldOfFourRefPoints(ReferencePoint aFirstReferencePoint, ReferencePoint aSecondPoint, ReferencePoint aThirdReferencePoint, ReferencePoint aFourthReferencePoint){
+	
+	
+	
+	return true;
+	
+}
 }

@@ -1,6 +1,8 @@
 package core;
 import static org.junit.Assert.*;
 
+import mrlib.core.PositionLib;
+
 import org.junit.Test;
 
 import essentials.communication.worlddata_server2008.ReferencePoint;
@@ -14,15 +16,33 @@ public class PostionLibrary {
 
     @Test
     public void testGetMiddleOfTwoReferencePoints() {
-
+    	int flag = 0;
         ReferencePoint vFirstPoint = new ReferencePoint( 6 , 30.0, true );       
         ReferencePoint vSecondPoint = new ReferencePoint( 4.5 , 60.0, true );
+        ReferencePoint vThirdPoint = new ReferencePoint( 4.46 , -159.94, true );       
+        ReferencePoint vFourthPoint = new ReferencePoint( 3.89 , -108.5, true );
         
         ReferencePoint vResultingPoint = mrlib.core.PositionLib.getMiddleOfTwoReferencePoints( vFirstPoint, vSecondPoint );
         
         assertEquals(" Die Distanz muss 5,07 betragen.", 5.07 , vResultingPoint.getDistanceToPoint(), 0.1 );
         assertEquals(" Der Winkel muss 42,81 Grad betragen.", 42.81 , vResultingPoint.getAngleToPoint(), 0.1);
-        
+        System.out.println("Winkel 1:"+vFirstPoint.getAngleToPoint());
+        System.out.println("Winkel 2:"+vSecondPoint.getAngleToPoint());
+        assertEquals("Der Winkel muss 30 Grad betragen.", 30, PositionLib.getAngleOfTwoReferencePoints(vFirstPoint, vSecondPoint) ,0.1);
+        System.out.println("Winkel 1:"+vSecondPoint.getAngleToPoint());
+        System.out.println("Winkel 2:"+vThirdPoint.getAngleToPoint());
+        assertEquals("Der Winkel muss 140.06 Grad betragen.", 140.06, PositionLib.getAngleOfTwoReferencePoints(vSecondPoint, vThirdPoint) ,0.1);
+        System.out.println("Winkel 1:"+vThirdPoint.getAngleToPoint());
+        System.out.println("Winkel 2:"+vFourthPoint.getAngleToPoint());
+        assertEquals("Der Winkel muss 51.44 Grad betragen.", 51.44, PositionLib.getAngleOfTwoReferencePoints(vThirdPoint, vFourthPoint) ,0.1);
+        System.out.println("Winkel 1:"+vFourthPoint.getAngleToPoint());
+        System.out.println("Winkel 2:"+vFirstPoint.getAngleToPoint());
+        assertEquals("Der Winkel muss 138.5 Grad betragen.", 138.5, PositionLib.getAngleOfTwoReferencePoints(vFourthPoint, vFirstPoint) ,0.1);
+        if(PositionLib.isBotInFieldOfFourReferencePoints(vFirstPoint, vSecondPoint, vThirdPoint, vFourthPoint))
+        	flag = 1;
+        else
+        	flag = 0;
+        assertEquals("Sollte true sein", 1, flag, 0);
         
         vFirstPoint = new ReferencePoint( 5 , -30, true );       
         vSecondPoint = new ReferencePoint( 11 , 45, true );
