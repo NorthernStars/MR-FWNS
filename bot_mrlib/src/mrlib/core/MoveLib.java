@@ -99,11 +99,17 @@ public class MoveLib {
 		if(vAngle < 10 && vAngle >-10 || vAngle > 170 && vAngle < -170){
 			return (Action) Movement.NO_MOVEMENT;
 		}
-		else if(vAngle >= 0 && vAngle <= 180){
+		else if(vAngle >= 50 && vAngle <= 130){
 			return (Action) new Movement(100,-100);
 		}
-		else if(vAngle < 0 && vAngle >= -179.99){
+		else if(vAngle <= -50 && vAngle >= -130){
 			return (Action) new Movement(-100,100);
+		}
+		else if((vAngle >= 10 && vAngle <= 50) || vAngle < -130){
+			return (Action) new Movement(50,-50);
+		}
+		else if((vAngle < -10 && vAngle >= -50) || vAngle > 130){
+			return (Action) new Movement(-50,50);
 		}
 		
 		return (Action) Movement.NO_MOVEMENT;

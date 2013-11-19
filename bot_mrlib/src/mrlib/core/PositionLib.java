@@ -284,14 +284,7 @@ public static boolean isBotInFieldOfFourReferencePoints(ReferencePoint aFirstRef
 
 public static boolean isBallinFieldOfFourRefPoints(ReferencePoint aFirstReferencePoint, ReferencePoint aSecondPoint, ReferencePoint aThirdReferencePoint, ReferencePoint aFourthReferencePoint){
 	
-	aFirstReferencePoint.setXOfPoint(aFirstReferencePoint.getDistanceToPoint()*Math.sin(Math.toRadians(aFirstReferencePoint.getAngleToPoint())));
-	aFirstReferencePoint.setYOfPoint(aFirstReferencePoint.getDistanceToPoint()*Math.cos(Math.toRadians(aFirstReferencePoint.getAngleToPoint())));
-	aSecondPoint.setXOfPoint(aSecondPoint.getDistanceToPoint()*Math.sin(Math.toRadians(aSecondPoint.getAngleToPoint())));
-	aSecondPoint.setYOfPoint(aSecondPoint.getDistanceToPoint()*Math.cos(Math.toRadians(aSecondPoint.getAngleToPoint())));
-	aThirdReferencePoint.setXOfPoint(aThirdReferencePoint.getDistanceToPoint()*Math.sin(Math.toRadians(aThirdReferencePoint.getAngleToPoint())));
-	aThirdReferencePoint.setYOfPoint(aThirdReferencePoint.getDistanceToPoint()*Math.cos(Math.toRadians(aThirdReferencePoint.getAngleToPoint())));
-	aFourthReferencePoint.setXOfPoint(aFourthReferencePoint.getDistanceToPoint()*Math.sin(Math.toRadians(aFourthReferencePoint.getAngleToPoint())));
-	aFourthReferencePoint.setYOfPoint(aFourthReferencePoint.getDistanceToPoint()*Math.cos(Math.toRadians(aFourthReferencePoint.getAngleToPoint())));
+	
 	
 	
 	
