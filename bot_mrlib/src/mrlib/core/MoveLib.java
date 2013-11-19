@@ -100,16 +100,16 @@ public class MoveLib {
 			return (Action) Movement.NO_MOVEMENT;
 		}
 		else if(vAngle >= 50 && vAngle <= 130){
-			return (Action) new Movement(100,-100);
-		}
-		else if(vAngle <= -50 && vAngle >= -130){
-			return (Action) new Movement(-100,100);
-		}
-		else if((vAngle >= 25 && vAngle <= 50) || vAngle < -130 && vAngle > -165){
 			return (Action) new Movement(50,-50);
 		}
-		else if((vAngle < -25 && vAngle >= -50) || vAngle > 130 && vAngle < 165){
+		else if(vAngle <= -50 && vAngle >= -130){
 			return (Action) new Movement(-50,50);
+		}
+		else if((vAngle >= 25 && vAngle <= 50) || vAngle < -130 && vAngle > -165){
+			return (Action) new Movement(35,-35);
+		}
+		else if((vAngle < -25 && vAngle >= -50) || vAngle > 130 && vAngle < 165){
+			return (Action) new Movement(-35,35);
 		}
 		else if((vAngle >= 10 && vAngle <= 25) || vAngle < -165 && vAngle > -170){
 			return (Action) new Movement(25,-25);
