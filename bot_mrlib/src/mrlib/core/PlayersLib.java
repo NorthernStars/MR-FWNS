@@ -139,15 +139,8 @@ public class PlayersLib {
 		
     	for( FellowPlayer p : vTeamMates){
     		if( nearestMate == null || ( vOpponents.size() > 0 && p.getDistanceToPlayer() < nearestMate.getDistanceToPlayer() )){
-    			nearestMate = p;
-    		}
-    		if( p.getDistanceToPlayer() < 2*mSelf.getGamevalue( GamevalueNames.KickRange )){
-    			for( FellowPlayer a : vOpponents ){
-    				if(( p.getDistanceToPlayer() < nearestMate.getDistanceToPlayer()) && !PlayersLib.isEnemyAroundMate(vWorldState, mSelf, p)){
-    					nearestMate = a;
-    				}                    				
-    			}
-    			
+    			if(PlayersLib.isEnemyAroundMate(vWorldState, mSelf, p))
+    				nearestMate = p;
     		}
     	}
 		return nearestMate;
