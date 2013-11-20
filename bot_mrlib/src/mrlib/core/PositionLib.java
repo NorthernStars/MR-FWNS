@@ -152,6 +152,39 @@ public class PositionLib {
     	return DMFpoint;
     }
     
+    
+    public static ReferencePoint getDMFpositionBottom( RawWorldData aWorldData, Teams aTeam ){
+    	ReferencePoint PenaltyBottom;
+    	ReferencePoint vDMFpointBottom;
+    	
+    	if ( aTeam == Teams.Blue){
+    		PenaltyBottom = aWorldData.getBluePenaltyAreaFrontBottom();
+    	}else
+    	{
+    		PenaltyBottom = aWorldData.getYellowPenaltyAreaFrontBottom();
+    	}
+    	
+    	vDMFpointBottom = getMiddleOfTwoReferencePoints(aWorldData.getFieldCenter(), PenaltyBottom);
+    	    	
+    	return vDMFpointBottom;
+    }
+    
+    public static ReferencePoint getDMFpositionTop( RawWorldData aWorldData, Teams aTeam ){
+    	ReferencePoint vPenaltyTop;
+    	ReferencePoint vDMFpointTop;
+    	
+    	if ( aTeam == Teams.Blue){
+    		vPenaltyTop = aWorldData.getBluePenaltyAreaFrontTop();
+    	}else
+    	{
+    		vPenaltyTop = aWorldData.getYellowPenaltyAreaFrontTop();
+    	}
+    	
+    	vDMFpointTop = getMiddleOfTwoReferencePoints(aWorldData.getFieldCenter(), vPenaltyTop);
+    	    	
+    	return vDMFpointTop;
+    }
+    
     public static boolean isBallInRangeOfRefPoint(BallPosition ballPos, ReferencePoint RefPoint,double range){
     	
     	double a, b, wa, wb;
