@@ -207,11 +207,11 @@ public class PlayersLib {
 	/*
 	 * TODO: Write function to check if an enemy is on a line from me to a ReferencePoint
 	 * */
-	public static boolean isEnemyInOnLineToRefPoint(RawWorldData aWorldState, ReferencePoint RefPoint){
+	public static boolean isEnemyOnLineToRefPoint(RawWorldData aWorldState, ReferencePoint RefPoint){
 		
 		List<FellowPlayer> vOpponents = aWorldState.getListOfOpponents();
 		for ( FellowPlayer a: vOpponents){
-			if(a.getAngleToPlayer() > RefPoint.getAngleToPoint()+20 || a.getAngleToPlayer() < RefPoint.getAngleToPoint()-20){
+			if(a.getAngleToPlayer() > RefPoint.getAngleToPoint()+10 || a.getAngleToPlayer() < RefPoint.getAngleToPoint()-10){
 				return false;
 			}
 			else{
@@ -256,5 +256,23 @@ public class PlayersLib {
 		}
 		return true;
 	}
-
+	
+	public static boolean hasMateTheBall(RawWorldData aWorldState, BotInformation botInfo){
+		BallPosition ball = aWorldState.getBallPosition();
+		List<FellowPlayer> vTeamMates = aWorldState.getListOfTeamMates();
+		double dist = 0;
+		
+		for ( FellowPlayer a: vTeamMates){
+			dist = PlayersLib.getDistanceBetweenPlayerAndBall(a, ball);
+			if(dist < botInfo.getGamevalue(GamevalueNames.KickRange)){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+		
+		return false;
+		
+	}
 }
