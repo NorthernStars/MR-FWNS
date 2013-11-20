@@ -18,6 +18,7 @@ import essentials.communication.worlddata_server2008.ReferencePoint;
 import essentials.core.ArtificialIntelligence;
 import essentials.core.BotInformation;
 import essentials.core.BotInformation.GamevalueNames;
+import exampleai.hypothallamus.RollSelection;
 
 
 
@@ -32,6 +33,7 @@ public class DMF extends Thread implements ArtificialIntelligence {
     boolean mNeedNewAction = true;    
     boolean mIsStarted = false;
     boolean mIsPaused = false;
+    private boolean mRestart = false;
     
     @Override
     public void initializeAI( BotInformation aOneSelf ) {
@@ -78,6 +80,7 @@ public class DMF extends Thread implements ArtificialIntelligence {
                     if( vWorldState.getBallPosition() != null ){
                     	System.out.println("DMF spieler");
                     	// get ball position
+                    	
                     	BallPosition ballPos = vWorldState.getBallPosition();
                     	ReferencePoint DMF = PositionLib.getDMFposition(vWorldState, mSelf.getTeam());
                     	//Ist Gegner in der Nähe?
@@ -178,7 +181,7 @@ public class DMF extends Thread implements ArtificialIntelligence {
 	@Override
 	public boolean wantRestart() {
 		// TODO Auto-generated method stub
-		return false;
+		return mRestart;
 	}
 
     @Override
