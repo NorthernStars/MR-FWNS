@@ -211,7 +211,7 @@ public class PlayersLib {
 		
 		List<FellowPlayer> vOpponents = aWorldState.getListOfOpponents();
 		for ( FellowPlayer a: vOpponents){
-			if(a.getAngleToPlayer() > RefPoint.getAngleToPoint()+10 || a.getAngleToPlayer() < RefPoint.getAngleToPoint()-10){
+			if(a.getAngleToPlayer() > RefPoint.getAngleToPoint()+20 || a.getAngleToPlayer() < RefPoint.getAngleToPoint()-20){
 				return false;
 			}
 			else{
@@ -219,6 +219,41 @@ public class PlayersLib {
 			}
 		}
 		
+		return true;
+	}
+	
+	public static boolean isEnemyInAngleBetweenTwoRefPoints(RawWorldData aWorldState, ReferencePoint refPoint1, ReferencePoint refPoint2){
+		double ref1Angle = 0;
+		double ref2Angle = 0;
+		List<FellowPlayer> vOpponents = aWorldState.getListOfOpponents();
+		if(refPoint1.getAngleToPoint() > refPoint2.getAngleToPoint()){
+			ref1Angle = refPoint1.getAngleToPoint();
+			ref2Angle = refPoint2.getAngleToPoint();
+		}
+		else {
+			ref1Angle = refPoint2.getAngleToPoint();
+			ref2Angle = refPoint1.getAngleToPoint();
+		}
+		if(Math.abs(ref1Angle-ref2Angle) > 180){
+			for ( FellowPlayer a: vOpponents){
+				if(a.getAngleToPlayer() < ref2Angle && a.getAngleToPlayer() > -180 || a.getAngleToPlayer() > ref1Angle && a.getAngleToPlayer() < 180){
+					return true;
+				}
+				else{
+					return false;
+				}
+			}
+		}
+		else{
+			for ( FellowPlayer a: vOpponents){
+				if(a.getAngleToPlayer() > ref2Angle && a.getAngleToPlayer() < ref1Angle){
+					return true;
+				}
+				else{
+				return false;
+				}
+			}
+		}
 		return true;
 	}
 
