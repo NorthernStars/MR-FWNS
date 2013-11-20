@@ -295,7 +295,9 @@ public static boolean isBallinRectangleOfFourRefPoints(ReferencePoint aFirstPoin
 		smallestX = aSecondPoint.getXOfPoint();
 	if(aThirdPoint.getXOfPoint() < smallestX)
 		smallestX = aThirdPoint.getXOfPoint();
-	if(aFourthPoint.)
+	if(aFourthPoint.getXOfPoint() < smallestX)
+		smallestX = aFourthPoint.getXOfPoint();
+	
 	
 	
 	
