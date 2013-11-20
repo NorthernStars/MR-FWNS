@@ -6,6 +6,7 @@ import java.util.List;
 import essentials.communication.worlddata_server2008.BallPosition;
 import essentials.communication.worlddata_server2008.FellowPlayer;
 import essentials.communication.worlddata_server2008.RawWorldData;
+import essentials.communication.worlddata_server2008.ReferencePoint;
 import essentials.core.BotInformation;
 import essentials.core.BotInformation.GamevalueNames;
 
@@ -185,7 +186,6 @@ public class PlayersLib {
 		return bestMate;
 	}
 	
-
 	public static boolean amINearestToBall(RawWorldData vWorldState, BallPosition ballPos, BotInformation mSelf){
 		List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
 		vTeamMates.add(new FellowPlayer(mSelf.getVtId(), mSelf.getBotname(), true, 0, 0, 0) );
@@ -201,4 +201,33 @@ public class PlayersLib {
 			return false;
 		}
 	}
+	
+	/*
+	 * TODO: Write function to get the nearest Player to the Ball
+	 * */
+	public static ReferencePoint whoIsNearestToBall(RawWorldData aWorldState){
+		ReferencePoint player = null;
+		
+		
+		return player;
+	}
+	
+	/*
+	 * TODO: Write function to check if an enemy is on a line from me to a ReferencePoint
+	 * */
+	public static boolean isEnemyInOnLineToRefPoint(RawWorldData aWorldState, ReferencePoint RefPoint){
+		
+		List<FellowPlayer> vOpponents = aWorldState.getListOfOpponents();
+		for ( FellowPlayer a: vOpponents){
+			if(a.getAngleToPlayer() > RefPoint.getAngleToPoint()+10 || a.getAngleToPlayer() < RefPoint.getAngleToPoint()-10){
+				return false;
+			}
+			else{
+				return true;
+			}
+		}
+		
+		return true;
+	}
+
 }

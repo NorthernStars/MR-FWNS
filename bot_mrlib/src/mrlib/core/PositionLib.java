@@ -282,9 +282,20 @@ public static boolean isBotInFieldOfFourReferencePoints(ReferencePoint aFirstRef
 		}
 	}
 
-public static boolean isBallinFieldOfFourRefPoints(ReferencePoint aFirstReferencePoint, ReferencePoint aSecondPoint, ReferencePoint aThirdReferencePoint, ReferencePoint aFourthReferencePoint){
+/*
+* TODO: Write function to get if the Ball is in an area of 4 ReferencePoints
+* */
+
+public static boolean isBallinRectangleOfFourRefPoints(ReferencePoint aFirstPoint, ReferencePoint aSecondPoint, ReferencePoint aThirdPoint, ReferencePoint aFourthPoint, BallPosition ballPos){
 	
-	
+	double smallestX = 0;
+	double biggestX = 0;
+	smallestX = aFirstPoint.getXOfPoint();
+	if(aSecondPoint.getXOfPoint() < smallestX)
+		smallestX = aSecondPoint.getXOfPoint();
+	if(aThirdPoint.getXOfPoint() < smallestX)
+		smallestX = aThirdPoint.getXOfPoint();
+	if(aFourthPoint.)
 	
 	
 	
