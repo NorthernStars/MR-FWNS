@@ -110,7 +110,7 @@ public class PlayersLib {
 		return c;
 	}
 	
-	private static double getDistanceBetweenPlayersAndBall(FellowPlayer p, BallPosition ballPos) {
+	public static double getDistanceBetweenPlayerAndBall(FellowPlayer p, BallPosition ballPos) {
 		double a, b, wa, wb;
         
         if( p.getAngleToPlayer() > ballPos.getAngleToBall() ){
@@ -183,7 +183,7 @@ public class PlayersLib {
 		vTeamMates.add(new FellowPlayer(mSelf.getVtId(), mSelf.getBotname(), true, 0, 0, 0) );
 		FellowPlayer closest_player = null;
 		for ( FellowPlayer a: vTeamMates){
-			if(closest_player == null || PlayersLib.getDistanceBetweenPlayersAndBall(a, ballPos) < PlayersLib.getDistanceBetweenPlayersAndBall(closest_player, ballPos)){
+			if(closest_player == null || PlayersLib.getDistanceBetweenPlayerAndBall(a, ballPos) < PlayersLib.getDistanceBetweenPlayerAndBall(closest_player, ballPos)){
 				closest_player = a;
 			}
 		}
