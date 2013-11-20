@@ -134,14 +134,13 @@ public class PlayersLib {
 	}
 	
 	public static FellowPlayer getNearestMateWithoutEnemyAround(RawWorldData vWorldState, BotInformation mSelf){
-        List<FellowPlayer> vOpponents = vWorldState.getListOfOpponents();
         List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
 		FellowPlayer nearestMate = null;
-		
     	for( FellowPlayer p : vTeamMates){
-    		if( nearestMate == null || ( vOpponents.size() > 0 && p.getDistanceToPlayer() < nearestMate.getDistanceToPlayer() )){
-    			if(PlayersLib.isEnemyAroundMate(vWorldState, mSelf, p))
+    		if( nearestMate == null || p.getDistanceToPlayer() < nearestMate.getDistanceToPlayer() ){
+    			if(!PlayersLib.isEnemyAroundMate(vWorldState, mSelf, p)) {
     				nearestMate = p;
+    			}
     		}
     	}
 		return nearestMate;
@@ -184,7 +183,7 @@ public class PlayersLib {
 		vTeamMates.add(new FellowPlayer(mSelf.getVtId(), mSelf.getBotname(), true, 0, 0, 0) );
 		FellowPlayer closest_player = null;
 		for ( FellowPlayer a: vTeamMates){
-			if(closest_player == null || PlayersLib.getDistanceBetweenPlayersAndBall(a, ballPos) < closest_player.getDistanceToPlayer()){
+			if(closest_player == null || PlayersLib.getDistanceBetweenPlayersAndBall(a, ballPos) < PlayersLib.getDistanceBetweenPlayersAndBall(closest_player, ballPos)){
 				closest_player = a;
 			}
 		}
