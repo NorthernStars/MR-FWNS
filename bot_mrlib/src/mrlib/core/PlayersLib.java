@@ -275,6 +275,26 @@ public class PlayersLib {
 		return false;
 		
 	}
+	
+	public static boolean isEnemyNearBall(RawWorldData aWorldState, BotInformation botInfo){
+		BallPosition ball = aWorldState.getBallPosition();
+		List<FellowPlayer> vOpponents = aWorldState.getListOfOpponents();
+		double dist = 0;
+		
+		for ( FellowPlayer a: vOpponents){
+			dist = PlayersLib.getDistanceBetweenPlayerAndBall(a, ball);
+			if(dist < botInfo.getGamevalue(GamevalueNames.KickRange)*2){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+		
+		return false;
+		
+	}
+	
 	public static double getDistanceBetweenPlayerAndPoint(FellowPlayer player,ReferencePoint refPoint) {
 		double a, b, wa, wb;
         
