@@ -248,6 +248,7 @@ public class PositionLib {
         	return false;
         }
     }
+    
     public static double getDistanceBetweenTwoRefPoints(ReferencePoint RefPoint0, ReferencePoint RefPoint){
     	
     	double a, b, wa, wb;
@@ -308,83 +309,83 @@ public class PositionLib {
     }
     
 
-public static double getAngleOfTwoReferencePoints( ReferencePoint aFirstReferencePoint, ReferencePoint aSecondReferencePoint ){
-	   
-    double wa, wb;
-    
-    if( aFirstReferencePoint.getAngleToPoint() > aSecondReferencePoint.getAngleToPoint() ){
-        
-        
-        wa = aFirstReferencePoint.getAngleToPoint();
-       
-        wb =aSecondReferencePoint.getAngleToPoint();
-        
-    } else {
-
-        
-        wa =aSecondReferencePoint.getAngleToPoint(); 
-       
-        wb = aFirstReferencePoint.getAngleToPoint();
-        
-    }
-    double gamma = 0;
-    
-    gamma = Math.abs(wa - wb);
-    if (gamma > 180)
-    	gamma = 360 - gamma;
-    
-    return gamma;
+	public static double getAngleOfTwoReferencePoints( ReferencePoint aFirstReferencePoint, ReferencePoint aSecondReferencePoint ){
+		   
+	    double wa, wb;
+	    
+	    if( aFirstReferencePoint.getAngleToPoint() > aSecondReferencePoint.getAngleToPoint() ){
+	        
+	        
+	        wa = aFirstReferencePoint.getAngleToPoint();
+	       
+	        wb =aSecondReferencePoint.getAngleToPoint();
+	        
+	    } else {
+	
+	        
+	        wa =aSecondReferencePoint.getAngleToPoint(); 
+	       
+	        wb = aFirstReferencePoint.getAngleToPoint();
+	        
+	    }
+	    double gamma = 0;
+	    
+	    gamma = Math.abs(wa - wb);
+	    if (gamma > 180)
+	    	gamma = 360 - gamma;
+	    
+	    return gamma;
+		}
+	
+	
+	public static boolean isBotInFieldOfFourReferencePoints(ReferencePoint aFirstReferencePoint, ReferencePoint aSecondReferencePoint, ReferencePoint aThirdReferencePoint, ReferencePoint aFourthReferencePoint){
+			double angle1, angle2, angle3, angle4;
+			angle1= PositionLib.getAngleOfTwoReferencePoints(aFirstReferencePoint, aSecondReferencePoint);
+			angle2= PositionLib.getAngleOfTwoReferencePoints(aSecondReferencePoint, aThirdReferencePoint);
+			angle3= PositionLib.getAngleOfTwoReferencePoints(aThirdReferencePoint, aFourthReferencePoint);
+			angle4= PositionLib.getAngleOfTwoReferencePoints(aFourthReferencePoint, aFirstReferencePoint);
+			if(angle1+angle2+angle3+angle4 < 361 && angle1+angle2+angle3+angle4 > 359){
+				return true;
+			}else {
+				return false;
+			}
+		}
+	
+	/*
+	* TODO: Write function to get if the Ball is in an area of 4 ReferencePoints
+	* */
+	
+	public static boolean isBallinRectangleOfFourRefPoints(ReferencePoint aFirstPoint, ReferencePoint aSecondPoint, ReferencePoint aThirdPoint, ReferencePoint aFourthPoint, BallPosition ballPos){
+		
+		double smallestX = 0;
+	//	double biggestX = 0;
+		smallestX = aFirstPoint.getXOfPoint();
+		if(aSecondPoint.getXOfPoint() < smallestX)
+			smallestX = aSecondPoint.getXOfPoint();
+		if(aThirdPoint.getXOfPoint() < smallestX)
+			smallestX = aThirdPoint.getXOfPoint();
+		if(aFourthPoint.getXOfPoint() < smallestX)
+			smallestX = aFourthPoint.getXOfPoint();
+		
+		
+		
+		
+		return true;
+		
 	}
-
-
-public static boolean isBotInFieldOfFourReferencePoints(ReferencePoint aFirstReferencePoint, ReferencePoint aSecondReferencePoint, ReferencePoint aThirdReferencePoint, ReferencePoint aFourthReferencePoint){
-		double angle1, angle2, angle3, angle4;
-		angle1= PositionLib.getAngleOfTwoReferencePoints(aFirstReferencePoint, aSecondReferencePoint);
-		angle2= PositionLib.getAngleOfTwoReferencePoints(aSecondReferencePoint, aThirdReferencePoint);
-		angle3= PositionLib.getAngleOfTwoReferencePoints(aThirdReferencePoint, aFourthReferencePoint);
-		angle4= PositionLib.getAngleOfTwoReferencePoints(aFourthReferencePoint, aFirstReferencePoint);
-		if(angle1+angle2+angle3+angle4 < 361 && angle1+angle2+angle3+angle4 > 359){
+	public static boolean amINearestToPoint(RawWorldData vWorldState, ReferencePoint RefPoint, BotInformation aSelf){
+		List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
+		vTeamMates.add(new FellowPlayer(aSelf.getVtId(),"me", true,0,0,0) );
+		FellowPlayer closest_player = null;
+		for ( FellowPlayer a: vTeamMates){
+			if(closest_player == null || PlayersLib.getDistanceBetweenPlayerAndPoint(a, RefPoint) < PlayersLib.getDistanceBetweenPlayerAndPoint(closest_player, RefPoint)){
+				closest_player = a;
+			}
+		}
+		if(closest_player.getId() == aSelf.getVtId()){
 			return true;
-		}else {
+		}else{
 			return false;
 		}
 	}
-
-/*
-* TODO: Write function to get if the Ball is in an area of 4 ReferencePoints
-* */
-
-public static boolean isBallinRectangleOfFourRefPoints(ReferencePoint aFirstPoint, ReferencePoint aSecondPoint, ReferencePoint aThirdPoint, ReferencePoint aFourthPoint, BallPosition ballPos){
-	
-	double smallestX = 0;
-//	double biggestX = 0;
-	smallestX = aFirstPoint.getXOfPoint();
-	if(aSecondPoint.getXOfPoint() < smallestX)
-		smallestX = aSecondPoint.getXOfPoint();
-	if(aThirdPoint.getXOfPoint() < smallestX)
-		smallestX = aThirdPoint.getXOfPoint();
-	if(aFourthPoint.getXOfPoint() < smallestX)
-		smallestX = aFourthPoint.getXOfPoint();
-	
-	
-	
-	
-	return true;
-	
-}
-public static boolean amINearestToPoint(RawWorldData vWorldState, ReferencePoint RefPoint, BotInformation aSelf){
-	List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
-	vTeamMates.add(new FellowPlayer(aSelf.getVtId(),"me", true,0,0,0) );
-	FellowPlayer closest_player = null;
-	for ( FellowPlayer a: vTeamMates){
-		if(closest_player == null || PlayersLib.getDistanceBetweenPlayerAndPoint(a, RefPoint) < PlayersLib.getDistanceBetweenPlayerAndPoint(closest_player, RefPoint)){
-			closest_player = a;
-		}
-	}
-	if(closest_player.getId() == aSelf.getVtId()){
-		return true;
-	}else{
-		return false;
-	}
-}
 }
