@@ -188,6 +188,38 @@ public class PositionLib {
     	return vDMFpointTop;
     }
     
+    public static ReferencePoint getOMFpositionBottom( RawWorldData aWorldData, Teams aTeam ){
+    	ReferencePoint PenaltyBottom;
+    	ReferencePoint vOMFpointBottom;
+    	
+    	if ( aTeam == Teams.Blue){
+    		PenaltyBottom = aWorldData.getYellowPenaltyAreaFrontBottom();
+    	}else
+    	{
+    		PenaltyBottom = aWorldData.getBluePenaltyAreaFrontBottom();
+    	}
+    	
+    	vOMFpointBottom = getMiddleOfTwoReferencePoints(aWorldData.getFieldCenter(), PenaltyBottom);
+    	    	
+    	return vOMFpointBottom;
+    }
+    
+    public static ReferencePoint getOMFpositionTop( RawWorldData aWorldData, Teams aTeam ){
+    	ReferencePoint vPenaltyTop;
+    	ReferencePoint vOMFpointTop;
+    	
+    	if ( aTeam == Teams.Blue){
+    		vPenaltyTop = aWorldData.getYellowPenaltyAreaFrontTop();
+    	}else
+    	{
+    		vPenaltyTop = aWorldData.getBluePenaltyAreaFrontTop();
+    	}
+    	
+    	vOMFpointTop = getMiddleOfTwoReferencePoints(aWorldData.getFieldCenter(), vPenaltyTop);
+    	    	
+    	return vOMFpointTop;
+    }
+    
     public static boolean isBallInRangeOfRefPoint(BallPosition ballPos, ReferencePoint RefPoint,double range){
     	
     	double a, b, wa, wb;
@@ -325,7 +357,7 @@ public static boolean isBotInFieldOfFourReferencePoints(ReferencePoint aFirstRef
 public static boolean isBallinRectangleOfFourRefPoints(ReferencePoint aFirstPoint, ReferencePoint aSecondPoint, ReferencePoint aThirdPoint, ReferencePoint aFourthPoint, BallPosition ballPos){
 	
 	double smallestX = 0;
-	double biggestX = 0;
+//	double biggestX = 0;
 	smallestX = aFirstPoint.getXOfPoint();
 	if(aSecondPoint.getXOfPoint() < smallestX)
 		smallestX = aSecondPoint.getXOfPoint();
