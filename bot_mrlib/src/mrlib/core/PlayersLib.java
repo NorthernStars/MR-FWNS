@@ -275,4 +275,18 @@ public class PlayersLib {
 		return false;
 		
 	}
+	public static double getDistanceBetweenPlayerAndPoint(FellowPlayer player,ReferencePoint refPoint) {
+		double a, b, wa, wb;
+        
+        
+        a = player.getDistanceToPoint();
+        wa = player.getAngleToPoint();
+        b = refPoint.getDistanceToPoint();
+        wb = refPoint.getAngleToPoint();
+         
+       
+        double c = Math.sqrt( a*a + b*b - 2 * a * b * Math.cos(Math.toRadians(Math.abs(wa - wb))));
+    	
+       return c;
+	}
 }

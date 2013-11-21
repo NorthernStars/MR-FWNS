@@ -1,10 +1,13 @@
 package mrlib.core;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import essentials.communication.worlddata_server2008.BallPosition;
+import essentials.communication.worlddata_server2008.FellowPlayer;
 import essentials.communication.worlddata_server2008.RawWorldData;
 import essentials.communication.worlddata_server2008.ReferencePoint;
+import essentials.core.BotInformation;
 import essentials.core.BotInformation.Teams;
 
 /**
@@ -336,5 +339,20 @@ public static boolean isBallinRectangleOfFourRefPoints(ReferencePoint aFirstPoin
 	
 	return true;
 	
+}
+public static boolean amINearestToPoint(RawWorldData vWorldState, ReferencePoint RefPoint, BotInformation aSelf){
+	List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
+	vTeamMates.add(new FellowPlayer(aSelf.getVtId(),"me", true,0,0,0) );
+	FellowPlayer closest_player = null;
+	for ( FellowPlayer a: vTeamMates){
+		if(closest_player == null || PlayersLib.getDistanceBetweenPlayerAndPoint(a, RefPoint) < PlayersLib.getDistanceBetweenPlayerAndPoint(closest_player, RefPoint)){
+			closest_player = a;
+		}
+	}
+	if(closest_player.getId() == aSelf.getVtId()){
+		return true;
+	}else{
+		return false;
+	}
 }
 }
