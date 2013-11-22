@@ -51,27 +51,27 @@ public class MoveLib {
             return (Action) new Movement( 100, 100 );            
         }
         
-        if( vAngle > -80 && vAngle < -10 ){            
+        if( vAngle > -60 && vAngle < -10 ){            
             return (Action) new Movement( 100, 100 + (int) vAngle );            
         }
         
-        if( vAngle > 10 && vAngle < 80 ){            
+        if( vAngle > 10 && vAngle < 60 ){            
             return (Action) new Movement( 100 - (int) vAngle, 100 );            
         }
         
-        if( vAngle >= -110 && vAngle <= -80 ){            
+        if( vAngle >= -130 && vAngle <= -60 ){            
             return (Action) new Movement( 100, -100 );            
         }
         
-        if( vAngle >= 80 && vAngle <= 110 ){            
+        if( vAngle >= 60 && vAngle <= 130 ){            
             return (Action) new Movement( -100, 100 );            
         }
         
-        if( vAngle > -170 && vAngle < -110 ){            
+        if( vAngle > -170 && vAngle < -130 ){            
             return (Action) new Movement( -100, 100 + (int) vAngle );            
         }
         
-        if( vAngle > 110 && vAngle < 170 ){            
+        if( vAngle > 130 && vAngle < 170 ){            
             return (Action) new Movement( 100 - (int) vAngle, -100 );            
         }
         

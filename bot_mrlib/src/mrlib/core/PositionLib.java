@@ -352,7 +352,7 @@ public class PositionLib {
 		}
 	
 	/*
-	* TODO: Write function to get if the Ball is in an area of 4 ReferencePoints
+	* TODO: Complete function to get if the Ball is in an area of 4 ReferencePoints
 	* */
 	
 	public static boolean isBallinRectangleOfFourRefPoints(ReferencePoint aFirstPoint, ReferencePoint aSecondPoint, ReferencePoint aThirdPoint, ReferencePoint aFourthPoint, BallPosition ballPos){
