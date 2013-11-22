@@ -256,6 +256,40 @@ public class PlayersLib {
 		}
 		return true;
 	}
+	public static boolean isSpecificEnemyInAngleBetweenTwoRefPoints(FellowPlayer enemy, ReferencePoint refPoint1, ReferencePoint refPoint2){
+		double ref1Angle = 0;
+		double ref2Angle = 0;
+		
+		if(refPoint1.getAngleToPoint() > refPoint2.getAngleToPoint()){
+			ref1Angle = refPoint1.getAngleToPoint();
+			ref2Angle = refPoint2.getAngleToPoint();
+		}
+		else {
+			ref1Angle = refPoint2.getAngleToPoint();
+			ref2Angle = refPoint1.getAngleToPoint();
+		}
+		if(Math.abs(ref1Angle-ref2Angle) > 180){
+			
+				if(enemy.getAngleToPlayer() < ref2Angle && enemy.getAngleToPlayer() > -180 || enemy.getAngleToPlayer() > ref1Angle && enemy.getAngleToPlayer() < 180){
+					return true;
+				}
+				else{
+					return false;
+				}
+			
+		}
+		else{
+			
+				if(enemy.getAngleToPlayer() > ref2Angle && enemy.getAngleToPlayer() < ref1Angle){
+					return true;
+				}
+				else{
+				return false;
+				}
+			
+		}
+		
+	}
 	
 	public static boolean hasMateTheBall(RawWorldData aWorldState, BotInformation botInfo){
 		BallPosition ball = aWorldState.getBallPosition();
