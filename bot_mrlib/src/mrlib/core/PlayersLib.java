@@ -21,10 +21,10 @@ import essentials.core.BotInformation.GamevalueNames;
 public class PlayersLib {
 
 	 /**
-     * Returns nearest teammate
-     * @param RawWorldData vWorldState
-     * @param BotInformation mSelf
-     * @return FellowPlayer nearestMate
+     * Returns nearest Teammate, doesn't check if something is inbetween or not
+     * @param RawWorldData vWorldState, the complete Worlddata from the Server
+     * @param BotInformation mSelf, the information of the bot
+     * @return FellowPlayer nearestMate, Teammate with the shortest distance to oneself
      */
 	public static FellowPlayer getNearestMate(RawWorldData vWorldState, BotInformation mSelf){
         List<FellowPlayer> vOpponents = vWorldState.getListOfOpponents();
@@ -44,10 +44,10 @@ public class PlayersLib {
 		return nearestMate;
 	}
 	 /**
-     * Checks if Enemy is within 2 x KickRange
-     * @param RawWorldData vWorldState
-     * @param BotInformation mSelf
-     * @return true or false
+     * Checks if Enemy is within 2 x KickRange of the bot
+     * @param RawWorldData vWorldState, the complete Worlddata from the Server
+     * @param BotInformation mSelf, the information of the bot
+     * @return true or false whether there is an enemy in 2x kickrange or not
      */
 	public static boolean isEnemyAround(RawWorldData vWorldState, BotInformation mSelf){
 		List<FellowPlayer> vOpponents = vWorldState.getListOfOpponents();
@@ -61,10 +61,10 @@ public class PlayersLib {
 	}
 	 /**
      * Checks if Enemy is within a specific range
-     * @param RawWorldData vWorldState
-     * @param BotInformation mSelf
-     * @param double range
-     * @return true or false
+     * @param RawWorldData vWorldState, the complete Worlddata from the Server
+     * @param BotInformation mSelf, the information of the bot
+     * @param double range, in mm
+     * @return true or false if there is an enemy in a specific range around the bot
      */
 	public static boolean isEnemyAround(RawWorldData vWorldState, BotInformation mSelf, double range){
 		List<FellowPlayer> vOpponents = vWorldState.getListOfOpponents();
@@ -77,6 +77,13 @@ public class PlayersLib {
 		return false;
 	}
 	
+	/**
+     * Checks if Enemy is around a specific teammate of the FellowPlayer type
+     * @param RawWorldData vWorldState, the complete worlddata from the Server
+     * @param BotInformation mSelf, the information of the bot
+     * @param FellowPlayer teamMate, the teammate that should be checked upon
+     * @return true or false, if there is an enemy in a specific range around the bot
+     */
 	public static boolean isEnemyAroundMate(RawWorldData vWorldState, BotInformation mSelf, FellowPlayer teamMate){
 		List<FellowPlayer> vOpponents = vWorldState.getListOfOpponents();
 		for( FellowPlayer p : vOpponents){
@@ -86,7 +93,13 @@ public class PlayersLib {
 		}
 		return false;
 	}
-	
+	/**
+     * Returns the distance between two players
+     * 
+     * @param FellowPlayer p, the player whos distance to the teammate should be calculated
+     * @param FellowPlayer teamMate, the teammate that should be checked upon
+     * @return distance as double
+     */
 	private static double getDistanceBetweenTwoPlayers(FellowPlayer p,FellowPlayer teamMate) {
 		double a, b, wa, wb;
         
@@ -109,7 +122,13 @@ public class PlayersLib {
     	
 		return c;
 	}
-	
+	/**
+     * Returns the distance between specific player and ball
+     * 
+     * @param FellowPlayer p, the player whos distance to the ball should be calculated
+     * @param BallPosition ballPos, the ballPosition from the worlddata
+     * @return distance as double
+     */
 	public static double getDistanceBetweenPlayerAndBall(FellowPlayer p, BallPosition ballPos) {
 		double a, b, wa, wb;
         
@@ -132,7 +151,13 @@ public class PlayersLib {
     	
 		return c;
 	}
-	
+	/**
+     * Returns the nearest teammate where no enemy is around
+     * 
+     * @param RawWorldData vWorldState, the complete worlddata from the Server
+     * @param BotInformation mSelf, the information about the bot
+     * @return nearest teammate where no enemy is in 2x kickrange
+     */
 	public static FellowPlayer getNearestMateWithoutEnemyAround(RawWorldData vWorldState, BotInformation mSelf){
         List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
 		FellowPlayer nearestMate = null;
@@ -145,7 +170,13 @@ public class PlayersLib {
     	}
 		return nearestMate;
 	}
-	
+	/**
+     * Returns the teammate who the enemys are furthest away of
+     * 
+     * @param RawWorldData vWorldState, the complete worlddata from the Server
+     * @param BotInformation mSelf, the information about the bot
+     * @return teammate with a enemy around but the enemy furthest away
+     */
 	public static FellowPlayer getMateWithEnemyNearButFurthestAway(RawWorldData vWorldState, BotInformation mSelf){
         List<FellowPlayer> vOpponents = vWorldState.getListOfOpponents();
         List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
@@ -177,7 +208,14 @@ public class PlayersLib {
 		
 		return bestMate;
 	}
-	
+	/**
+     * Checks if the bot is the nearest to the ball
+     * 
+     * @param RawWorldData vWorldState, the complete worlddata from the Server
+     * @param BallPosition ballPos, the Position of the ball from the server
+     * @param BotInformation mSelf, the information about the bot
+     * @return true or false whether bot is the closest to the ball or not
+     */
 	public static boolean amINearestToBall(RawWorldData vWorldState, BallPosition ballPos, BotInformation mSelf){
 		List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
 		vTeamMates.add(new FellowPlayer(mSelf.getVtId(), mSelf.getBotname(), true, 0, 0, 0) );
@@ -204,8 +242,12 @@ public class PlayersLib {
 		return player;
 	}
 	
-	/*
-	 * TODO: Write function to check if an enemy is on a line from me to a ReferencePoint
+	/**
+	 * Returns if an enemy is at the same angle as a specific reference point +- 10 degrees
+	 * 
+	 * @param RawWorldData aWorldState, worlddata from the server
+	 * @param ReferencePoint RefPoint, a point with distance and angle
+	 * @returns true or false if an enemy is found at the same angle as the reference point relative to the bot
 	 * */
 	public static boolean isEnemyOnLineToRefPoint(RawWorldData aWorldState, ReferencePoint RefPoint){
 		
@@ -221,7 +263,14 @@ public class PlayersLib {
 		
 		return true;
 	}
-	
+	/**
+	 * Returns if an enemy is in the angle of 2 reference points
+	 * 
+	 * @param RawWorldData aWorldState, worlddata from the server
+	 * @param ReferencePoint refPoint1, a point with distance and angle
+	 * @param ReferencePoint refPoint2, a point with distance and angle
+	 * @returns true or false if an enemy is found in angle between the reference points
+	 * */
 	public static boolean isEnemyInAngleBetweenTwoRefPoints(RawWorldData aWorldState, ReferencePoint refPoint1, ReferencePoint refPoint2){
 		double ref1Angle = 0;
 		double ref2Angle = 0;
@@ -256,6 +305,14 @@ public class PlayersLib {
 		}
 		return true;
 	}
+	/**
+	 * Returns if an specific enemy is in the angle of 2 reference points
+	 * 
+	 * @param FellowPlayer enemy, the player who should be checked upon
+	 * @param ReferencePoint refPoint1, a point with distance and angle
+	 * @param ReferencePoint refPoint2, a point with distance and angle
+	 * @returns true or false if an enemy is found in angle between the reference points
+	 * */
 	public static boolean isSpecificEnemyInAngleBetweenTwoRefPoints(FellowPlayer enemy, ReferencePoint refPoint1, ReferencePoint refPoint2){
 		double ref1Angle = 0;
 		double ref2Angle = 0;
@@ -290,7 +347,13 @@ public class PlayersLib {
 		}
 		
 	}
-	
+	/**
+	 * Checks if any of the teammates is inside the kick range
+	 * 
+	 * @param RawWorldData aWorldState
+	 * @param BotInformation botInfo, information about the bot
+	 * @returns true or false if a teammate is in kick range or not
+	 * */
 	public static boolean hasMateTheBall(RawWorldData aWorldState, BotInformation botInfo){
 		BallPosition ball = aWorldState.getBallPosition();
 		List<FellowPlayer> vTeamMates = aWorldState.getListOfTeamMates();
@@ -309,7 +372,13 @@ public class PlayersLib {
 		return false;
 		
 	}
-	
+	/**
+	 * Checks if any of the opponents is inside the kick range * 2
+	 * 
+	 * @param RawWorldData aWorldState
+	 * @param BotInformation botInfo, information about the bot
+	 * @returns true or false if a opponent is in kick range * 2 or not
+	 * */
 	public static boolean isEnemyNearBall(RawWorldData aWorldState, BotInformation botInfo){
 		BallPosition ball = aWorldState.getBallPosition();
 		List<FellowPlayer> vOpponents = aWorldState.getListOfOpponents();
@@ -328,7 +397,13 @@ public class PlayersLib {
 		return false;
 		
 	}
-	
+	/**
+     * Returns the distance between specific player and reference point
+     * 
+     * @param FellowPlayer p, the player whos distance to the point should be calculated
+     * @param ReferencePoint refPoint, the reference point to which the distance of the player should be calculated
+     * @return distance as double
+     */
 	public static double getDistanceBetweenPlayerAndPoint(FellowPlayer player,ReferencePoint refPoint) {
 		double a, b, wa, wb;
         
