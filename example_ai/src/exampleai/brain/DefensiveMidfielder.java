@@ -18,12 +18,13 @@ import essentials.communication.worlddata_server2008.ReferencePoint;
 import essentials.core.ArtificialIntelligence;
 import essentials.core.BotInformation;
 import essentials.core.BotInformation.GamevalueNames;
+import essentials.core.BotInformation.Teams;
 
 
 // -bn 3 -tn "Northern Stars" -t blau -ids 3 -s 192.168.178.22:3310 -aiarc "${workspace_loc:FWNS_ExampleAI}/bin" -aicl "exampleai.brain.AI" -aiarg 0
 
-public class DMF extends Thread implements ArtificialIntelligence {
-
+public class DefensiveMidfielder extends Thread implements ArtificialIntelligence {
+	
     BotInformation mSelf = null;
     RawWorldData mWorldState = null;
     Action mAction = null;
@@ -80,7 +81,7 @@ public class DMF extends Thread implements ArtificialIntelligence {
                     	// get ball position
                     	
                     	BallPosition ballPos = vWorldState.getBallPosition();
-                    	ReferencePoint DMF = PositionLib.getDMFposition(vWorldState, mSelf.getTeam());
+                    	ReferencePoint DMF = getDMFposition(vWorldState, mSelf.getTeam());
                     	//Ist Gegner in der Nähe?
                     	
                     	
@@ -186,6 +187,26 @@ public class DMF extends Thread implements ArtificialIntelligence {
     public void executeCommand( String arg0 ) {
         // TODO Auto-generated method stub
         
+    }
+    
+    public static ReferencePoint getDMFposition( RawWorldData aWorldData, Teams aTeam ){
+    	ReferencePoint PenaltyTop;
+    	ReferencePoint PenaltyBottom;
+    	ReferencePoint PenaltyMid;
+    	
+    	if ( aTeam == Teams.Blue){
+    		PenaltyTop = aWorldData.getBluePenaltyAreaFrontTop();
+    		PenaltyBottom = aWorldData.getBluePenaltyAreaFrontBottom();
+    	}else
+    	{
+    		PenaltyTop = aWorldData.getYellowPenaltyAreaFrontTop();
+    		PenaltyBottom = aWorldData.getYellowPenaltyAreaFrontBottom();
+    	}
+    	
+    	PenaltyMid = PositionLib.getMiddleOfTwoReferencePoints(PenaltyTop, PenaltyBottom);
+    	ReferencePoint DMFpoint = PositionLib.getMiddleOfTwoReferencePoints(PenaltyMid, aWorldData.getFieldCenter());
+    	    	
+    	return DMFpoint;
     }
 
 }

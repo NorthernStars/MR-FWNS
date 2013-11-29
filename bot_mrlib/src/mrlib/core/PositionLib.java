@@ -135,91 +135,6 @@ public class PositionLib {
     }
     
     
-    public static ReferencePoint getDMFposition( RawWorldData aWorldData, Teams aTeam ){
-    	ReferencePoint PenaltyTop;
-    	ReferencePoint PenaltyBottom;
-    	ReferencePoint PenaltyMid;
-    	
-    	if ( aTeam == Teams.Blue){
-    		PenaltyTop = aWorldData.getBluePenaltyAreaFrontTop();
-    		PenaltyBottom = aWorldData.getBluePenaltyAreaFrontBottom();
-    	}else
-    	{
-    		PenaltyTop = aWorldData.getYellowPenaltyAreaFrontTop();
-    		PenaltyBottom = aWorldData.getYellowPenaltyAreaFrontBottom();
-    	}
-    	
-    	PenaltyMid = getMiddleOfTwoReferencePoints(PenaltyTop, PenaltyBottom);
-    	ReferencePoint DMFpoint = getMiddleOfTwoReferencePoints(PenaltyMid, aWorldData.getFieldCenter());
-    	    	
-    	return DMFpoint;
-    }
-    
-    
-    public static ReferencePoint getDMFpositionBottom( RawWorldData aWorldData, Teams aTeam ){
-    	ReferencePoint PenaltyBottom;
-    	ReferencePoint vDMFpointBottom;
-    	
-    	if ( aTeam == Teams.Blue){
-    		PenaltyBottom = aWorldData.getBluePenaltyAreaFrontBottom();
-    	}else
-    	{
-    		PenaltyBottom = aWorldData.getYellowPenaltyAreaFrontBottom();
-    	}
-    	
-    	vDMFpointBottom = getMiddleOfTwoReferencePoints(aWorldData.getFieldCenter(), PenaltyBottom);
-    	    	
-    	return vDMFpointBottom;
-    }
-    
-    public static ReferencePoint getDMFpositionTop( RawWorldData aWorldData, Teams aTeam ){
-    	ReferencePoint vPenaltyTop;
-    	ReferencePoint vDMFpointTop;
-    	
-    	if ( aTeam == Teams.Blue){
-    		vPenaltyTop = aWorldData.getBluePenaltyAreaFrontTop();
-    	}else
-    	{
-    		vPenaltyTop = aWorldData.getYellowPenaltyAreaFrontTop();
-    	}
-    	
-    	vDMFpointTop = getMiddleOfTwoReferencePoints(aWorldData.getFieldCenter(), vPenaltyTop);
-    	    	
-    	return vDMFpointTop;
-    }
-    
-    public static ReferencePoint getOMFpositionBottom( RawWorldData aWorldData, Teams aTeam ){
-    	ReferencePoint PenaltyBottom;
-    	ReferencePoint vOMFpointBottom;
-    	
-    	if ( aTeam == Teams.Blue){
-    		PenaltyBottom = aWorldData.getYellowPenaltyAreaFrontBottom();
-    	}else
-    	{
-    		PenaltyBottom = aWorldData.getBluePenaltyAreaFrontBottom();
-    	}
-    	
-    	vOMFpointBottom = getMiddleOfTwoReferencePoints(aWorldData.getFieldCenter(), PenaltyBottom);
-    	    	
-    	return vOMFpointBottom;
-    }
-    
-    public static ReferencePoint getOMFpositionTop( RawWorldData aWorldData, Teams aTeam ){
-    	ReferencePoint vPenaltyTop;
-    	ReferencePoint vOMFpointTop;
-    	
-    	if ( aTeam == Teams.Blue){
-    		vPenaltyTop = aWorldData.getYellowPenaltyAreaFrontTop();
-    	}else
-    	{
-    		vPenaltyTop = aWorldData.getBluePenaltyAreaFrontTop();
-    	}
-    	
-    	vOMFpointTop = getMiddleOfTwoReferencePoints(aWorldData.getFieldCenter(), vPenaltyTop);
-    	    	
-    	return vOMFpointTop;
-    }
-    
     public static boolean isBallInRangeOfRefPoint(BallPosition ballPos, ReferencePoint RefPoint,double range){
     	
     	double a, b, wa, wb;
@@ -355,16 +270,19 @@ public class PositionLib {
 	* TODO: Complete function to get if the Ball is in an area of 4 ReferencePoints
 	* */
 	
-	public static boolean isBallinRectangleOfFourRefPoints(ReferencePoint aFirstPoint, ReferencePoint aSecondPoint, ReferencePoint aThirdPoint, ReferencePoint aFourthPoint, BallPosition ballPos){
+	public static boolean isBallinAreaOfFourRefPoints(ReferencePoint aFirstPoint, ReferencePoint aSecondPoint, ReferencePoint aThirdPoint, ReferencePoint aFourthPoint, BallPosition ballPos){
 		
-		double smallestX = 0;
+		double smallestX = 0, secondsmallestX = 0;
 	//	double biggestX = 0;
 		smallestX = aFirstPoint.getXOfPoint();
 		if(aSecondPoint.getXOfPoint() < smallestX)
+			secondsmallestX = smallestX;
 			smallestX = aSecondPoint.getXOfPoint();
 		if(aThirdPoint.getXOfPoint() < smallestX)
+			secondsmallestX = smallestX;
 			smallestX = aThirdPoint.getXOfPoint();
 		if(aFourthPoint.getXOfPoint() < smallestX)
+			secondsmallestX = smallestX;
 			smallestX = aFourthPoint.getXOfPoint();
 		
 		

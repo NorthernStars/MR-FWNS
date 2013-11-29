@@ -18,7 +18,7 @@ import essentials.core.BotInformation.GamevalueNames;
 
 // -bn 3 -tn "Northern Stars" -t blau -ids 3 -s 192.168.178.22:3310 -aiarc "${workspace_loc:FWNS_ExampleAI}/bin" -aicl "exampleai.brain.AI" -aiarg 0
 
-public class AI extends Thread implements ArtificialIntelligence {
+public class Striker extends Thread implements ArtificialIntelligence {
 
     BotInformation mSelf = null;
     RawWorldData mWorldState = null;
