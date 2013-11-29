@@ -78,7 +78,7 @@ public class PlayersLib {
 	}
 	
 	/**
-     * Checks if Enemy is around a specific teammate of the FellowPlayer type
+     * Checks if Enemy is around a specific teammate of the FellowPlayer type in 2x KickRange
      * @param RawWorldData vWorldState, the complete worlddata from the Server
      * @param BotInformation mSelf, the information of the bot
      * @param FellowPlayer teamMate, the teammate that should be checked upon
