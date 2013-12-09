@@ -71,7 +71,7 @@ public class Striker extends Thread implements ArtificialIntelligence {
                     
                     if( vWorldState.getBallPosition() != null ){
                     	if(PositionLib.getDistanceBetweenTwoRefPoints(vWorldState.getFieldCenter(), new ReferencePoint(0,0,true))< 10){
-                    		mSelf.setAIClassname("exampleai.brain.DMF");
+                    		mSelf.setAIClassname("exampleai.brain.DefensiveMidfielder");
                     		mRestart = true;
                     		mAction = (Action) Movement.NO_MOVEMENT;
                     	}
