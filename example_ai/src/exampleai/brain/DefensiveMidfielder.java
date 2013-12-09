@@ -7,6 +7,7 @@ import java.util.List;
 
 import mrlib.core.KickLib;
 import mrlib.core.MoveLib;
+import mrlib.core.PlayersLib;
 import mrlib.core.PositionLib;
 
 import essentials.communication.Action;
@@ -84,7 +85,11 @@ public class DefensiveMidfielder extends Thread implements ArtificialIntelligenc
                     	ReferencePoint DMF = getDMFposition(vWorldState, mSelf.getTeam());
                     	//Ist Gegner in der Nähe?
                     	
-                    	
+                    	if(PlayersLib.amINearestToBall(vWorldState, ballPos, mSelf)){
+                    		mSelf.setAIClassname("exampleai.brain.DefensiveMidfielder");
+                    		mRestart = true;
+                    		mAction = (Action) Movement.NO_MOVEMENT;
+                    	}
                     	
                     	if( ballPos.getDistanceToBall() < mSelf.getGamevalue( GamevalueNames.KickRange ) ){                 
                     		// kick

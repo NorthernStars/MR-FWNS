@@ -3,6 +3,7 @@ package exampleai.brain;
 
 import mrlib.core.KickLib;
 import mrlib.core.MoveLib;
+import mrlib.core.PlayersLib;
 import mrlib.core.PositionLib;
 
 import essentials.communication.Action;
@@ -70,7 +71,7 @@ public class Striker extends Thread implements ArtificialIntelligence {
                     // --------------- START AI -------------------
                     
                     if( vWorldState.getBallPosition() != null ){
-                    	if(PositionLib.getDistanceBetweenTwoRefPoints(vWorldState.getFieldCenter(), new ReferencePoint(0,0,true))< 10){
+                    	if(PositionLib.getDistanceBetweenTwoRefPoints(vWorldState.getFieldCenter(), new ReferencePoint(0,0,true))< 10 && !PlayersLib.amINearestToBall(vWorldState, vWorldState.getBallPosition(), mSelf)){
                     		mSelf.setAIClassname("exampleai.brain.DefensiveMidfielder");
                     		mRestart = true;
                     		mAction = (Action) Movement.NO_MOVEMENT;
