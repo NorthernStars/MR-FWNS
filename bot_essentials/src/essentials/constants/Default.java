@@ -2,7 +2,7 @@ package essentials.constants;
 
 public class Default {
 
-    public static final float KickRange = 39;
+    public static final float KickRange = 25;
     
     public static final float MaximumKickTravelDistance = 10;
     
