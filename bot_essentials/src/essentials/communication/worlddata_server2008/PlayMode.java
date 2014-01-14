@@ -9,6 +9,8 @@ import javax.xml.bind.annotation.XmlType;
 public enum PlayMode {
 
     @XmlEnumValue("kick off") KickOff,
+    @XmlEnumValue("kick off blue") KickOffBlue,
+    @XmlEnumValue("kick off yellow") KickOffYellow,
     @XmlEnumValue("play on") PlayOn,
     @XmlEnumValue("corner kick blue") CornerKickBlue,
     @XmlEnumValue("corner kick yellow") CornerKickYellow,
@@ -22,6 +24,6 @@ public enum PlayMode {
     @XmlEnumValue("warn ending") WarnEnding,
     @XmlEnumValue("warming up") WarmingUp,
     @XmlEnumValue("time over") TimeOver,
-    @XmlEnumValue("team adjustmest") TeamAdjustment;
+    @XmlEnumValue("team adjustment") TeamAdjustment;
     
 }
