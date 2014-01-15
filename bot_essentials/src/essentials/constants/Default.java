@@ -17,5 +17,7 @@ public class Default {
     public static final float Attrition = 8;
     
     public static final float VelocityPerPixel = (float) 20.3;
+    
+    public static final float MaxFieldLength = 1000;
 
 }
