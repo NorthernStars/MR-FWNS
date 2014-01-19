@@ -81,7 +81,8 @@ public class BotInformation implements Serializable{
         MaxSpeed( Default.MaxSpeed ),
         MaxRate( Default.MaxRate ),
         Attrition( Default.Attrition ),
-        VelocityPerPixel( Default.VelocityPerPixel );
+        VelocityPerPixel( Default.VelocityPerPixel ),
+        MaxFieldLength(Default.MaxFieldLength);
    
         @GuardedBy("this") private float mValue;
         
