@@ -258,8 +258,8 @@ public class ReferencePoint{
      * @param aScalar The double
      * @return dieser Referenzpunkt zum Verknüpfen von Methoden */
     public ReferencePoint add( double aScalar ) {
-            mX -= aScalar;
-            mY -= aScalar;
+            mX += aScalar;
+            mY += aScalar;
             return set( mX, mY, false );
     }
 
