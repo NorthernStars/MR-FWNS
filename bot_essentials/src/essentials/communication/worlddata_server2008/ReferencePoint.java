@@ -245,14 +245,14 @@ public class ReferencePoint{
             
     }
 
-//    /** Subtracts the given ReferencePoint from this ReferencePoint.
-//     * @param v The ReferencePoint
-//     * @return This ReferencePoint for chaining */
-//    public ReferencePoint sub (ReferencePoint v) {
-//            mX -= v.mX;
-//            mY -= v.mY;
-//            return this;
-//    }
+    /** Subtracts the given double from this ReferencePoint.
+     * @param v The double
+     * @return dieser Referenzpunkt zum Verknüpfen von Methoden */
+    public ReferencePoint sub ( double aScalar ) {
+            mX -= aScalar;
+            mY -= aScalar;
+            return this;
+    }
 //
 //    /** Adds the given ReferencePoint to this ReferencePoint
 //     * @param v The ReferencePoint
@@ -290,14 +290,14 @@ public class ReferencePoint{
 //            return mX * v.mX + mY * v.mY;
 //    }
 //
-//    /** Multiplies this ReferencePoint by a scalar
-//     * @param scalar The scalar
-//     * @return This ReferencePoint for chaining */
-//    public ReferencePoint scl (double scalar) {
-//            mX *= scalar;
-//            mY *= scalar;
-//            return this;
-//    }
+    /** Multiplies this ReferencePoint by a scalar
+     * @param scalar The scalar
+     * @return This ReferencePoint for chaining */
+    public ReferencePoint multiply( double scalar ) {
+            mX *= scalar;
+            mY *= scalar;
+            return this;
+    }
 //
 //    /** Multiplies this ReferencePoint by a scalar
 //     * @return This ReferencePoint for chaining */
