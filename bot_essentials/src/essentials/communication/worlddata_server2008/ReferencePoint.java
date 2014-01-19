@@ -251,7 +251,7 @@ public class ReferencePoint{
     public ReferencePoint sub( double aScalar ) {
             mX -= aScalar;
             mY -= aScalar;
-            return this;
+            return set( mX, mY, false );
     }
 
     /** Adds the given double from this ReferencePoint.
@@ -260,7 +260,7 @@ public class ReferencePoint{
     public ReferencePoint add( double aScalar ) {
             mX -= aScalar;
             mY -= aScalar;
-            return this;
+            return set( mX, mY, false );
     }
 
     /** Adds the given ReferencePoint to this ReferencePoint
@@ -269,7 +269,7 @@ public class ReferencePoint{
     public ReferencePoint add( ReferencePoint aReferencePoint ) {
             mX += aReferencePoint.mX;
             mY += aReferencePoint.mY;
-            return this;
+            return set( mX, mY, false );
     }
 //
 //    /** Adds the given components to this ReferencePoint
@@ -305,7 +305,7 @@ public class ReferencePoint{
     public ReferencePoint multiply( double scalar ) {
             mX *= scalar;
             mY *= scalar;
-            return this;
+            return set( mX, mY, false );
     }
 //
 //    /** Multiplies this ReferencePoint by a scalar
