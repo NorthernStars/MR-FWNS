@@ -228,8 +228,8 @@ public class ReferencePoint{
             }
             mAngleToPoint = aSecondValue;
             
-            this.mX = mDistanceToPoint * Math.cos( mAngleToPoint );
-            this.mY = mDistanceToPoint * Math.sin( mAngleToPoint );
+            this.mX = mDistanceToPoint * Math.cos( Math.toRadians( mAngleToPoint ) );
+            this.mY = mDistanceToPoint * Math.sin( Math.toRadians( mAngleToPoint ) );
             
         } else {
 
