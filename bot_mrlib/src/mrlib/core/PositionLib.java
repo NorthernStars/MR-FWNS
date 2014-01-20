@@ -270,7 +270,7 @@ public class PositionLib {
 	* TODO: Complete function to get if the Ball is in an area of 4 ReferencePoints
 	* */
 	
-	public static boolean isBallinAreaOfFourRefPoints(ReferencePoint aFirstPoint, ReferencePoint aSecondPoint, ReferencePoint aThirdPoint, ReferencePoint aFourthPoint, BallPosition ballPos){
+	public static boolean isBallInAreaOfFourRefPoints(ReferencePoint aFirstPoint, ReferencePoint aSecondPoint, ReferencePoint aThirdPoint, ReferencePoint aFourthPoint, BallPosition ballPos){
 		
 		double smallestX = 0, secondsmallestX = 0;
 	//	double biggestX = 0;

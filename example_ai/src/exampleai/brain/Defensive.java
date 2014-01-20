@@ -9,11 +9,11 @@ import mrlib.core.KickLib;
 import mrlib.core.MoveLib;
 import mrlib.core.PlayersLib;
 import mrlib.core.PositionLib;
-
 import essentials.communication.Action;
 import essentials.communication.action_server2008.Movement;
 import essentials.communication.worlddata_server2008.BallPosition;
 import essentials.communication.worlddata_server2008.FellowPlayer;
+import essentials.communication.worlddata_server2008.PlayMode;
 import essentials.communication.worlddata_server2008.RawWorldData;
 import essentials.communication.worlddata_server2008.ReferencePoint;
 import essentials.core.ArtificialIntelligence;
@@ -24,7 +24,7 @@ import essentials.core.BotInformation.Teams;
 
 // -bn 3 -tn "Northern Stars" -t blau -ids 3 -s 192.168.178.22:3310 -aiarc "${workspace_loc:FWNS_ExampleAI}/bin" -aicl "exampleai.brain.AI" -aiarg 0
 
-public class DefensiveMidfielder extends Thread implements ArtificialIntelligence {
+public class Defensive extends Thread implements ArtificialIntelligence {
 	
     BotInformation mSelf = null;
     RawWorldData mWorldState = null;
@@ -73,63 +73,79 @@ public class DefensiveMidfielder extends Thread implements ArtificialIntelligenc
                         vWorldState = mWorldState;
                     }
                     
-                    List<FellowPlayer> vOpponents = vWorldState.getListOfOpponents();
-                    List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
-                    // --------------- START AI -------------------
-                    
-                    if( vWorldState.getBallPosition() != null ){
-                    	System.out.println("DMF spieler");
-                    	// get ball position
+                    PlayMode mPlayMode = vWorldState.getPlayMode();
+                    if( mPlayMode == PlayMode.KickOff
+                    		|| (mPlayMode == PlayMode.KickOffYellow && mSelf.getTeam() == Teams.Yellow)
+                    		|| (mPlayMode == PlayMode.KickOffBlue && mSelf.getTeam() == Teams.Blue) ){
                     	
-                    	BallPosition ballPos = vWorldState.getBallPosition();
-                    	ReferencePoint DMF = getDMFposition(vWorldState, mSelf.getTeam());
-                    	//Ist Gegner in der Nähe?
-                    	
-                    	if(PlayersLib.amINearestToBall(vWorldState, ballPos, mSelf)){
-                    		mSelf.setAIClassname("exampleai.brain.DefensiveMidfielder");
-                    		mRestart = true;
-                    		mAction = (Action) Movement.NO_MOVEMENT;
-                    	}
-                    	
-                    	if( ballPos.getDistanceToBall() < mSelf.getGamevalue( GamevalueNames.KickRange ) ){                 
-                    		// kick
-                    		FellowPlayer nearestMate = null;
-                        	boolean enemyNear = false;
-                        	for( FellowPlayer p : vOpponents){
-                        		if(p.getDistanceToPlayer() < 75){
-                        			enemyNear = true;
-                        			for( FellowPlayer a : vTeamMates){
-                        				if( nearestMate == null || a.getDistanceToPlayer() < nearestMate.getDistanceToPlayer()){
-                        					nearestMate = a;
-                        				}                    				
-                        			break;
-                        			}
-                        			
-                        		}
-                        	}
-                        	if(enemyNear == true){
-                        		vBotAction = KickLib.kickTo(nearestMate);
-                        		enemyNear = false;
-                        	}else{
-                        		ReferencePoint goalMid = PositionLib.getMiddleOfGoal( vWorldState, mSelf.getTeam() );
-                        		vBotAction = KickLib.kickTo( goalMid );  
-                    		}                  		
-                    	} else if(PositionLib.isBallInRangeOfRefPoint(ballPos, DMF, 200)){
-                    		// move to ball
-                    		vBotAction = MoveLib.runTo( ballPos );
-                    	} 
-                    	else {
-                    		if(DMF.getDistanceToPoint() > 10){
-                    			vBotAction = MoveLib.runTo(DMF);
-                    		}
-                    		else{
-                    			vBotAction = null;
-                    		}
-                    	}
+                    	// --------------- KICK OFF ---------------
+                    	ReferencePoint kickOffPoint = PositionLib.getMiddleOfTwoReferencePoints(
+                    										vWorldState.getFieldCenter(),
+                    										PositionLib.getMiddleOfOwnGoal(vWorldState, mSelf.getTeam()) );
+                    	vBotAction = MoveLib.runTo( kickOffPoint );                	
+                    	// --------------- KICK OFF END ---------------
                     	
                     }
+                    else{
                     
-                    // ---------------- END AI --------------------
+	                    // --------------- START AI -------------------
+                    	List<FellowPlayer> vOpponents = vWorldState.getListOfOpponents();
+	                    List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
+	                    
+	                    if( vWorldState.getBallPosition() != null ){
+	                    	System.out.println("DMF spieler");
+	                    	// get ball position
+	                    	
+	                    	BallPosition ballPos = vWorldState.getBallPosition();
+	                    	ReferencePoint DMF = getDMFposition(vWorldState, mSelf.getTeam());
+	                    	//Ist Gegner in der Nähe?
+	                    	
+	                    	if(PlayersLib.amINearestToBall(vWorldState, ballPos, mSelf)){
+	                    		mSelf.setAIClassname("exampleai.brain.DefensiveMidfielder");
+	                    		mRestart = true;
+	                    		mAction = (Action) Movement.NO_MOVEMENT;
+	                    	}
+	                    	
+	                    	if( ballPos.getDistanceToBall() < mSelf.getGamevalue( GamevalueNames.KickRange ) ){                 
+	                    		// kick
+	                    		FellowPlayer nearestMate = null;
+	                        	boolean enemyNear = false;
+	                        	for( FellowPlayer p : vOpponents){
+	                        		if(p.getDistanceToPlayer() < 75){
+	                        			enemyNear = true;
+	                        			for( FellowPlayer a : vTeamMates){
+	                        				if( nearestMate == null || a.getDistanceToPlayer() < nearestMate.getDistanceToPlayer()){
+	                        					nearestMate = a;
+	                        				}                    				
+	                        			break;
+	                        			}
+	                        			
+	                        		}
+	                        	}
+	                        	if(enemyNear == true){
+	                        		vBotAction = KickLib.kickTo(nearestMate);
+	                        		enemyNear = false;
+	                        	}else{
+	                        		ReferencePoint goalMid = PositionLib.getMiddleOfGoal( vWorldState, mSelf.getTeam() );
+	                        		vBotAction = KickLib.kickTo( goalMid );  
+	                    		}                  		
+	                    	} else if(PositionLib.isBallInRangeOfRefPoint(ballPos, DMF, 200)){
+	                    		// move to ball
+	                    		vBotAction = MoveLib.runTo( ballPos );
+	                    	} 
+	                    	else {
+	                    		if(DMF.getDistanceToPoint() > 10){
+	                    			vBotAction = MoveLib.runTo(DMF);
+	                    		}
+	                    		else{
+	                    			vBotAction = null;
+	                    		}
+	                    	}
+                    	
+	                    }                    
+	                    // ---------------- END AI --------------------
+	                    
+                    }
                     
                     synchronized ( this ) {
                         mAction = vBotAction;

@@ -5,15 +5,16 @@ import mrlib.core.KickLib;
 import mrlib.core.MoveLib;
 import mrlib.core.PlayersLib;
 import mrlib.core.PositionLib;
-
 import essentials.communication.Action;
 import essentials.communication.action_server2008.Movement;
 import essentials.communication.worlddata_server2008.BallPosition;
+import essentials.communication.worlddata_server2008.PlayMode;
 import essentials.communication.worlddata_server2008.RawWorldData;
 import essentials.communication.worlddata_server2008.ReferencePoint;
 import essentials.core.ArtificialIntelligence;
 import essentials.core.BotInformation;
 import essentials.core.BotInformation.GamevalueNames;
+import essentials.core.BotInformation.Teams;
 
 
 
@@ -67,30 +68,44 @@ public class Striker extends Thread implements ArtificialIntelligence {
                     synchronized ( this ) {
                         vWorldState = mWorldState;
                     }
-
-                    // --------------- START AI -------------------
-                    
-                    if( vWorldState.getBallPosition() != null ){
-                    	if(PositionLib.getDistanceBetweenTwoRefPoints(vWorldState.getFieldCenter(), new ReferencePoint(0,0,true))< 10 && !PlayersLib.amINearestToBall(vWorldState, vWorldState.getBallPosition(), mSelf)){
-                    		mSelf.setAIClassname("exampleai.brain.DefensiveMidfielder");
-                    		mRestart = true;
-                    		mAction = (Action) Movement.NO_MOVEMENT;
-                    	}
-                    	// get ball position
-                    	BallPosition ballPos = vWorldState.getBallPosition();
+                    PlayMode mPlayMode = mWorldState.getPlayMode();
+                    if( mPlayMode == PlayMode.KickOff
+                    		|| (mPlayMode == PlayMode.KickOffYellow && mSelf.getTeam() == Teams.Yellow)
+                    		|| (mPlayMode == PlayMode.KickOffBlue && mSelf.getTeam() == Teams.Blue) ){
                     	
-                    	if( ballPos.getDistanceToBall() < mSelf.getGamevalue( GamevalueNames.KickRange ) ){                 
-                    		// kick
-                    		ReferencePoint goalMid = PositionLib.getMiddleOfGoal( vWorldState, mSelf.getTeam() );
-                    		vBotAction = KickLib.kickTo( goalMid );                    		
-                    	} else {
-                    		// move to ball
-                    		vBotAction = MoveLib.runTo( ballPos );
-                    	}
+                    	// --------------- KICK OFF ---------------
+                    	vBotAction = MoveLib.runTo( vWorldState.getBallPosition()  );                   	
+                    	// --------------- KICK OFF END ---------------
                     	
                     }
+                    else{
+
+	                    // --------------- START AI -------------------
+	                    
+	                    if( vWorldState.getBallPosition() != null ){
+	                    	if(PositionLib.getDistanceBetweenTwoRefPoints(vWorldState.getFieldCenter(), new ReferencePoint(0,0,true))< 10 && !PlayersLib.amINearestToBall(vWorldState, vWorldState.getBallPosition(), mSelf)){
+	                    		mSelf.setAIClassname("exampleai.brain.DefensiveMidfielder");
+	                    		mRestart = true;
+	                    		vBotAction = (Action) Movement.NO_MOVEMENT;
+	                    	}
+	                    	// get ball position
+	                    	BallPosition ballPos = vWorldState.getBallPosition();
+	                    	
+	                    	if( ballPos.getDistanceToBall() < mSelf.getGamevalue( GamevalueNames.KickRange ) ){                 
+	                    		// kick
+	                    		ReferencePoint goalMid = PositionLib.getMiddleOfGoal( vWorldState, mSelf.getTeam() );
+	                    		vBotAction = KickLib.kickTo( goalMid );                    		
+	                    	} else {
+	                    		// move to ball
+	                    		vBotAction = MoveLib.runTo( ballPos );
+	                    	}
+	                    	
+	                    }
+	                    
+	                    // ---------------- END AI --------------------
                     
-                    // ---------------- END AI --------------------
+                    }
+                    
                     
                     synchronized ( this ) {
                         mAction = vBotAction;

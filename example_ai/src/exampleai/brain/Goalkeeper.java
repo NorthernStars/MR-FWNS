@@ -4,15 +4,16 @@ package exampleai.brain;
 import mrlib.core.KickLib;
 import mrlib.core.MoveLib;
 import mrlib.core.PositionLib;
-
 import essentials.communication.Action;
 import essentials.communication.action_server2008.Movement;
 import essentials.communication.worlddata_server2008.BallPosition;
+import essentials.communication.worlddata_server2008.PlayMode;
 import essentials.communication.worlddata_server2008.RawWorldData;
 import essentials.communication.worlddata_server2008.ReferencePoint;
 import essentials.core.ArtificialIntelligence;
 import essentials.core.BotInformation;
 import essentials.core.BotInformation.GamevalueNames;
+import essentials.core.BotInformation.Teams;
 
 
 // -bn 3 -tn "Northern Stars" -t blau -ids 3 -s 192.168.178.22:3310 -aiarc "${workspace_loc:FWNS_ExampleAI}/bin" -aicl "exampleai.brain.AI" -aiarg 0
@@ -64,34 +65,48 @@ public class Goalkeeper extends Thread implements ArtificialIntelligence {
                     synchronized ( this ) {
                         vWorldState = mWorldState;
                     }
-
-                    // --------------- START AI -------------------
                     
-                    if( vWorldState.getBallPosition() != null ){
+                    PlayMode mPlayMode = vWorldState.getPlayMode();
+                    if( mPlayMode == PlayMode.KickOff
+                    		|| (mPlayMode == PlayMode.KickOffYellow && mSelf.getTeam() == Teams.Yellow)
+                    		|| (mPlayMode == PlayMode.KickOffBlue && mSelf.getTeam() == Teams.Blue) ){
                     	
-                    	// get ball position
-                    	BallPosition ballPos = vWorldState.getBallPosition();
-                    	ReferencePoint GoalMid = PositionLib.getMiddleOfOwnGoal(vWorldState, mSelf.getTeam());
-                    	if( ballPos.getDistanceToBall() < mSelf.getGamevalue( GamevalueNames.KickRange )){                 
-                    		// kick
-                    		ReferencePoint goalMid = PositionLib.getMiddleOfGoal( vWorldState, mSelf.getTeam() );
-                    		vBotAction = KickLib.kickTo( goalMid );                    		
-                    	} else if(PositionLib.isBallInRangeOfRefPoint(ballPos, GoalMid, 200)){
-                    		// move to ball
-                    		MoveLib.runTo( ballPos );
-                    	} 
-                    	else {
-                    		if(GoalMid.getDistanceToPoint() > 10){
-                    			vBotAction = MoveLib.runTo(GoalMid);
-                    		}
-                    		else{
-                    			vBotAction = null;
-                    		}
-                    	}
+                    	// --------------- KICK OFF ---------------
+                    	vBotAction = MoveLib.runTo( PositionLib.getMiddleOfOwnGoal(vWorldState, mSelf.getTeam()) );                	
+                    	// --------------- KICK OFF END ---------------
                     	
                     }
-                    
-                    // ---------------- END AI --------------------
+                    else{
+
+	                    // --------------- START AI -------------------
+	                    
+	                    if( vWorldState.getBallPosition() != null ){
+	                    	
+	                    	// get ball position
+	                    	BallPosition ballPos = vWorldState.getBallPosition();
+	                    	ReferencePoint GoalMid = PositionLib.getMiddleOfOwnGoal(vWorldState, mSelf.getTeam());
+	                    	if( ballPos.getDistanceToBall() < mSelf.getGamevalue( GamevalueNames.KickRange )){                 
+	                    		// kick
+	                    		ReferencePoint goalMid = PositionLib.getMiddleOfGoal( vWorldState, mSelf.getTeam() );
+	                    		vBotAction = KickLib.kickTo( goalMid );                    		
+	                    	} else if(PositionLib.isBallInRangeOfRefPoint(ballPos, GoalMid, 200)){
+	                    		// move to ball
+	                    		MoveLib.runTo( ballPos );
+	                    	} 
+	                    	else {
+	                    		if(GoalMid.getDistanceToPoint() > 10){
+	                    			vBotAction = MoveLib.runTo(GoalMid);
+	                    		}
+	                    		else{
+	                    			vBotAction = null;
+	                    		}
+	                    	}
+	                    	
+	                    }
+	                    
+	                    // ---------------- END AI --------------------
+	                    
+                    }
                     
                     synchronized ( this ) {
                         mAction = vBotAction;
