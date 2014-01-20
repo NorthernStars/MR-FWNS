@@ -56,7 +56,7 @@ public class RawWorldData implements WorldData{
     @XmlElement(name="flag")
     List<ReferencePoint> mReferencePoints;
     
-	@XmlTransient
+    @XmlTransient
     public double getPlayTime() {
         return mPlayTime;
     }
@@ -211,6 +211,11 @@ public class RawWorldData implements WorldData{
         
     }
 
+    @XmlTransient
+    public List<ReferencePoint> getReferencePoints() {
+        return mReferencePoints;
+    }
+	
     public ReferencePoint getReferencePoint( ReferencePointName aName ) {
         
         if( mReferencePoints.get( aName.getPosition() ).getPointName() == aName ){
