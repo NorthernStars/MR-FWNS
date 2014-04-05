@@ -14,5 +14,6 @@
 			<attribute name="javadoc_location" value="jar:file:/E:/Robotik/MRBot/MR-FWNS/bot_lib/libraries/log4j-core-2.0-beta9-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/MixedRealityBot/bot_mr.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
