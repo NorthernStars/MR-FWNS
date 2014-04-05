@@ -3,13 +3,12 @@ package exampleai.brain;
 
 
 
-import java.util.List;
-
 import mrlib.core.KickLib;
 import mrlib.core.MoveLib;
 import mrlib.core.PlayersLib;
 import mrlib.core.PositionLib;
 import essentials.communication.Action;
+import essentials.communication.WorldData;
 import essentials.communication.action_server2008.Movement;
 import essentials.communication.worlddata_server2008.BallPosition;
 import essentials.communication.worlddata_server2008.FellowPlayer;
@@ -33,29 +32,22 @@ public class Defensive extends Thread implements ArtificialIntelligence {
     boolean mNeedNewAction = true;    
     boolean mIsStarted = false;
     boolean mIsPaused = false;
-    private boolean mRestart = false;
     
     @Override
-    public void initializeAI( BotInformation aOneSelf ) {
-        
+    public void initializeAI( BotInformation aOneSelf ) {        
         mSelf = aOneSelf; 
         mIsStarted = true;
-        start();
-        
+        start();        
     }
 
     @Override
-    public void resumeAI() {
-        
-        mIsPaused = false;
-        
+    public void resumeAI() {        
+        mIsPaused = false;        
     }
     
     @Override
-    public void suspendAI() {
-        
-        mIsPaused = true;   
-        
+    public void suspendAI() {        
+        mIsPaused = true; 
     }
     
     public void run(){
@@ -73,76 +65,85 @@ public class Defensive extends Thread implements ArtificialIntelligence {
                         vWorldState = mWorldState;
                     }
                     
-                    PlayMode mPlayMode = vWorldState.getPlayMode();
-                    if( mPlayMode == PlayMode.KickOff
-                    		|| (mPlayMode == PlayMode.KickOffYellow && mSelf.getTeam() == Teams.Yellow)
-                    		|| (mPlayMode == PlayMode.KickOffBlue && mSelf.getTeam() == Teams.Blue) ){
+                    // Getting current play mode
+                    PlayMode vPlayMode = mWorldState.getPlayMode();
+                    
+                    // Check for kick off
+                    if( vPlayMode == PlayMode.KickOff
+                    		|| (vPlayMode == PlayMode.KickOffYellow && mSelf.getTeam() == Teams.Yellow)
+                    		|| (vPlayMode == PlayMode.KickOffBlue && mSelf.getTeam() == Teams.Blue) ){
                     	
                     	// --------------- KICK OFF ---------------
-                    	ReferencePoint kickOffPoint = PositionLib.getMiddleOfTwoReferencePoints(
-                    										vWorldState.getFieldCenter(),
-                    										PositionLib.getMiddleOfOwnGoal(vWorldState, mSelf.getTeam()) );
-                    	vBotAction = MoveLib.runTo( kickOffPoint );                	
+                    	vBotAction = MoveLib.runTo( getDMFposition(vWorldState, mSelf.getTeam()) );                	
                     	// --------------- KICK OFF END ---------------
                     	
                     }
                     else{
                     
 	                    // --------------- START AI -------------------
-                    	List<FellowPlayer> vOpponents = vWorldState.getListOfOpponents();
-	                    List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
 	                    
+	                    // get width of field
+                    	double fieldWidth = PositionLib.getDistanceBetweenTwoRefPoints(
+                    			PositionLib.getMiddleOfGoal(vWorldState, mSelf.getTeam()),
+                    			PositionLib.getMiddleOfOwnGoal(vWorldState, mSelf.getTeam()));
+                    	
+                    	// set distances
+                    	double defenseRange = fieldWidth * 0.2;			// 20% defense range
+                    	double positionThreshold = fieldWidth * 0.05;	// 5% position tolerance
+	                    
+                    	// check if ball is available
 	                    if( vWorldState.getBallPosition() != null ){
-	                    	System.out.println("DMF spieler");
-	                    	// get ball position
 	                    	
+	                    	// get ball and dmf position	                    	
 	                    	BallPosition ballPos = vWorldState.getBallPosition();
-	                    	ReferencePoint DMF = getDMFposition(vWorldState, mSelf.getTeam());
-	                    	//Ist Gegner in der Nähe?
+	                    	ReferencePoint dmfPos = getDMFposition(vWorldState, mSelf.getTeam());
 	                    	
-	                    	if(PlayersLib.amINearestToBall(vWorldState, ballPos, mSelf)){
-	                    		mSelf.setAIClassname("exampleai.brain.DefensiveMidfielder");
-	                    		mRestart = true;
-	                    		mAction = (Action) Movement.NO_MOVEMENT;
-	                    	}
-	                    	
-	                    	if( ballPos.getDistanceToBall() < mSelf.getGamevalue( GamevalueNames.KickRange ) ){                 
-	                    		// kick
-	                    		FellowPlayer nearestMate = null;
-	                        	boolean enemyNear = false;
-	                        	for( FellowPlayer p : vOpponents){
-	                        		if(p.getDistanceToPlayer() < 75){
-	                        			enemyNear = true;
-	                        			for( FellowPlayer a : vTeamMates){
-	                        				if( nearestMate == null || a.getDistanceToPlayer() < nearestMate.getDistanceToPlayer()){
-	                        					nearestMate = a;
-	                        				}                    				
-	                        			break;
-	                        			}
-	                        			
-	                        		}
+	                    	// check if bot can kick and is nearest team mate to ball
+	                    	if( ballPos.getDistanceToBall() < mSelf.getGamevalue( GamevalueNames.KickRange )
+	                    			&& PlayersLib.amINearestToBall(vWorldState, ballPos, mSelf) ){
+	                    		
+	                    		/*
+	                    		 * Get nearest team mate.
+	                    		 * First try to get one without anemy in twice of kick range around.
+	                    		 * If that fails, simply get the nearest team mate
+	                    		 */
+	                    		FellowPlayer nearestTeamMate = PlayersLib.getNearestMateWithoutEnemyAround(vWorldState, mSelf);
+	                    		if( nearestTeamMate == null ){
+	                    			nearestTeamMate = PlayersLib.getNearestMate(vWorldState, mSelf);
+	                    		}
+	                    		
+	                    		// check if enemy is around and in twice of kick range and it is possible to kick to team mate
+	                    		if( PlayersLib.isEnemyAround(vWorldState, mSelf) && nearestTeamMate != null ){	                    			
+	                    			// kick to nearest team mate
+	                    			vBotAction = KickLib.kickTo(nearestTeamMate);
 	                        	}
-	                        	if(enemyNear == true){
-	                        		vBotAction = KickLib.kickTo(nearestMate);
-	                        		enemyNear = false;
-	                        	}else{
+	                    		// kick to enemies goal middle
+	                    		else{
 	                        		ReferencePoint goalMid = PositionLib.getMiddleOfGoal( vWorldState, mSelf.getTeam() );
 	                        		vBotAction = KickLib.kickTo( goalMid );  
-	                    		}                  		
-	                    	} else if(PositionLib.isBallInRangeOfRefPoint(ballPos, DMF, 200)){
+	                    		} 	                        	
+	                    	
+	                    	}
+	                    	
+	                    	// can not kick and ball is inside defense range around dmf position
+	                    	else if( PositionLib.isBallInRangeOfRefPoint(ballPos, dmfPos, defenseRange) ){
 	                    		// move to ball
 	                    		vBotAction = MoveLib.runTo( ballPos );
 	                    	} 
+	                    	
+	                    	// ball not in defense range and not kickable
 	                    	else {
-	                    		if(DMF.getDistanceToPoint() > 10){
-	                    			vBotAction = MoveLib.runTo(DMF);
+	                    		// move to dmf position
+	                    		if(dmfPos.getDistanceToPoint() > positionThreshold){
+	                    			vBotAction = MoveLib.runTo(dmfPos);
 	                    		}
 	                    		else{
-	                    			vBotAction = null;
+	                    			vBotAction = (Action) Movement.NO_MOVEMENT;
 	                    		}
 	                    	}
                     	
-	                    }                    
+	                    }  
+	                    
 	                    // ---------------- END AI --------------------
 	                    
                     }
@@ -164,70 +165,69 @@ public class Defensive extends Thread implements ArtificialIntelligence {
     
     @Override
     public synchronized Action getAction() {
-
         synchronized ( this ) {
             if( mAction != null)
                 return mAction;
         }
-        return (Action) Movement.NO_MOVEMENT;
-        
+        return (Action) Movement.NO_MOVEMENT;        
     }
 
     @Override
     public void putWorldState(RawWorldData aWorldState) {
-
         synchronized ( this ) {
             mWorldState = aWorldState;
             mNeedNewAction = true;
-        }
-        
+        }        
     }
 
     @Override
-    public void disposeAI() {
-        
+    public void disposeAI() {        
         mIsStarted = false;
-        mIsPaused = false;
-        
+        mIsPaused = false;        
     }
     
     @Override
     public boolean isRunning() {
-
-        return mIsStarted && !mIsPaused;
-        
+        return mIsStarted && !mIsPaused;        
     }
 
 	@Override
 	public boolean wantRestart() {
-		// TODO Auto-generated method stub
-		return mRestart;
+		return false;
 	}
 
     @Override
     public void executeCommand( String arg0 ) {
-        // TODO Auto-generated method stub
-        
     }
     
+    /**
+     * Calculates position for bot in the middle of the defense field side.
+     * @param aWorldData	{@link WorldData}
+     * @param aTeam			{@link Teams} own team
+     * @return				{@link ReferencePoint} of dmf position
+     */
     public static ReferencePoint getDMFposition( RawWorldData aWorldData, Teams aTeam ){
-    	ReferencePoint PenaltyTop;
-    	ReferencePoint PenaltyBottom;
-    	ReferencePoint PenaltyMid;
+    	ReferencePoint penaltyTop;
+    	ReferencePoint penaltyBottom;
+    	ReferencePoint penaltyMid;
     	
+    	// get penalty top and bottom of own goal
     	if ( aTeam == Teams.Blue){
-    		PenaltyTop = aWorldData.getBluePenaltyAreaFrontTop();
-    		PenaltyBottom = aWorldData.getBluePenaltyAreaFrontBottom();
-    	}else
-    	{
-    		PenaltyTop = aWorldData.getYellowPenaltyAreaFrontTop();
-    		PenaltyBottom = aWorldData.getYellowPenaltyAreaFrontBottom();
+    		penaltyTop = aWorldData.getBluePenaltyAreaFrontTop();
+    		penaltyBottom = aWorldData.getBluePenaltyAreaFrontBottom();
+    	}
+    	else{
+    		penaltyTop = aWorldData.getYellowPenaltyAreaFrontTop();
+    		penaltyBottom = aWorldData.getYellowPenaltyAreaFrontBottom();
     	}
     	
-    	PenaltyMid = PositionLib.getMiddleOfTwoReferencePoints(PenaltyTop, PenaltyBottom);
-    	ReferencePoint DMFpoint = PositionLib.getMiddleOfTwoReferencePoints(PenaltyMid, aWorldData.getFieldCenter());
+    	// get position in middle between penalty top and bottom
+    	penaltyMid = PositionLib.getMiddleOfTwoReferencePoints(penaltyTop, penaltyBottom);
+    	
+    	// set dmf position to middle of penaltyMid and field center
+    	ReferencePoint dmfPoint = PositionLib.getMiddleOfTwoReferencePoints(penaltyMid, aWorldData.getFieldCenter());
     	    	
-    	return DMFpoint;
+    	return dmfPoint;
     }
 
 }
