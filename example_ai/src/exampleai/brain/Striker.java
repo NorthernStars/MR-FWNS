@@ -31,7 +31,6 @@ public class Striker extends Thread implements ArtificialIntelligence {
     boolean mNeedNewAction = true;    
     boolean mIsStarted = false;
     boolean mIsPaused = false;
-	private boolean mRestart = false;
     
     @Override
     public void initializeAI( BotInformation aOneSelf ) {        
@@ -86,15 +85,13 @@ public class Striker extends Thread implements ArtificialIntelligence {
 
 	                    // --------------- START AI -------------------
 	                    
+                    	// check if ball is available
 	                    if( vWorldState.getBallPosition() != null ){
-	                    	if(PositionLib.getDistanceBetweenTwoRefPoints(vWorldState.getFieldCenter(), new ReferencePoint(0,0,true))< 10 && !PlayersLib.amINearestToBall(vWorldState, vWorldState.getBallPosition(), mSelf)){
-	                    		mSelf.setAIClassname("exampleai.brain.DefensiveMidfielder");
-	                    		mRestart = true;
-	                    		vBotAction = (Action) Movement.NO_MOVEMENT;
-	                    	}
+	                    	
 	                    	// get ball position
 	                    	BallPosition ballPos = vWorldState.getBallPosition();
 	                    	
+	                    	// check if bot can kick
 	                    	if( ballPos.getDistanceToBall() < mSelf.getGamevalue( GamevalueNames.KickRange ) ){                 
 	                    		// kick
 	                    		ReferencePoint goalMid = PositionLib.getMiddleOfGoal( vWorldState, mSelf.getTeam() );
@@ -102,7 +99,7 @@ public class Striker extends Thread implements ArtificialIntelligence {
 	                    	} else {
 	                    		// move to ball
 	                    		vBotAction = MoveLib.runTo( ballPos );
-	                    	}
+	                    	}	 
 	                    	
 	                    }
 	                    
@@ -156,7 +153,7 @@ public class Striker extends Thread implements ArtificialIntelligence {
 
 	@Override
 	public boolean wantRestart() {
-		return mRestart ;
+		return false;
 	}
 
     @Override
