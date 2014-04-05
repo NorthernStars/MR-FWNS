@@ -1,6 +1,6 @@
-package core;
+package fwns_botremotecontrol.core;
 
-import gui.Botcontrol;
+import fwns_botremotecontrol.gui.Botcontrol;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -69,6 +69,8 @@ public class Core {
                 @Override
                 public void run() {
                     
+                	// Stop running bot processes
+                    BotLoader.stopRunningProcesses();
                     close();
                     
                 }

@@ -1,11 +1,11 @@
-package core;
+package fwns_botremotecontrol.core;
 
 import java.lang.management.ManagementFactory;
 
 public class Main {
     
     public static void main( String[] aCommandline ) {
-        
+    	
         System.setProperty("RemoteControl", ManagementFactory.getRuntimeMXBean().getName() + "" );
         Core.getLogger().info("Starting RemoteControl(" + ManagementFactory.getRuntimeMXBean().getName() + ")" );
         
