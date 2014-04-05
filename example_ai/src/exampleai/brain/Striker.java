@@ -16,10 +16,12 @@ import essentials.core.BotInformation;
 import essentials.core.BotInformation.GamevalueNames;
 import essentials.core.BotInformation.Teams;
 
-
-
-// -bn 3 -tn "Northern Stars" -t blau -ids 3 -s 192.168.178.22:3310 -aiarc "${workspace_loc:FWNS_ExampleAI}/bin" -aicl "exampleai.brain.AI" -aiarg 0
-
+/**
+ * Example striker AI
+ * Simply runs to the ball and tries to kick into the middle of the goal.
+ * @author Hannes Eilers
+ *
+ */
 public class Striker extends Thread implements ArtificialIntelligence {
 
     BotInformation mSelf = null;
@@ -32,28 +34,25 @@ public class Striker extends Thread implements ArtificialIntelligence {
 	private boolean mRestart = false;
     
     @Override
-    public void initializeAI( BotInformation aOneSelf ) {
-        
+    public void initializeAI( BotInformation aOneSelf ) {        
         mSelf = aOneSelf; 
         mIsStarted = true;
-        start();
-        
+        start();        
     }
 
     @Override
-    public void resumeAI() {
-        
-        mIsPaused = false;
-        
+    public void resumeAI() {        
+        mIsPaused = false;        
     }
     
     @Override
-    public void suspendAI() {
-        
-        mIsPaused = true;   
-        
+    public void suspendAI() {        
+        mIsPaused = true;           
     }
     
+    /**
+     * Main function of AI
+     */
     public void run(){
         
         RawWorldData vWorldState = null;
@@ -68,16 +67,21 @@ public class Striker extends Thread implements ArtificialIntelligence {
                     synchronized ( this ) {
                         vWorldState = mWorldState;
                     }
-                    PlayMode mPlayMode = mWorldState.getPlayMode();
-                    if( mPlayMode == PlayMode.KickOff
-                    		|| (mPlayMode == PlayMode.KickOffYellow && mSelf.getTeam() == Teams.Yellow)
-                    		|| (mPlayMode == PlayMode.KickOffBlue && mSelf.getTeam() == Teams.Blue) ){
+                    
+                    // Getting current play mode
+                    PlayMode vPlayMode = mWorldState.getPlayMode();
+                    
+                    // Check for kick off
+                    if( vPlayMode == PlayMode.KickOff
+                    		|| (vPlayMode == PlayMode.KickOffYellow && mSelf.getTeam() == Teams.Yellow)
+                    		|| (vPlayMode == PlayMode.KickOffBlue && mSelf.getTeam() == Teams.Blue) ){
                     	
                     	// --------------- KICK OFF ---------------
-                    	vBotAction = MoveLib.runTo( vWorldState.getBallPosition()  );                   	
+                    	vBotAction = MoveLib.runTo( vWorldState.getBallPosition()  );    
                     	// --------------- KICK OFF END ---------------
                     	
                     }
+                    // No kick off
                     else{
 
 	                    // --------------- START AI -------------------
@@ -106,7 +110,7 @@ public class Striker extends Thread implements ArtificialIntelligence {
                     
                     }
                     
-                    
+                    // Set action
                     synchronized ( this ) {
                         mAction = vBotAction;
                         mNeedNewAction = false;
@@ -124,50 +128,39 @@ public class Striker extends Thread implements ArtificialIntelligence {
     
     @Override
     public synchronized Action getAction() {
-
         synchronized ( this ) {
             if( mAction != null)
                 return mAction;
         }
-        return (Action) Movement.NO_MOVEMENT;
-        
+        return (Action) Movement.NO_MOVEMENT;        
     }
 
     @Override
     public void putWorldState(RawWorldData aWorldState) {
-
         synchronized ( this ) {
             mWorldState = aWorldState;
             mNeedNewAction = true;
-        }
-        
+        }        
     }
 
     @Override
-    public void disposeAI() {
-        
+    public void disposeAI() {        
         mIsStarted = false;
-        mIsPaused = false;
-        
+        mIsPaused = false;        
     }
     
     @Override
     public boolean isRunning() {
-
-        return mIsStarted && !mIsPaused;
-        
+        return mIsStarted && !mIsPaused;        
     }
 
 	@Override
 	public boolean wantRestart() {
-		// TODO Auto-generated method stub
 		return mRestart ;
 	}
 
     @Override
     public void executeCommand( String arg0 ) {
-        // TODO Auto-generated method stub
-        
     }
 
 }
