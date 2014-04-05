@@ -37,7 +37,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
@@ -436,22 +435,27 @@ public class Botcontrol {
                         		
                         		try{
                         			
-                        			String botname = txtBotname.getText();
-                        			String teamname = txtTeamname.getText();
+                        			String botname = txtBotname.getText().trim();
+                        			String teamname = txtTeamname.getText().trim();
                         			String aiclassname = cmbAiClasses.getItemAt( cmbAiClasses.getSelectedIndex() );
-                        			String serverip = txtServerIp.getText();
+                        			String serverip = txtServerIp.getText().trim();
                         			int serverport = (int)( Double.parseDouble(txtServerPort.getText()) );
                         			int rcid = (int)( Double.parseDouble(txtRcId.getText()) );
                         			int vtid = (int)( Double.parseDouble(txtVtId.getText()) );
                         			Teams team = cmbTeam.getItemAt( cmbTeam.getSelectedIndex() );
                         			File aifile = new File(txtBotFile.getText());
                         			
+                        			// check botname
+                        			if( botname.length() == 0 ){
+                        				botname = aiclassname.substring( aiclassname.lastIndexOf(".") );
+                        			}
+                        			
                         			// set bot information
                         			BotInformation vBot = new BotInformation();
-                        			vBot.setBotname(botname.trim());
-                        			vBot.setTeamname(teamname.trim());
-                        			vBot.setAIClassname(aiclassname.trim());
-                        			vBot.setServerIP( InetAddress.getByName(serverip.trim()) );
+                        			vBot.setBotname(botname);
+                        			vBot.setTeamname(teamname);
+                        			vBot.setAIClassname(aiclassname);
+                        			vBot.setServerIP( InetAddress.getByName(serverip) );
                         			vBot.setServerPort( serverport );
                         			vBot.setRcId(rcid);
                         			vBot.setVtId(vtid);
