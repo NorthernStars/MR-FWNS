@@ -75,7 +75,12 @@ public class Striker extends Thread implements ArtificialIntelligence {
                     		|| (vPlayMode == PlayMode.KickOffBlue && mSelf.getTeam() == Teams.Blue) ){
                     	
                     	// --------------- KICK OFF ---------------
-                    	vBotAction = MoveLib.runTo( vWorldState.getBallPosition()  );    
+                    	if( vWorldState.getBallPosition() != null ){
+                    		vBotAction = MoveLib.runTo( vWorldState.getBallPosition()  );
+                    	}
+                    	else{
+                    		vBotAction = MoveLib.runTo( vWorldState.getFieldCenter() );
+                    	}
                     	// --------------- KICK OFF END ---------------
                     	
                     }
