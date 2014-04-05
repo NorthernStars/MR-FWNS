@@ -12,62 +12,63 @@ import essentials.communication.worlddata_server2008.ReferencePoint;
 /**
  * Includes static functions to kick somewhere
  * @author Hannes Eilers
+ * @version 1.0
  *
  */
 public class KickLib {
 
 	/**
-	 * Kick into a direction of an angle in degree with a force (0.0 to 1.0)
-	 * @param aAngle
-	 * @param aForce
-	 * @return Action
+	 * Kick into a direction of an angle with a specific force.
+	 * @param aAngle	{@link Double} angle to kick to in degree
+	 * @param aForce	{@link Float} force to kick with (0.0f - 1.0f)
+	 * @return Action	{@link Action}
 	 */
 	public static Action kickTo( double aAngle, float aForce ){
 		return (Action) new Kick( aAngle, aForce );
 	}
 	
 	/**
-	 * Kick into a direction of an angle in degree with maximum force
-	 * @param aAngle
-	 * @return Action
+	 * Kick into a direction of an angle with maximum force.
+	 * @param aAngle	{@link Double} angle to kick to in degree
+	 * @return Action	{@link Action}
 	 */
 	public static Action kickTo( double aAngle ){
 		return kickTo( aAngle, 1.0f );
 	}
 	
 	/**
-	 * Kicks to reference point with maximum force
-	 * @param aRefPoint
-	 * @return Action
+	 * Kicks to reference point with maximum force.
+	 * @param aRefPoint	{@link ReferencePoint} to kick to
+	 * @return Action	{@link Action}
 	 */
 	public static Action kickTo( ReferencePoint aRefPoint ){
 		return kickTo( aRefPoint, 1.0f );
 	}
 	
 	/**
-	 * Kicks to a reference point with specified force
-	 * @param aRefPoint
-	 * @param aForce
-	 * @return
+	 * Kicks to a reference point with specific force.
+	 * @param aRefPoint	{@link ReferencePoint} to kick to
+	 * @param aForce	{@link Float} force to kick with (0.0f - 1.0f)
+	 * @return			{@link Action}
 	 */
 	public static Action kickTo( ReferencePoint aRefPoint, float aForce ){
 		return kickTo( aRefPoint.getAngleToPoint(), aForce );
 	}
 	
 	/**
-	 * Kicks to a fellow player with maxmimum force
-	 * @param aFellowPlayer
-	 * @return Action
+	 * Kicks to a fellow player with maxmimum force.
+	 * @param aFellowPlayer	{@link FellowPlayer} to kick to
+	 * @return Action		{@link Action}
 	 */
 	public static Action kickTo( FellowPlayer aFellowPlayer ){
 		return kickTo( aFellowPlayer, 1.0f );
 	}
 	
 	/**
-	 * Kicks to a fellow player with specified force
-	 * @param aFellowPlayer
-	 * @param aForce
-	 * @return Action
+	 * Kicks to a fellow player with specific force.
+	 * @param aFellowPlayer	{@link FellowPlayer} to kick to
+	 * @param aForce		{@link Float} force to kick with (0.0f - 1.0f)
+	 * @return Action		{@link Action}
 	 */
 	public static Action kickTo( FellowPlayer aFellowPlayer, float aForce ){
 		return kickTo( aFellowPlayer.getAngleToPlayer(), aForce );
@@ -75,37 +76,37 @@ public class KickLib {
 	
 	
 	/**
-	 * Kicks to nearest teammate
-	 * @param aWorldData
-	 * @return Action
+	 * Kicks to nearest teammate.
+	 * @param aWorldData	{@link RawWorldData}
+	 * @return Action		{@link Action}
 	 */
 	public static Action kickToNearestTeamMate( RawWorldData aWorldData ){
 		return kickToNearest( aWorldData, FellowPlayers.TeamMates );
 	}
 	
 	/**
-	 * Kicks to nearest opponent
-	 * @param aWorldData
-	 * @return Action
+	 * Kicks to nearest opponent.
+	 * @param aWorldData	{@link RawWorldData}
+	 * @return Action		{@link Action}
 	 */
 	public static Action kickToNearestOpponent( RawWorldData aWorldData ){
 		return kickToNearest( aWorldData, FellowPlayers.Opponents );
 	}
 	
 	/**
-	 * Kicks to nearest player (teammate or opponent)
-	 * @param aWorldData
-	 * @return Action
+	 * Kicks to nearest player (teammate or opponent).
+	 * @param aWorldData	{@link RawWorldData}
+	 * @return Action		{@link Action}
 	 */
 	public static Action kickToNearest( RawWorldData aWorldData ){
 		return kickToNearest( aWorldData, FellowPlayers.AllPlayers );
 	}
 	
 	/**
-	 * Kicks to nearest player
-	 * @param aWorldData
-	 * @param aFellowPlayers Value of FellowPlayer enum, that speicifes if to kick to nearest opponent teammate or both.
-	 * @return Action
+	 * Kicks to specific player type.
+	 * @param aWorldData		{@link RawWorldData}
+	 * @param aFellowPlayers 	{@link FellowPlayers} type to kick to
+	 * @return Action			{@link Action}
 	 */
 	private static Action kickToNearest( RawWorldData aWorldData, FellowPlayers aFellowPlayers ){		
         ArrayList<FellowPlayer> vSpieler = new ArrayList<FellowPlayer>();

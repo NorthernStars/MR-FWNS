@@ -28,17 +28,17 @@ public class PostionLibrary {
         assertEquals(" Der Winkel muss 42,81 Grad betragen.", 42.81 , vResultingPoint.getAngleToPoint(), 0.1);
         System.out.println("Winkel 1:"+vFirstPoint.getAngleToPoint());
         System.out.println("Winkel 2:"+vSecondPoint.getAngleToPoint());
-        assertEquals("Der Winkel muss 30 Grad betragen.", 30, PositionLib.getAngleOfTwoReferencePoints(vFirstPoint, vSecondPoint) ,0.1);
+        assertEquals("Der Winkel muss 30 Grad betragen.", 30, PositionLib.getAngleBetweenTwoReferencePoints(vFirstPoint, vSecondPoint) ,0.1);
         System.out.println("Winkel 1:"+vSecondPoint.getAngleToPoint());
         System.out.println("Winkel 2:"+vThirdPoint.getAngleToPoint());
-        assertEquals("Der Winkel muss 140.06 Grad betragen.", 140.06, PositionLib.getAngleOfTwoReferencePoints(vSecondPoint, vThirdPoint) ,0.1);
+        assertEquals("Der Winkel muss 140.06 Grad betragen.", 140.06, PositionLib.getAngleBetweenTwoReferencePoints(vSecondPoint, vThirdPoint) ,0.1);
         System.out.println("Winkel 1:"+vThirdPoint.getAngleToPoint());
         System.out.println("Winkel 2:"+vFourthPoint.getAngleToPoint());
-        assertEquals("Der Winkel muss 51.44 Grad betragen.", 51.44, PositionLib.getAngleOfTwoReferencePoints(vThirdPoint, vFourthPoint) ,0.1);
+        assertEquals("Der Winkel muss 51.44 Grad betragen.", 51.44, PositionLib.getAngleBetweenTwoReferencePoints(vThirdPoint, vFourthPoint) ,0.1);
         System.out.println("Winkel 1:"+vFourthPoint.getAngleToPoint());
         System.out.println("Winkel 2:"+vFirstPoint.getAngleToPoint());
-        assertEquals("Der Winkel muss 138.5 Grad betragen.", 138.5, PositionLib.getAngleOfTwoReferencePoints(vFourthPoint, vFirstPoint) ,0.1);
-        if(PositionLib.isBotInFieldOfFourReferencePoints(vFirstPoint, vSecondPoint, vThirdPoint, vFourthPoint))
+        assertEquals("Der Winkel muss 138.5 Grad betragen.", 138.5, PositionLib.getAngleBetweenTwoReferencePoints(vFourthPoint, vFirstPoint) ,0.1);
+        if(PositionLib.isBotInQuadrangle(vFirstPoint, vSecondPoint, vThirdPoint, vFourthPoint))
         	flag = 1;
         else
         	flag = 0;

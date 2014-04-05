@@ -16,24 +16,21 @@ import essentials.core.BotInformation.Teams;
  * 
  * @author Hannes Eilers, Louis Jorswieck, Eike Petersen
  * @since 0.5
- * @version 0.9
+ * @version 1.0
  *
  */
 public class PositionLib {
 
     /**
-     * Gibt den Punkt in der Mitte von zwei Referenzpunkten als neuen Referenzpunkt zurueck.
-     * 
-     * Dabei wird zwischen den beiden Punkten eine Line errechnet und 
-     * in der Mitte dieser ein neuer Refenzpunkt erstellt. 
+     * Gets {@link ReferencePoint} in middle of two other {@link ReferencePoint}.
      * 
      * @since 0.9
-     * @param aFirstReferencePoint der erste Referenzpunkt
-     * @param aSecondReferencePoint der zweite Referenzpunkt
+     * @param aRefPoint0 	First {@link ReferencePoint}
+     * @param aRefPoint1 Second {@link ReferencePoint}
      * 
-     * @return einen ReferencePoint mit den Koordinaten des Mittelpunkts der Parameter
+     * @return {@link ReferencePoint} in middle between {@code aRefPoint0} and {@code aRerfPoint1}.
      */
-    public static ReferencePoint getMiddleOfTwoReferencePoints( ReferencePoint aFirstReferencePoint, ReferencePoint aSecondReferencePoint ){
+    public static ReferencePoint getMiddleOfTwoReferencePoints( ReferencePoint aRefPoint0, ReferencePoint aRefPoint1 ){
     	
     	    	
         //TODO: vieleicht noch mehr testen!
@@ -43,19 +40,19 @@ public class PositionLib {
         
         double a, b, wa, wb;
         
-        if( aFirstReferencePoint.getAngleToPoint() > aSecondReferencePoint.getAngleToPoint() ){
+        if( aRefPoint0.getAngleToPoint() > aRefPoint1.getAngleToPoint() ){
             
-            a = aFirstReferencePoint.getDistanceToPoint();
-            wa = aFirstReferencePoint.getAngleToPoint();
-            b = aSecondReferencePoint.getDistanceToPoint();
-            wb =aSecondReferencePoint.getAngleToPoint();
+            a = aRefPoint0.getDistanceToPoint();
+            wa = aRefPoint0.getAngleToPoint();
+            b = aRefPoint1.getDistanceToPoint();
+            wb =aRefPoint1.getAngleToPoint();
             
         } else {
 
-            a = aSecondReferencePoint.getDistanceToPoint();
-            wa =aSecondReferencePoint.getAngleToPoint(); 
-            b = aFirstReferencePoint.getDistanceToPoint();
-            wb = aFirstReferencePoint.getAngleToPoint();
+            a = aRefPoint1.getDistanceToPoint();
+            wa =aRefPoint1.getAngleToPoint(); 
+            b = aRefPoint0.getDistanceToPoint();
+            wb = aRefPoint0.getAngleToPoint();
             
         }
         double c = Math.sqrt( a*a + b*b - 2 * a * b * Math.cos(Math.toRadians(Math.abs(wa - wb))));
@@ -86,10 +83,10 @@ public class PositionLib {
     
     
     /**
-     * Returns the middle of enemy goal
-     * @param aWorldData
-     * @param aTeam own team color BotInformation -> getTeam()
-     * @return ReferencePoint
+     * Returns the middle of enemies goal.
+     * @param aWorldData		{@link RawWorldData}
+     * @param aTeam 			Own {@link Teams} information
+     * @return ReferencePoint	{@link ReferencePoint} of middle of enemies goal.
      */
     public static ReferencePoint getMiddleOfGoal( RawWorldData aWorldData, Teams aTeam ){       
         ReferencePoint rGoalMiddle = new ReferencePoint( 0.0 , 0.0, true );
@@ -109,11 +106,12 @@ public class PositionLib {
         rGoalMiddle = PositionLib.getMiddleOfTwoReferencePoints(vGoalTop, vGoalBottom);     
         return rGoalMiddle;
     }
+    
     /**
-     * Returns the middle of own goal
-     * @param aWorldData
-     * @param aTeam own team color BotInformation -> getTeam()
-     * @return ReferencePoint
+     * Returns the middle of own goal.
+     * @param aWorldData		{@link RawWorldData}
+     * @param aTeam 			Own {@link Teams} information
+     * @return ReferencePoint	{@link ReferencePoint} of middle of own goal.
      */
     public static ReferencePoint getMiddleOfOwnGoal( RawWorldData aWorldData, Teams aTeam ){       
         ReferencePoint rOwnGoalMiddle = new ReferencePoint( 0.0 , 0.0, true );
@@ -134,22 +132,28 @@ public class PositionLib {
         return rOwnGoalMiddle;
     }
     
-    
-    public static boolean isBallInRangeOfRefPoint(BallPosition ballPos, ReferencePoint RefPoint,double range){
+    /**
+     * Calculates if ball is in specific range around {@link ReferencePoint}.
+     * @param ballPos	{@link BallPosition}
+     * @param aRefPoint	{@link ReferencePoint}
+     * @param range		{@link Double} range
+     * @return			{@code true} if {@code ballPos} is in {@code range} around {@code aRefPoint}, {@code false} otherwise.
+     */
+    public static boolean isBallInRangeOfRefPoint(BallPosition ballPos, ReferencePoint aRefPoint, double range){
     	
     	double a, b, wa, wb;
         
-        if( ballPos.getAngleToBall() > RefPoint.getAngleToPoint() ){
+        if( ballPos.getAngleToBall() > aRefPoint.getAngleToPoint() ){
             
             a = ballPos.getDistanceToBall();
             wa = ballPos.getAngleToBall();
-            b = RefPoint.getDistanceToPoint();
-            wb = RefPoint.getAngleToPoint();
+            b = aRefPoint.getDistanceToPoint();
+            wb = aRefPoint.getAngleToPoint();
             
         } else {
 
-            a = RefPoint.getDistanceToPoint();
-            wa = RefPoint.getAngleToPoint(); 
+            a = aRefPoint.getDistanceToPoint();
+            wa = aRefPoint.getAngleToPoint(); 
             b = ballPos.getDistanceToBall();
             wb = ballPos.getAngleToBall();
             
@@ -164,15 +168,21 @@ public class PositionLib {
         }
     }
     
-    public static double getDistanceBetweenTwoRefPoints(ReferencePoint RefPoint0, ReferencePoint RefPoint){
+    /**
+     * Calculates the distance between to {@link ReferencePoint}.
+     * @param aRefPoint0	{@link ReferencePoint}
+     * @param aRefPoint1	{@link ReferencePoint}
+     * @return				{@link Double} of distance between {@code aRefPoint0} and {@code aRefPoint1}.
+     */
+    public static double getDistanceBetweenTwoRefPoints(ReferencePoint aRefPoint0, ReferencePoint aRefPoint1){
     	
     	double a, b, wa, wb;
         
             
-        a = RefPoint0.getDistanceToPoint();
-        wa = RefPoint0.getAngleToPoint();
-        b = RefPoint.getDistanceToPoint();
-        wb = RefPoint.getAngleToPoint();
+        a = aRefPoint0.getDistanceToPoint();
+        wa = aRefPoint0.getAngleToPoint();
+        b = aRefPoint1.getDistanceToPoint();
+        wb = aRefPoint1.getAngleToPoint();
          
        
         double c = Math.sqrt( a*a + b*b - 2 * a * b * Math.cos(Math.toRadians(Math.abs(wa - wb))));
@@ -181,9 +191,9 @@ public class PositionLib {
     }
 
     /**
-     * Get's the Defensive Midfielder position
-     * @param aWorldData
-     * @return ReferencePoint
+     * Get's the {@link ReferencePoint} farest away from ball.
+     * @param aWorldData		{@link RawWorldData}
+     * @return ReferencePoint	{@link ReferencePoint} farest away from ball.
      */
     public static ReferencePoint getBestPointAwayFromBall( RawWorldData aWorldData ) {        
         ReferencePoint vBestPoint = null;
@@ -224,23 +234,29 @@ public class PositionLib {
     }
     
 
-	public static double getAngleOfTwoReferencePoints( ReferencePoint aFirstReferencePoint, ReferencePoint aSecondReferencePoint ){
+    /**
+     * Calculates angle between two reference points
+     * @param aRefPoint0	{@link ReferencePoint}
+     * @param aRefPoint1	{@link ReferencePoint}
+     * @return				{@link Double} agnle between {@code aRefPoint0} and {@code aRefPoint1}.
+     */
+	public static double getAngleBetweenTwoReferencePoints( ReferencePoint aRefPoint0, ReferencePoint aRefPoint1 ){
 		   
 	    double wa, wb;
 	    
-	    if( aFirstReferencePoint.getAngleToPoint() > aSecondReferencePoint.getAngleToPoint() ){
+	    if( aRefPoint0.getAngleToPoint() > aRefPoint1.getAngleToPoint() ){
 	        
 	        
-	        wa = aFirstReferencePoint.getAngleToPoint();
+	        wa = aRefPoint0.getAngleToPoint();
 	       
-	        wb =aSecondReferencePoint.getAngleToPoint();
+	        wb =aRefPoint1.getAngleToPoint();
 	        
 	    } else {
 	
 	        
-	        wa =aSecondReferencePoint.getAngleToPoint(); 
+	        wa =aRefPoint1.getAngleToPoint(); 
 	       
-	        wb = aFirstReferencePoint.getAngleToPoint();
+	        wb = aRefPoint0.getAngleToPoint();
 	        
 	    }
 	    double gamma = 0;
@@ -250,56 +266,92 @@ public class PositionLib {
 	    	gamma = 360 - gamma;
 	    
 	    return gamma;
+	}
+	
+	/**
+	 * Calculates if bot isside quadrilateral of {@link ReferencePoint}.
+	 * @param aRefPoint0	{@link ReferencePoint}
+	 * @param aRefPoint1	{@link ReferencePoint}
+	 * @param aRefPoint2	{@link ReferencePoint}
+	 * @param aRefPoint3	{@link ReferencePoint}
+	 * @return				{@code true} if bot is inside quadrilateral {@code aRefPoint0} to {@code aRefPoint3}, {@code false} otherwise.
+	 */
+	public static boolean isBotInQuadrangle(ReferencePoint aRefPoint0, ReferencePoint aRefPoint1, ReferencePoint aRefPoint2, ReferencePoint aRefPoint3){
+		double angle1, angle2, angle3, angle4;
+		angle1= PositionLib.getAngleBetweenTwoReferencePoints(aRefPoint0, aRefPoint1);
+		angle2= PositionLib.getAngleBetweenTwoReferencePoints(aRefPoint1, aRefPoint2);
+		angle3= PositionLib.getAngleBetweenTwoReferencePoints(aRefPoint2, aRefPoint3);
+		angle4= PositionLib.getAngleBetweenTwoReferencePoints(aRefPoint3, aRefPoint0);
+		if(angle1+angle2+angle3+angle4 < 361 && angle1+angle2+angle3+angle4 > 359){
+			return true;
+		}else {
+			return false;
 		}
+	}
+	
+	/**
+	 * Calculates if bot is inside soccer field.
+	 * @param aWorldData	{@link RawWorldData}
+	 * @return				{@code true} if bot is inside soccer field, {@code false} othwerwise.
+	 */
+	public static boolean isMeselfOutOfBounds( RawWorldData aWorldData ){
+		return isBotInQuadrangle(aWorldData.getBlueFieldCornerTop(),
+				aWorldData.getBlueFieldCornerBottom(),
+				aWorldData.getYellowFieldCornerBottom(),
+				aWorldData.getYellowFieldCornerTop());
+	}
 	
 	
-	public static boolean isBotInFieldOfFourReferencePoints(ReferencePoint aFirstReferencePoint, ReferencePoint aSecondReferencePoint, ReferencePoint aThirdReferencePoint, ReferencePoint aFourthReferencePoint){
-			double angle1, angle2, angle3, angle4;
-			angle1= PositionLib.getAngleOfTwoReferencePoints(aFirstReferencePoint, aSecondReferencePoint);
-			angle2= PositionLib.getAngleOfTwoReferencePoints(aSecondReferencePoint, aThirdReferencePoint);
-			angle3= PositionLib.getAngleOfTwoReferencePoints(aThirdReferencePoint, aFourthReferencePoint);
-			angle4= PositionLib.getAngleOfTwoReferencePoints(aFourthReferencePoint, aFirstReferencePoint);
-			if(angle1+angle2+angle3+angle4 < 361 && angle1+angle2+angle3+angle4 > 359){
-				return true;
-			}else {
-				return false;
-			}
-		}
-	
-	/*
-	* TODO: Complete function to get if the Ball is in an area of 4 ReferencePoints
-	* */
-	
-	public static boolean isBallInAreaOfFourRefPoints(ReferencePoint aFirstPoint, ReferencePoint aSecondPoint, ReferencePoint aThirdPoint, ReferencePoint aFourthPoint, BallPosition ballPos){
+	/**
+	 * Calculates if ball is inside qaudrilateral of {@link ReferencePoint}.
+	 * ATTENTION: FUNCTION IS NOT WORKING!
+	 * @param aRefPoint0	{@link ReferencePoint}
+	 * @param aRefPoint1	{@link ReferencePoint}
+	 * @param aRefPoint2	{@link ReferencePoint}
+	 * @param aRefPoint3	{@link ReferencePoint}
+	 * @param ballPos		{@link BallPosition}
+	 * @return				{@code true} if {@code ballPos} is inside quadrilateral {@code aRefPoint0} to {@code aRefPoint3}, {@code false} otherwise.
+	 */
+	public static boolean isBallInQuadrangle(ReferencePoint aRefPoint0, ReferencePoint aRefPoint1, ReferencePoint aRefPoint2, ReferencePoint aRefPoint3, BallPosition ballPos){
+		
+		/*
+		* TODO: Complete function to get if the Ball is in an area of 4 ReferencePoints
+		* */
 		
 		double smallestX = 0;
 		@SuppressWarnings("unused")
 		double secondsmallestX = 0;
 //		double biggestX = 0;
 		
-		smallestX = aFirstPoint.getXOfPoint();
-		if(aSecondPoint.getXOfPoint() < smallestX)
+		smallestX = aRefPoint0.getXOfPoint();
+		if(aRefPoint1.getXOfPoint() < smallestX)
 			secondsmallestX = smallestX;
-			smallestX = aSecondPoint.getXOfPoint();
-		if(aThirdPoint.getXOfPoint() < smallestX)
+			smallestX = aRefPoint1.getXOfPoint();
+		if(aRefPoint2.getXOfPoint() < smallestX)
 			secondsmallestX = smallestX;
-			smallestX = aThirdPoint.getXOfPoint();
-		if(aFourthPoint.getXOfPoint() < smallestX)
+			smallestX = aRefPoint2.getXOfPoint();
+		if(aRefPoint3.getXOfPoint() < smallestX)
 			secondsmallestX = smallestX;
-			smallestX = aFourthPoint.getXOfPoint();
-		
-		
-		
+			smallestX = aRefPoint3.getXOfPoint();
 		
 		return true;
 		
 	}
-	public static boolean amINearestToPoint(RawWorldData vWorldState, ReferencePoint RefPoint, BotInformation aSelf){
+	
+	/**
+	 * Calculate if agent is nearest team mate to a {@link ReferencePoint}.
+	 * @param vWorldState	{@link RawWorldData}
+	 * @param aRefPoint		{@link ReferencePoint}
+	 * @param aSelf			{@link BotInformation}
+	 * @return				{@code true} if bot is nearest team mate to {@code aRefPoint}.
+	 */
+	public static boolean amINearestMateToPoint(RawWorldData vWorldState, ReferencePoint aRefPoint, BotInformation aSelf){
 		List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
 		vTeamMates.add(new FellowPlayer(aSelf.getVtId(),"me", true,0,0,0) );
+		
 		FellowPlayer closest_player = null;
 		for ( FellowPlayer a: vTeamMates){
-			if(closest_player == null || PlayersLib.getDistanceBetweenPlayerAndPoint(a, RefPoint) < PlayersLib.getDistanceBetweenPlayerAndPoint(closest_player, RefPoint)){
+			if(closest_player == null || PlayersLib.getDistanceBetweenPlayerAndPoint(a, aRefPoint) < PlayersLib.getDistanceBetweenPlayerAndPoint(closest_player, aRefPoint)){
 				closest_player = a;
 			}
 		}

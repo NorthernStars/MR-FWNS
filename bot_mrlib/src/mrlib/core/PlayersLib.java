@@ -12,7 +12,7 @@ import essentials.core.BotInformation.GamevalueNames;
 
 /**
  * Includes static functions to get or calculate positions of players or the ball on the playing field.
- * !!! Needs verification still not fully tested and not final !!!
+ * @version 1.0
  *  
  * @author Louis Jorswieck
  * 
@@ -27,20 +27,16 @@ public class PlayersLib {
      * @return FellowPlayer nearestMate, Teammate with the shortest distance to oneself
      */
 	public static FellowPlayer getNearestMate(RawWorldData vWorldState, BotInformation mSelf){
-        List<FellowPlayer> vOpponents = vWorldState.getListOfOpponents();
         List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
+        
 		FellowPlayer nearestMate = null;
-    	for( FellowPlayer p : vOpponents){
-    		if(p.getDistanceToPlayer() < 2*mSelf.getGamevalue( GamevalueNames.KickRange )){
-    			for( FellowPlayer a : vTeamMates){
-    				if( nearestMate == null || a.getDistanceToPlayer() < nearestMate.getDistanceToPlayer()){
-    					nearestMate = a;
-    				}                    				
-    			
-    			}
-    			
-    		}
-    	}
+    	for( FellowPlayer a : vTeamMates){
+			if( nearestMate == null || a.getDistanceToPlayer() < nearestMate.getDistanceToPlayer()){
+				nearestMate = a;
+			}                    				
+		
+		}
+
 		return nearestMate;
 	}
 	 /**
@@ -161,9 +157,11 @@ public class PlayersLib {
 	public static FellowPlayer getNearestMateWithoutEnemyAround(RawWorldData vWorldState, BotInformation mSelf){
         List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
 		FellowPlayer nearestMate = null;
+		
     	for( FellowPlayer p : vTeamMates){
     		if( nearestMate == null || p.getDistanceToPlayer() < nearestMate.getDistanceToPlayer() ){
-    			if(!PlayersLib.isEnemyAroundMate(vWorldState, mSelf, p)) {
+    			if( !PlayersLib.isEnemyAroundMate(vWorldState, mSelf, p)
+    					&& p.getId() != mSelf.getVtId() ) {
     				nearestMate = p;
     			}
     		}
@@ -219,17 +217,20 @@ public class PlayersLib {
 	public static boolean amINearestToBall(RawWorldData vWorldState, BallPosition ballPos, BotInformation mSelf){
 		List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
 		vTeamMates.add(new FellowPlayer(mSelf.getVtId(), mSelf.getBotname(), true, 0, 0, 0) );
+		
 		FellowPlayer closest_player = null;
 		for ( FellowPlayer a: vTeamMates){
-			if(closest_player == null || PlayersLib.getDistanceBetweenPlayerAndBall(a, ballPos) < PlayersLib.getDistanceBetweenPlayerAndBall(closest_player, ballPos)){
+			if(closest_player == null
+					|| PlayersLib.getDistanceBetweenPlayerAndBall(a, ballPos) < PlayersLib.getDistanceBetweenPlayerAndBall(closest_player, ballPos)){
 				closest_player = a;
 			}
 		}
+		
 		if(closest_player.getId() == mSelf.getVtId()){
 			return true;
-		}else{
-			return false;
 		}
+		
+		return false;
 	}
 	
 	/*
