@@ -3,7 +3,6 @@ package exampleai.brain;
 
 import mrlib.core.KickLib;
 import mrlib.core.MoveLib;
-import mrlib.core.PlayersLib;
 import mrlib.core.PositionLib;
 import essentials.communication.Action;
 import essentials.communication.action_server2008.Movement;
@@ -95,7 +94,8 @@ public class Striker extends Thread implements ArtificialIntelligence {
 	                    	if( ballPos.getDistanceToBall() < mSelf.getGamevalue( GamevalueNames.KickRange ) ){                 
 	                    		// kick
 	                    		ReferencePoint goalMid = PositionLib.getMiddleOfGoal( vWorldState, mSelf.getTeam() );
-	                    		vBotAction = KickLib.kickTo( goalMid );                    		
+	                    		vBotAction = KickLib.kickTo( goalMid ); 
+	                    		
 	                    	} else {
 	                    		// move to ball
 	                    		vBotAction = MoveLib.runTo( ballPos );
