@@ -1,4 +1,4 @@
-package core;
+package fwns_botremotecontrol.core;
 
 import java.rmi.Naming;
 import java.rmi.server.UnicastRemoteObject;
@@ -33,7 +33,7 @@ public class RemoteControlClient {
         for (int i = 0; i < names.length; i++)
             System.out.println(names[i]);
         
-        obj.unregisterLogListener( null );
+        obj.unregisterLogListener( -1 );
         obj.closeBot();
 
         names = Naming.list("//localhost:1099/");

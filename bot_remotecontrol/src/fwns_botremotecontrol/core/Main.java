@@ -1,4 +1,4 @@
-package core;
+package fwns_botremotecontrol.core;
 
 import java.lang.management.ManagementFactory;
 

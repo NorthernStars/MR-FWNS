@@ -1,4 +1,4 @@
-package gui;
+package fwns_botremotecontrol.gui;
 
 import java.awt.EventQueue;
 
@@ -18,7 +18,8 @@ import javax.swing.JSeparator;
 import java.awt.GridBagLayout;
 
 import javax.swing.JPanel;
-import core.Core;
+
+import fwns_botremotecontrol.core.Core;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;

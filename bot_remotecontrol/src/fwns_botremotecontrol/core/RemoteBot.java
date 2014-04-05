@@ -1,4 +1,4 @@
-package core;
+package fwns_botremotecontrol.core;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -11,11 +11,11 @@ import javax.swing.SwingUtilities;
 
 import org.apache.logging.log4j.core.LogEvent;
 
+import fwns_botremotecontrol.gui.BotFrame;
 import fwns_network.botremotecontrol.BotStatusType;
 import fwns_network.botremotecontrol.LogListener;
 import fwns_network.botremotecontrol.RemoteControlInterface;
 import fwns_network.botremotecontrol.StatusListener;
-import gui.BotFrame;
 
 public class RemoteBot implements LogListener, StatusListener {
 

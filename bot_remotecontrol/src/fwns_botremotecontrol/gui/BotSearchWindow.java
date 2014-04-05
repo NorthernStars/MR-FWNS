@@ -1,4 +1,4 @@
-package gui;
+package fwns_botremotecontrol.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -16,8 +16,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import core.Core;
-import core.RemoteBot;
+import fwns_botremotecontrol.core.Core;
+import fwns_botremotecontrol.core.RemoteBot;
 
 public class BotSearchWindow extends JFrame {
 

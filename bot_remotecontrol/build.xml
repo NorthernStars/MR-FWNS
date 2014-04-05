@@ -5,7 +5,7 @@
     <target name="create_run_jar">
         <jar destfile="E:/workspace/MR-FWNS/MixedRealityBot/bot_remotecontrol.jar" filesetmanifest="mergewithoutmain">
             <manifest>
-                <attribute name="Main-Class" value="core.Main"/>
+                <attribute name="Main-Class" value="fwns_botremotecontrol.core.Main"/>
                 <attribute name="Class-Path" value="."/>
             </manifest>
             <fileset dir="E:/workspace/MR-FWNS/bot_remotecontrol/bin"/>

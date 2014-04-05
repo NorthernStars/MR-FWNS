@@ -1,4 +1,4 @@
-package gui;
+package fwns_botremotecontrol.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -48,9 +48,9 @@ import javax.swing.text.BadLocationException;
 
 import org.apache.logging.log4j.Level;
 
-import core.RemoteBot;
 import essentials.core.BotInformation;
 import essentials.core.BotInformation.Teams;
+import fwns_botremotecontrol.core.RemoteBot;
 import fwns_network.botremotecontrol.BotStatusType;
 
 public class BotFrame extends JPanel {
