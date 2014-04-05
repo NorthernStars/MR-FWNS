@@ -144,7 +144,8 @@ public class BotLoader implements Runnable {
 			while( isActive() && mReader != null ){
 				String line = mReader.readLine();
 				if( line != null ){
-					System.out.println( line );
+					// Uncomment to see process output
+//					System.out.println( line );
 				}
 			}
 
