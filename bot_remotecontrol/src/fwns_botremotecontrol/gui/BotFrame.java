@@ -65,55 +65,56 @@ public class BotFrame extends JPanel {
     private JButton mPanelHeadPanelBackLabelButtonExpandContract;
     private JPanel mPanelHead;
     private JTabbedPane mTabbedPane;
-    private JPanel vTabbedPanePanelStatus;
-    private JPanel vTabbedPanePanelData;
-    private JPanel vTabbedPanePanelConnection;
-    private JPanel vTabbedPanePanelLoggingPanelControlRight;
+    private JPanel vPanelStatus;
+    private JPanel vPanelData;
+    private JPanel vPanelConnection;
+    private JPanel vLoggingPanelControlRight;
     private JScrollPane scrollPane_Logging;
-    private JTextArea mTabbedPanePanelLoggingTextarea;
+    private JTextArea mLoggingTextarea;
     private JPopupMenu popupMenu;
     private JMenuItem mntmCopy;
     private JMenuItem mntmSetMaxLines;
-    private JButton mTabbedPanePanelLoggingPanelControlButtonDisconnectlogger;
-    private JButton mTabbedPanePanelLoggingPanelControlButtonConnectlogger;
+    private JButton mLoggingControlButtonDisconnectlogger;
+    private JButton mLoggingControlButtonConnectlogger;
     private JComboBox mTabbedPanePanelLoggingPanelControlComboBoxLoglevel;
-    private JPanel vTabbedPanePanelAIPanelArguments;
-    private JTextField mTabbedPanePanelAIPanelExecutionTextfieldAiarchive;
-    private JTextField mTabbedPanePanelAIPanelExecutionTextfieldAiclass;
-    private JTextField mTabbedPanePanelConnectionTextfieldServeraddress;
-    private JTextField mTabbedPanePanelConnectionTextfieldServerteamport;
-    private JTextField mTabbedPanePanelConnectionTextfieldBotaddress;
-    private JTextField mTabbedPanePanelConnectionTextfieldBotport;
-    private JTextField mTabbedPanePanelDataPanelGeneralTextfieldBotname;
-    private JTextField mTabbedPanePanelDataPanelGeneralTextFieldBotteamname;
-    private JTextField mTabbedPanePanelDataPanelGeneralTextfieldRcid;
-    private JTextField mTabbedPanePanelDataPanelGeneralTextfieldVtid;
+    private JPanel vPanelAIPanelArguments;
+    private JTextField mAIExecutionTextfieldAiarchive;
+    private JTextField mAIExecutionTextfieldAiclass;
+    private JTextField mConnectionTextfieldServeraddress;
+    private JTextField mConnectionTextfieldServerteamport;
+    private JTextField mConnectionTextfieldBotaddress;
+    private JTextField mConnectionTextfieldBotport;
+    private JTextField mDataGeneralTextfieldBotname;
+    private JTextField mDataGeneralTextFieldBotteamname;
+    private JTextField mDataGeneralTextfieldRcid;
+    private JTextField mDataGeneralTextfieldVtid;
     private JLabel mPanelHeadPanelBackLabelNetworkConnected;
     private JLabel mPanelHeadPanelBackLabelNetworkTrafficOutgoing;
     private JLabel mPanelHeadPanelBackLabelNetworkTrafficIncoming;
     private JLabel mPanelHeadPanelBackLabelAIRunning;
     private JLabel mPanelHeadPanelBackLabelAILoaded;
-    private JLabel mTabbedPanePanelStatusPanelNetworkstatusLabelConnectedstatus;
-    private JLabel mTabbedPanePanelStatusPanelAiLabelRunningstatus;
-    private JLabel mTabbedPanePanelStatusPanelNetworkstatusLabelTrafficoutgoingstatus;
-    private JLabel mTabbedPanePanelStatusPanelNetworkstatusLabelTrafficincomingstatus;
-    private JLabel mTabbedPanePanelStatusPanelAiLabelLoadedstatus;
-    private JTable mTabbedPanePanelDataPanelServerconstantsTable;
-    private JComboBox mTabbedPanePanelDataPanelGeneralComboBoxTeam;
-    private JButton mTabbedPanePanelConnectionButtonConnect;
-    private JButton mTabbedPanePanelConnectionButtonReconnect;
-    private JButton mTabbedPanePanelConnectionButtonDisconnect;
-    private JButton mTabbedPanePanelAIPanelArgumentsButtonExecute;
-    private JTextArea mTabbedPanePanelAIPanelArgumentsTextareaAiarguments;
-    private JButton mTabbedPanePanelAIPanelExecutionButtonAiinitialise;
-    private JButton mTabbedPanePanelAIPanelExecutionButtonAiunpause;
-    private JButton mTabbedPanePanelAIPanelExecutionButtonAidispose;
-    private JButton mTabbedPanePanelAIPanelExecutionButtonAipause;
+    private JLabel mStatusNetworkstatusLabelConnectedstatus;
+    private JLabel mStatusAiLabelRunningstatus;
+    private JLabel mStatusNetworkstatusLabelTrafficoutgoingstatus;
+    private JLabel mStatusNetworkstatusLabelTrafficincomingstatus;
+    private JLabel mStatusAiLabelLoadedstatus;
+    private JTable mDataPanelServerconstantsTable;
+    private JComboBox mDataGeneralComboBoxTeam;
+    private JButton mConnectionButtonConnect;
+    private JButton mConnectionButtonReconnect;
+    private JButton mConnectionButtonDisconnect;
+    private JButton mAIArgumentsButtonExecute;
+    private JTextArea mAIArgumentsTextareaAiarguments;
+    private JButton mAIExecutionButtonAiinitialise;
+    private JButton mAIExecutionButtonAiunpause;
+    private JButton mAIExecutionButtonAidispose;
+    private JButton mAIExecutionButtonAipause;
 
     private RemoteBot mTheRemoteBot;
-    private JButton mTabbedPanePanelDataPanelGeneralButtonChangeData;
+    private JButton mDataGeneralButtonChangeData;
 
     private BotInformation mBotInformation;
+    public JButton btnStatusButtonStopBot;
 
     /**
      * Create the panel.
@@ -122,7 +123,7 @@ public class BotFrame extends JPanel {
         
         setBorder(new LineBorder(UIManager.getColor("TabbedPane.selected"), 3));
         setLayout(new BorderLayout(0, 0));
-        setPreferredSize(new Dimension(363, 221));
+        setPreferredSize(new Dimension(349, 249));
         setMinimumSize(new Dimension(400, 45));
         setMaximumSize(new Dimension(10000, 45));
         
@@ -246,69 +247,69 @@ public class BotFrame extends JPanel {
         mTabbedPane = new JTabbedPane(SwingConstants.TOP);
         add(mTabbedPane, BorderLayout.CENTER);
         
-        vTabbedPanePanelStatus = new JPanel();
-        mTabbedPane.addTab("Status", null, vTabbedPanePanelStatus, null);
-        vTabbedPanePanelStatus.setLayout(null);
+        vPanelStatus = new JPanel();
+        mTabbedPane.addTab("Status", null, vPanelStatus, null);
+        vPanelStatus.setLayout(null);
         
-        JPanel vTabbedPanePanelStatusPanelNetworkstatus = new JPanel();
-        vTabbedPanePanelStatusPanelNetworkstatus.setBorder(new TitledBorder(null, "Network", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        vTabbedPanePanelStatusPanelNetworkstatus.setBounds(10, 11, 150, 100);
-        vTabbedPanePanelStatus.add(vTabbedPanePanelStatusPanelNetworkstatus);
-        vTabbedPanePanelStatusPanelNetworkstatus.setLayout(null);
+        JPanel vStatusPanelNetworkstatus = new JPanel();
+        vStatusPanelNetworkstatus.setBorder(new TitledBorder(null, "Network", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        vStatusPanelNetworkstatus.setBounds(10, 11, 150, 100);
+        vPanelStatus.add(vStatusPanelNetworkstatus);
+        vStatusPanelNetworkstatus.setLayout(null);
         
-        JLabel vTabbedPanePanelStatusPanelNetworkstatusLabelConnected = new JLabel("Connected....................");
-        vTabbedPanePanelStatusPanelNetworkstatusLabelConnected.setBounds(10, 15, 113, 17);
-        vTabbedPanePanelStatusPanelNetworkstatus.add(vTabbedPanePanelStatusPanelNetworkstatusLabelConnected);
+        JLabel vStatusNetworkstatusLabelConnected = new JLabel("Connected....................");
+        vStatusNetworkstatusLabelConnected.setBounds(10, 15, 113, 17);
+        vStatusPanelNetworkstatus.add(vStatusNetworkstatusLabelConnected);
         
-        mTabbedPanePanelStatusPanelNetworkstatusLabelConnectedstatus = new JLabel("");
-        mTabbedPanePanelStatusPanelNetworkstatusLabelConnectedstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
-        mTabbedPanePanelStatusPanelNetworkstatusLabelConnectedstatus.setBounds(120, 15, 17, 17);
-        vTabbedPanePanelStatusPanelNetworkstatus.add(mTabbedPanePanelStatusPanelNetworkstatusLabelConnectedstatus);
+        mStatusNetworkstatusLabelConnectedstatus = new JLabel("");
+        mStatusNetworkstatusLabelConnectedstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
+        mStatusNetworkstatusLabelConnectedstatus.setBounds(120, 15, 17, 17);
+        vStatusPanelNetworkstatus.add(mStatusNetworkstatusLabelConnectedstatus);
         
-        JLabel vTabbedPanePanelStatusPanelNetworkstatusLabelTrafficincoming = new JLabel("Traffic incoming.............");
-        vTabbedPanePanelStatusPanelNetworkstatusLabelTrafficincoming.setBounds(10, 43, 113, 17);
-        vTabbedPanePanelStatusPanelNetworkstatus.add(vTabbedPanePanelStatusPanelNetworkstatusLabelTrafficincoming);
+        JLabel vStatusNetworkstatusLabelTrafficincoming = new JLabel("Traffic incoming.............");
+        vStatusNetworkstatusLabelTrafficincoming.setBounds(10, 43, 113, 17);
+        vStatusPanelNetworkstatus.add(vStatusNetworkstatusLabelTrafficincoming);
         
-        mTabbedPanePanelStatusPanelNetworkstatusLabelTrafficincomingstatus = new JLabel("");
-        mTabbedPanePanelStatusPanelNetworkstatusLabelTrafficincomingstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
-        mTabbedPanePanelStatusPanelNetworkstatusLabelTrafficincomingstatus.setBounds(120, 43, 17, 17);
-        vTabbedPanePanelStatusPanelNetworkstatus.add(mTabbedPanePanelStatusPanelNetworkstatusLabelTrafficincomingstatus);
+        mStatusNetworkstatusLabelTrafficincomingstatus = new JLabel("");
+        mStatusNetworkstatusLabelTrafficincomingstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
+        mStatusNetworkstatusLabelTrafficincomingstatus.setBounds(120, 43, 17, 17);
+        vStatusPanelNetworkstatus.add(mStatusNetworkstatusLabelTrafficincomingstatus);
         
-        JLabel vTabbedPanePanelStatusPanelNetworkstatusLabelTrafficoutgoing = new JLabel("Traffic outgoing............");
-        vTabbedPanePanelStatusPanelNetworkstatusLabelTrafficoutgoing.setBounds(10, 71, 113, 17);
-        vTabbedPanePanelStatusPanelNetworkstatus.add(vTabbedPanePanelStatusPanelNetworkstatusLabelTrafficoutgoing);
+        JLabel vStatusNetworkstatusLabelTrafficoutgoing = new JLabel("Traffic outgoing............");
+        vStatusNetworkstatusLabelTrafficoutgoing.setBounds(10, 71, 113, 17);
+        vStatusPanelNetworkstatus.add(vStatusNetworkstatusLabelTrafficoutgoing);
         
-        mTabbedPanePanelStatusPanelNetworkstatusLabelTrafficoutgoingstatus = new JLabel("");
-        mTabbedPanePanelStatusPanelNetworkstatusLabelTrafficoutgoingstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
-        mTabbedPanePanelStatusPanelNetworkstatusLabelTrafficoutgoingstatus.setBounds(120, 71, 17, 17);
-        vTabbedPanePanelStatusPanelNetworkstatus.add(mTabbedPanePanelStatusPanelNetworkstatusLabelTrafficoutgoingstatus);
+        mStatusNetworkstatusLabelTrafficoutgoingstatus = new JLabel("");
+        mStatusNetworkstatusLabelTrafficoutgoingstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
+        mStatusNetworkstatusLabelTrafficoutgoingstatus.setBounds(120, 71, 17, 17);
+        vStatusPanelNetworkstatus.add(mStatusNetworkstatusLabelTrafficoutgoingstatus);
         
-        JPanel vTabbedPanePanelStatusPanelAi = new JPanel();
-        vTabbedPanePanelStatusPanelAi.setLayout(null);
-        vTabbedPanePanelStatusPanelAi.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "AI", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        vTabbedPanePanelStatusPanelAi.setBounds(170, 11, 150, 73);
-        vTabbedPanePanelStatus.add(vTabbedPanePanelStatusPanelAi);
+        JPanel vStatusPanelAi = new JPanel();
+        vStatusPanelAi.setLayout(null);
+        vStatusPanelAi.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "AI", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        vStatusPanelAi.setBounds(170, 11, 150, 73);
+        vPanelStatus.add(vStatusPanelAi);
         
-        JLabel vTabbedPanePanelStatusPanelAiLabelRunning = new JLabel("Running.........................");
-        vTabbedPanePanelStatusPanelAiLabelRunning.setBounds(10, 15, 113, 17);
-        vTabbedPanePanelStatusPanelAi.add(vTabbedPanePanelStatusPanelAiLabelRunning);
+        JLabel vStatusAiLabelRunning = new JLabel("Running.........................");
+        vStatusAiLabelRunning.setBounds(10, 15, 113, 17);
+        vStatusPanelAi.add(vStatusAiLabelRunning);
         
-        mTabbedPanePanelStatusPanelAiLabelRunningstatus = new JLabel("");
-        mTabbedPanePanelStatusPanelAiLabelRunningstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
-        mTabbedPanePanelStatusPanelAiLabelRunningstatus.setBounds(120, 15, 17, 17);
-        vTabbedPanePanelStatusPanelAi.add(mTabbedPanePanelStatusPanelAiLabelRunningstatus);
+        mStatusAiLabelRunningstatus = new JLabel("");
+        mStatusAiLabelRunningstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
+        mStatusAiLabelRunningstatus.setBounds(120, 15, 17, 17);
+        vStatusPanelAi.add(mStatusAiLabelRunningstatus);
         
-        JLabel vTabbedPanePanelStatusPanelAiLabelLoaded = new JLabel("Loaded..........................");
-        vTabbedPanePanelStatusPanelAiLabelLoaded.setBounds(10, 43, 113, 17);
-        vTabbedPanePanelStatusPanelAi.add(vTabbedPanePanelStatusPanelAiLabelLoaded);
+        JLabel vStatusAiLabelLoaded = new JLabel("Loaded..........................");
+        vStatusAiLabelLoaded.setBounds(10, 43, 113, 17);
+        vStatusPanelAi.add(vStatusAiLabelLoaded);
         
-        mTabbedPanePanelStatusPanelAiLabelLoadedstatus = new JLabel("");
-        mTabbedPanePanelStatusPanelAiLabelLoadedstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
-        mTabbedPanePanelStatusPanelAiLabelLoadedstatus.setBounds(120, 43, 17, 17);
-        vTabbedPanePanelStatusPanelAi.add(mTabbedPanePanelStatusPanelAiLabelLoadedstatus);
+        mStatusAiLabelLoadedstatus = new JLabel("");
+        mStatusAiLabelLoadedstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
+        mStatusAiLabelLoadedstatus.setBounds(120, 43, 17, 17);
+        vStatusPanelAi.add(mStatusAiLabelLoadedstatus);
         
-        JButton vTabbedPanePanelStatusButtonManuallystatuscheck = new JButton("Manually check status");
-        vTabbedPanePanelStatusButtonManuallystatuscheck.addActionListener(new ActionListener() {
+        JButton vStatusButtonManuallystatuscheck = new JButton("Manually check status");
+        vStatusButtonManuallystatuscheck.addActionListener(new ActionListener() {
             @Override
 			public void actionPerformed(ActionEvent e) {
                 
@@ -321,66 +322,77 @@ public class BotFrame extends JPanel {
                 
             }
         });
-        vTabbedPanePanelStatusButtonManuallystatuscheck.setBounds(10, 122, 310, 23);
-        vTabbedPanePanelStatus.add(vTabbedPanePanelStatusButtonManuallystatuscheck);
+        vStatusButtonManuallystatuscheck.setBounds(10, 113, 310, 23);
+        vPanelStatus.add(vStatusButtonManuallystatuscheck);
         
-        vTabbedPanePanelData = new JPanel();
-        mTabbedPane.addTab("Data", null, vTabbedPanePanelData, null);
-        vTabbedPanePanelData.setLayout(new BorderLayout(0, 0));
+        btnStatusButtonStopBot = new JButton("Stop bot");
+        btnStatusButtonStopBot.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		if( mTheRemoteBot.getBotLoader() != null ){
+        			mTheRemoteBot.getBotLoader().stopBot();
+        		}
+        	}
+        });
+        btnStatusButtonStopBot.setBounds(10, 141, 310, 23);
+        vPanelStatus.add(btnStatusButtonStopBot);
         
-        JPanel vTabbedPanePanelDataPanelGeneral = new JPanel();
-        vTabbedPanePanelDataPanelGeneral.setPreferredSize(new Dimension(200, 10));
-        vTabbedPanePanelData.add(vTabbedPanePanelDataPanelGeneral, BorderLayout.WEST);
-        vTabbedPanePanelDataPanelGeneral.setLayout(null);
+        vPanelData = new JPanel();
+        mTabbedPane.addTab("Data", null, vPanelData, null);
+        vPanelData.setLayout(new BorderLayout(0, 0));
         
-        JLabel vTabbedPanePanelDataPanelGeneralLabelBotname = new JLabel("Botname");
-        vTabbedPanePanelDataPanelGeneralLabelBotname.setBounds(10, 11, 180, 14);
-        vTabbedPanePanelDataPanelGeneral.add(vTabbedPanePanelDataPanelGeneralLabelBotname);
+        JPanel vDataPanelGeneral = new JPanel();
+        vDataPanelGeneral.setPreferredSize(new Dimension(200, 10));
+        vPanelData.add(vDataPanelGeneral, BorderLayout.WEST);
+        vDataPanelGeneral.setLayout(null);
         
-        mTabbedPanePanelDataPanelGeneralTextfieldBotname = new JTextField();
-        mTabbedPanePanelDataPanelGeneralTextfieldBotname.setBounds(10, 26, 180, 20);
-        vTabbedPanePanelDataPanelGeneral.add(mTabbedPanePanelDataPanelGeneralTextfieldBotname);
-        mTabbedPanePanelDataPanelGeneralTextfieldBotname.setColumns(10);
+        JLabel vDataGeneralLabelBotname = new JLabel("Botname");
+        vDataGeneralLabelBotname.setBounds(10, 11, 180, 14);
+        vDataPanelGeneral.add(vDataGeneralLabelBotname);
         
-        JLabel vTabbedPanePanelDataPanelGeneralLabelBotteamname = new JLabel("Botteamname");
-        vTabbedPanePanelDataPanelGeneralLabelBotteamname.setBounds(10, 51, 180, 14);
-        vTabbedPanePanelDataPanelGeneral.add(vTabbedPanePanelDataPanelGeneralLabelBotteamname);
+        mDataGeneralTextfieldBotname = new JTextField();
+        mDataGeneralTextfieldBotname.setBounds(10, 26, 180, 20);
+        vDataPanelGeneral.add(mDataGeneralTextfieldBotname);
+        mDataGeneralTextfieldBotname.setColumns(10);
         
-        mTabbedPanePanelDataPanelGeneralTextFieldBotteamname = new JTextField();
-        mTabbedPanePanelDataPanelGeneralTextFieldBotteamname.setBounds(10, 65, 180, 20);
-        vTabbedPanePanelDataPanelGeneral.add(mTabbedPanePanelDataPanelGeneralTextFieldBotteamname);
-        mTabbedPanePanelDataPanelGeneralTextFieldBotteamname.setColumns(10);
+        JLabel vDataGeneralLabelBotteamname = new JLabel("Teamname");
+        vDataGeneralLabelBotteamname.setBounds(10, 51, 180, 14);
+        vDataPanelGeneral.add(vDataGeneralLabelBotteamname);
         
-        JLabel vTabbedPanePanelDataPanelGeneralLabelRcid = new JLabel("RC-ID");
-        vTabbedPanePanelDataPanelGeneralLabelRcid.setBounds(10, 90, 35, 14);
-        vTabbedPanePanelDataPanelGeneral.add(vTabbedPanePanelDataPanelGeneralLabelRcid);
+        mDataGeneralTextFieldBotteamname = new JTextField();
+        mDataGeneralTextFieldBotteamname.setBounds(10, 65, 180, 20);
+        vDataPanelGeneral.add(mDataGeneralTextFieldBotteamname);
+        mDataGeneralTextFieldBotteamname.setColumns(10);
         
-        JLabel vTabbedPanePanelDataPanelGeneralLabelVtid = new JLabel("VT-ID");
-        vTabbedPanePanelDataPanelGeneralLabelVtid.setBounds(55, 90, 35, 14);
-        vTabbedPanePanelDataPanelGeneral.add(vTabbedPanePanelDataPanelGeneralLabelVtid);
+        JLabel vDataGeneralLabelRcid = new JLabel("RC-ID");
+        vDataGeneralLabelRcid.setBounds(10, 90, 35, 14);
+        vDataPanelGeneral.add(vDataGeneralLabelRcid);
         
-        JLabel vTabbedPanePanelDataPanelGeneralLabelTeam = new JLabel("Team");
-        vTabbedPanePanelDataPanelGeneralLabelTeam.setBounds(100, 90, 90, 14);
-        vTabbedPanePanelDataPanelGeneral.add(vTabbedPanePanelDataPanelGeneralLabelTeam);
+        JLabel vDataGeneralLabelVtid = new JLabel("VT-ID");
+        vDataGeneralLabelVtid.setBounds(55, 90, 35, 14);
+        vDataPanelGeneral.add(vDataGeneralLabelVtid);
         
-        mTabbedPanePanelDataPanelGeneralTextfieldRcid = new JTextField();
-        mTabbedPanePanelDataPanelGeneralTextfieldRcid.setText("22");
-        mTabbedPanePanelDataPanelGeneralTextfieldRcid.setBounds(10, 104, 35, 20);
-        vTabbedPanePanelDataPanelGeneral.add(mTabbedPanePanelDataPanelGeneralTextfieldRcid);
-        mTabbedPanePanelDataPanelGeneralTextfieldRcid.setColumns(10);
+        JLabel vDataGeneralLabelTeam = new JLabel("Team color");
+        vDataGeneralLabelTeam.setBounds(100, 90, 90, 14);
+        vDataPanelGeneral.add(vDataGeneralLabelTeam);
         
-        mTabbedPanePanelDataPanelGeneralTextfieldVtid = new JTextField();
-        mTabbedPanePanelDataPanelGeneralTextfieldVtid.setBounds(55, 104, 35, 20);
-        vTabbedPanePanelDataPanelGeneral.add(mTabbedPanePanelDataPanelGeneralTextfieldVtid);
-        mTabbedPanePanelDataPanelGeneralTextfieldVtid.setColumns(10);
+        mDataGeneralTextfieldRcid = new JTextField();
+        mDataGeneralTextfieldRcid.setText("22");
+        mDataGeneralTextfieldRcid.setBounds(10, 104, 35, 20);
+        vDataPanelGeneral.add(mDataGeneralTextfieldRcid);
+        mDataGeneralTextfieldRcid.setColumns(10);
         
-        mTabbedPanePanelDataPanelGeneralComboBoxTeam = new JComboBox();
-        mTabbedPanePanelDataPanelGeneralComboBoxTeam.setModel(new DefaultComboBoxModel(Teams.values()));
-        mTabbedPanePanelDataPanelGeneralComboBoxTeam.setBounds(100, 103, 90, 22);
-        vTabbedPanePanelDataPanelGeneral.add(mTabbedPanePanelDataPanelGeneralComboBoxTeam);
+        mDataGeneralTextfieldVtid = new JTextField();
+        mDataGeneralTextfieldVtid.setBounds(55, 104, 35, 20);
+        vDataPanelGeneral.add(mDataGeneralTextfieldVtid);
+        mDataGeneralTextfieldVtid.setColumns(10);
         
-        mTabbedPanePanelDataPanelGeneralButtonChangeData = new JButton("Change Data");
-        mTabbedPanePanelDataPanelGeneralButtonChangeData.addActionListener(new ActionListener() {
+        mDataGeneralComboBoxTeam = new JComboBox();
+        mDataGeneralComboBoxTeam.setModel(new DefaultComboBoxModel(Teams.values()));
+        mDataGeneralComboBoxTeam.setBounds(100, 103, 90, 22);
+        vDataPanelGeneral.add(mDataGeneralComboBoxTeam);
+        
+        mDataGeneralButtonChangeData = new JButton("Change Data");
+        mDataGeneralButtonChangeData.addActionListener(new ActionListener() {
             @Override
 			public void actionPerformed(ActionEvent e) {
                 
@@ -388,77 +400,77 @@ public class BotFrame extends JPanel {
                 
             }
         });
-        mTabbedPanePanelDataPanelGeneralButtonChangeData.setBounds(10, 135, 180, 23);
-        vTabbedPanePanelDataPanelGeneral.add(mTabbedPanePanelDataPanelGeneralButtonChangeData);
+        mDataGeneralButtonChangeData.setBounds(10, 135, 180, 23);
+        vDataPanelGeneral.add(mDataGeneralButtonChangeData);
         
         JScrollPane scrollPane_Serverconstants = new JScrollPane();
-        vTabbedPanePanelData.add(scrollPane_Serverconstants, BorderLayout.CENTER);
+        vPanelData.add(scrollPane_Serverconstants, BorderLayout.CENTER);
         
-        JPanel vTabbedPanePanelDataPanelServerconstants = new JPanel();
-        scrollPane_Serverconstants.setViewportView(vTabbedPanePanelDataPanelServerconstants);
-        vTabbedPanePanelDataPanelServerconstants.setLayout(new BorderLayout(0, 0));
+        JPanel vDataPanelServerconstants = new JPanel();
+        scrollPane_Serverconstants.setViewportView(vDataPanelServerconstants);
+        vDataPanelServerconstants.setLayout(new BorderLayout(0, 0));
         
-        JLabel vTabbedPanePanelDataPanelServerconstantsLabel = new JLabel("Serverconstants");
-        vTabbedPanePanelDataPanelServerconstants.add(vTabbedPanePanelDataPanelServerconstantsLabel, BorderLayout.NORTH);
+        JLabel vDataPanelServerconstantsLabel = new JLabel("Serverconstants");
+        vDataPanelServerconstants.add(vDataPanelServerconstantsLabel, BorderLayout.NORTH);
         
-        mTabbedPanePanelDataPanelServerconstantsTable = new JTable();
-        mTabbedPanePanelDataPanelServerconstantsTable.setModel(new DefaultTableModel(
+        mDataPanelServerconstantsTable = new JTable();
+        mDataPanelServerconstantsTable.setModel(new DefaultTableModel(
             new Object[][] {
             },
             new String[] {
                 "New column", "New column"
             }
         ));
-        vTabbedPanePanelDataPanelServerconstants.add(mTabbedPanePanelDataPanelServerconstantsTable, BorderLayout.CENTER);
+        vDataPanelServerconstants.add(mDataPanelServerconstantsTable, BorderLayout.CENTER);
         
-        vTabbedPanePanelConnection = new JPanel();
-        mTabbedPane.addTab("Connection", null, vTabbedPanePanelConnection, null);
-        vTabbedPanePanelConnection.setLayout(new BorderLayout(0, 0));
+        vPanelConnection = new JPanel();
+        mTabbedPane.addTab("Connection", null, vPanelConnection, null);
+        vPanelConnection.setLayout(new BorderLayout(0, 0));
         
-        JPanel vTabbedPanePanelConnectionPanel2 = new JPanel();
-        vTabbedPanePanelConnectionPanel2.setPreferredSize(new Dimension(300, 10));
-        vTabbedPanePanelConnection.add(vTabbedPanePanelConnectionPanel2, BorderLayout.WEST);
-        vTabbedPanePanelConnectionPanel2.setLayout(null);
+        JPanel vPanelConnectionPanel2 = new JPanel();
+        vPanelConnectionPanel2.setPreferredSize(new Dimension(300, 10));
+        vPanelConnection.add(vPanelConnectionPanel2, BorderLayout.WEST);
+        vPanelConnectionPanel2.setLayout(null);
         
-        JLabel vTabbedPanePanelConnectionLabelServeraddress = new JLabel("Server IP-Address");
-        vTabbedPanePanelConnectionLabelServeraddress.setBounds(10, 11, 150, 14);
-        vTabbedPanePanelConnectionPanel2.add(vTabbedPanePanelConnectionLabelServeraddress);
+        JLabel vConnectionLabelServeraddress = new JLabel("Server IP-Address");
+        vConnectionLabelServeraddress.setBounds(10, 11, 150, 14);
+        vPanelConnectionPanel2.add(vConnectionLabelServeraddress);
         
-        mTabbedPanePanelConnectionTextfieldServeraddress = new JTextField();
-        mTabbedPanePanelConnectionTextfieldServeraddress.setBounds(10, 27, 150, 20);
-        vTabbedPanePanelConnectionPanel2.add(mTabbedPanePanelConnectionTextfieldServeraddress);
-        mTabbedPanePanelConnectionTextfieldServeraddress.setColumns(10);
+        mConnectionTextfieldServeraddress = new JTextField();
+        mConnectionTextfieldServeraddress.setBounds(10, 27, 150, 20);
+        vPanelConnectionPanel2.add(mConnectionTextfieldServeraddress);
+        mConnectionTextfieldServeraddress.setColumns(10);
         
-        mTabbedPanePanelConnectionTextfieldServerteamport = new JTextField();
-        mTabbedPanePanelConnectionTextfieldServerteamport.setBounds(170, 27, 86, 20);
-        vTabbedPanePanelConnectionPanel2.add(mTabbedPanePanelConnectionTextfieldServerteamport);
-        mTabbedPanePanelConnectionTextfieldServerteamport.setColumns(10);
+        mConnectionTextfieldServerteamport = new JTextField();
+        mConnectionTextfieldServerteamport.setBounds(170, 27, 86, 20);
+        vPanelConnectionPanel2.add(mConnectionTextfieldServerteamport);
+        mConnectionTextfieldServerteamport.setColumns(10);
         
-        JLabel vTabbedPanePanelConnectionLabelServerteamport = new JLabel("Teamport");
-        vTabbedPanePanelConnectionLabelServerteamport.setBounds(170, 11, 86, 14);
-        vTabbedPanePanelConnectionPanel2.add(vTabbedPanePanelConnectionLabelServerteamport);
+        JLabel vConnectionLabelServerteamport = new JLabel("Teamport");
+        vConnectionLabelServerteamport.setBounds(170, 11, 86, 14);
+        vPanelConnectionPanel2.add(vConnectionLabelServerteamport);
         
-        JLabel vTabbedPanePanelConnectionLabelBotaddress = new JLabel("Bot IPAddress");
-        vTabbedPanePanelConnectionLabelBotaddress.setBounds(10, 58, 150, 14);
-        vTabbedPanePanelConnectionPanel2.add(vTabbedPanePanelConnectionLabelBotaddress);
+        JLabel vConnectionLabelBotaddress = new JLabel("Bot IPAddress");
+        vConnectionLabelBotaddress.setBounds(10, 58, 150, 14);
+        vPanelConnectionPanel2.add(vConnectionLabelBotaddress);
         
-        mTabbedPanePanelConnectionTextfieldBotaddress = new JTextField();
-        mTabbedPanePanelConnectionTextfieldBotaddress.setEditable(false);
-        mTabbedPanePanelConnectionTextfieldBotaddress.setBounds(10, 75, 150, 20);
-        vTabbedPanePanelConnectionPanel2.add(mTabbedPanePanelConnectionTextfieldBotaddress);
-        mTabbedPanePanelConnectionTextfieldBotaddress.setColumns(10);
+        mConnectionTextfieldBotaddress = new JTextField();
+        mConnectionTextfieldBotaddress.setEditable(false);
+        mConnectionTextfieldBotaddress.setBounds(10, 75, 150, 20);
+        vPanelConnectionPanel2.add(mConnectionTextfieldBotaddress);
+        mConnectionTextfieldBotaddress.setColumns(10);
         
-        JLabel vTabbedPanePanelConnectionLabelBotport = new JLabel("Botport");
-        vTabbedPanePanelConnectionLabelBotport.setBounds(170, 58, 86, 14);
-        vTabbedPanePanelConnectionPanel2.add(vTabbedPanePanelConnectionLabelBotport);
+        JLabel vConnectionLabelBotport = new JLabel("Botport");
+        vConnectionLabelBotport.setBounds(170, 58, 86, 14);
+        vPanelConnectionPanel2.add(vConnectionLabelBotport);
         
-        mTabbedPanePanelConnectionTextfieldBotport = new JTextField();
-        mTabbedPanePanelConnectionTextfieldBotport.setBounds(170, 75, 86, 20);
-        vTabbedPanePanelConnectionPanel2.add(mTabbedPanePanelConnectionTextfieldBotport);
-        mTabbedPanePanelConnectionTextfieldBotport.setColumns(10);
+        mConnectionTextfieldBotport = new JTextField();
+        mConnectionTextfieldBotport.setBounds(170, 75, 86, 20);
+        vPanelConnectionPanel2.add(mConnectionTextfieldBotport);
+        mConnectionTextfieldBotport.setColumns(10);
         
-        mTabbedPanePanelConnectionButtonConnect = new JButton("Connect");
-        mTabbedPanePanelConnectionButtonConnect.addActionListener(new ActionListener() {
+        mConnectionButtonConnect = new JButton("Connect");
+        mConnectionButtonConnect.addActionListener(new ActionListener() {
             @Override
 			public void actionPerformed(ActionEvent e) {
                 
@@ -500,11 +512,11 @@ public class BotFrame extends JPanel {
                 
             }
         });
-        mTabbedPanePanelConnectionButtonConnect.setBounds(10, 106, 118, 23);
-        vTabbedPanePanelConnectionPanel2.add(mTabbedPanePanelConnectionButtonConnect);
+        mConnectionButtonConnect.setBounds(10, 106, 118, 23);
+        vPanelConnectionPanel2.add(mConnectionButtonConnect);
         
-        mTabbedPanePanelConnectionButtonReconnect = new JButton("Reconnect");
-        mTabbedPanePanelConnectionButtonReconnect.addActionListener(new ActionListener() {
+        mConnectionButtonReconnect = new JButton("Reconnect");
+        mConnectionButtonReconnect.addActionListener(new ActionListener() {
             @Override
 			public void actionPerformed(ActionEvent e) {
                 
@@ -544,11 +556,11 @@ public class BotFrame extends JPanel {
                 
             }
         });
-        mTabbedPanePanelConnectionButtonReconnect.setBounds(138, 106, 118, 23);
-        vTabbedPanePanelConnectionPanel2.add(mTabbedPanePanelConnectionButtonReconnect);
+        mConnectionButtonReconnect.setBounds(138, 106, 118, 23);
+        vPanelConnectionPanel2.add(mConnectionButtonReconnect);
         
-        mTabbedPanePanelConnectionButtonDisconnect = new JButton("Disconnect");
-        mTabbedPanePanelConnectionButtonDisconnect.addActionListener(new ActionListener() {
+        mConnectionButtonDisconnect = new JButton("Disconnect");
+        mConnectionButtonDisconnect.addActionListener(new ActionListener() {
             @Override
 			public void actionPerformed(ActionEvent e) {
 
@@ -589,42 +601,42 @@ public class BotFrame extends JPanel {
                 
             }
         });
-        mTabbedPanePanelConnectionButtonDisconnect.setVisible(false);
-        mTabbedPanePanelConnectionButtonDisconnect.setEnabled(false);
-        mTabbedPanePanelConnectionButtonDisconnect.setBounds(10, 106, 246, 23);
-        vTabbedPanePanelConnectionPanel2.add(mTabbedPanePanelConnectionButtonDisconnect);
+        mConnectionButtonDisconnect.setVisible(false);
+        mConnectionButtonDisconnect.setEnabled(false);
+        mConnectionButtonDisconnect.setBounds(10, 106, 246, 23);
+        vPanelConnectionPanel2.add(mConnectionButtonDisconnect);
         
-        JPanel vTabbedPanePanelAI = new JPanel();
-        mTabbedPane.addTab("AI", null, vTabbedPanePanelAI, null);
-        vTabbedPanePanelAI.setLayout(new BorderLayout(0, 0));
+        JPanel vPanelAI = new JPanel();
+        mTabbedPane.addTab("AI", null, vPanelAI, null);
+        vPanelAI.setLayout(new BorderLayout(0, 0));
         
-        JPanel vTabbedPanePanelAIPanelExecution = new JPanel();
-        vTabbedPanePanelAIPanelExecution.setPreferredSize(new Dimension(200, 10));
-        vTabbedPanePanelAIPanelExecution.setSize(new Dimension(200, 0));
-        vTabbedPanePanelAI.add(vTabbedPanePanelAIPanelExecution, BorderLayout.WEST);
-        vTabbedPanePanelAIPanelExecution.setLayout(null);
+        JPanel vPanelAIPanelExecution = new JPanel();
+        vPanelAIPanelExecution.setPreferredSize(new Dimension(200, 10));
+        vPanelAIPanelExecution.setSize(new Dimension(200, 0));
+        vPanelAI.add(vPanelAIPanelExecution, BorderLayout.WEST);
+        vPanelAIPanelExecution.setLayout(null);
         
-        JLabel vTabbedPanePanelAIPanelExecutionLabelAiarchive = new JLabel("Archive");
-        vTabbedPanePanelAIPanelExecutionLabelAiarchive.setBounds(10, 11, 180, 14);
-        vTabbedPanePanelAIPanelExecution.add(vTabbedPanePanelAIPanelExecutionLabelAiarchive);
+        JLabel vAIExecutionLabelAiarchive = new JLabel("Archive");
+        vAIExecutionLabelAiarchive.setBounds(10, 11, 180, 14);
+        vPanelAIPanelExecution.add(vAIExecutionLabelAiarchive);
         
-        mTabbedPanePanelAIPanelExecutionTextfieldAiarchive = new JTextField();
-        mTabbedPanePanelAIPanelExecutionTextfieldAiarchive.setBounds(10, 29, 180, 20);
-        vTabbedPanePanelAIPanelExecution.add(mTabbedPanePanelAIPanelExecutionTextfieldAiarchive);
-        mTabbedPanePanelAIPanelExecutionTextfieldAiarchive.setColumns(50);
+        mAIExecutionTextfieldAiarchive = new JTextField();
+        mAIExecutionTextfieldAiarchive.setBounds(10, 29, 180, 20);
+        vPanelAIPanelExecution.add(mAIExecutionTextfieldAiarchive);
+        mAIExecutionTextfieldAiarchive.setColumns(50);
         
-        JLabel vTabbedPanePanelAIPanelExecutionLabelAiclass = new JLabel("Classname");
-        vTabbedPanePanelAIPanelExecutionLabelAiclass.setBounds(10, 59, 180, 14);
-        vTabbedPanePanelAIPanelExecution.add(vTabbedPanePanelAIPanelExecutionLabelAiclass);
+        JLabel vAIExecutionLabelAiclass = new JLabel("Classname");
+        vAIExecutionLabelAiclass.setBounds(10, 59, 180, 14);
+        vPanelAIPanelExecution.add(vAIExecutionLabelAiclass);
         
-        mTabbedPanePanelAIPanelExecutionTextfieldAiclass = new JTextField();
-        mTabbedPanePanelAIPanelExecutionTextfieldAiclass.setText("ais/example_ai.jar");
-        mTabbedPanePanelAIPanelExecutionTextfieldAiclass.setBounds(10, 77, 180, 20);
-        vTabbedPanePanelAIPanelExecution.add(mTabbedPanePanelAIPanelExecutionTextfieldAiclass);
-        mTabbedPanePanelAIPanelExecutionTextfieldAiclass.setColumns(10);
+        mAIExecutionTextfieldAiclass = new JTextField();
+        mAIExecutionTextfieldAiclass.setText("ais/example_ai.jar");
+        mAIExecutionTextfieldAiclass.setBounds(10, 77, 180, 20);
+        vPanelAIPanelExecution.add(mAIExecutionTextfieldAiclass);
+        mAIExecutionTextfieldAiclass.setColumns(10);
         
-        mTabbedPanePanelAIPanelExecutionButtonAiinitialise = new JButton("Initialise");
-        mTabbedPanePanelAIPanelExecutionButtonAiinitialise.addActionListener(new ActionListener() {
+        mAIExecutionButtonAiinitialise = new JButton("Initialise");
+        mAIExecutionButtonAiinitialise.addActionListener(new ActionListener() {
             @Override
 			public void actionPerformed(ActionEvent e) {
                 
@@ -665,11 +677,11 @@ public class BotFrame extends JPanel {
                 
             }
         });
-        mTabbedPanePanelAIPanelExecutionButtonAiinitialise.setBounds(10, 108, 180, 23);
-        vTabbedPanePanelAIPanelExecution.add(mTabbedPanePanelAIPanelExecutionButtonAiinitialise);
+        mAIExecutionButtonAiinitialise.setBounds(10, 108, 180, 23);
+        vPanelAIPanelExecution.add(mAIExecutionButtonAiinitialise);
         
-        mTabbedPanePanelAIPanelExecutionButtonAiunpause = new JButton("Resume");
-        mTabbedPanePanelAIPanelExecutionButtonAiunpause.addActionListener(new ActionListener() {
+        mAIExecutionButtonAiunpause = new JButton("Resume");
+        mAIExecutionButtonAiunpause.addActionListener(new ActionListener() {
             @Override
 			public void actionPerformed(ActionEvent e) {
                 
@@ -710,12 +722,12 @@ public class BotFrame extends JPanel {
                 
             }
         });
-        mTabbedPanePanelAIPanelExecutionButtonAiunpause.setEnabled(false);
-        mTabbedPanePanelAIPanelExecutionButtonAiunpause.setBounds(10, 142, 180, 23);
-        vTabbedPanePanelAIPanelExecution.add(mTabbedPanePanelAIPanelExecutionButtonAiunpause);
+        mAIExecutionButtonAiunpause.setEnabled(false);
+        mAIExecutionButtonAiunpause.setBounds(10, 142, 180, 23);
+        vPanelAIPanelExecution.add(mAIExecutionButtonAiunpause);
         
-        mTabbedPanePanelAIPanelExecutionButtonAidispose = new JButton("Dispose");
-        mTabbedPanePanelAIPanelExecutionButtonAidispose.addActionListener(new ActionListener() {
+        mAIExecutionButtonAidispose = new JButton("Dispose");
+        mAIExecutionButtonAidispose.addActionListener(new ActionListener() {
             @Override
 			public void actionPerformed(ActionEvent e) {
                 
@@ -753,13 +765,13 @@ public class BotFrame extends JPanel {
                 
             }
         });
-        mTabbedPanePanelAIPanelExecutionButtonAidispose.setEnabled(false);
-        mTabbedPanePanelAIPanelExecutionButtonAidispose.setVisible(false);
-        mTabbedPanePanelAIPanelExecutionButtonAidispose.setBounds(10, 108, 180, 23);
-        vTabbedPanePanelAIPanelExecution.add(mTabbedPanePanelAIPanelExecutionButtonAidispose);
+        mAIExecutionButtonAidispose.setEnabled(false);
+        mAIExecutionButtonAidispose.setVisible(false);
+        mAIExecutionButtonAidispose.setBounds(10, 108, 180, 23);
+        vPanelAIPanelExecution.add(mAIExecutionButtonAidispose);
         
-        mTabbedPanePanelAIPanelExecutionButtonAipause = new JButton("Suspend");
-        mTabbedPanePanelAIPanelExecutionButtonAipause.addActionListener(new ActionListener() {
+        mAIExecutionButtonAipause = new JButton("Suspend");
+        mAIExecutionButtonAipause.addActionListener(new ActionListener() {
             @Override
 			public void actionPerformed(ActionEvent e) {
                 
@@ -797,17 +809,17 @@ public class BotFrame extends JPanel {
                 
             }
         });
-        mTabbedPanePanelAIPanelExecutionButtonAipause.setVisible(false);
-        mTabbedPanePanelAIPanelExecutionButtonAipause.setEnabled(false);
-        mTabbedPanePanelAIPanelExecutionButtonAipause.setBounds(10, 142, 180, 23);
-        vTabbedPanePanelAIPanelExecution.add(mTabbedPanePanelAIPanelExecutionButtonAipause);
+        mAIExecutionButtonAipause.setVisible(false);
+        mAIExecutionButtonAipause.setEnabled(false);
+        mAIExecutionButtonAipause.setBounds(10, 142, 180, 23);
+        vPanelAIPanelExecution.add(mAIExecutionButtonAipause);
         
-        vTabbedPanePanelAIPanelArguments = new JPanel();
-        vTabbedPanePanelAI.add(vTabbedPanePanelAIPanelArguments, BorderLayout.CENTER);
-        vTabbedPanePanelAIPanelArguments.setLayout(new BorderLayout(0, 0));
+        vPanelAIPanelArguments = new JPanel();
+        vPanelAI.add(vPanelAIPanelArguments, BorderLayout.CENTER);
+        vPanelAIPanelArguments.setLayout(new BorderLayout(0, 0));
         
-        mTabbedPanePanelAIPanelArgumentsButtonExecute = new JButton("Execute Arguments");
-        mTabbedPanePanelAIPanelArgumentsButtonExecute.addActionListener(new ActionListener() {
+        mAIArgumentsButtonExecute = new JButton("Execute Arguments");
+        mAIArgumentsButtonExecute.addActionListener(new ActionListener() {
             @Override
 			public void actionPerformed(ActionEvent e) {
                 
@@ -817,7 +829,7 @@ public class BotFrame extends JPanel {
 
                         try {
                             
-                            mTheRemoteBot.getTheBot().executeCommandOnAI( mTabbedPanePanelAIPanelArgumentsTextareaAiarguments.getText() );
+                            mTheRemoteBot.getTheBot().executeCommandOnAI( mAIArgumentsTextareaAiarguments.getText() );
 
                             SwingUtilities.invokeLater( new Runnable() { //TODO: nachdenken
                                 @Override
@@ -843,43 +855,43 @@ public class BotFrame extends JPanel {
                 
             }
         });
-        mTabbedPanePanelAIPanelArgumentsButtonExecute.setEnabled(false);
-        vTabbedPanePanelAIPanelArguments.add(mTabbedPanePanelAIPanelArgumentsButtonExecute, BorderLayout.SOUTH);
+        mAIArgumentsButtonExecute.setEnabled(false);
+        vPanelAIPanelArguments.add(mAIArgumentsButtonExecute, BorderLayout.SOUTH);
         
         JScrollPane scrollPane_aiarguments = new JScrollPane();
-        vTabbedPanePanelAIPanelArguments.add(scrollPane_aiarguments, BorderLayout.CENTER);
+        vPanelAIPanelArguments.add(scrollPane_aiarguments, BorderLayout.CENTER);
         
-        mTabbedPanePanelAIPanelArgumentsTextareaAiarguments = new JTextArea();
-        mTabbedPanePanelAIPanelArgumentsTextareaAiarguments.setLineWrap(true);
-        scrollPane_aiarguments.setViewportView(mTabbedPanePanelAIPanelArgumentsTextareaAiarguments);
+        mAIArgumentsTextareaAiarguments = new JTextArea();
+        mAIArgumentsTextareaAiarguments.setLineWrap(true);
+        scrollPane_aiarguments.setViewportView(mAIArgumentsTextareaAiarguments);
         
-        JPanel vTabbedPanePanelLogging = new JPanel();
-        mTabbedPane.addTab("Logging", null, vTabbedPanePanelLogging, null);
-        vTabbedPanePanelLogging.setLayout(new BorderLayout(0, 0));
+        JPanel vPanelLogging = new JPanel();
+        mTabbedPane.addTab("Logging", null, vPanelLogging, null);
+        vPanelLogging.setLayout(new BorderLayout(0, 0));
         
         JPanel vTabbedPanePanelLoggingPanelControl = new JPanel();
-        vTabbedPanePanelLogging.add(vTabbedPanePanelLoggingPanelControl, BorderLayout.NORTH);
+        vPanelLogging.add(vTabbedPanePanelLoggingPanelControl, BorderLayout.NORTH);
         vTabbedPanePanelLoggingPanelControl.setLayout(new BorderLayout(0, 0));
         
-        vTabbedPanePanelLoggingPanelControlRight = new JPanel();
-        vTabbedPanePanelLoggingPanelControlRight.setMinimumSize(new Dimension(100, 25));
-        vTabbedPanePanelLoggingPanelControlRight.setPreferredSize(new Dimension(150, 23));
-        vTabbedPanePanelLoggingPanelControlRight.setSize(new Dimension(100, 23));
-        vTabbedPanePanelLoggingPanelControl.add(vTabbedPanePanelLoggingPanelControlRight, BorderLayout.EAST);
-        vTabbedPanePanelLoggingPanelControlRight.setLayout(null);
+        vLoggingPanelControlRight = new JPanel();
+        vLoggingPanelControlRight.setMinimumSize(new Dimension(100, 25));
+        vLoggingPanelControlRight.setPreferredSize(new Dimension(150, 23));
+        vLoggingPanelControlRight.setSize(new Dimension(100, 23));
+        vTabbedPanePanelLoggingPanelControl.add(vLoggingPanelControlRight, BorderLayout.EAST);
+        vLoggingPanelControlRight.setLayout(null);
         
-        mTabbedPanePanelLoggingPanelControlButtonConnectlogger = new JButton("Connect Logger");
-        mTabbedPanePanelLoggingPanelControlButtonConnectlogger.addActionListener(new ActionListener() {
+        mLoggingControlButtonConnectlogger = new JButton("Connect Logger");
+        mLoggingControlButtonConnectlogger.addActionListener(new ActionListener() {
             @Override
 			public void actionPerformed(ActionEvent e) {
                 
                 try {
                     
                     mTheRemoteBot.connectLogListener();
-                    mTabbedPanePanelLoggingPanelControlButtonConnectlogger.setEnabled(false);
-                    mTabbedPanePanelLoggingPanelControlButtonConnectlogger.setVisible(false);
-                    mTabbedPanePanelLoggingPanelControlButtonDisconnectlogger.setEnabled(true);
-                    mTabbedPanePanelLoggingPanelControlButtonDisconnectlogger.setVisible(true);
+                    mLoggingControlButtonConnectlogger.setEnabled(false);
+                    mLoggingControlButtonConnectlogger.setVisible(false);
+                    mLoggingControlButtonDisconnectlogger.setEnabled(true);
+                    mLoggingControlButtonDisconnectlogger.setVisible(true);
                     
                 } catch ( RemoteException e1 ) {
                     // TODO Auto-generated catch block
@@ -888,24 +900,24 @@ public class BotFrame extends JPanel {
                 
             }
         });
-        mTabbedPanePanelLoggingPanelControlButtonConnectlogger.setEnabled(false);
-        mTabbedPanePanelLoggingPanelControlButtonConnectlogger.setVisible(false);
-        mTabbedPanePanelLoggingPanelControlButtonConnectlogger.setBounds(0, 0, 150, 23);
-        vTabbedPanePanelLoggingPanelControlRight.add(mTabbedPanePanelLoggingPanelControlButtonConnectlogger);
+        mLoggingControlButtonConnectlogger.setEnabled(false);
+        mLoggingControlButtonConnectlogger.setVisible(false);
+        mLoggingControlButtonConnectlogger.setBounds(0, 0, 150, 23);
+        vLoggingPanelControlRight.add(mLoggingControlButtonConnectlogger);
         
-        mTabbedPanePanelLoggingPanelControlButtonDisconnectlogger = new JButton("Disconnect Logger");
+        mLoggingControlButtonDisconnectlogger = new JButton("Disconnect Logger");
         
-        mTabbedPanePanelLoggingPanelControlButtonDisconnectlogger.addActionListener(new ActionListener() {
+        mLoggingControlButtonDisconnectlogger.addActionListener(new ActionListener() {
             @Override
 			public void actionPerformed(ActionEvent e) {
 
                 try {
                     
                     mTheRemoteBot.disconnectLogListener();
-                    mTabbedPanePanelLoggingPanelControlButtonDisconnectlogger.setEnabled(false);
-                    mTabbedPanePanelLoggingPanelControlButtonDisconnectlogger.setVisible(false);
-                    mTabbedPanePanelLoggingPanelControlButtonConnectlogger.setEnabled(true);
-                    mTabbedPanePanelLoggingPanelControlButtonConnectlogger.setVisible(true);
+                    mLoggingControlButtonDisconnectlogger.setEnabled(false);
+                    mLoggingControlButtonDisconnectlogger.setVisible(false);
+                    mLoggingControlButtonConnectlogger.setEnabled(true);
+                    mLoggingControlButtonConnectlogger.setVisible(true);
 
                 } catch ( RemoteException e1 ) {
                     // TODO Auto-generated catch block
@@ -914,17 +926,17 @@ public class BotFrame extends JPanel {
                 
             }
         });
-        mTabbedPanePanelLoggingPanelControlButtonDisconnectlogger.setBounds(0, 0, 150, 23);
-        vTabbedPanePanelLoggingPanelControlRight.add(mTabbedPanePanelLoggingPanelControlButtonDisconnectlogger);
+        mLoggingControlButtonDisconnectlogger.setBounds(0, 0, 150, 23);
+        vLoggingPanelControlRight.add(mLoggingControlButtonDisconnectlogger);
         
-        JPanel vTabbedPanePanelLoggingPanelControlLeft = new JPanel();
-        vTabbedPanePanelLoggingPanelControl.add(vTabbedPanePanelLoggingPanelControlLeft, BorderLayout.CENTER);
-        vTabbedPanePanelLoggingPanelControlLeft.setLayout(null);
+        JPanel vLoggingPanelControlLeft = new JPanel();
+        vTabbedPanePanelLoggingPanelControl.add(vLoggingPanelControlLeft, BorderLayout.CENTER);
+        vLoggingPanelControlLeft.setLayout(null);
         
         JLabel vTabbedPanePanelLoggingPanelControlLabelLoglevel = new JLabel("Loglevel:");
         vTabbedPanePanelLoggingPanelControlLabelLoglevel.setHorizontalAlignment(SwingConstants.RIGHT);
         vTabbedPanePanelLoggingPanelControlLabelLoglevel.setBounds(3, 5, 50, 17);
-        vTabbedPanePanelLoggingPanelControlLeft.add(vTabbedPanePanelLoggingPanelControlLabelLoglevel);
+        vLoggingPanelControlLeft.add(vTabbedPanePanelLoggingPanelControlLabelLoglevel);
         
         mTabbedPanePanelLoggingPanelControlComboBoxLoglevel = new JComboBox();
         mTabbedPanePanelLoggingPanelControlComboBoxLoglevel.addActionListener(new ActionListener() {
@@ -942,13 +954,13 @@ public class BotFrame extends JPanel {
         });
         mTabbedPanePanelLoggingPanelControlComboBoxLoglevel.setModel(new DefaultComboBoxModel(Level.values()));
         mTabbedPanePanelLoggingPanelControlComboBoxLoglevel.setBounds(55, 0, 100, 23);
-        vTabbedPanePanelLoggingPanelControlLeft.add(mTabbedPanePanelLoggingPanelControlComboBoxLoglevel);
+        vLoggingPanelControlLeft.add(mTabbedPanePanelLoggingPanelControlComboBoxLoglevel);
         
         scrollPane_Logging = new JScrollPane();
-        vTabbedPanePanelLogging.add(scrollPane_Logging, BorderLayout.CENTER);
+        vPanelLogging.add(scrollPane_Logging, BorderLayout.CENTER);
         
-        mTabbedPanePanelLoggingTextarea = new JTextArea();
-        mTabbedPanePanelLoggingTextarea.addMouseListener(new MouseAdapter() {
+        mLoggingTextarea = new JTextArea();
+        mLoggingTextarea.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 
@@ -960,8 +972,8 @@ public class BotFrame extends JPanel {
                 
             }
         });
-        mTabbedPanePanelLoggingTextarea.setEditable(false);
-        scrollPane_Logging.setViewportView(mTabbedPanePanelLoggingTextarea);
+        mLoggingTextarea.setEditable(false);
+        scrollPane_Logging.setViewportView(mLoggingTextarea);
         
         popupMenu = new JPopupMenu();
         popupMenu.setBounds(0, 0, 119, 25);
@@ -971,7 +983,7 @@ public class BotFrame extends JPanel {
             @Override
 			public void actionPerformed(ActionEvent e) {
                 
-                mTabbedPanePanelLoggingTextarea.copy();
+                mLoggingTextarea.copy();
                 
             }
         });
@@ -1105,16 +1117,16 @@ public class BotFrame extends JPanel {
         
         mBotInformation.setBotname( mPanelHeadPanelFrontLabelBotname.getText() );
         
-        mBotInformation.setTeam( (Teams) mTabbedPanePanelDataPanelGeneralComboBoxTeam.getSelectedItem() );
-        mBotInformation.setBotname( mTabbedPanePanelDataPanelGeneralTextfieldBotname.getText() );
-        mBotInformation.setTeamname( mTabbedPanePanelDataPanelGeneralTextFieldBotteamname.getText() );
+        mBotInformation.setTeam( (Teams) mDataGeneralComboBoxTeam.getSelectedItem() );
+        mBotInformation.setBotname( mDataGeneralTextfieldBotname.getText() );
+        mBotInformation.setTeamname( mDataGeneralTextFieldBotteamname.getText() );
         try{
-            mBotInformation.setRcId( Integer.decode( mTabbedPanePanelDataPanelGeneralTextfieldRcid.getText() ) );
+            mBotInformation.setRcId( Integer.decode( mDataGeneralTextfieldRcid.getText() ) );
         }catch( Exception vException ){
             
         }
         try{
-            mBotInformation.setVtId( Integer.decode( mTabbedPanePanelDataPanelGeneralTextfieldVtid.getText() ) );
+            mBotInformation.setVtId( Integer.decode( mDataGeneralTextfieldVtid.getText() ) );
         }catch( Exception vException ){
             
         }
@@ -1123,17 +1135,17 @@ public class BotFrame extends JPanel {
             if( !mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.NetworkConnection ) ){
                 
                 try{
-                    mBotInformation.setBotPort( Integer.decode( mTabbedPanePanelConnectionTextfieldBotport.getText() ) );
+                    mBotInformation.setBotPort( Integer.decode( mConnectionTextfieldBotport.getText() ) );
                 }catch( Exception vException ){
                     
                 }
                 try{
-                    mBotInformation.setServerIP(  InetAddress.getByName( mTabbedPanePanelConnectionTextfieldServeraddress.getText() ) );
+                    mBotInformation.setServerIP(  InetAddress.getByName( mConnectionTextfieldServeraddress.getText() ) );
                 }catch( Exception vException ){
                     
                 }
                 try{
-                    mBotInformation.setServerPort( Integer.decode( mTabbedPanePanelConnectionTextfieldServerteamport.getText() ) );
+                    mBotInformation.setServerPort( Integer.decode( mConnectionTextfieldServerteamport.getText() ) );
                 }catch( Exception vException ){
                     
                 }
@@ -1145,9 +1157,9 @@ public class BotFrame extends JPanel {
             e.printStackTrace();
         }
         
-        mBotInformation.setAIArchive( mTabbedPanePanelAIPanelExecutionTextfieldAiarchive.getText() );
-        mBotInformation.setAIArgs( mTabbedPanePanelAIPanelArgumentsTextareaAiarguments.getText() );
-        mBotInformation.setAIClassname( mTabbedPanePanelAIPanelExecutionTextfieldAiclass.getText() );
+        mBotInformation.setAIArchive( mAIExecutionTextfieldAiarchive.getText() );
+        mBotInformation.setAIArgs( mAIArgumentsTextareaAiarguments.getText() );
+        mBotInformation.setAIClassname( mAIExecutionTextfieldAiclass.getText() );
         
         try {
             mTheRemoteBot.getTheBot().setBotInformation( mBotInformation );
@@ -1162,10 +1174,10 @@ public class BotFrame extends JPanel {
 
     public void addToLog( String aString ){
         
-        while( mTabbedPanePanelLoggingTextarea.getLineCount() > mMaxLinesInLog ){
+        while( mLoggingTextarea.getLineCount() > mMaxLinesInLog ){
             
             try {
-                mTabbedPanePanelLoggingTextarea.replaceRange( null, mTabbedPanePanelLoggingTextarea.getLineStartOffset( 0 ), mTabbedPanePanelLoggingTextarea.getLineEndOffset( 0 ) );
+                mLoggingTextarea.replaceRange( null, mLoggingTextarea.getLineStartOffset( 0 ), mLoggingTextarea.getLineEndOffset( 0 ) );
             } catch ( BadLocationException e2 ) {
                 // TODO Auto-generated catch block
                 e2.printStackTrace();
@@ -1173,7 +1185,7 @@ public class BotFrame extends JPanel {
             
         }
         
-        mTabbedPanePanelLoggingTextarea.append( aString );
+        mLoggingTextarea.append( aString );
         
     }
     
@@ -1213,20 +1225,20 @@ public class BotFrame extends JPanel {
         
         mPanelHeadPanelFrontLabelBotname.setText( mBotInformation.getBotname() );
         
-        mTabbedPanePanelDataPanelGeneralComboBoxTeam.setSelectedItem( mBotInformation.getTeam() );
-        mTabbedPanePanelDataPanelGeneralTextfieldBotname.setText( mBotInformation.getBotname() );
-        mTabbedPanePanelDataPanelGeneralTextFieldBotteamname.setText( mBotInformation.getTeamname() );
-        mTabbedPanePanelDataPanelGeneralTextfieldRcid.setText( Integer.toString( mBotInformation.getRcId() ) );
-        mTabbedPanePanelDataPanelGeneralTextfieldVtid.setText( Integer.toString( mBotInformation.getVtId() ) );
+        mDataGeneralComboBoxTeam.setSelectedItem( mBotInformation.getTeam() );
+        mDataGeneralTextfieldBotname.setText( mBotInformation.getBotname() );
+        mDataGeneralTextFieldBotteamname.setText( mBotInformation.getTeamname() );
+        mDataGeneralTextfieldRcid.setText( Integer.toString( mBotInformation.getRcId() ) );
+        mDataGeneralTextfieldVtid.setText( Integer.toString( mBotInformation.getVtId() ) );
         
-        mTabbedPanePanelConnectionTextfieldBotaddress.setText( mBotInformation.getBotIP().getHostAddress() );
-        mTabbedPanePanelConnectionTextfieldBotport.setText( Integer.toString( mBotInformation.getBotPort() ) );
-        mTabbedPanePanelConnectionTextfieldServeraddress.setText( mBotInformation.getServerIP().getHostAddress() );
-        mTabbedPanePanelConnectionTextfieldServerteamport.setText( Integer.toString( mBotInformation.getServerPort() ) );
+        mConnectionTextfieldBotaddress.setText( mBotInformation.getBotIP().getHostAddress() );
+        mConnectionTextfieldBotport.setText( Integer.toString( mBotInformation.getBotPort() ) );
+        mConnectionTextfieldServeraddress.setText( mBotInformation.getServerIP().getHostAddress() );
+        mConnectionTextfieldServerteamport.setText( Integer.toString( mBotInformation.getServerPort() ) );
         
-        mTabbedPanePanelAIPanelExecutionTextfieldAiarchive.setText( mBotInformation.getAIArchive() );
-        mTabbedPanePanelAIPanelExecutionTextfieldAiclass.setText( mBotInformation.getAIClassname() );
-        mTabbedPanePanelAIPanelArgumentsTextareaAiarguments.setText( mBotInformation.getAIArgs() );
+        mAIExecutionTextfieldAiarchive.setText( mBotInformation.getAIArchive() );
+        mAIExecutionTextfieldAiclass.setText( mBotInformation.getAIClassname() );
+        mAIArgumentsTextareaAiarguments.setText( mBotInformation.getAIArgs() );
         
         mTabbedPanePanelLoggingPanelControlComboBoxLoglevel.setSelectedItem( mTheRemoteBot.getTheBot().getLogLevel() );
         
@@ -1238,12 +1250,12 @@ public class BotFrame extends JPanel {
          
             if( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AILoaded ) ){
                 
-                mTabbedPanePanelStatusPanelAiLabelLoadedstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
+                mStatusAiLabelLoadedstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
                 mPanelHeadPanelBackLabelAILoaded.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
                 
             } else {
                 
-                mTabbedPanePanelStatusPanelAiLabelLoadedstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
+                mStatusAiLabelLoadedstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
                 mPanelHeadPanelBackLabelAILoaded.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
                 
             }
@@ -1254,12 +1266,12 @@ public class BotFrame extends JPanel {
          
             if( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AIRunning) ){
                 
-                mTabbedPanePanelStatusPanelAiLabelRunningstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
+                mStatusAiLabelRunningstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
                 mPanelHeadPanelBackLabelAIRunning.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
                 
             } else {
                 
-                mTabbedPanePanelStatusPanelAiLabelRunningstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
+                mStatusAiLabelRunningstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
                 mPanelHeadPanelBackLabelAIRunning.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
                 
             }
@@ -1270,12 +1282,12 @@ public class BotFrame extends JPanel {
                  
             if( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.NetworkConnection ) ){
                 
-                mTabbedPanePanelStatusPanelNetworkstatusLabelConnectedstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
+                mStatusNetworkstatusLabelConnectedstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
                 mPanelHeadPanelBackLabelNetworkConnected.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
                 
             } else {
                 
-                mTabbedPanePanelStatusPanelNetworkstatusLabelConnectedstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
+                mStatusNetworkstatusLabelConnectedstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
                 mPanelHeadPanelBackLabelNetworkConnected.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
                 
             }
@@ -1286,12 +1298,12 @@ public class BotFrame extends JPanel {
          
             if( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.NetworkIncomingTraffic ) ){
                 
-                mTabbedPanePanelStatusPanelNetworkstatusLabelTrafficincomingstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
+                mStatusNetworkstatusLabelTrafficincomingstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
                 mPanelHeadPanelBackLabelNetworkTrafficIncoming.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
                 
             } else {
                 
-                mTabbedPanePanelStatusPanelNetworkstatusLabelTrafficincomingstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
+                mStatusNetworkstatusLabelTrafficincomingstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
                 mPanelHeadPanelBackLabelNetworkTrafficIncoming.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
                 
             }
@@ -1302,12 +1314,12 @@ public class BotFrame extends JPanel {
          
             if( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.NetworkOutgoingTraffic ) ){
                 
-                mTabbedPanePanelStatusPanelNetworkstatusLabelTrafficoutgoingstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
+                mStatusNetworkstatusLabelTrafficoutgoingstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
                 mPanelHeadPanelBackLabelNetworkTrafficOutgoing.setIcon(new ImageIcon(BotFrame.class.getResource("/res/green_signal.gif")));
                 
             } else {
                 
-                mTabbedPanePanelStatusPanelNetworkstatusLabelTrafficoutgoingstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
+                mStatusNetworkstatusLabelTrafficoutgoingstatus.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
                 mPanelHeadPanelBackLabelNetworkTrafficOutgoing.setIcon(new ImageIcon(BotFrame.class.getResource("/res/red_signal.gif")));
                 
             }
@@ -1317,29 +1329,29 @@ public class BotFrame extends JPanel {
 
     public void changeConnectionButtons( boolean aConnected ) throws RemoteException {
         
-        mTabbedPanePanelConnectionButtonConnect.setEnabled( !aConnected );
-        mTabbedPanePanelConnectionButtonConnect.setVisible( !aConnected );
-        mTabbedPanePanelConnectionButtonReconnect.setEnabled( !aConnected );
-        mTabbedPanePanelConnectionButtonReconnect.setVisible( !aConnected );
-        mTabbedPanePanelConnectionButtonDisconnect.setEnabled( aConnected );
-        mTabbedPanePanelConnectionButtonDisconnect.setVisible( aConnected);
+        mConnectionButtonConnect.setEnabled( !aConnected );
+        mConnectionButtonConnect.setVisible( !aConnected );
+        mConnectionButtonReconnect.setEnabled( !aConnected );
+        mConnectionButtonReconnect.setVisible( !aConnected );
+        mConnectionButtonDisconnect.setEnabled( aConnected );
+        mConnectionButtonDisconnect.setVisible( aConnected);
         
         updateStatus( null );
     }
     
     public void changeAIButtons( boolean aInitalised, boolean aRunning ) throws RemoteException{
 
-        mTabbedPanePanelAIPanelArgumentsButtonExecute.setEnabled( aInitalised & aRunning );
+        mAIArgumentsButtonExecute.setEnabled( aInitalised & aRunning );
 
-        mTabbedPanePanelAIPanelExecutionButtonAipause.setEnabled( aInitalised & aRunning );
-        mTabbedPanePanelAIPanelExecutionButtonAipause.setVisible( aInitalised & aRunning );
-        mTabbedPanePanelAIPanelExecutionButtonAiunpause.setEnabled( aInitalised & !aRunning );
-        mTabbedPanePanelAIPanelExecutionButtonAiunpause.setVisible( aInitalised & !aRunning );
+        mAIExecutionButtonAipause.setEnabled( aInitalised & aRunning );
+        mAIExecutionButtonAipause.setVisible( aInitalised & aRunning );
+        mAIExecutionButtonAiunpause.setEnabled( aInitalised & !aRunning );
+        mAIExecutionButtonAiunpause.setVisible( aInitalised & !aRunning );
 
-        mTabbedPanePanelAIPanelExecutionButtonAidispose.setEnabled( aInitalised );
-        mTabbedPanePanelAIPanelExecutionButtonAidispose.setVisible( aInitalised );
-        mTabbedPanePanelAIPanelExecutionButtonAiinitialise.setEnabled( !aInitalised );
-        mTabbedPanePanelAIPanelExecutionButtonAiinitialise.setVisible( !aInitalised );
+        mAIExecutionButtonAidispose.setEnabled( aInitalised );
+        mAIExecutionButtonAidispose.setVisible( aInitalised );
+        mAIExecutionButtonAiinitialise.setEnabled( !aInitalised );
+        mAIExecutionButtonAiinitialise.setVisible( !aInitalised );
         
         updateStatus( null );
         

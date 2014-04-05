@@ -21,7 +21,7 @@ public class BotLoader implements Runnable {
 	private static List<Process> runningProcesses = new ArrayList<Process>();
 
 	private BotInformation mBot;
-	private String workingDir = ".";
+	private File mCoreJarFile;
 	private Process mProcess;
 	private BufferedReader mReader;
 	private boolean active = false;
@@ -30,11 +30,11 @@ public class BotLoader implements Runnable {
 	/**
 	 * Consctructor
 	 * @param aBot			{@link BotInformation} about bot to start
-	 * @param coreJarFile	{@link File} of bot core
+	 * @param aCoreJarFile	{@link File} of bot core
 	 */
-	public BotLoader(BotInformation aBot, File coreJarFile) {
+	public BotLoader(BotInformation aBot, File aCoreJarFile) {
 		setBot(aBot);
-		workingDir = coreJarFile.getParent();
+		mCoreJarFile = aCoreJarFile;
 	}
 
 	/**
@@ -46,19 +46,21 @@ public class BotLoader implements Runnable {
 
 			if (mBot != null) {
 
-				String cmd = "java -cp \"libraries/*;bot_mr.jar\" core.Main"
-						+ " -bn " + mBot.getBotname()
-						+ " -tn " + mBot.getTeamname()
+				String cmd = "java -cp \"libraries/*;" + mCoreJarFile.getPath() + "\" core.Main"
+						+ ( mBot.getBotname().trim().length() > 0 ? " -bn " + mBot.getBotname().trim() : "" )
+						+ ( mBot.getTeamname().trim().length() > 0 ? " -tn " + mBot.getTeamname().trim() : "" )
 						+ " -t " + mBot.getTeam().name().toLowerCase()
 						+ " -ids " + mBot.getRcId() + ":" + mBot.getVtId()
-						+ " -s " + mBot.getServerIP() + ":" + mBot.getServerPort()
+						+ " -s " + mBot.getServerIP().getHostAddress() + ":" + mBot.getServerPort()
 						+ " -aiarc \"" + mBot.getAIArchive() + "\""
 						+ " -aicl \"" + mBot.getAIClassname() + "\"";
+				
+				System.out.println("CMD: " + cmd);
 				
 				// create processbuilder
 				ProcessBuilder processBuilder = new ProcessBuilder( cmd.split(" ") );
 				processBuilder.redirectErrorStream(true);
-				processBuilder.directory( new File(workingDir) );
+				processBuilder.directory( new File(mCoreJarFile.getParent()) );
 				
 				// start process
 				mMessages.clear();

@@ -21,6 +21,7 @@ public class RemoteBot implements LogListener, StatusListener {
 
     private final RemoteControlInterface mTheBot;
     private BotFrame mTheBotFrame = null;
+    private BotLoader mBotLoader = null;
 
     private int mLogListenerIdent = 0;
     private int mStatusListenerIdent = 0;
@@ -36,6 +37,11 @@ public class RemoteBot implements LogListener, StatusListener {
         mTheBotFrame = aBotFrame;
         mTheBotFrame.registerBot( this );
         
+    }
+    
+    public RemoteBot( String aBotURL, BotFrame aBotFrame, BotLoader aBotLoader ) throws RemoteException, MalformedURLException, NotBoundException {
+    	this(aBotURL, aBotFrame);
+    	mBotLoader = aBotLoader;
     }
 
     public void connectStatusListener() throws RemoteException {
@@ -84,6 +90,10 @@ public class RemoteBot implements LogListener, StatusListener {
         
         return mTheBot;
         
+    }
+    
+    public BotLoader getBotLoader(){
+    	return mBotLoader;
     }
     
     @Override
