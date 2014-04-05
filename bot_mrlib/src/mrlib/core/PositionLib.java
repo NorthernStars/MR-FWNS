@@ -272,8 +272,11 @@ public class PositionLib {
 	
 	public static boolean isBallInAreaOfFourRefPoints(ReferencePoint aFirstPoint, ReferencePoint aSecondPoint, ReferencePoint aThirdPoint, ReferencePoint aFourthPoint, BallPosition ballPos){
 		
-		double smallestX = 0, secondsmallestX = 0;
-	//	double biggestX = 0;
+		double smallestX = 0;
+		@SuppressWarnings("unused")
+		double secondsmallestX = 0;
+//		double biggestX = 0;
+		
 		smallestX = aFirstPoint.getXOfPoint();
 		if(aSecondPoint.getXOfPoint() < smallestX)
 			secondsmallestX = smallestX;
