@@ -48,12 +48,55 @@ var javaCommentMultiOpen = '/*';
 var javaCommentMultiClose = '*/';
 var javaAnnotations = [ '@' ];
 
+function showCode(id){
+	
+	element = document.getElementById("pre"+id);
+	if( element != null ){
+		// set element visible
+		element.style.height = 'auto';
+		
+		// set link to hide
+		element = document.getElementById("preA"+id);
+		element.innerText = "hide code";
+		element.setAttribute("href", "javascript: hideCode("+id+")");
+	}
+	
+}
+
+function hideCode(id){
+	
+	element = document.getElementById("pre"+id);
+	if( element != null ){
+		// set element visible
+		element.style.height = '40px';
+		
+		// set link to hide
+		element = document.getElementById("preA"+id);
+		element.innerText = "show code";
+		element.setAttribute("href", "javascript: showCode("+id+")");
+	}
+	
+}
+
 function checkJavaSyntax(){
 	var elements = document.getElementsByTagName('pre');
 	for( var i=0; i<elements.length; i++ ){
-		
+
 		var element = elements[i];	
 		var lines = elements[i].innerHTML.split('\n');
+		
+		// set element id
+		element.setAttribute("id", "pre"+i);
+		
+		var btn = document.createElement("a");
+		btn.setAttribute("id", "preA"+i);
+		btn.setAttribute("class", "preButtonLink");
+		btn.setAttribute("href", "javascript:showCode("+i+")");
+		btn.innerText = "show code";
+		
+		// add showing function before
+		element.parentNode.insertBefore(btn, element);
+		
 		
 		// highlight keywords
 		var comment = false;
