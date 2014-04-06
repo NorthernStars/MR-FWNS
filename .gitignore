@@ -10,4 +10,5 @@
 !*.xml
 !*/src/**/*.*
 !*.zip
-'*.tar.gz
+'*.tar
+!*.gz
