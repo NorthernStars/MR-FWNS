@@ -60,7 +60,11 @@ public class BotLoader implements Runnable {
 				// create processbuilder
 				ProcessBuilder processBuilder = new ProcessBuilder( cmd.split(" ") );
 				processBuilder.redirectErrorStream(true);
-				processBuilder.directory( new File(mCoreJarFile.getParent()) );
+				if( mCoreJarFile.getParent() != null ){
+					processBuilder.directory( new File(mCoreJarFile.getParent()) );
+				} else{
+					processBuilder.directory( new File(".") );
+				}
 				
 				// start process
 				mMessages.clear();
@@ -151,7 +155,6 @@ public class BotLoader implements Runnable {
 
 			if( mReader != null ){
 				mReader.close();
-				mReader = null;
 			}
 		
 		}catch (IOException e){

@@ -76,7 +76,8 @@ public class BotFrame extends JPanel {
     private JMenuItem mntmSetMaxLines;
     private JButton mLoggingControlButtonDisconnectlogger;
     private JButton mLoggingControlButtonConnectlogger;
-    private JComboBox mTabbedPanePanelLoggingPanelControlComboBoxLoglevel;
+    @SuppressWarnings("rawtypes")
+	private JComboBox mTabbedPanePanelLoggingPanelControlComboBoxLoglevel;
     private JPanel vPanelAIPanelArguments;
     private JTextField mAIExecutionTextfieldAiarchive;
     private JTextField mAIExecutionTextfieldAiclass;
@@ -99,7 +100,8 @@ public class BotFrame extends JPanel {
     private JLabel mStatusNetworkstatusLabelTrafficincomingstatus;
     private JLabel mStatusAiLabelLoadedstatus;
     private JTable mDataPanelServerconstantsTable;
-    private JComboBox mDataGeneralComboBoxTeam;
+    @SuppressWarnings("rawtypes")
+	private JComboBox mDataGeneralComboBoxTeam;
     private JButton mConnectionButtonConnect;
     private JButton mConnectionButtonReconnect;
     private JButton mConnectionButtonDisconnect;
@@ -119,7 +121,8 @@ public class BotFrame extends JPanel {
     /**
      * Create the panel.
      */
-    public BotFrame() {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public BotFrame() {
         
         setBorder(new LineBorder(UIManager.getColor("TabbedPane.selected"), 3));
         setLayout(new BorderLayout(0, 0));
@@ -145,13 +148,13 @@ public class BotFrame extends JPanel {
             @Override
 			public void actionPerformed(ActionEvent e) {
 
+            	// TODO: nachdenken! Frage nicht eindeutig!
                 int vSelection = JOptionPane.showConfirmDialog(
                         Botcontrol.getInstance().getMainFrame(),
                         "Would you like to close the Bot?",
                         "Closing the Bot",
                         JOptionPane.YES_NO_CANCEL_OPTION);
                 
-                System.out.println(vSelection);
                 if ( vSelection == 0 || vSelection == 1 ){
                     
                     setEnabled( false );
@@ -330,7 +333,14 @@ public class BotFrame extends JPanel {
         btnStatusButtonStopBot.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		if( mTheRemoteBot.getBotLoader() != null ){
-        			mTheRemoteBot.getBotLoader().stopBot();
+        			// disable button
+        			btnStatusButtonStopBot.setEnabled( !mTheRemoteBot.getBotLoader().stopBot() );
+        			
+        			// remove bot frame and close bot
+        			setEnabled( false );
+                    setVisible( false );                    
+                    Botcontrol.getInstance().removeBotframe( (BotFrame) mPanelHead.getParent() );
+                    close( true );
         		}
         	}
         });
@@ -1066,7 +1076,7 @@ public class BotFrame extends JPanel {
         
         mPanelHeadPanelBackLabelButtonExpandContract.addActionListener(new ActionListener() {
             
-            private int i = 0;
+//			private int i = 0;
             
             @Override
 			public void actionPerformed(ActionEvent e) {

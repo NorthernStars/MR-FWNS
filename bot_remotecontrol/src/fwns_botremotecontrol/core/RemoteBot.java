@@ -27,8 +27,12 @@ public class RemoteBot implements LogListener, StatusListener {
     private int mStatusListenerIdent = 0;
     
     public RemoteBot( String aBotURL, BotFrame aBotFrame ) throws RemoteException, MalformedURLException, NotBoundException {
-        
-        mTheBot = (RemoteControlInterface)Naming.lookup( aBotURL );
+    	this(aBotURL, aBotFrame, null);
+    }
+    
+    public RemoteBot( String aBotURL, BotFrame aBotFrame, BotLoader aBotLoader ) throws RemoteException, MalformedURLException, NotBoundException {
+    	mTheBot = (RemoteControlInterface)Naming.lookup( aBotURL );
+    	mBotLoader = aBotLoader;
         
         UnicastRemoteObject.exportObject( this, 0 );
         connectLogListener();
@@ -36,12 +40,7 @@ public class RemoteBot implements LogListener, StatusListener {
         
         mTheBotFrame = aBotFrame;
         mTheBotFrame.registerBot( this );
-        
-    }
-    
-    public RemoteBot( String aBotURL, BotFrame aBotFrame, BotLoader aBotLoader ) throws RemoteException, MalformedURLException, NotBoundException {
-    	this(aBotURL, aBotFrame);
-    	mBotLoader = aBotLoader;
+    	
     }
 
     public void connectStatusListener() throws RemoteException {
@@ -110,7 +109,9 @@ public class RemoteBot implements LogListener, StatusListener {
             SwingUtilities.invokeLater( new Runnable() { //TODO: nachdenken
                 public void run() {
                     
-                    mTheBotFrame.addToLog( vLogMessage );
+                	try{
+                		mTheBotFrame.addToLog( vLogMessage );
+                	} catch (Exception vException){}
                     
                 }
             });
