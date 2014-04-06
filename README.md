@@ -6,6 +6,8 @@ The Mixed-Reality is a robot soccer league that plays with a set of tiny robots 
 The robots are controlled remotely by game server wich interacts with several autonomous agents (clients).
 This framework gives you the aibility for developing your own agent.
 
+See http://northernstars.github.io/MR-FWNS/ for more information.
+
 Install Instructions
 ====================
 This install instructions explains how to import MR_NSFW into Eclipse (www.eclipse.org).
