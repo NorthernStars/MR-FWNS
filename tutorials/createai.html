@@ -1,0 +1,206 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>NorthernStars Mixed-Reality Framework by NorthernStars</title>
+
+    <link rel="stylesheet" href="../stylesheets/styles.css">
+    <link rel="stylesheet" href="../stylesheets/pygment_trac.css">
+    <script src="../javascripts/scale.fix.js"></script>
+    <script src="../javascripts/main.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body onload="checkJavaSyntax()">
+    <div class="wrapper">
+      <header>
+        <h1 class="header">MR-FWNS</h1>
+        <p class="header">NorthernStars Mixed-Reality Framework</p>
+
+		<hr />
+		<p class="header">MR-Framework:</p>
+        <ul>
+          	<li class="download"><a class="buttons" href="https://github.com/NorthernStars/MR-FWNS/raw/master/MR-FWNS-complete.zip">Download ZIP</a></li>
+          	<li class="download"><a class="buttons" href="https://github.com/NorthernStars/MR-FWNS/raw/master/MR-FWNS-complete.tar.gz">Download TAR</a></li>
+        </ul>
+        
+        <hr />
+		<p class="header">Example AI:</p>
+        <ul>
+          	<li class="download"><a class="buttons" href="https://github.com/NorthernStars/MR-FWNS/raw/master/MR-FWNS-AI.zip">Download ZIP</a></li>
+          	<li class="download"><a class="buttons" href="https://github.com/NorthernStars/MR-FWNS/raw/master/MR-FWNS-AI.tar.gz">Download TAR</a></li>
+        </ul>
+        
+        <hr />
+        <ul>
+        	<li><a class="buttons github" href="https://github.com/NorthernStars/MR-FWNS/releases" target="_blank">View Releases</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/NorthernStars">NorthernStars</a></p>
+
+
+      </header>
+      <section>
+      	<h2>Creating an artifical intelligence</h2>
+      	<p>
+      		This tutorial shows, how to create an artificial intelligence (AI).
+      		We mainly use <a href="https://eclipse.org/" target="_blank">Eclipse</a> for programming.
+      		But this tutorial should also work with any other IDE.
+      		This tutorial requires downloaded and extracted <i>MR-FWNS-complete</i> archive (download MR-Framework on the left side).
+      		
+      	</p>
+      	
+      	<h3>Create project.</h3>
+      	<p>
+      		Create a new java project and name it however you like, for example <i>MyAI</i>.
+      		Set up a source folder and a main package that will contain your AI. Let's say you named your main package <i>default</i>.
+      	</p>
+      	<p>
+      		Add the following jar libraries from extracted <i>MR-FWNS-complete</i> subfolder <i>libraries</i> to your build path:
+      		<ul>
+      			<li>bot_essentials.jar</li>
+      			<li>bot_mrlib.jar</li>
+      		</ul> 
+      	</p>
+      	
+      	<h3>Create AI class</h3>
+      	<p>
+      		Create a new java file with a class inside the <i>default</i> package that extends the class <code>Thread</code> and implements the interface <code>ArtificialIntelligence</code> from <code>essentials.core</code>.<br />
+      		To add all missing functions from extendes class and interface as well as some other variables, use the following template to complete your AI class:
+      	</p>
+<pre>
+public class MyAI extends Thread implements ArtificialIntelligence {
+
+    BotInformation mSelf = null;
+    RawWorldData mWorldState = null;
+    Action mAction = null;
+    
+    boolean mNeedNewAction = true;    
+    boolean mIsStarted = false;
+    boolean mIsPaused = false;
+    
+    @Override
+    public void initializeAI( BotInformation aOneSelf ) {        
+        mSelf = aOneSelf; 
+        mIsStarted = true;
+        start();        
+    }
+
+    @Override
+    public void resumeAI() {        
+        mIsPaused = false;        
+    }
+    
+    @Override
+    public void suspendAI() {        
+        mIsPaused = true;           
+    }
+    
+    /**
+     * Main function of AI
+     */
+    public void run(){
+        
+        RawWorldData vWorldState = null;
+        Action vBotAction = null;
+        
+        while ( mIsStarted ){
+            
+            while( mIsPaused ){ try { this.wait( 10 ); } catch ( InterruptedException e ) { e.printStackTrace(); } }
+
+            try {             
+                if( mNeedNewAction && mWorldState != null  ){
+                    synchronized ( this ) {
+                        vWorldState = mWorldState;
+                    }
+                    
+                    // Getting current play mode
+                    PlayMode vPlayMode = mWorldState.getPlayMode();
+                    
+                    // Check for kick off
+                    if( vPlayMode == PlayMode.KickOff
+                    		|| (vPlayMode == PlayMode.KickOffYellow && mSelf.getTeam() == Teams.Yellow)
+                    		|| (vPlayMode == PlayMode.KickOffBlue && mSelf.getTeam() == Teams.Blue) ){
+                    	
+                    	// --------------- KICK OFF ---------------
+                    	// --------------- KICK OFF END ---------------
+                    	
+                    }
+                    // No kick off
+                    else{
+                    	
+                    	// --------------- START AI -------------------	                    
+                    	// ---------------- END AI --------------------
+                    
+                    }
+                    
+                    // Set action
+                    synchronized ( this ) {
+                        mAction = vBotAction;
+                        mNeedNewAction = false;
+                    }                  
+                }
+                Thread.sleep( 1 );                
+            } catch ( Exception e ) {
+                e.printStackTrace();
+            }            
+            
+        }
+        
+    }
+
+    
+    @Override
+    public synchronized Action getAction() {
+        synchronized ( this ) {
+            if( mAction != null)
+                return mAction;
+        }
+        return (Action) Movement.NO_MOVEMENT;        
+    }
+
+    @Override
+    public void putWorldState(RawWorldData aWorldState) {
+        synchronized ( this ) {
+            mWorldState = aWorldState;
+            mNeedNewAction = true;
+        }        
+    }
+
+    @Override
+    public void disposeAI() {        
+        mIsStarted = false;
+        mIsPaused = false;        
+    }
+    
+    @Override
+    public boolean isRunning() {
+        return mIsStarted && !mIsPaused;        
+    }
+
+	@Override
+	public boolean wantRestart() {
+		return false;
+	}
+
+    @Override
+    public void executeCommand( String arg0 ) {
+    }
+
+}      		
+</pre>
+      	
+      	
+      	<p><a class="back" href="javascript: history.back()">Back</a></p>
+	  </section>
+      <footer>
+        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
