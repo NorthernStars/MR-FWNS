@@ -326,6 +326,7 @@ public class BotFrame extends JPanel {
         vPanelStatus.add(vStatusButtonManuallystatuscheck);
         
         btnStatusButtonStopBot = new JButton("Stop bot");
+        btnStatusButtonStopBot.setEnabled(false);
         btnStatusButtonStopBot.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		if( mTheRemoteBot.getBotLoader() != null ){
@@ -1212,6 +1213,10 @@ public class BotFrame extends JPanel {
         
         changeConnectionButtons( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.NetworkConnection ) );
         changeAIButtons( mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AILoaded ), mTheRemoteBot.getTheBot().getBooleanStatus( BotStatusType.AIRunning ) );
+        
+        if( mTheRemoteBot.getBotLoader() != null ){
+        	btnStatusButtonStopBot.setEnabled(true);
+        }
         
         //mTabbedPanePanelConnectionButtonConnect;
         //mTabbedPanePanelConnectionButtonDisconnect;
