@@ -62,9 +62,9 @@ public class BotFrame extends JPanel {
     private boolean mExpanded = true;
     private int mMaxLinesInLog = 1000;
     private final Executor mExecutor = Executors.newFixedThreadPool( 1 );
-    private JButton mPanelHeadPanelBackLabelButtonExpandContract;
+    public JButton mPanelHeadPanelBackLabelButtonExpandContract;
     private JPanel mPanelHead;
-    private JTabbedPane mTabbedPane;
+    public JTabbedPane mTabbedPane;
     private JPanel vPanelStatus;
     private JPanel vPanelData;
     private JPanel vPanelConnection;
@@ -126,7 +126,7 @@ public class BotFrame extends JPanel {
         
         setBorder(new LineBorder(UIManager.getColor("TabbedPane.selected"), 3));
         setLayout(new BorderLayout(0, 0));
-        setPreferredSize(new Dimension(349, 249));
+        setPreferredSize(new Dimension(349, 278));
         setMinimumSize(new Dimension(400, 45));
         setMaximumSize(new Dimension(10000, 45));
         
@@ -1115,8 +1115,12 @@ public class BotFrame extends JPanel {
                     
                 }
                 
-                revalidate();
-                getParent().validate();
+                try{
+                	revalidate();
+                	getParent().validate();
+                }catch (Exception err){
+//                	err.printStackTrace();
+                }
                 
             }
         });

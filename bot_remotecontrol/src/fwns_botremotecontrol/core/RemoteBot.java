@@ -40,6 +40,11 @@ public class RemoteBot implements LogListener, StatusListener {
         
         mTheBotFrame = aBotFrame;
         mTheBotFrame.registerBot( this );
+        
+        if( mBotLoader != null ){
+        	// start minimized
+        	mTheBotFrame.mPanelHeadPanelBackLabelButtonExpandContract.doClick();
+        }
     	
     }
 

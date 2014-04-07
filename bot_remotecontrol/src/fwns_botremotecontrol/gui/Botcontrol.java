@@ -26,10 +26,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
+
 import javax.swing.KeyStroke;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.InputEvent;
 import java.awt.Insets;
@@ -81,6 +82,8 @@ public class Botcontrol {
     private JComboBox<Teams> cmbTeam;
     private int mRcId = 0;
     private int mVtId = 0;
+    private JLabel lblStatus;
+    private JButton btnStartBot;
     
     private Botcontrol(){
         initialize();
@@ -178,6 +181,10 @@ public class Botcontrol {
         		
         		if( chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION ){
         			mCoreJarFile = chooser.getSelectedFile();
+        			if( mCoreJarFile.exists() ){
+        				lblStatus.setText("Bot core jar file loaded.");
+        				btnStartBot.setEnabled(true);
+        			}
         		}
         	}
         });
@@ -203,6 +210,10 @@ public class Botcontrol {
         
         JPanel panel = new JPanel();
         vMenuBar.add(panel);
+        
+        lblStatus = new JLabel("");
+        lblStatus.setHorizontalAlignment(SwingConstants.CENTER);
+        panel.add(lblStatus);
                 GridBagLayout gridBagLayout = new GridBagLayout();
                 gridBagLayout.columnWidths = new int[]{0, 0};
                 gridBagLayout.rowHeights = new int[]{0, 0, 0};
@@ -430,115 +441,16 @@ public class Botcontrol {
                         panelAddBot.add(txtServerPort, gbc_txtServerPort);
                         txtServerPort.setColumns(10);
                         
-                        JButton bntStartBot = new JButton("Start bot");
-                        bntStartBot.addActionListener(new ActionListener() {
-                        	public void actionPerformed(ActionEvent e) {
-                        		
+                        btnStartBot = new JButton("Start bot");
+                        btnStartBot.setEnabled(false);
+                        btnStartBot.addActionListener(new ActionListener() {
+                        	public void actionPerformed(ActionEvent e) {                        		
                         		new Thread(new Runnable(){                					
-                					@SuppressWarnings("null")
 									@Override
-                					public void run(){
-                        		
-		                        		try{
-		                        			
-		                        			String botname = txtBotname.getText().trim();
-		                        			String teamname = txtTeamname.getText().trim();
-		                        			String aiclassname = cmbAiClasses.getItemAt( cmbAiClasses.getSelectedIndex() );
-		                        			String serverip = txtServerIp.getText().trim();
-		                        			int serverport = (int)( Double.parseDouble(txtServerPort.getText()) );
-		                        			mRcId = (int)( Double.parseDouble(txtRcId.getText()) );
-		                        			mVtId = (int)( Double.parseDouble(txtVtId.getText()) );
-		                        			Teams team = cmbTeam.getItemAt( cmbTeam.getSelectedIndex() );
-		                        			File aifile = new File(txtBotFile.getText());
-		                        			
-		                        			// check botname
-		                        			if( botname.length() == 0 && aiclassname != null ){
-		                        				botname = aiclassname.substring( aiclassname.lastIndexOf(".")+1 );
-		                        			}
-		                        			
-		                        			// set bot information
-		                        			BotInformation vBot = new BotInformation();
-		                        			vBot.setBotname(botname);
-		                        			vBot.setTeamname(teamname);
-		                        			vBot.setAIClassname(aiclassname);
-		                        			vBot.setServerIP( InetAddress.getByName(serverip) );
-		                        			vBot.setServerPort( serverport );
-		                        			vBot.setRcId(mRcId);
-		                        			vBot.setVtId(mVtId);
-		                        			vBot.setTeam(team);
-		                        			vBot.setAIArchive( aifile.getPath() );
-		                        			
-		                        			// create new bot
-		                        			if( mCoreJarFile != null && mCoreJarFile.exists() ){                        				
-
-		                        				// load new bot
-		                        				BotLoader botLoader = new BotLoader(vBot, mCoreJarFile);
-		                        				if( botLoader.startBot() ){
-		                        					
-		                        					// increase rcid and vtid
-		                        					mRcId++;
-		                        					mVtId++;
-		                        					txtRcId.setText( Integer.toString(mRcId) );
-		                        					txtVtId.setText( Integer.toString(mVtId) );
-		                        					
-		                        					// Create bot remotecontrol url
-		                        					String botRemoteURL = "//localhost:1099/" + vBot.getBotname()
-		                        							+ "-" + vBot.getRcId() + "-" + vBot.getVtId();
-		                        					
-		                        					// wait until bot is registered
-		                        					boolean botRegistered = true;
-		                        					try{			                        					
-			                        					long tm = System.currentTimeMillis();
-			                        					while( !botRegistered
-			                        							&& (System.currentTimeMillis()-tm < 3000)){
-			                        						String[] vListOfBots = Core.getInstance().getListOfBots("//localhost:1099/");
-			                        						for( String url : vListOfBots ){
-			                        							if( url.equals(botRemoteURL) ){
-			                        								botRegistered = true;
-			                        								break;
-			                        							}
-			                        						}
-			                        						Thread.sleep(100);
-			                        					}
-		                        					}catch( Exception e ){
-		                        						e.printStackTrace();
-		                        					}
-		                        					
-		                        					// check if bot is registered
-		                        					if( botRegistered ){		                        					
-			                        					// show bot frame
-			                        					BotFrame vNewBotFrame = new BotFrame();
-			                        	                RemoteBot vNewRemoteBot = null;
-			                        	                try {
-			                        	                	
-			                        	                    vNewRemoteBot = new RemoteBot( botRemoteURL, vNewBotFrame, botLoader );
-			                        	                    Botcontrol.getInstance().addBotFrame( vNewBotFrame );
-			                        	                    
-			                        	                } catch ( RemoteException | MalformedURLException | NotBoundException e1 ) {
-			                        	                    e1.printStackTrace();
-			                        	                    vNewRemoteBot.close( false);
-			                        	                    vNewBotFrame.close( false);
-			                        	                } catch (Exception e){
-			                        	                	e.printStackTrace();
-			                        	                }
-		                        					}else {
-		                        						// not registered > stop bot
-		                        						botLoader.stopBot();
-		                        					}
-		                        				}
-		                        				
-		                        			}
-	                        			
-	                        			
-		                        		}catch (IllegalFormatException err){
-		                        			Core.getLogger().error("Can not convert string to number. " + err.getLocalizedMessage());
-		                        		} catch (UnknownHostException e2) {
-											Core.getLogger().error("Could not resolve server ip.");
-		                        		}
-		                        		
+                					public void run(){                        		
+		                        		startNewBot();		                        		
                 					}
-                        		}).start();
-                        		
+                        		}).start();                        		
                         	}
                         });
                         GridBagConstraints gbc_bntStartBot = new GridBagConstraints();
@@ -548,7 +460,7 @@ public class Botcontrol {
                         gbc_bntStartBot.insets = new Insets(0, 0, 5, 5);
                         gbc_bntStartBot.gridx = 1;
                         gbc_bntStartBot.gridy = 7;
-                        panelAddBot.add(bntStartBot, gbc_bntStartBot);
+                        panelAddBot.add(btnStartBot, gbc_bntStartBot);
                         
                         JLabel lblSpaceHolder1 = new JLabel("");
                         GridBagConstraints gbc_lblSpaceHolder1 = new GridBagConstraints();
@@ -608,6 +520,131 @@ public class Botcontrol {
         preloadData();
         
     }
+    
+    
+    private void startNewBot(){
+    	try{
+			
+			String botname = txtBotname.getText().trim();
+			String teamname = txtTeamname.getText().trim();
+			String aiclassname = cmbAiClasses.getItemAt( cmbAiClasses.getSelectedIndex() );
+			String serverip = txtServerIp.getText().trim();
+			int serverport = (int)( Double.parseDouble(txtServerPort.getText()) );
+			mRcId = (int)( Double.parseDouble(txtRcId.getText()) );
+			mVtId = (int)( Double.parseDouble(txtVtId.getText()) );
+			Teams team = cmbTeam.getItemAt( cmbTeam.getSelectedIndex() );
+			File aifile = new File(txtBotFile.getText());
+			
+			// check botname
+			if( botname.length() == 0 && aiclassname != null ){
+				botname = aiclassname.substring( aiclassname.lastIndexOf(".")+1 );
+			}
+			
+			// set bot information
+			BotInformation vBot = new BotInformation();
+			vBot.setBotname(botname);
+			vBot.setTeamname(teamname);
+			vBot.setAIClassname(aiclassname);
+			vBot.setServerIP( InetAddress.getByName(serverip) );
+			vBot.setServerPort( serverport );
+			vBot.setRcId(mRcId);
+			vBot.setVtId(mVtId);
+			vBot.setTeam(team);
+			vBot.setAIArchive( aifile.getPath() );
+			
+			// create new bot
+			if( mCoreJarFile != null && mCoreJarFile.exists() ){                        				
+
+				// load new bot
+				BotLoader botLoader = new BotLoader(vBot, mCoreJarFile);
+				if( botLoader.startBot() ){
+					
+					// increase rcid and vtid
+					mRcId++;
+					mVtId++;
+					txtRcId.setText( Integer.toString(mRcId) );
+					txtVtId.setText( Integer.toString(mVtId) );
+					lblStatus.setText( "Started bot " + vBot.getBotname()
+							+ " (" + vBot.getRcId() + "-" + vBot.getVtId() + ")" );
+					
+					// Create bot remotecontrol url
+					String botRemoteURL = "//localhost:1099/" + vBot.getBotname()
+							+ "-" + vBot.getRcId() + "-" + vBot.getVtId();
+					
+					// wait until bot is registered
+					boolean botRegistered = true;
+					try{			                        					
+    					long tm = System.currentTimeMillis();
+    					while( !botRegistered
+    							&& (System.currentTimeMillis()-tm < 10000)){
+    						String[] vListOfBots = Core.getInstance().getListOfBots("//localhost:1099/");
+    						for( String url : vListOfBots ){
+    							if( url.equals(botRemoteURL) ){
+    								botRegistered = true;
+    								break;
+    							}
+    						}
+    						Thread.sleep(100);
+    					}
+					}catch( Exception e ){
+						e.printStackTrace();
+					}
+					
+					// check if bot is registered
+					if( botRegistered ){		                        					
+    					// show bot frame
+    					BotFrame vNewBotFrame = new BotFrame();
+    	                RemoteBot vNewRemoteBot = null;
+    	                
+    	                boolean loaded = false;
+    	                
+    	                try{
+    	                	
+	    	                long tm = System.currentTimeMillis();
+	    	                while( !loaded && System.currentTimeMillis()-tm < 10000 ){
+	        	                try {
+	        	                	
+	        	                	System.out.println("try");
+	        	                    vNewRemoteBot = new RemoteBot( botRemoteURL, vNewBotFrame, botLoader );
+	        	                    
+	        	                } catch ( RemoteException | MalformedURLException | NotBoundException e1 ) {
+	        	                	Thread.sleep(250);
+	        	                    continue;
+	        	                } catch (Exception e){
+	        	                	Thread.sleep(250);
+	        	                	continue;
+	        	                }
+	        	                
+	    	                    Botcontrol.getInstance().addBotFrame( vNewBotFrame );
+	    	                    loaded = true;
+	    	                   	Core.getLogger().debug("Added bot " + botRemoteURL + " to remote control.");
+	    	                   	lblStatus.setText("Loaded bot " + vBot.getBotname()
+							+ " (" + vBot.getRcId() + "-" + vBot.getVtId() + ")");
+	    	                }
+	    	                
+    	                }catch (InterruptedException e){
+    	                	e.printStackTrace();
+    	                }
+    	                
+    	                if( !loaded ){
+    	                	vNewRemoteBot.close( false );
+    	                    vNewBotFrame.close( false );   
+    	                }
+					}else {
+						// not registered > stop bot
+						botLoader.stopBot();
+					}
+				}
+				
+			}
+		
+		
+		}catch (IllegalFormatException err){
+			Core.getLogger().error("Can not convert string to number. " + err.getLocalizedMessage());
+		} catch (UnknownHostException e2) {
+			Core.getLogger().error("Could not resolve server ip.");
+		}
+    }
 
     
     public void addBotFrame( BotFrame botFrame ) {
@@ -645,6 +682,10 @@ public class Botcontrol {
     	System.out.println("core jar: " + f.getPath() + " " + f.exists());
     	if( f.exists() ){
     		mCoreJarFile = f;
+    		btnStartBot.setEnabled(true);
+    	}
+    	else{
+    		lblStatus.setText("No bot core file loaded!");
     	}
     	
     	// try to load default ai classes
