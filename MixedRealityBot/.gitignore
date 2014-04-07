@@ -1,3 +1,4 @@
 !.gitignore
 !startscript__bot.sh
 !startscript__bot.bat
+!bot_remotecontrol_linux_starter.sh
