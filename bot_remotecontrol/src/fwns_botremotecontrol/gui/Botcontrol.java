@@ -452,7 +452,7 @@ public class Botcontrol {
 		                        			File aifile = new File(txtBotFile.getText());
 		                        			
 		                        			// check botname
-		                        			if( botname.length() == 0 ){
+		                        			if( botname.length() == 0 && aiclassname != null ){
 		                        				botname = aiclassname.substring( aiclassname.lastIndexOf(".")+1 );
 		                        			}
 		                        			
@@ -486,18 +486,22 @@ public class Botcontrol {
 		                        							+ "-" + vBot.getRcId() + "-" + vBot.getVtId();
 		                        					
 		                        					// wait until bot is registered
-		                        					boolean botRegistered = false;
-		                        					long tm = System.currentTimeMillis();
-		                        					while( !botRegistered
-		                        							&& (System.currentTimeMillis()-tm < 3000)){
-		                        						String[] vListOfBots = Core.getInstance().getListOfBots("//localhost:1099/");
-		                        						for( String url : vListOfBots ){
-		                        							if( url.equals(botRemoteURL) ){
-		                        								botRegistered = true;
-		                        								break;
-		                        							}
-		                        						}
-		                        						Thread.sleep(100);
+		                        					boolean botRegistered = true;
+		                        					try{			                        					
+			                        					long tm = System.currentTimeMillis();
+			                        					while( !botRegistered
+			                        							&& (System.currentTimeMillis()-tm < 3000)){
+			                        						String[] vListOfBots = Core.getInstance().getListOfBots("//localhost:1099/");
+			                        						for( String url : vListOfBots ){
+			                        							if( url.equals(botRemoteURL) ){
+			                        								botRegistered = true;
+			                        								break;
+			                        							}
+			                        						}
+			                        						Thread.sleep(100);
+			                        					}
+		                        					}catch( Exception e ){
+		                        						e.printStackTrace();
 		                        					}
 		                        					
 		                        					// check if bot is registered
@@ -506,7 +510,7 @@ public class Botcontrol {
 			                        					BotFrame vNewBotFrame = new BotFrame();
 			                        	                RemoteBot vNewRemoteBot = null;
 			                        	                try {
-			                        	                    
+			                        	                	
 			                        	                    vNewRemoteBot = new RemoteBot( botRemoteURL, vNewBotFrame, botLoader );
 			                        	                    Botcontrol.getInstance().addBotFrame( vNewBotFrame );
 			                        	                    
@@ -514,6 +518,8 @@ public class Botcontrol {
 			                        	                    e1.printStackTrace();
 			                        	                    vNewRemoteBot.close( false);
 			                        	                    vNewBotFrame.close( false);
+			                        	                } catch (Exception e){
+			                        	                	e.printStackTrace();
 			                        	                }
 		                        					}else {
 		                        						// not registered > stop bot
@@ -528,9 +534,7 @@ public class Botcontrol {
 		                        			Core.getLogger().error("Can not convert string to number. " + err.getLocalizedMessage());
 		                        		} catch (UnknownHostException e2) {
 											Core.getLogger().error("Could not resolve server ip.");
-										} catch (InterruptedException e) {
-											e.printStackTrace();
-										}
+		                        		}
 		                        		
                 					}
                         		}).start();
