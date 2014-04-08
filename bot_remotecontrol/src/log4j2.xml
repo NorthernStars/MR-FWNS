@@ -15,7 +15,7 @@
     </RandomAccessFile>
   </appenders>
   <loggers>
-    <logger name="CORE" level="info">
+    <logger name="REMOTE" level="trace">
       <appender-ref ref="Console"/>
       <appender-ref ref="ERROR" />
     </logger>

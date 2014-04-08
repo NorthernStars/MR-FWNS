@@ -134,7 +134,7 @@ public class BotLoader implements Runnable {
 	 * Stops all running processes.
 	 */
 	public static void stopRunningProcesses(){
-		Core.getLogger().info("Stopping running processes.");
+		Core.getLogger().debug("Stopping running processes.");
 		for( Process p : runningProcesses ){
 			p.destroy();
 		}

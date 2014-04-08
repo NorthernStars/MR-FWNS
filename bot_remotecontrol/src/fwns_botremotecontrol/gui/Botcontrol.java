@@ -43,6 +43,7 @@ import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
 import java.util.IllegalFormatException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -522,7 +523,8 @@ public class Botcontrol {
     }
     
     
-    private void startNewBot(){
+    @SuppressWarnings("null")
+	private void startNewBot(){
     	try{
 			
 			String botname = txtBotname.getText().trim();
@@ -572,7 +574,7 @@ public class Botcontrol {
 							+ "-" + vBot.getRcId() + "-" + vBot.getVtId();
 					
 					// wait until bot is registered
-					boolean botRegistered = true;
+					boolean botRegistered = false;
 					try{			                        					
     					long tm = System.currentTimeMillis();
     					while( !botRegistered
@@ -581,6 +583,7 @@ public class Botcontrol {
     						for( String url : vListOfBots ){
     							if( url.equals(botRemoteURL) ){
     								botRegistered = true;
+    								Core.getLogger().trace("Found {} = {}", url, botRemoteURL);
     								break;
     							}
     						}
@@ -596,40 +599,22 @@ public class Botcontrol {
     					BotFrame vNewBotFrame = new BotFrame();
     	                RemoteBot vNewRemoteBot = null;
     	                
-    	                boolean loaded = false;
-    	                
-    	                try{
-    	                	
-	    	                long tm = System.currentTimeMillis();
-	    	                while( !loaded && System.currentTimeMillis()-tm < 10000 ){
-	        	                try {
-	        	                	
-	        	                	System.out.println("try");
-	        	                    vNewRemoteBot = new RemoteBot( botRemoteURL, vNewBotFrame, botLoader );
-	        	                    
-	        	                } catch ( RemoteException | MalformedURLException | NotBoundException e1 ) {
-	        	                	Thread.sleep(250);
-	        	                    continue;
-	        	                } catch (Exception e){
-	        	                	Thread.sleep(250);
-	        	                	continue;
-	        	                }
+		                try {
+	
+		                    vNewRemoteBot = new RemoteBot( botRemoteURL, vNewBotFrame, botLoader );
+		                    Botcontrol.getInstance().addBotFrame( vNewBotFrame );
+		                    
+		                } catch ( RemoteException | MalformedURLException | NotBoundException e1 ) {
+		                	e1.printStackTrace();
+		                	vNewRemoteBot.close( false );
+		                    vNewBotFrame.close( false );  
+		                }
 	        	                
-	    	                    Botcontrol.getInstance().addBotFrame( vNewBotFrame );
-	    	                    loaded = true;
-	    	                   	Core.getLogger().debug("Added bot " + botRemoteURL + " to remote control.");
-	    	                   	lblStatus.setText("Loaded bot " + vBot.getBotname()
-							+ " (" + vBot.getRcId() + "-" + vBot.getVtId() + ")");
-	    	                }
-	    	                
-    	                }catch (InterruptedException e){
-    	                	e.printStackTrace();
-    	                }
+	    	                    
+	                   	Core.getLogger().trace("Added bot {} to remote control.", botRemoteURL);
+	                   	lblStatus.setText("Loaded bot " + vBot.getBotname()
+	                   			+ " (" + vBot.getRcId() + "-" + vBot.getVtId() + ")");
     	                
-    	                if( !loaded ){
-    	                	vNewRemoteBot.close( false );
-    	                    vNewBotFrame.close( false );   
-    	                }
 					}else {
 						// not registered > stop bot
 						botLoader.stopBot();

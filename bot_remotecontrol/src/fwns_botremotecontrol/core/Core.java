@@ -40,7 +40,7 @@ public class Core {
         
     }
     
-    private static Logger BOTCORELOGGER = LogManager.getLogger("CORE");
+    private static Logger BOTCORELOGGER = LogManager.getLogger("REMOTE");
     
     public static Logger getLogger(){
         
