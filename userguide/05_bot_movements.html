@@ -64,19 +64,23 @@
       		Normally the bot couldn't target a specific angle.
       		There's always a tolerance of a few degree between the view direction of the bot and the target
       		due to physical tolerances and unprecise object recognition.
-      	</p>
-      	
+      	</p>      	
       	<p>
       		To handle these tolerances MR-FWNS bot mrlib library offers functions to calculate movements that include these tolerances.
       		For example if the angle difference between the target and the bots view direction is below 10 degree the bot just moves forward or backward.
       		If the angle difference is between 10 and 60 degree the bot turns into the targets direction but subtracts the difference angle from one of the wheels
       		corresponding to the direction of the target.
       		If the angle difference is above 60 degree the bot turns by settings one wheels speed to +100% and one to -100%.
-      	</p>
-      	
+      	</p>      	
       	<p>
       		So for several angle difference sections several behaviours are used.
       		You can modify the thresholds for every sections by changeing public static attributes of <code>mrlib.core.MoveLib</code> class.
+      	</p>
+      	<p>
+      		<img src="img/chart-bot-movements-01.png" /><br />
+      		The chart shows the default values of the attributes <code>moveAngleNoTurn</code> and <code>moveAngleTurnAndMove</code> and how the different movements are constructed
+      		using these attributes.
+      		You can change them to make the bot turn earlier or later or adjusting the tolerance for moving to targets nearly in front / in rear of the bot.
       	</p>
       	
       	<p><a class="back" href="javascript: history.back()">Back</a></p>
