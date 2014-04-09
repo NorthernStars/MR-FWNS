@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>NorthernStars Mixed-Reality Framework by NorthernStars</title>
+
+    <link rel="stylesheet" href="../stylesheets/styles.css">
+    <link rel="stylesheet" href="../stylesheets/pygment_trac.css">
+    <script src="../javascripts/scale.fix.js"></script>
+    <script src="../javascripts/main.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body onload="checkJavaSyntax()">
+    <div class="wrapper">
+      <header>
+        <h1 class="header">MR-FWNS</h1>
+        <p class="header">NorthernStars Mixed-Reality Framework</p>
+
+		<hr />
+		<p class="header">MR-Framework:</p>
+        <ul>
+          	<li class="download"><a class="buttons" href="https://github.com/NorthernStars/MR-FWNS/raw/master/MR-FWNS-complete.zip">Download ZIP</a></li>
+          	<li class="download"><a class="buttons" href="https://github.com/NorthernStars/MR-FWNS/raw/master/MR-FWNS-complete.tar.gz">Download TAR</a></li>
+        </ul>
+        
+        <hr />
+		<p class="header">Example AI:</p>
+        <ul>
+          	<li class="download"><a class="buttons" href="https://github.com/NorthernStars/MR-FWNS/raw/master/MR-FWNS-AI.zip">Download ZIP</a></li>
+          	<li class="download"><a class="buttons" href="https://github.com/NorthernStars/MR-FWNS/raw/master/MR-FWNS-AI.tar.gz">Download TAR</a></li>
+        </ul>
+        
+        <hr />
+        <ul>
+        	<li><a class="buttons github" href="https://github.com/NorthernStars/MR-FWNS/releases" target="_blank">View Releases</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/NorthernStars">NorthernStars</a></p>
+
+
+      </header>
+      <section>
+      	<h2>Bot Movements</h2>
+      	<p>
+      		This sections describes how movements for the bot are calculated in MR-FWNS.
+      		Normally bot movements should be good.
+      		But you can modify behaviour using the bot mrlib library.
+      	</p>
+      	
+      	<h3>How bots are moving</h3>
+      	<p>
+      		The physical bot moves using two wheels, on on the left, on at the right side of the robot.
+      		By setting the speed for each wheel the bot moves into different directions.
+      		The MR-FWNS <code>Movement</code> action sets the wheels speed in a range of 0% to 100%. 
+      	</p>
+      	
+      	<h3>Tolerance problems</h3>
+      	<p>
+      		Problems in bot moving occour if the bot tries to rotate to aim a target.
+      		Normally the bot couldn't target a specific angle.
+      		There's always a tolerance of a few degree between the view direction of the bot and the target
+      		due to physical tolerances and unprecise object recognition.
+      	</p>
+      	
+      	<p>
+      		To handle these tolerances MR-FWNS bot mrlib library offers functions to calculate movements that include these tolerances.
+      		For example if the angle difference between the target and the bots view direction is below 10 degree the bot just moves forward or backward.
+      		If the angle difference is between 10 and 60 degree the bot turns into the targets direction but subtracts the difference angle from one of the wheels
+      		corresponding to the direction of the target.
+      		If the angle difference is above 60 degree the bot turns by settings one wheels speed to +100% and one to -100%.
+      	</p>
+      	
+      	<p>
+      		So for several angle difference sections several behaviours are used.
+      		You can modify the thresholds for every sections by changeing public static attributes of <code>mrlib.core.MoveLib</code> class.
+      	</p>
+      	
+      	<p><a class="back" href="javascript: history.back()">Back</a></p>
+	  </section>
+      <footer>
+        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
