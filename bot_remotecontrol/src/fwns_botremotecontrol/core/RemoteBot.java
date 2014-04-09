@@ -41,6 +41,11 @@ public class RemoteBot implements LogListener, StatusListener {
         mTheBotFrame = aBotFrame;
         mTheBotFrame.registerBot( this );
         
+        // try to get bot loader if not set
+        if( mBotLoader == null ){
+        	mBotLoader = BotLoader.getBotLoaderByKey(aBotURL);
+        }
+        
         if( mBotLoader != null ){
         	// start minimized
         	// TODO: using action listiener
@@ -72,7 +77,7 @@ public class RemoteBot implements LogListener, StatusListener {
             }
             UnicastRemoteObject.unexportObject( this, true );
             
-        } catch ( RemoteException e ) {
+        } catch ( Exception e ) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }

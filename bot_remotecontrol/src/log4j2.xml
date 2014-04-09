@@ -1,25 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration packages="remotecontrol,core,">
-  <appenders>
-    <Console name="Console" target="SYSTEM_OUT">
-      <PatternLayout pattern="%d{HH:mm:ss.SSS}(%r) [%t] %-5level %logger{36} - %msg%n"/>
-      <filters>
-        <MarkerFilter marker="EXCEPTION" onMatch="DENY" onMismatch="ACCEPT"/>
-      </filters>
-    </Console>
-    <RandomAccessFile name="ERROR" fileName="logs/error(${sys:Bot}).log" >
-      <PatternLayout pattern="%d{HH:mm:ss.SSS}(%r) [%t] %-5level %logger{36} %C{1}.%M %m %ex%n"/>
-      <filters>
-        <MarkerFilter marker="EXCEPTION" onMatch="ACCEPT" onMismatch="DENY"/>
-      </filters>
-    </RandomAccessFile>
-  </appenders>
-  <loggers>
-    <logger name="REMOTE" level="trace">
-      <appender-ref ref="Console"/>
-      <appender-ref ref="ERROR" />
-    </logger>
-    <root level="error">
-    </root>
-  </loggers>
+	<appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="%d{HH:mm:ss.SSS}(%r) [%t] %-5level %logger{36} - %msg%n" />
+			<filters>
+				<MarkerFilter marker="EXCEPTION" onMatch="DENY"
+					onMismatch="ACCEPT" />
+			</filters>
+		</Console>
+		<RandomAccessFile name="ERROR" fileName="logs/error(${sys:Bot}).log">
+			<PatternLayout
+				pattern="%d{HH:mm:ss.SSS}(%r) [%t] %-5level %logger{36} %C{1}.%M %m %ex%n" />
+			<filters>
+				<MarkerFilter marker="EXCEPTION" onMatch="ACCEPT"
+					onMismatch="DENY" />
+			</filters>
+		</RandomAccessFile>
+	</appenders>
+	<loggers>
+		<logger name="REMOTE" level="debug">
+			<appender-ref ref="Console" />
+			<appender-ref ref="ERROR" />
+		</logger>
+		<root level="error">
+		</root>
+	</loggers>
 </Configuration>

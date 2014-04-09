@@ -188,10 +188,17 @@ public class Botcontrol {
                 
             }
         });
-        vFileMenue.add(vMenueItemExit);
         
-        JPanel panel = new JPanel();
-        vMenuBar.add(panel);
+        JMenuItem mntmConnectToBot = new JMenuItem("Connect to bot");
+        mntmConnectToBot.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		BotSearchWindow search = new BotSearchWindow();
+        		search.setVisible(true);
+        	}
+        });
+        mntmConnectToBot.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
+        vFileMenue.add(mntmConnectToBot);
+        vFileMenue.add(vMenueItemExit);
                 GridBagLayout gridBagLayout = new GridBagLayout();
                 gridBagLayout.columnWidths = new int[]{0, 0};
                 gridBagLayout.rowHeights = new int[]{0, 0, 0, 0};
@@ -538,8 +545,9 @@ public class Botcontrol {
         
     }
     
-    
-    @SuppressWarnings("null")
+    /**
+     * Starts a new bot
+     */
 	private void startNewBot(){
     	try{
 			
@@ -577,6 +585,9 @@ public class Botcontrol {
 				BotLoader botLoader = new BotLoader(vBot, mCoreJarFile);
 				if( botLoader.startBot() ){
 					
+					// disable start button
+					btnStartBot.setEnabled(false);
+					
 					// increase rcid and vtid
 					mRcId++;
 					mVtId++;
@@ -594,7 +605,7 @@ public class Botcontrol {
 					try{			                        					
     					long tm = System.currentTimeMillis();
     					while( !botRegistered
-    							&& (System.currentTimeMillis()-tm < 10000)){
+    							&& (System.currentTimeMillis()-tm < 3000)){
     						
     						String[] vListOfBots = Core.getInstance().getListOfBots("//localhost:1099/");
     						
@@ -602,7 +613,7 @@ public class Botcontrol {
 	    						for( String url : vListOfBots ){
 	    							if( url.equals(botRemoteURL) ){
 	    								botRegistered = true;
-	    								Core.getLogger().trace("Found {} = {}", url, botRemoteURL);
+	    								Core.getLogger().debug("Found {} = {}", url, botRemoteURL);
 	    								break;
 	    							}
 	    						}
@@ -617,26 +628,25 @@ public class Botcontrol {
 					if( botRegistered ){		                        					
     					// show bot frame
     					BotFrame vNewBotFrame = new BotFrame();
-    	                RemoteBot vNewRemoteBot = null;
     	                
 		                try {
 	
-		                    vNewRemoteBot = new RemoteBot( botRemoteURL, vNewBotFrame, botLoader );
+		                    new RemoteBot( botRemoteURL, vNewBotFrame, botLoader );
 		                    Botcontrol.getInstance().addBotFrame( vNewBotFrame );
 		                    
 		                } catch ( RemoteException | MalformedURLException | NotBoundException e1 ) {
 		                	e1.printStackTrace();
-		                	vNewRemoteBot.close( false );
 		                    vNewBotFrame.close( false );  
 		                }
 	        	                
 	    	                    
-	                   	Core.getLogger().trace("Added bot {} to remote control.", botRemoteURL);
+	                   	Core.getLogger().debug("Added bot {} to remote control.", botRemoteURL);
 	                   	lblStatus.setText("Registered bot " + vBot.getBotname()
 	                   			+ " (" + vBot.getRcId() + "-" + vBot.getVtId() + ")");
     	                
 					}else {
 						// not registered > stop bot
+						Core.getLogger().debug("Bot {} not found", botRemoteURL);
 						botLoader.stopBot();
 					}
 				}
@@ -649,6 +659,9 @@ public class Botcontrol {
 		} catch (UnknownHostException e2) {
 			Core.getLogger().error("Could not resolve server ip.");
 		}
+    	
+    	// Enable start button
+    	btnStartBot.setEnabled(true);
     }
 
     
@@ -683,13 +696,14 @@ public class Botcontrol {
     private void preloadData(){
     	
     	// try to load core jar file
-    	mBotFile = new File("bot_mr.jar");
+    	mBotFile = new File("ais/example_ai.jar");
     	
     	// try to load default ai classes
-    	mCoreJarFile = new File( txtBotFile.getText() );
+    	mCoreJarFile = new File( "bot_mr.jar" );
     	
     	// update gui
     	updateFileLoadedButtons();
+    	
     		
     }
     
