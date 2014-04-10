@@ -605,7 +605,7 @@ public class Botcontrol {
 					try{			                        					
     					long tm = System.currentTimeMillis();
     					while( !botRegistered
-    							&& (System.currentTimeMillis()-tm < 3000)){
+    							&& (System.currentTimeMillis()-tm < 5000)){
     						
     						String[] vListOfBots = Core.getInstance().getListOfBots("//localhost:1099/");
     						

@@ -57,7 +57,7 @@ public class BotFrame extends JPanel {
 
     private static final long serialVersionUID = 21785150238115621L;
     
-    private JLabel mPanelHeadPanelFrontLabelBotname;
+    private JLabel mLblHeaderBotname;
     private JPanel mPanelHeadPanelFront;
     private boolean mExpanded = true;
     private int mMaxLinesInLog = 1000;
@@ -178,15 +178,15 @@ public class BotFrame extends JPanel {
         vPanelHeadPanelFrontButtonExit.setBounds(5, 5, 28, 28);
         mPanelHeadPanelFront.add(vPanelHeadPanelFrontButtonExit);
         
-        mPanelHeadPanelFrontLabelBotname = new JLabel("New label");
-        mPanelHeadPanelFrontLabelBotname.setBounds(40, 5, 160, 28);
-        mPanelHeadPanelFront.add(mPanelHeadPanelFrontLabelBotname);
+        mLblHeaderBotname = new JLabel("New label");
+        mLblHeaderBotname.setBounds(40, 5, 160, 28);
+        mPanelHeadPanelFront.add(mLblHeaderBotname);
 
         mPanelHeadPanelFront.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
                 
-                mPanelHeadPanelFrontLabelBotname.setSize( mPanelHeadPanelFront.getWidth() - 45, mPanelHeadPanelFrontLabelBotname.getHeight() );
+                mLblHeaderBotname.setSize( mPanelHeadPanelFront.getWidth() - 45, mLblHeaderBotname.getHeight() );
                 
             }
         });
@@ -1130,7 +1130,7 @@ public class BotFrame extends JPanel {
     protected void updateTheRemoteBot() {
 
         
-        mBotInformation.setBotname( mPanelHeadPanelFrontLabelBotname.getText() );
+        mBotInformation.setBotname( mLblHeaderBotname.getText() );
         
         mBotInformation.setTeam( (Teams) mDataGeneralComboBoxTeam.getSelectedItem() );
         mBotInformation.setBotname( mDataGeneralTextfieldBotname.getText() );
@@ -1242,7 +1242,25 @@ public class BotFrame extends JPanel {
         
         mBotInformation = mTheRemoteBot.getTheBot().getBotInformation();
         
-        mPanelHeadPanelFrontLabelBotname.setText( mBotInformation.getBotname() );
+        mLblHeaderBotname.setText( mBotInformation.getBotname()
+        		+ " (" + mBotInformation.getRcId() + "-" + mBotInformation.getVtId() + ")" );
+        
+        // set bot name color
+        switch( mBotInformation.getTeam() ){
+		case Blue:
+			mLblHeaderBotname.setBackground( Color.CYAN );
+			mLblHeaderBotname.setOpaque(true);
+			break;
+			
+		case Yellow:
+			mLblHeaderBotname.setBackground( Color.YELLOW );
+			mLblHeaderBotname.setOpaque(true);
+			break;
+			
+		default:
+			mLblHeaderBotname.setOpaque(false);
+			break;        
+        }
         
         mDataGeneralComboBoxTeam.setSelectedItem( mBotInformation.getTeam() );
         mDataGeneralTextfieldBotname.setText( mBotInformation.getBotname() );
