@@ -204,12 +204,12 @@ synchronized ( this ) {
 }
 </pre>
 		<p>
-			inside the surrounding if clause.
+			inside the surrounding if statement.
 			The template above already contains some stuff there.
 			It gets the current play mode (<code>PlayMode vPlayMode = mWorldState.getPlayMode();</code>).<br />
 			The play mode could be a value from enum <code>PlayMode</code> from package <code>essentials.communication.worlddata_server2008</code>.
 			Currently two cases are implemented.
-			The first one occurs if the play mode is a general <i>KickOff</i> or a kick off of the team of the agent.
+			The first one occurs if the play mode is a general <i>KickOff</i>, <i>KickOffYellow</i> or <i>KickOffBlue</i>.
 		</p>
 <pre>
 if ( vPlayMode == PlayMode.KickOff
@@ -237,7 +237,7 @@ else {
 		
 		<h3>Main behavior</h3>
 		<p>
-			The else clause after the kick off section contains the behavior if the play mode isn't a kick off.
+			The else statement after the kick off section contains the behavior if the play mode isn't a kick off.
 			Here you can add an behavior between the comments <code>START AI</code> and <code>END AI</code>.
 			So add the following code:
 		</p>
@@ -262,11 +262,11 @@ if ( vWorldState.getBallPosition() != null ){
 }
 </pre>
 		<p>
-			The first if clause checks if there's a ball. If there's no ball the agent does nothing.
+			The first if statement checks if there's a ball. If there's no ball the agent does nothing.
 			If there's a ball the current ball position is saved in the variable <code>ballPos</code>.
 		</p>
 		<p>
-			The next if clause checks if the agent can kick the ball.
+			The next if statement checks if the agent can kick the ball.
 			For that the distance to the ball is compared to a game value called <i>KickRange</i>.
 			The kick range is the range the ball has to be within so that the agent can kick the ball.
 		</p>
@@ -276,7 +276,7 @@ if ( vWorldState.getBallPosition() != null ){
 			The function <code>mSelf.getGamevalue()</code> gets a specific value.
 		</p>
 		<p>
-			So if the agent can kick the ball, it receives the position of the enemies goal middle using the function <code>PositionLib.getMiddleOfGoal()</code>
+			So if the agent can kick the ball, it retrieves the middle of the enemies goal using the function <code>PositionLib.getMiddleOfGoal()</code>
 			that requires the current world model, stored in <code>vWorldState</code> and the team of the current agent.
 			After the agent got the position of the goal middle it kicks the ball into that direction using the function <code>KickLib.kickTo()</code>.
 		</p>
