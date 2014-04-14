@@ -42,7 +42,7 @@ String.prototype.replaceAll = function( token, newToken, ignoreCase ) {
 // arrays
 var javaKeywords = [ 'class', 'public', 'private', 'protected', 'static', 'return', 'null', 'extends', 'package',
                     'implements', 'final', 'synchronized', 'interface', 'abstract', 'do', 'if', 'else', 'new',
-                    'for', 'while', 'switch', 'case' ];
+                    'for', 'while', 'switch', 'case', 'try', 'catch' ];
 var javaCommentSingle = '//';
 var javaCommentMultiOpen = '/*';
 var javaCommentMultiClose = '*/';
