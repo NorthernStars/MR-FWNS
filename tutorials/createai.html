@@ -109,10 +109,10 @@ public class MyAI extends Thread implements ArtificialIntelligence {
         
         while ( mIsStarted ){
             
-            while( mIsPaused ){ try { this.wait( 10 ); } catch ( InterruptedException e ) { e.printStackTrace(); } }
+            while ( mIsPaused ){ try { this.wait( 10 ); } catch ( InterruptedException e ) { e.printStackTrace(); } }
 
             try {             
-                if( mNeedNewAction && mWorldState != null  ){
+                if ( mNeedNewAction && mWorldState != null  ){
                     synchronized ( this ) {
                         vWorldState = mWorldState;
                     }
@@ -121,7 +121,7 @@ public class MyAI extends Thread implements ArtificialIntelligence {
                     PlayMode vPlayMode = mWorldState.getPlayMode();
                     
                     // Check for kick off
-                    if( vPlayMode == PlayMode.KickOff
+                    if ( vPlayMode == PlayMode.KickOff
                     		|| (vPlayMode == PlayMode.KickOffYellow && mSelf.getTeam() == Teams.Yellow)
                     		|| (vPlayMode == PlayMode.KickOffBlue && mSelf.getTeam() == Teams.Blue) ){
                     	
@@ -130,7 +130,7 @@ public class MyAI extends Thread implements ArtificialIntelligence {
                     	
                     }
                     // No kick off
-                    else{
+                    else {
                     	
                     	// --------------- START AI -------------------	                    
                     	// ---------------- END AI --------------------
@@ -192,6 +192,108 @@ public class MyAI extends Thread implements ArtificialIntelligence {
 
 }      		
 </pre>
+
+		<h3>Dealing with play modes</h3>
+		<p>
+			The template above does nothing.
+			The right place to add an intelligent behavior is after
+		</p>
+<pre>
+synchronized ( this ) {
+    vWorldState = mWorldState;
+}
+</pre>
+		<p>
+			inside the surrounding if clause.
+			The template above already contains some stuff there.
+			It gets the current play mode (<code>PlayMode vPlayMode = mWorldState.getPlayMode();</code>).<br />
+			The play mode could be a value from enum <code>PlayMode</code> from package <code>essentials.communication.worlddata_server2008</code>.
+			Currently two cases are implemented.
+			The first one occurs if the play mode is a general <i>KickOff</i> or a kick off of the team of the agent.
+		</p>
+<pre>
+if ( vPlayMode == PlayMode.KickOff
+	|| (vPlayMode == PlayMode.KickOffYellow && mSelf.getTeam() == Teams.Yellow)
+	|| (vPlayMode == PlayMode.KickOffBlue && mSelf.getTeam() == Teams.Blue) )
+</pre>
+		<p>
+		You can add your own behavior between the two comments
+		<code>KICK OFF</code> and <code>KICK OFF END</code>.
+		</p>
+		<p>
+		For example add the following lines:
+		</p>
+<pre>
+if ( vWorldState.getBallPosition() != null ){
+	vBotAction = MoveLib.runTo( vWorldState.getBallPosition()  );
+}
+else {
+	vBotAction = MoveLib.runTo( vWorldState.getFieldCenter() );
+}
+</pre
+		<p>
+			During kick off this makes the agent running to the current ball position, if there's a ball or to run to the fields center, if there's no ball.
+		</p>
+		
+		<h3>Main behavior</h3>
+		<p>
+			The else clause after the kick off section contains the behavior if the play mode isn't a kick off.
+			Here you can add an behavior between the comments <code>START AI</code> and <code>END AI</code>.
+			So add the following code:
+		</p>
+<pre>
+// check if ball is available
+if ( vWorldState.getBallPosition() != null ){
+	                    	
+	// get ball position
+	BallPosition ballPos = vWorldState.getBallPosition();
+		                    	
+	// check if bot can kick
+	if ( ballPos.getDistanceToBall() < mSelf.getGamevalue( GamevalueNames.KickRange ) ){                 
+		// kick
+		ReferencePoint goalMid = PositionLib.getMiddleOfGoal( vWorldState, mSelf.getTeam() );
+		vBotAction = KickLib.kickTo( goalMid ); 
+	
+	} else {
+		// move to ball
+		vBotAction = MoveLib.runTo( ballPos );
+	}	 
+	                    	
+}
+</pre>
+		<p>
+			The first if clause checks if there's a ball. If there's no ball the agent does nothing.
+			If there's a ball the current ball position is saved in the variable <code>ballPos</code>.
+		</p>
+		<p>
+			The next if clause checks if the agent can kick the ball.
+			For that the distance to the ball is compared to a game value called <i>KickRange</i>.
+			The kick range is the range the ball has to be within so that the agent can kick the ball.
+		</p>
+		<p>
+			To get a game value the object <code>mSelf</code> storing information about the current agent is used.
+			All available game values are stored in the enum <code>GamevalueNames</code> from package <code>essentials.core</code>.
+			The function <code>mSelf.getGamevalue()</code> gets a specific value.
+		</p>
+		<p>
+			So if the agent can kick the ball, it receives the position of the enemies goal middle using the function <code>PositionLib.getMiddleOfGoal()</code>
+			that requires the current world model, stored in <code>vWorldState</code> and the team of the current agent.
+			After the agent got the position of the goal middle it kicks the ball into that direction using the function <code>KickLib.kickTo()</code>.
+		</p>
+		<p>
+			If the agent couldn't kick the ball it moves toward the balls position using the function <code>MoveLib.runTo()</code>.
+		</p>
+		
+		<h3>Agents origin</h3>
+		<p>
+			The current world model stored inside <code>vWorldState</code> (using the template above) has it's origin in the middle of the current agent.
+			So the center of the world for a robot is itself.
+			Other objects in the world like several reference points like goal poles, field center and so on are described in polar coordinate space using an
+			angle and a distance to the object.
+			The agent always views toward zero degree.
+			You can also use cartesian coordinates by calling the function <code>getXOfPoint()</code> and <code>getYOfPoint</code> on any reference point.
+			Doing this the cartesian coordinates are calculated so it's recommended to use polar coordinate space as much as possible (sometimes it's not and therefor you can use catersian coordinates).
+		</p>
       	
       	
       	<p><a class="back" href="javascript: history.back()">Back</a></p>
