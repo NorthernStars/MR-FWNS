@@ -201,9 +201,9 @@ public class Botcontrol {
         vFileMenue.add(vMenueItemExit);
                 GridBagLayout gridBagLayout = new GridBagLayout();
                 gridBagLayout.columnWidths = new int[]{0, 0};
-                gridBagLayout.rowHeights = new int[]{0, 0, 0, 0};
+                gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0};
                 gridBagLayout.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-                gridBagLayout.rowWeights = new double[]{0.0, 1.0, 0.0, Double.MIN_VALUE};
+                gridBagLayout.rowWeights = new double[]{0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
                 mFrameBotcontrol.getContentPane().setLayout(gridBagLayout);
                         
                         JPanel panelAddBot = new JPanel();
@@ -499,13 +499,31 @@ public class Botcontrol {
                         gbc_vScrollPane.gridy = 1;
                         mFrameBotcontrol.getContentPane().add(vScrollPane, gbc_vScrollPane);
                         
+                        JButton btnStopAllProcesses = new JButton("Stop all bots");
+                        btnStopAllProcesses.addActionListener(new ActionListener() {
+                        	public void actionPerformed(ActionEvent arg0) {
+                        		BotLoader.stopRunningProcesses();
+                        		System.out.println("removed");
+                        		mPanelContent.removeAll();
+                        		mPanelContent.validate();
+                        		mPanelContent.repaint();
+                        	}
+                        });
+                        GridBagConstraints gbc_btnStopAllProcesses = new GridBagConstraints();
+                        gbc_btnStopAllProcesses.gridx = 0;
+                        gbc_btnStopAllProcesses.gridy = 2;
+                        mFrameBotcontrol.getContentPane().add(btnStopAllProcesses, gbc_btnStopAllProcesses);
+                        
                         lblStatus = new JLabel(" ");
                         lblStatus.setHorizontalAlignment(SwingConstants.LEFT);
                         GridBagConstraints gbc_lblStatus = new GridBagConstraints();
+                        gbc_lblStatus.insets = new Insets(0, 0, 5, 0);
                         gbc_lblStatus.fill = GridBagConstraints.HORIZONTAL;
                         gbc_lblStatus.gridx = 0;
-                        gbc_lblStatus.gridy = 2;
+                        gbc_lblStatus.gridy = 3;
                         mFrameBotcontrol.getContentPane().add(lblStatus, gbc_lblStatus);
+                        
+                        
 
         mPanelFiller.setMinimumSize( new Dimension(0,0) );
         mPanelFiller.setPreferredSize( new Dimension(0,0) );

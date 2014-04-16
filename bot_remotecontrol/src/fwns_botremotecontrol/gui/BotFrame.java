@@ -1211,6 +1211,7 @@ public class BotFrame extends JPanel {
         if( mTheRemoteBot != null ){
             
             mTheRemoteBot.close( aCloseBot );
+            mTheRemoteBot.getBotLoader().stopBot();
             
         }
         mTheRemoteBot = null;

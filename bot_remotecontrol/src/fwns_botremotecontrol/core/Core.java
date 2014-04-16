@@ -70,7 +70,6 @@ public class Core {
                 public void run() {
                     
                 	// Stop running bot processes
-                    BotLoader.stopRunningProcesses();
                     close();
                     
                 }

@@ -93,6 +93,13 @@ public class BotLoader {
 				Core.getLogger().info("Started bot " + mBot.getBotname() + "(" + mBot.getVtId() + ") "
 				+ processBuilder.directory().getPath());
 				
+				Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {					
+					@Override
+					public void run() {
+						stopBot();
+					}
+				}));
+				
 				return true;
 				
 			}
