@@ -1,7 +1,10 @@
 #!/bin/bash
 
+botid=0
+
 function clean_up(){
-	kill -s 9 $! > log
+	echo "killing process id $botid" 
+	kill -s 9 $!
 	exit 0
 }
 
@@ -11,6 +14,5 @@ eval "$* &"
 
 while :
 do
-	echo "" > /dev/null
+	botid=$!
 done
-echo "end"
