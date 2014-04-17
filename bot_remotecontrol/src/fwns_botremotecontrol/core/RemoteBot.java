@@ -46,7 +46,7 @@ public class RemoteBot implements LogListener, StatusListener {
         	mBotLoader = BotLoader.getBotLoaderByKey(aBotURL);
         }
         
-        if( mBotLoader != null ){
+        if( mBotLoader != null ){        	
         	// start minimized
         	// TODO: using action listiener
         	mTheBotFrame.mPanelHeadPanelBackLabelButtonExpandContract.doClick();
@@ -70,6 +70,7 @@ public class RemoteBot implements LogListener, StatusListener {
             
             disconnectLogListener();
             disconnectStatusListener();
+            
             if( aCloseBot ){
                 
                 mTheBot.closeBot();
@@ -87,13 +88,11 @@ public class RemoteBot implements LogListener, StatusListener {
     }
 
     public void disconnectStatusListener() throws RemoteException {
-        mTheBot.unregisterStatusListener( mStatusListenerIdent );
+    	mTheBot.unregisterStatusListener( mStatusListenerIdent );
     }
 
-    public void disconnectLogListener() throws RemoteException {
-        
-        mTheBot.unregisterLogListener( mLogListenerIdent );
-        
+    public void disconnectLogListener() throws RemoteException {        
+    	mTheBot.unregisterLogListener( mLogListenerIdent );        
     }
     
     public RemoteControlInterface getTheBot(){

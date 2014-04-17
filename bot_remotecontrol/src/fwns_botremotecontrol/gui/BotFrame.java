@@ -50,6 +50,7 @@ import org.apache.logging.log4j.Level;
 
 import essentials.core.BotInformation;
 import essentials.core.BotInformation.Teams;
+import fwns_botremotecontrol.core.BotLoader;
 import fwns_botremotecontrol.core.RemoteBot;
 import fwns_network.botremotecontrol.BotStatusType;
 
@@ -148,11 +149,10 @@ public class BotFrame extends JPanel {
             @Override
 			public void actionPerformed(ActionEvent e) {
 
-            	// TODO: nachdenken! Frage nicht eindeutig!
                 int vSelection = JOptionPane.showConfirmDialog(
                         Botcontrol.getInstance().getMainFrame(),
-                        "Would you like to close the Bot?",
-                        "Closing the Bot",
+                        "Would you like to stop the Bot?",
+                        "Stop the Bot",
                         JOptionPane.YES_NO_CANCEL_OPTION);
                 
                 if ( vSelection == 0 || vSelection == 1 ){
@@ -332,16 +332,17 @@ public class BotFrame extends JPanel {
         btnStatusButtonStopBot.setEnabled(false);
         btnStatusButtonStopBot.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		if( mTheRemoteBot.getBotLoader() != null ){
-        			// disable button
-        			btnStatusButtonStopBot.setEnabled( !mTheRemoteBot.getBotLoader().stopBot() );
+        		BotLoader loader = mTheRemoteBot.getBotLoader();
         			
-        			// remove bot frame and close bot
-        			setEnabled( false );
-                    setVisible( false );                    
-                    Botcontrol.getInstance().removeBotframe( (BotFrame) mPanelHead.getParent() );
-                    close( true );
-        		}
+    			// remove bot frame and close bot
+    			setEnabled( false );
+                setVisible( false );
+                
+                Botcontrol.getInstance().removeBotframe( (BotFrame) mPanelHead.getParent() );
+                close( true );
+                
+                // stop process
+                loader.stopBot();
         	}
         });
         btnStatusButtonStopBot.setBounds(10, 141, 310, 23);
@@ -1211,7 +1212,7 @@ public class BotFrame extends JPanel {
         if( mTheRemoteBot != null ){
             
             mTheRemoteBot.close( aCloseBot );
-            mTheRemoteBot.getBotLoader().stopBot();
+//            mTheRemoteBot.getBotLoader().stopBot();
             
         }
         mTheRemoteBot = null;

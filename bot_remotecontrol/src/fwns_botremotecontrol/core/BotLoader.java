@@ -120,9 +120,17 @@ public class BotLoader {
 	 */
 	public boolean stopBot(){
 		if( mProcess != null ){
-			mProcess.destroy();
-			runningProcesses.remove(mKey);
-			return true;
+			try {
+				
+				// destroy process
+				mProcess.destroy();
+				runningProcesses.remove(mKey);
+				return true;
+			
+			} catch (Exception e) {
+				Core.getLogger().error("Can not stop bot {}", mKey);
+				e.printStackTrace();
+			}
 		}
 		
 		return false;
@@ -172,5 +180,5 @@ public class BotLoader {
 	public Process getProcess() {
 		return mProcess;
 	}
-
+	
 }

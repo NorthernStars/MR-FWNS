@@ -3,8 +3,8 @@
 botid=0
 
 function clean_up(){
-	echo "killing process id $botid" 
-	kill -s 9 $!
+	kill -s 9 $botid
+	echo "killing process id $botid"
 	exit 0
 }
 
