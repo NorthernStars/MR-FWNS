@@ -548,7 +548,7 @@ public class Botcontrol {
                     System.out.println("---" + vComponent.getClass() );
                     if( vComponent.getClass() == BotFrame.class ){
                         
-                        ((BotFrame)vComponent).close( false );
+                        ((BotFrame)vComponent).close();
                         
                     }
                     
@@ -654,7 +654,7 @@ public class Botcontrol {
 		                    
 		                } catch ( RemoteException | MalformedURLException | NotBoundException e1 ) {
 		                	e1.printStackTrace();
-		                    vNewBotFrame.close( false );  
+		                    vNewBotFrame.close();  
 		                }
 	        	                
 	    	                    
