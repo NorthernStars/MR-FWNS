@@ -342,14 +342,14 @@ public class PlayersLib {
 	}
 	
 	/**
-	 * Returns if an enemy is in the angle of 2 reference points
+	 * Return if an enemy is in corridor between two {@link ReferencePoint}s.
 	 * 
-	 * @param RawWorldData aWorldState, worlddata from the server
-	 * @param ReferencePoint refPoint1, a point with distance and angle
-	 * @param ReferencePoint refPoint2, a point with distance and angle
-	 * @returns true or false if an enemy is found in angle between the reference points
+	 * @param aWorldState	{@link RawWorldData} from the server
+	 * @param refPoint1		First {@link ReferencePoint}
+	 * @param refPoint2		Second {@link ReferencePoint}
+	 * @returns 			{@code true} if an enemy is in angle between {@code refPoint1} and {@code RefPoint2}, {@code false} otherwise.
 	 * */
-	public static boolean isEnemyInAngleBetweenTwoRefPoints(RawWorldData aWorldState, ReferencePoint refPoint1, ReferencePoint refPoint2){
+	public static boolean isEnemyInCorridorBetweenTwoRefPoints(RawWorldData aWorldState, ReferencePoint refPoint1, ReferencePoint refPoint2){
 		double ref1Angle = 0;
 		double ref2Angle = 0;
 		List<FellowPlayer> vOpponents = aWorldState.getListOfOpponents();
@@ -383,13 +383,14 @@ public class PlayersLib {
 		}
 		return true;
 	}
+	
 	/**
-	 * Returns if an specific enemy is in the angle of 2 reference points
+	 * Return if an specific enemy is corridor of two {@link ReferencePoint}s.
 	 * 
-	 * @param FellowPlayer enemy, the player who should be checked upon
-	 * @param ReferencePoint refPoint1, a point with distance and angle
-	 * @param ReferencePoint refPoint2, a point with distance and angle
-	 * @returns true or false if an enemy is found in angle between the reference points
+	 * @param enemy 	{@link FellowPlayer} who should be checked upon
+	 * @param refPoint1	First {@link ReferencePoint}
+	 * @param refPoint2 Seconds {@link ReferencePoint}
+	 * @returns 		{@code true} if {@code enemy} is in angle between {@code refPoint1} and {@code refPoint2}, {@code false} otherwise.
 	 * */
 	public static boolean isSpecificEnemyInAngleBetweenTwoRefPoints(FellowPlayer enemy, ReferencePoint refPoint1, ReferencePoint refPoint2){
 		double ref1Angle = 0;
@@ -425,37 +426,42 @@ public class PlayersLib {
 		}
 		
 	}
+	
 	/**
-	 * Checks if any of the teammates is inside the kick range
+	 * Check if any of the teammates is in the kick range around the current {@link BallPosition} of the ball
 	 * 
-	 * @param RawWorldData aWorldState
-	 * @param BotInformation botInfo, information about the bot
-	 * @returns true or false if a teammate is in kick range or not
+	 * @param aWorldState	{@link RawWorldData} from server
+	 * @param botInfo		{@link BotInformation} of the agent
+	 * @returns 			{@code true} if a teammate is in kick range of ball, {@code false} otherwise.
 	 * */
 	public static boolean hasMateTheBall(RawWorldData aWorldState, BotInformation botInfo){
 		BallPosition ball = aWorldState.getBallPosition();
-		List<FellowPlayer> vTeamMates = aWorldState.getListOfTeamMates();
-		double dist = 0;
 		
-		for ( FellowPlayer a: vTeamMates){
-			dist = PlayersLib.getDistanceBetweenPlayerAndBall(a, ball);
-			if(dist < botInfo.getGamevalue(GamevalueNames.KickRange)){
-				return true;
-			}
-			else{
-				return false;
+		if( ball != null ){
+			List<FellowPlayer> vTeamMates = aWorldState.getListOfTeamMates();
+			double dist = 0;
+			
+			for ( FellowPlayer a: vTeamMates){
+				dist = PlayersLib.getDistanceBetweenPlayerAndBall(a, ball);
+				if(dist < botInfo.getGamevalue(GamevalueNames.KickRange)){
+					return true;
+				}
+				else{
+					return false;
+				}
 			}
 		}
 		
 		return false;
 		
 	}
+	
 	/**
-	 * Checks if any of the opponents is inside the kick range * 2
+	 * Check if any opponents is in 2x kick range of current {@link BallPosition} of the ball.
 	 * 
-	 * @param RawWorldData aWorldState
-	 * @param BotInformation botInfo, information about the bot
-	 * @returns true or false if a opponent is in kick range * 2 or not
+	 * @param aWorldState	{@link RawWorldData} from server
+	 * @param botInfo		{@link BotInformation} of the agent
+	 * @returns 			{@code true} if any opponent is 2x kick range away from ball, {@code false} otherwise.
 	 * */
 	public static boolean isEnemyNearBall(RawWorldData aWorldState, BotInformation botInfo){
 		BallPosition ball = aWorldState.getBallPosition();
@@ -475,25 +481,30 @@ public class PlayersLib {
 		return false;
 		
 	}
+	
 	/**
-     * Returns the distance between specific player and reference point
+     * Return the distance between {@link FellowPlayer} and {@link ReferencePoint}.
      * 
-     * @param FellowPlayer p, the player whos distance to the point should be calculated
-     * @param ReferencePoint refPoint, the reference point to which the distance of the player should be calculated
-     * @return distance as double
+     * @param p			{@link FellowPlayer} whose distance to the point should be calculated
+     * @param refPoint	{@link ReferencePoint} to which the distance of the player should be calculated
+     * @return 			Distance between {@code p} and {@code refPoint} as {@link Double}.
+     * @deprecated		Use {@code sub(aReferencePoint)} function of {@link ReferencePoint}
+     * 					or {@link FellowPlayer} to calculate distance.
      */
+	@Deprecated
 	public static double getDistanceBetweenPlayerAndPoint(FellowPlayer player,ReferencePoint refPoint) {
-		double a, b, wa, wb;
-        
-        
-        a = player.getDistanceToPoint();
-        wa = player.getAngleToPoint();
-        b = refPoint.getDistanceToPoint();
-        wb = refPoint.getAngleToPoint();
-         
-       
-        double c = Math.sqrt( a*a + b*b - 2 * a * b * Math.cos(Math.toRadians(Math.abs(wa - wb))));
-    	
-       return c;
+//		double a, b, wa, wb;
+//        
+//        
+//        a = player.getDistanceToPoint();
+//        wa = player.getAngleToPoint();
+//        b = refPoint.getDistanceToPoint();
+//        wb = refPoint.getAngleToPoint();
+//         
+//       
+//        double c = Math.sqrt( a*a + b*b - 2 * a * b * Math.cos(Math.toRadians(Math.abs(wa - wb))));
+//    	
+//       return c;
+		return player.sub( refPoint ).getDistanceToPoint();
 	}
 }
