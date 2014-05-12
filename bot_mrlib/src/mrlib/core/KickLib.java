@@ -37,7 +37,7 @@ public class KickLib {
 	}
 	
 	/**
-	 * Kicks to reference point with maximum force.
+	 * Kick to {@link ReferencePoint} with maximum force.
 	 * @param aRefPoint	{@link ReferencePoint} to kick to
 	 * @return Action	{@link Action}
 	 */
@@ -46,7 +46,7 @@ public class KickLib {
 	}
 	
 	/**
-	 * Kicks to a reference point with specific force.
+	 * Kick to {@link ReferencePoint} with specific force.
 	 * @param aRefPoint	{@link ReferencePoint} to kick to
 	 * @param aForce	{@link Float} force to kick with (0.0f - 1.0f)
 	 * @return			{@link Action}
@@ -56,7 +56,7 @@ public class KickLib {
 	}
 	
 	/**
-	 * Kicks to a fellow player with maxmimum force.
+	 * Kick to {@link FellowPlayer} with maxmimum force.
 	 * @param aFellowPlayer	{@link FellowPlayer} to kick to
 	 * @return Action		{@link Action}
 	 */
@@ -65,7 +65,7 @@ public class KickLib {
 	}
 	
 	/**
-	 * Kicks to a fellow player with specific force.
+	 * Kick to {@link FellowPlayer} with specific force.
 	 * @param aFellowPlayer	{@link FellowPlayer} to kick to
 	 * @param aForce		{@link Float} force to kick with (0.0f - 1.0f)
 	 * @return Action		{@link Action}
@@ -85,7 +85,7 @@ public class KickLib {
 	}
 	
 	/**
-	 * Kicks to nearest opponent.
+	 * Kick to nearest opponent.
 	 * @param aWorldData	{@link RawWorldData}
 	 * @return Action		{@link Action}
 	 */
@@ -94,7 +94,7 @@ public class KickLib {
 	}
 	
 	/**
-	 * Kicks to nearest player (teammate or opponent).
+	 * Kick to nearest player (teammate or opponent).
 	 * @param aWorldData	{@link RawWorldData}
 	 * @return Action		{@link Action}
 	 */
@@ -103,7 +103,7 @@ public class KickLib {
 	}
 	
 	/**
-	 * Kicks to specific player type.
+	 * Kick to specific nearest player type.
 	 * @param aWorldData		{@link RawWorldData}
 	 * @param aFellowPlayers 	{@link FellowPlayers} type to kick to
 	 * @return Action			{@link Action}

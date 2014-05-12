@@ -151,8 +151,8 @@ public class BotFrame extends JPanel {
 
                 int vSelection = JOptionPane.showConfirmDialog(
                         Botcontrol.getInstance().getMainFrame(),
-                        "Would you like to stop the Bot?",
-                        "Stop the Bot",
+                        "Would you like to stop the Bot process?",
+                        "Stop the Bot process",
                         JOptionPane.YES_NO_CANCEL_OPTION);
                 
                 if ( vSelection == 0 || vSelection == 1 ){
@@ -161,7 +161,9 @@ public class BotFrame extends JPanel {
                     setVisible( false );
                     
                     Botcontrol.getInstance().removeBotframe( (BotFrame) mPanelHead.getParent() );
-                    close( vSelection == 0 );
+                    if( vSelection == 0 ){
+                    	closeRemoteBot();
+                    }
                 
                 }
                                 
@@ -339,7 +341,7 @@ public class BotFrame extends JPanel {
                 setVisible( false );
                 
                 Botcontrol.getInstance().removeBotframe( (BotFrame) mPanelHead.getParent() );
-                close( true );
+                closeRemoteBot();
                 
                 // stop process
                 loader.stopBot();
@@ -1205,19 +1207,23 @@ public class BotFrame extends JPanel {
         
     }
     
-    public void close( boolean aCloseBot ){
-        
-        //TODO
-
+    public void closeRemoteBot(){
         if( mTheRemoteBot != null ){
             
-            mTheRemoteBot.close( aCloseBot );
-//            mTheRemoteBot.getBotLoader().stopBot();
+        	new Thread(new Runnable() {				
+				@Override
+				public void run() {
+					mTheRemoteBot.close( true );
+		            mTheRemoteBot.getBotLoader().stopBot();
+		            
+				}
+			}).start();            
             
         }
-        mTheRemoteBot = null;
-        
-        
+    }
+    
+    public void close(){
+    	mTheRemoteBot = null;
     }
 
     public void registerBot( RemoteBot aRemoteBot ) throws RemoteException {
