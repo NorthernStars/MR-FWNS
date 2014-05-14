@@ -7,7 +7,7 @@ import essentials.communication.worlddata_server2008.FellowPlayer;
 import essentials.communication.worlddata_server2008.ReferencePoint;
 
 /**
- * Includes static function to let the agent move somewhere.
+ * Includes static functions for agent movement.
  * @author Hannes Eilers
  * @version 1.0
  *
@@ -15,26 +15,26 @@ import essentials.communication.worlddata_server2008.ReferencePoint;
 public class MoveLib {
 	
 	/**
-	 * Angle to {@link ReferencePoint} wihtout to turn during movement.
+	 * Angle to {@link ReferencePoint}, below that the agent doesn't turn.
 	 */
 	public static double moveAngleNoTurn = 10.0;
 	
 	/**
-	 * Angle to {@link ReferencePoint} below that the agent should mvoe and turn,
-	 * depending on the value of the angel to the {@link ReferencePoint}.
+	 * Angle to {@link ReferencePoint}, below that the agent should move and turn,
+	 * depending on the value of the angle to the {@link ReferencePoint}.
 	 * This value has to bee higher than {@link #moveAngleNoTurn}.
 	 */
 	public static double moveAngleTurnAndMove = 60.0;
 	
 	/**
-	 * Angle to below that agent should turn with 25% speed only.
+	 * Angle to {@link ReferencePoint}, below that the agent should turn with 25% speed only.
 	 */
 	public static double turnAngleSlowSpeed = 25.0;
 	
 	
 
 	/**
-	 * Runs to a reference point.
+	 * Running to a {@link ReferencePoint}.
 	 * @param aRefPoint	{@link ReferencePoint}
 	 * @return Action	{@link Action}
 	 */
@@ -43,7 +43,7 @@ public class MoveLib {
 	}
 	
 	/**
-	 * Runs to a fellow player.
+	 * Running to a {@link FellowPlayer}.
 	 * @param aFellowPlayer	{@link FellowPlayer}
 	 * @return Action		{@link Action}
 	 */
@@ -52,7 +52,7 @@ public class MoveLib {
 	}
 	
 	/**
-	 * Runs to a ball position.
+	 * Running to a {@link BallPosition}
 	 * @param aBallPosition	{@link BallPosition}
 	 * @return Action		{@link Action}
 	 */
@@ -61,7 +61,7 @@ public class MoveLib {
 	}
 	
 	/**
-	 * Lets the agent run into an specific direction.
+	 * Let the agent run into an specific direction.
 	 * @param vAngle	{@link Double} direction angle to run to in degree
 	 * @return Action	{@link Action}
 	 */
@@ -112,7 +112,7 @@ public class MoveLib {
     }
 	
 	/**
-	 * Lets the agent run to a {@link ReferencePoint}.
+	 * Turn to a {@link ReferencePoint}.
 	 * @param vRefPoint	{@link ReferencePoint}
 	 * @return			{@link Action}
 	 */
@@ -121,7 +121,7 @@ public class MoveLib {
 	}
 	
 	/**
-	 * Lets agent run to {@link FellowPlayer}
+	 * Turn to {@link FellowPlayer}
 	 * @param vFellowPlayer	{@link FellowPlayer}
 	 * @return				{@link Action}
 	 */
@@ -130,7 +130,7 @@ public class MoveLib {
 	}
 	
 	/**
-	 * Lets agent run to {@link BallPosition}.
+	 * Turn run to {@link BallPosition}.
 	 * @param vBallPos	{@link BallPosition}
 	 * @return			{@link Action}
 	 */
@@ -139,7 +139,7 @@ public class MoveLib {
 	}
 	
 	/**
-	 * Lets agent turn towards an agnle (no movement).
+	 * Turn towards an angle (no movement).
 	 * @param vAngle	{@link Double} angle to turn to.
 	 * @return			{@link Action}
 	 */

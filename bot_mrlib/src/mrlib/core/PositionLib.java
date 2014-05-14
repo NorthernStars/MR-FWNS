@@ -12,7 +12,7 @@ import essentials.core.BotInformation.Teams;
 
 /**
  * Includes static functions to get or calculate positions on the playing field.
- * Diese Funktionen sind in den beiliegenden UnitTests verifiziert worden.
+ * Functions tested using the included unit tests.
  * 
  * @author Hannes Eilers, Louis Jorswieck, Eike Petersen
  * @since 0.5
@@ -26,7 +26,7 @@ public class PositionLib {
      * 
      * @since 0.9
      * @param aRefPoint0 	First {@link ReferencePoint}
-     * @param aRefPoint1 Second {@link ReferencePoint}
+     * @param aRefPoint1 	Second {@link ReferencePoint}
      * 
      * @return {@link ReferencePoint} in middle between {@code aRefPoint0} and {@code aRerfPoint1}.
      */
@@ -169,7 +169,7 @@ public class PositionLib {
     }
     
     /**
-     * Calculates the distance between to {@link ReferencePoint}.
+     * Calculates the distance between two {@link ReferencePoint}.
      * @param aRefPoint0	{@link ReferencePoint}
      * @param aRefPoint1	{@link ReferencePoint}
      * @return				{@link Double} of distance between {@code aRefPoint0} and {@code aRefPoint1}.
@@ -269,7 +269,7 @@ public class PositionLib {
 	}
 	
 	/**
-	 * Calculates if bot isside quadrilateral of {@link ReferencePoint}.
+	 * Calculates if bot is inside quadrilateral of four {@link ReferencePoint}s.
 	 * @param aRefPoint0	{@link ReferencePoint}
 	 * @param aRefPoint1	{@link ReferencePoint}
 	 * @param aRefPoint2	{@link ReferencePoint}
@@ -303,8 +303,8 @@ public class PositionLib {
 	
 	
 	/**
-	 * Calculates if ball is inside qaudrilateral of {@link ReferencePoint}.
-	 * ATTENTION: FUNCTION IS NOT WORKING!
+	 * Calculates if ball is inside qaudrilateral of four {@link ReferencePoint}s.
+	 * ATTENTION: FUNCTION IS NOT WORKING! DON'T USE!
 	 * @param aRefPoint0	{@link ReferencePoint}
 	 * @param aRefPoint1	{@link ReferencePoint}
 	 * @param aRefPoint2	{@link ReferencePoint}
@@ -350,16 +350,22 @@ public class PositionLib {
 		vTeamMates.add(new FellowPlayer(aSelf.getVtId(),"me", true,0,0,0) );
 		
 		FellowPlayer closest_player = null;
-		for ( FellowPlayer a: vTeamMates){
-			if(closest_player == null || PlayersLib.getDistanceBetweenPlayerAndPoint(a, aRefPoint) < PlayersLib.getDistanceBetweenPlayerAndPoint(closest_player, aRefPoint)){
-				closest_player = a;
+		for ( FellowPlayer p: vTeamMates){
+			
+			double distNew = aRefPoint.sub(p).getDistanceToPoint();
+			double distOld = aRefPoint.sub(closest_player).getDistanceToPoint();
+			
+			if(closest_player == null || distNew < distOld){
+				closest_player = p;
 			}
+			
 		}
+		
 		if(closest_player.getId() == aSelf.getVtId()){
 			return true;
-		}else{
-			return false;
 		}
+			
+		return false;
 	}
 
 	

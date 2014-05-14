@@ -50,6 +50,7 @@ import org.apache.logging.log4j.Level;
 
 import essentials.core.BotInformation;
 import essentials.core.BotInformation.Teams;
+import fwns_botremotecontrol.core.BotLoader;
 import fwns_botremotecontrol.core.RemoteBot;
 import fwns_network.botremotecontrol.BotStatusType;
 
@@ -57,14 +58,14 @@ public class BotFrame extends JPanel {
 
     private static final long serialVersionUID = 21785150238115621L;
     
-    private JLabel mPanelHeadPanelFrontLabelBotname;
+    private JLabel mLblHeaderBotname;
     private JPanel mPanelHeadPanelFront;
     private boolean mExpanded = true;
     private int mMaxLinesInLog = 1000;
     private final Executor mExecutor = Executors.newFixedThreadPool( 1 );
-    private JButton mPanelHeadPanelBackLabelButtonExpandContract;
+    public JButton mPanelHeadPanelBackLabelButtonExpandContract;
     private JPanel mPanelHead;
-    private JTabbedPane mTabbedPane;
+    public JTabbedPane mTabbedPane;
     private JPanel vPanelStatus;
     private JPanel vPanelData;
     private JPanel vPanelConnection;
@@ -126,7 +127,7 @@ public class BotFrame extends JPanel {
         
         setBorder(new LineBorder(UIManager.getColor("TabbedPane.selected"), 3));
         setLayout(new BorderLayout(0, 0));
-        setPreferredSize(new Dimension(349, 249));
+        setPreferredSize(new Dimension(349, 278));
         setMinimumSize(new Dimension(400, 45));
         setMaximumSize(new Dimension(10000, 45));
         
@@ -148,11 +149,10 @@ public class BotFrame extends JPanel {
             @Override
 			public void actionPerformed(ActionEvent e) {
 
-            	// TODO: nachdenken! Frage nicht eindeutig!
                 int vSelection = JOptionPane.showConfirmDialog(
                         Botcontrol.getInstance().getMainFrame(),
-                        "Would you like to close the Bot?",
-                        "Closing the Bot",
+                        "Would you like to stop the Bot process?",
+                        "Stop the Bot process",
                         JOptionPane.YES_NO_CANCEL_OPTION);
                 
                 if ( vSelection == 0 || vSelection == 1 ){
@@ -161,7 +161,9 @@ public class BotFrame extends JPanel {
                     setVisible( false );
                     
                     Botcontrol.getInstance().removeBotframe( (BotFrame) mPanelHead.getParent() );
-                    close( vSelection == 0 );
+                    if( vSelection == 0 ){
+                    	closeRemoteBot();
+                    }
                 
                 }
                                 
@@ -178,15 +180,15 @@ public class BotFrame extends JPanel {
         vPanelHeadPanelFrontButtonExit.setBounds(5, 5, 28, 28);
         mPanelHeadPanelFront.add(vPanelHeadPanelFrontButtonExit);
         
-        mPanelHeadPanelFrontLabelBotname = new JLabel("New label");
-        mPanelHeadPanelFrontLabelBotname.setBounds(40, 5, 160, 28);
-        mPanelHeadPanelFront.add(mPanelHeadPanelFrontLabelBotname);
+        mLblHeaderBotname = new JLabel("New label");
+        mLblHeaderBotname.setBounds(40, 5, 160, 28);
+        mPanelHeadPanelFront.add(mLblHeaderBotname);
 
         mPanelHeadPanelFront.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
                 
-                mPanelHeadPanelFrontLabelBotname.setSize( mPanelHeadPanelFront.getWidth() - 45, mPanelHeadPanelFrontLabelBotname.getHeight() );
+                mLblHeaderBotname.setSize( mPanelHeadPanelFront.getWidth() - 45, mLblHeaderBotname.getHeight() );
                 
             }
         });
@@ -332,16 +334,17 @@ public class BotFrame extends JPanel {
         btnStatusButtonStopBot.setEnabled(false);
         btnStatusButtonStopBot.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		if( mTheRemoteBot.getBotLoader() != null ){
-        			// disable button
-        			btnStatusButtonStopBot.setEnabled( !mTheRemoteBot.getBotLoader().stopBot() );
+        		BotLoader loader = mTheRemoteBot.getBotLoader();
         			
-        			// remove bot frame and close bot
-        			setEnabled( false );
-                    setVisible( false );                    
-                    Botcontrol.getInstance().removeBotframe( (BotFrame) mPanelHead.getParent() );
-                    close( true );
-        		}
+    			// remove bot frame and close bot
+    			setEnabled( false );
+                setVisible( false );
+                
+                Botcontrol.getInstance().removeBotframe( (BotFrame) mPanelHead.getParent() );
+                closeRemoteBot();
+                
+                // stop process
+                loader.stopBot();
         	}
         });
         btnStatusButtonStopBot.setBounds(10, 141, 310, 23);
@@ -1115,8 +1118,12 @@ public class BotFrame extends JPanel {
                     
                 }
                 
-                revalidate();
-                getParent().validate();
+                try{
+                	revalidate();
+                	getParent().validate();
+                }catch (Exception err){
+//                	err.printStackTrace();
+                }
                 
             }
         });
@@ -1126,7 +1133,7 @@ public class BotFrame extends JPanel {
     protected void updateTheRemoteBot() {
 
         
-        mBotInformation.setBotname( mPanelHeadPanelFrontLabelBotname.getText() );
+        mBotInformation.setBotname( mLblHeaderBotname.getText() );
         
         mBotInformation.setTeam( (Teams) mDataGeneralComboBoxTeam.getSelectedItem() );
         mBotInformation.setBotname( mDataGeneralTextfieldBotname.getText() );
@@ -1200,18 +1207,23 @@ public class BotFrame extends JPanel {
         
     }
     
-    public void close( boolean aCloseBot ){
-        
-        //TODO
-
+    public void closeRemoteBot(){
         if( mTheRemoteBot != null ){
             
-            mTheRemoteBot.close( aCloseBot );
+        	new Thread(new Runnable() {				
+				@Override
+				public void run() {
+					mTheRemoteBot.close( true );
+		            mTheRemoteBot.getBotLoader().stopBot();
+		            
+				}
+			}).start();            
             
         }
-        mTheRemoteBot = null;
-        
-        
+    }
+    
+    public void close(){
+    	mTheRemoteBot = null;
     }
 
     public void registerBot( RemoteBot aRemoteBot ) throws RemoteException {
@@ -1238,7 +1250,25 @@ public class BotFrame extends JPanel {
         
         mBotInformation = mTheRemoteBot.getTheBot().getBotInformation();
         
-        mPanelHeadPanelFrontLabelBotname.setText( mBotInformation.getBotname() );
+        mLblHeaderBotname.setText( mBotInformation.getBotname()
+        		+ " (" + mBotInformation.getRcId() + "-" + mBotInformation.getVtId() + ")" );
+        
+        // set bot name color
+        switch( mBotInformation.getTeam() ){
+		case Blue:
+			mLblHeaderBotname.setBackground( Color.CYAN );
+			mLblHeaderBotname.setOpaque(true);
+			break;
+			
+		case Yellow:
+			mLblHeaderBotname.setBackground( Color.YELLOW );
+			mLblHeaderBotname.setOpaque(true);
+			break;
+			
+		default:
+			mLblHeaderBotname.setOpaque(false);
+			break;        
+        }
         
         mDataGeneralComboBoxTeam.setSelectedItem( mBotInformation.getTeam() );
         mDataGeneralTextfieldBotname.setText( mBotInformation.getBotname() );

@@ -98,23 +98,21 @@ public class BotSearchWindow extends JFrame {
         
         JButton vPanelContentPanelMainPanelOptionsButtonConnectToBot = new JButton("Connect to bot");
         vPanelContentPanelMainPanelOptionsButtonConnectToBot.addActionListener(new ActionListener() {
-            @SuppressWarnings("null")
 			public void actionPerformed(ActionEvent e) {
                 
                 BotFrame vNewBotFrame = new BotFrame();
-                RemoteBot vNewRemoteBot = null;
                 try {
                     
                     if( mPanelContentPanelMainPanelBotlistListBots.getSelectedValue() != null ){
-                        vNewRemoteBot = new RemoteBot( (String) mPanelContentPanelMainPanelBotlistListBots.getSelectedValue(), vNewBotFrame);
+                    	Core.getLogger().debug("Connecting to bot {}", mPanelContentPanelMainPanelBotlistListBots.getSelectedValue());
+                        new RemoteBot( (String) mPanelContentPanelMainPanelBotlistListBots.getSelectedValue(), vNewBotFrame);
                         Botcontrol.getInstance().addBotFrame( vNewBotFrame );
+                        Core.getLogger().debug("Bot added");
                     }
                     
                 } catch ( RemoteException | MalformedURLException | NotBoundException e1 ) {
-                    // TODO Auto-generated catch block
                     e1.printStackTrace();
-                    vNewRemoteBot.close( false);
-                    vNewBotFrame.close( false);
+                    vNewBotFrame.close();
                 }
                 
                 
