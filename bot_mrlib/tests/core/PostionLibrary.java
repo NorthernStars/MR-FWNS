@@ -156,4 +156,55 @@ public class PostionLibrary {
         assertEquals(" Die Distanz muss 2,22 betragen.", 2.22, vResultingPoint.getDistanceToPoint(), 0.1 );
         assertEquals(" Der Winkel muss 10,74 Grad betragen.", 10.74, vResultingPoint.getAngleToPoint(), 0.1);      
     } 
+    
+    @Test
+    public void testLawOfCosine(){
+    	
+    	ReferencePoint vFirstPoint = new ReferencePoint( 6.42 , 65.25, true );       
+        ReferencePoint vSecondPoint = new ReferencePoint( 3.28 , 42.53, true );
+        ReferencePoint vThirdPoint = new ReferencePoint( 9.95 , 21.1, true );       
+        double seiteA = PositionLib.getDistanceBetweenTwoRefPoints(vFirstPoint, vSecondPoint);
+        double seiteB = PositionLib.getDistanceBetweenTwoRefPoints(vFirstPoint, vThirdPoint);
+        double seiteC = PositionLib.getDistanceBetweenTwoRefPoints(vSecondPoint, vThirdPoint);
+        
+        double result = mrlib.core.PositionLib.lawOfCosine(seiteA, seiteB,seiteC);
+        
+        assertEquals("Die Seite muss xx betragen.", 3.62 , seiteA , 0.1);
+        assertEquals("Die Seite muss xx betragen.", 6.97 , seiteB , 0.1);
+        assertEquals("Die Seite muss xx betragen.", 6.99 , seiteC , 0.1);
+        
+        assertEquals("Der Winkel muss xx Grad betragen.", 74.54 , result , 0.1);
+        
+        result = mrlib.core.PositionLib.lawOfCosine(seiteB, seiteA,seiteC);
+        
+        assertEquals("Der Winkel muss xx Grad betragen.", 30.06 , result , 0.1);
+        
+        result = mrlib.core.PositionLib.lawOfCosine(seiteA, seiteC,seiteB);
+        
+        assertEquals("Der Winkel muss xx Grad betragen.", 75.39 , result , 0.1);
+        
+    	
+    }
+    
+    
+    @Test
+    public void testIsBallInTriangle() {
+    	
+    	ReferencePoint vFirstPoint = new ReferencePoint( 6.74 , 65.25, true );       
+        ReferencePoint vSecondPoint = new ReferencePoint( 3.28 , 42.53, true );
+        ReferencePoint vThirdPoint = new ReferencePoint( 9.95 , 21.1, true );       
+        ReferencePoint ballPos = new ReferencePoint ( 1.3 , 3.98 , true);
+        
+        boolean result = mrlib.core.PositionLib.IsBallInTriangle(vFirstPoint,vSecondPoint,vThirdPoint,ballPos);
+        
+        assertEquals("Der Ball ist ausserhalb Wert muss false sein.", false, result );
+        
+        ballPos = new ReferencePoint ( 4 , 4 , true);
+        
+        result = mrlib.core.PositionLib.IsBallInTriangle(vFirstPoint,vSecondPoint,vThirdPoint,ballPos);
+        
+        assertEquals("Der Ball ist innerhalb Wert muss true sein.", true, result );
+        
+        
+    }
 }
