@@ -22,11 +22,9 @@ import essentials.communication.worlddata_server2008.ReferencePoint;
 public class PositionLib {
     /**
      * Gets {@link ReferencePoint} in middle of two other {@link ReferencePoint}.
-     *
      * @since 0.9
-     * @param aRefPoint0        First {@link ReferencePoint}
-     * @param aRefPoint1        Second {@link ReferencePoint}
-     *
+     * @param aRefPoint0    First {@link ReferencePoint}
+     * @param aRefPoint1    Second {@link ReferencePoint}
      * @return {@link ReferencePoint} in middle between {@code aRefPoint0} and {@code aRerfPoint1}.
      */
     public static ReferencePoint getMiddleOfTwoReferencePoints(ReferencePoint aRefPoint0, ReferencePoint aRefPoint1) {
@@ -38,7 +36,7 @@ public class PositionLib {
         double a, b, wa, wb;
         if (aRefPoint0.getAngleToPoint() > aRefPoint1.getAngleToPoint()) {
             wa = aRefPoint0.getAngleToPoint();
-            wb =aRefPoint1.getAngleToPoint();
+            wb = aRefPoint1.getAngleToPoint();
             a = aRefPoint0.getDistanceToPoint();
             b = aRefPoint1.getDistanceToPoint();
         } else {
@@ -56,11 +54,9 @@ public class PositionLib {
         } else {
             gamma = wb - gamma;
         }
-
         if (gamma > 180) {
             gamma = gamma - 360;
         }
-
         if (gamma < -180) {
             gamma = gamma + 360;
         }
@@ -70,8 +66,8 @@ public class PositionLib {
 
     /**
      * Returns the middle of enemies goal.
-     * @param aWorldData                  {@link RawWorldData}
-     * @param aTeam                             Own {@link Teams} information
+     * @param aWorldData             {@link RawWorldData}
+     * @param aTeam                     Own {@link Teams} information
      * @return ReferencePoint       {@link ReferencePoint} of middle of enemies goal.
      */
     public static ReferencePoint getMiddleOfGoal(RawWorldData aWorldData, Teams aTeam) {
@@ -94,8 +90,8 @@ public class PositionLib {
 
     /**
      * Returns the middle of own goal.
-     * @param aWorldData                {@link RawWorldData}
-     * @param aTeam                           Own {@link Teams} information
+     * @param aWorldData           {@link RawWorldData}
+     * @param aTeam                   Own {@link Teams} information
      * @return ReferencePoint     {@link ReferencePoint} of middle of own goal.
      */
     public static ReferencePoint getMiddleOfOwnGoal(RawWorldData aWorldData, Teams aTeam) {
@@ -118,9 +114,9 @@ public class PositionLib {
 
     /**
      * Calculates if ball is in specific range around {@link ReferencePoint}.
-     * @param ballPos        {@link BallPosition}
+     * @param ballPos         {@link BallPosition}
      * @param aRefPoint    {@link ReferencePoint}
-     * @param range	            {@link Double} range
+     * @param range	          {@link Double} range
      * @return                      {@code true} if {@code ballPos} is in {@code range} around {@code aRefPoint}, {@code false} otherwise.
      */
     public static boolean isBallInRangeOfRefPoint(BallPosition ballPos, ReferencePoint aRefPoint, double range) {
@@ -149,7 +145,7 @@ public class PositionLib {
      * Calculates the distance between two {@link ReferencePoint}.
      * @param aRefPoint0        {@link ReferencePoint}
      * @param aRefPoint1        {@link ReferencePoint}
-     * @return                             {@link Double} of distance between {@code aRefPoint0} and {@code aRefPoint1}.
+     * @return                            {@link Double} of distance between {@code aRefPoint0} and {@code aRefPoint1}.
      */
     public static double getDistanceBetweenTwoRefPoints(ReferencePoint aRefPoint0, ReferencePoint aRefPoint1) {
         double a, b, wa, wb;
@@ -164,7 +160,7 @@ public class PositionLib {
 
     /**
      * Get's the {@link ReferencePoint} farest away from ball.
-     * @param aWorldData                {@link RawWorldData}
+     * @param aWorldData          {@link RawWorldData}
      * @return ReferencePoint     {@link ReferencePoint} farest away from ball.
      */
     public static ReferencePoint getFurthestPointAwayFromBall(RawWorldData aWorldData) {
@@ -205,7 +201,7 @@ public class PositionLib {
      * Calculates angle between two reference points
      * @param aRefPoint0        {@link ReferencePoint}
      * @param aRefPoint1        {@link ReferencePoint}
-     * @return                             {@link Double} agnle between {@code aRefPoint0} and {@code aRefPoint1}.
+     * @return                            {@link Double} agnle between {@code aRefPoint0} and {@code aRefPoint1}.
      */
     public static double getAngleBetweenTwoReferencePoints(ReferencePoint aRefPoint0, ReferencePoint aRefPoint1) {
         double wa, wb;
@@ -231,7 +227,7 @@ public class PositionLib {
      * @param aRefPoint1        {@link ReferencePoint}
      * @param aRefPoint2        {@link ReferencePoint}
      * @param aRefPoint3        {@link ReferencePoint}
-     * @return                             {@code true} if bot is inside quadrilateral {@code aRefPoint0} to {@code aRefPoint3}, {@code false} otherwise.
+     * @return                            {@code true} if bot is inside quadrilateral {@code aRefPoint0} to {@code aRefPoint3}, {@code false} otherwise.
      */
     public static boolean isBotInQuadrangle(ReferencePoint aRefPoint0, ReferencePoint aRefPoint1, ReferencePoint aRefPoint2, ReferencePoint aRefPoint3) {
         double angle1, angle2, angle3, angle4;
@@ -297,7 +293,7 @@ public class PositionLib {
 
     /**
      * Calculate if agent is nearest team mate to a {@link ReferencePoint}.
-     * @param vWorldState    {@link RawWorldData}
+     * @param vWorldState     {@link RawWorldData}
      * @param aRefPoint         {@link ReferencePoint}
      * @param aSelf	                {@link BotInformation}
      * @return                           {@code true} if bot is nearest team mate to {@code aRefPoint}.
