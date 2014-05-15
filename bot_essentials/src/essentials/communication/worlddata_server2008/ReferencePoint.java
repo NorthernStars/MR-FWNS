@@ -186,7 +186,7 @@ public class ReferencePoint{
         mAngleToPoint = aReferencePoint.getAngleToPoint();
         
         mX = aReferencePoint.getXOfPoint();
-        mY = aReferencePoint.getXOfPoint();
+        mY = aReferencePoint.getYOfPoint();
         
         mPointName = ReferencePointName.NoFixedName;
         
