@@ -367,4 +367,56 @@ public class PositionLib {
 			
 		return false;
 	}
+
+	
+	/**
+	 * Calculates angle between side A and C (opposite side B) {@link double}.
+	 * @param distA			{@link double}
+	 * @param distB			{@link double}
+	 * @param distC			{@link double}
+	 * @return				{@code double} angle in degree opposing side {@code distB}.
+	 */
+	public static double lawOfCosine(double distA, double distB, double distC){
+		/*
+    	 * TODO : Complete UnitTest ( function tested for few cases )
+    	 * */
+    	return Math.toDegrees(Math.acos(((distA*distA+distC*distC-distB*distB)/(2*distA*distC))));
+    }
+    
+	
+	/**
+	 * Checks if Ball is in Triangle of 3 ReferencePoints {@link ReferencePoint}.
+	 * @param pointA			{@link ReferencePoint}
+	 * @param pointB			{@link ReferencePoint}
+	 * @param pointC			{@link ReferencePoint}
+	 * @param ballpos			{@link ReferencePoint}
+	 * @return				{@code true} if {@code ballpos} is in triangle of {@code pointA}, {@code pointB}, {@code pointC}.
+	 */
+    public static boolean IsBallInTriangle(ReferencePoint pointA, ReferencePoint pointB, ReferencePoint pointC, ReferencePoint ballpos){
+    	
+    	/*
+    	 * TODO : Complete UnitTest ( function tested for few cases )
+    	 * */
+    	
+    	double distA = PositionLib.getDistanceBetweenTwoRefPoints(pointB, pointC);
+    	double distB = PositionLib.getDistanceBetweenTwoRefPoints(pointA, pointC);
+    	double distC = PositionLib.getDistanceBetweenTwoRefPoints(pointA, pointB);
+    	
+    	double distBallToA = PositionLib.getDistanceBetweenTwoRefPoints(pointA, ballpos);
+    	double distBallToB = PositionLib.getDistanceBetweenTwoRefPoints(pointB, ballpos);
+    	double distBallToC = PositionLib.getDistanceBetweenTwoRefPoints(pointC, ballpos);
+    	//Is Beta greater?
+    	if(lawOfCosine(distB, distA, distC) > lawOfCosine(distBallToA, distBallToB, distC)){
+    		//Is Epsilon greater?
+    		
+    		if(lawOfCosine(distC, distA, distB) > lawOfCosine(distBallToB, distBallToC, distA)){
+    			//Is Alpha greater?
+    			if(lawOfCosine(distA, distB, distC) > lawOfCosine(distBallToC, distBallToA, distB)){
+    				
+    				return true;
+    				
+    			} else return false;
+    		} else return false;
+    	} else return false;
+    }
 }
