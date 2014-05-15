@@ -141,7 +141,11 @@ public class Striker extends Thread implements ArtificialIntelligence {
     public void putWorldState(RawWorldData aWorldState) {
         synchronized ( this ) {
             mWorldState = aWorldState;
-            mNeedNewAction = true;
+            if( mWorldState.getReferencePoints() != null || !mWorldState.getReferencePoints().isEmpty() ){            
+            	mNeedNewAction = true;
+            } else {
+            	mNeedNewAction = false;
+            }
         }        
     }
 
