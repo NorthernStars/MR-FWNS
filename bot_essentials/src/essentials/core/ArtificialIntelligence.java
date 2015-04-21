@@ -32,11 +32,12 @@ public interface ArtificialIntelligence {
 	 * This will happen in the same frequency as messages arrive from the
 	 * server, the exact delay is saved in the [TODO: name and position in BotInformation (GameClockCycle) ]
 	 * The excecution is not guaranteed, because a new Worldstate can only be generated, if
-	 * the server sends the data.
+	 * the server sends the data. 
+	 * The WorldData needs to be casted to its final form, because it is just a containerinterface.
 	 * 
-	 * @param aWorldData The Worldstate as an RawWorldDataobject
+	 * @param aWorldData The Worldstate as an WorldDataobject
 	 */
-	public void putWorldState( essentials.communication.worlddata_server2008.RawWorldData aWorldData );
+	public void putWorldState( essentials.communication.WorldData aWorldData );
 
 	/**
 	 * Gets an Actionobject to send to the server. This method will 

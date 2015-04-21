@@ -6,9 +6,9 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.apache.logging.log4j.Level;
 
 import remotecontrol.RemoteControlServer;
-
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
+import essentials.communication.WorldDataInterpreter;
 import essentials.communication.worlddata_server2008.RawWorldData;
 import fwns_network.botremotecontrol.BotStatusType;
 
@@ -127,7 +127,7 @@ public class FromServerManagement extends Thread{
 					
 					if( Core.getInstance().getServerConnection() != null ) {
 						
-					    Core.getInstance().getAI().putWorldState( RawWorldData.createRawWorldDataFromXML( Core.getInstance().getServerConnection().getDatagramm( 1000 ) ) );
+					    Core.getInstance().getAI().putWorldState( WorldDataInterpreter.unmarshall( Core.getInstance().getServerConnection().getDatagramm( 1000 ) ) );
 						mLastReceivedMessage.set( System.currentTimeMillis() );
 						vStatusChanged = false;
 						

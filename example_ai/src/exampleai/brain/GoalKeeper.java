@@ -5,6 +5,7 @@ import mrlib.core.KickLib;
 import mrlib.core.MoveLib;
 import mrlib.core.PositionLib;
 import essentials.communication.Action;
+import essentials.communication.WorldData;
 import essentials.communication.action_server2008.Movement;
 import essentials.communication.worlddata_server2008.BallPosition;
 import essentials.communication.worlddata_server2008.PlayMode;
@@ -151,9 +152,9 @@ public class GoalKeeper extends Thread implements ArtificialIntelligence {
     }
 
     @Override
-    public void putWorldState(RawWorldData aWorldState) {
+    public void putWorldState( WorldData aWorldState) {
         synchronized ( this ) {
-            mWorldState = aWorldState;
+            mWorldState = (RawWorldData) aWorldState;
             if( mWorldState.getReferencePoints() != null || !mWorldState.getReferencePoints().isEmpty() ){            
             	mNeedNewAction = true;
             } else {
