@@ -173,9 +173,9 @@ public class Defensive extends Thread implements ArtificialIntelligence {
     }
 
     @Override
-    public void putWorldState(RawWorldData aWorldState) {
+    public void putWorldState( WorldData aWorldState) {
         synchronized ( this ) {
-            mWorldState = aWorldState;
+            mWorldState = (RawWorldData) aWorldState;
             if( mWorldState.getReferencePoints() != null || !mWorldState.getReferencePoints().isEmpty() ){            
             	mNeedNewAction = true;
             } else {

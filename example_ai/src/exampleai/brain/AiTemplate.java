@@ -1,6 +1,7 @@
 package exampleai.brain;
 
 import essentials.communication.Action;
+import essentials.communication.WorldData;
 import essentials.communication.action_server2008.Movement;
 import essentials.communication.worlddata_server2008.PlayMode;
 import essentials.communication.worlddata_server2008.RawWorldData;
@@ -129,10 +130,12 @@ public class AiTemplate extends Thread implements ArtificialIntelligence {
     }
 
     @Override
-    public void putWorldState(RawWorldData aWorldState) {
+    public void putWorldState( WorldData aWorldState) {
         synchronized ( this ) {
-            mWorldState = aWorldState;
-            if( mWorldState.getReferencePoints() != null || !mWorldState.getReferencePoints().isEmpty() ){            
+        	if( aWorldState instanceof RawWorldData ){
+        		mWorldState = (RawWorldData) aWorldState;
+        	}
+            if( aWorldState != null && mWorldState.getReferencePoints() != null && !mWorldState.getReferencePoints().isEmpty() ){            
             	mNeedNewAction = true;
             } else {
             	mNeedNewAction = false;
