@@ -119,7 +119,7 @@ public class ToServerManagement extends Thread{
 	
 	public void run(){
 	    
-	    Action vCurrentAction = null;
+	    Action vCurrentAction = null, vOldAction = null;
 	    boolean vStatusChanged = false; //TODO: musch
 	    
 		while( mManageMessagesToServer ){
@@ -128,14 +128,16 @@ public class ToServerManagement extends Thread{
 			
 			try {
 				
-				Thread.sleep(66); // besser machen!
+				 // besser machen!
 				
 				if( Core.getInstance().getServerConnection() != null ) {
 					
 					if( Core.getInstance().getAI() != null ) {
 
-					    vCurrentAction = Core.getInstance().getAI().getAction();
+					    while( (vCurrentAction = Core.getInstance().getAI().getAction()) == vOldAction ){ Thread.sleep( 0, 100 ); };
+					    Core.getLogger().debug( "Sending Action {} over {}.", vCurrentAction.getXMLString(), Core.getInstance().getServerConnection().toString() );
 					    Core.getInstance().getServerConnection().sendDatagramm( vCurrentAction );
+					    vOldAction = vCurrentAction;
                         mLastSendMessage.set( System.currentTimeMillis() );
                         vStatusChanged = false;
                         
@@ -151,6 +153,7 @@ public class ToServerManagement extends Thread{
 				} else {
 				    
 				    Core.getLogger().debug( "NetworkCommunication cannot be NULL when running ToServerManagement." ) ;
+				    Thread.sleep(66);
 					
 				}
 				
