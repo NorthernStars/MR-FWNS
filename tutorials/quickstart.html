@@ -21,23 +21,10 @@
         <p class="header">NorthernStars Mixed-Reality Framework</p>
 
 		<hr />
-		<p class="header">MR-Framework:</p>
-        <ul>
-          	<li class="download"><a class="buttons" href="https://github.com/NorthernStars/MR-FWNS/raw/master/MR-FWNS-complete.zip">Download ZIP</a></li>
-          	<li class="download"><a class="buttons" href="https://github.com/NorthernStars/MR-FWNS/raw/master/MR-FWNS-complete.tar.gz">Download TAR</a></li>
-        </ul>
-        
-        <hr />
-		<p class="header">Example AI:</p>
-        <ul>
-          	<li class="download"><a class="buttons" href="https://github.com/NorthernStars/MR-FWNS/raw/master/MR-FWNS-AI.zip">Download ZIP</a></li>
-          	<li class="download"><a class="buttons" href="https://github.com/NorthernStars/MR-FWNS/raw/master/MR-FWNS-AI.tar.gz">Download TAR</a></li>
-        </ul>
-        
-        <hr />
+		<p class="header">MR-Framework & Example AI:</p>
         <ul>
         	<li><a class="buttons github" href="https://github.com/NorthernStars/MR-FWNS/releases" target="_blank">View Releases</a></li>
-        </ul>
+	</ul>
 
         <p class="header">This project is maintained by <a class="header name" href="https://github.com/NorthernStars">NorthernStars</a></p>
 
@@ -51,20 +38,17 @@
       	
       	<h4>1. Download</h4>
       	<p>
-      		All you need is to download the <i>MR-Framework</i> from the side menu or from the <a href="https://github.com/NorthernStars/MR-FWNS/releases" target="_blank">github release page</a>.
-      		After downloading the <i>MR-FWNS-complete</i> archive, unpack it.
+      		All you need is to download the <i>MR-Framework</i> from the side menu.
+      		After downloading the <i>MixedRealityBot</i> archive, unpack it.
       	</p>
       	<p>
     		You also have to download a Mixed-Reality server. If you don't have one, simply use our <a href="http://northernstars.github.io/mrserver" target="_blank">Mixed-Reality Server</a>.   				
-      	</p>
-      	<p>
-      		You can also download the javadoc api reference for the bot mrlib library from <a href="https://github.com/NorthernStars/MR-FWNS/raw/master/lib-doc.zip" target="_blanc">github.com</a>.
       	</p>
       	
       	<h4>2. Starting Mixed-Reality Server</h4>
       	<p>
       		If you didn't started your Mixed-Reality server, do it now. Open ports for two teams and whatever you have to set up a new Mixed-Reality game. In terminal type:<br />
-      		java -jar mrserver-runnable.jar -cf defaultserver.config
+      		java -jar mrserver-runnable.jar -cf defaultserver.config -sl scenarios/mrscenariofootball.jar -sc mrscenariofootball.core.ScenarioCore -sc_al
       	</p>
       	
       	<h4>3. Starting bot remotecontrol</h4>
