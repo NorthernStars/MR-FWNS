@@ -60,7 +60,7 @@ public class Striker extends Thread implements ArtificialIntelligence {
         
         while ( mIsStarted ){
             
-            while( mIsPaused ){ try { this.wait( 10 ); } catch ( InterruptedException e ) { e.printStackTrace(); } }
+            while( mIsPaused || !mNeedNewAction ){ try { this.wait( 2 ); } catch ( InterruptedException e ) { e.printStackTrace(); } }
 
             try {             
                 if( mNeedNewAction && mWorldState != null  ){
@@ -121,7 +121,6 @@ public class Striker extends Thread implements ArtificialIntelligence {
                         mNeedNewAction = false;
                     }                  
                 }
-                Thread.sleep( 1 );                
             } catch ( Exception e ) {
                 e.printStackTrace();
             }            

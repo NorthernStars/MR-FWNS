@@ -57,10 +57,10 @@ public class Defensive extends Thread implements ArtificialIntelligence {
         
         while ( mIsStarted ){
             
-            while( mIsPaused ){ try { this.wait( 10 ); } catch ( InterruptedException e ) { e.printStackTrace(); } }
+            while( mIsPaused || !mNeedNewAction ){ try { this.wait( 2 ); } catch ( InterruptedException e ) { e.printStackTrace(); } }
 
             try {             
-                if( mNeedNewAction && mWorldState != null  ){
+                if( mWorldState != null  ){
                     synchronized ( this ) {
                         vWorldState = mWorldState;
                     }
@@ -152,8 +152,7 @@ public class Defensive extends Thread implements ArtificialIntelligence {
                         mAction = vBotAction;
                         mNeedNewAction = false;
                     }                  
-                }
-                Thread.sleep( 1 );                
+                }               
             } catch ( Exception e ) {
                 e.printStackTrace();
             }            
