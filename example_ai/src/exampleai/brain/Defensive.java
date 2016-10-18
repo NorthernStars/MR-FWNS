@@ -104,7 +104,7 @@ public class Defensive extends Thread implements ArtificialIntelligence {
 	                    		
 	                    		/*
 	                    		 * Get nearest team mate.
-	                    		 * First try to get one without anemy in twice of kick range around.
+	                    		 * First try to get one without enemy in twice of kick range around.
 	                    		 * If that fails, simply get the nearest team mate
 	                    		 */
 	                    		FellowPlayer nearestTeamMate = PlayersLib.getNearestMateWithoutEnemyAround(vWorldState, mSelf);
