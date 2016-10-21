@@ -56,10 +56,10 @@ public class GoalKeeper extends Thread implements ArtificialIntelligence {
         
         while ( mIsStarted ){
             
-            while( mIsPaused ){ try { this.wait( 10 ); } catch ( InterruptedException e ) { e.printStackTrace(); } }
+            while( mIsPaused || !mNeedNewAction ){ try { this.wait( 2 ); } catch ( InterruptedException e ) { e.printStackTrace(); } }
 
             try {            
-                if( mNeedNewAction && mWorldState != null  ){
+                if( mWorldState != null  ){
                     synchronized ( this ) {
                         vWorldState = mWorldState;
                     }
@@ -105,7 +105,7 @@ public class GoalKeeper extends Thread implements ArtificialIntelligence {
 	                    		ReferencePoint goalMid = PositionLib.getMiddleOfGoal( vWorldState, mSelf.getTeam() );
 	                    		vBotAction = KickLib.kickTo( goalMid );  
 	                    	
-	                    	// check if ball is withing defense range around own goal
+	                    	// check if ball is within defense range around own goal
 	                    	} else if(PositionLib.isBallInRangeOfRefPoint(ballPos, ownGoalMiddle, defenseRange)){
 	                    		// move to ball
 	                    		vBotAction = MoveLib.runTo( ballPos );
@@ -131,8 +131,7 @@ public class GoalKeeper extends Thread implements ArtificialIntelligence {
                         mAction = vBotAction;
                         mNeedNewAction = false;
                     }                  
-                }
-                Thread.sleep( 1 );                
+                }               
             } catch ( Exception e ) {
                 e.printStackTrace();
             }            

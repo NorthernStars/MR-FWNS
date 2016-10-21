@@ -8,6 +8,6 @@
 	<classpathentry kind="lib" path="/MixedRealityBot/libraries/bot_network.jar"/>
 	<classpathentry kind="lib" path="/MixedRealityBot/libraries/log4j-api-2.0-beta9.jar"/>
 	<classpathentry kind="lib" path="/MixedRealityBot/libraries/log4j-core-2.0-beta9.jar"/>
-	<classpathentry kind="lib" path="/home/hannes/workspace-java/MR-FWNS/MixedRealityBot/libraries/bot_mrlib.jar"/>
+	<classpathentry kind="lib" path="/MixedRealityBot/libraries/bot_mrlib.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
