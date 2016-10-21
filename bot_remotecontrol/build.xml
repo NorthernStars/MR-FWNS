@@ -19,6 +19,8 @@
 				src="../MixedRealityBot/libraries/log4j-api-2.0-beta9.jar" />
 			<zipfileset excludes="META-INF/*.SF"
 				src="../MixedRealityBot/libraries/log4j-core-2.0-beta9.jar" />
+			<zipfileset excludes="META-INF/*.SF"
+				src="../MixedRealityBot/bot_mr.jar" />
 		</jar>
 	</target>
 </project>
