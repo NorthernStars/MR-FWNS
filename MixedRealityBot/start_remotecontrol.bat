@@ -1,1 +1,1 @@
-start java -jar bot_remotecontrol.jar
+java -jar bot_remotecontrol.jar
