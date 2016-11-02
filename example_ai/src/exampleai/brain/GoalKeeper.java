@@ -56,7 +56,7 @@ public class GoalKeeper extends Thread implements ArtificialIntelligence {
         
         while ( mIsStarted ){
             
-            while( mIsPaused || !mNeedNewAction ){ try { this.wait( 2 ); } catch ( InterruptedException e ) { e.printStackTrace(); } }
+            while( mIsPaused || !mNeedNewAction ){ try { sleep( 2 ); } catch ( InterruptedException e ) { e.printStackTrace(); } }
 
             try {            
                 if( mWorldState != null  ){
