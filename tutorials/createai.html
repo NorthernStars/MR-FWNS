@@ -96,7 +96,7 @@ public class MyAI extends Thread implements ArtificialIntelligence {
         
         while ( mIsStarted ){
             
-            while ( mIsPaused ){ try { this.wait( 10 ); } catch ( InterruptedException e ) { e.printStackTrace(); } }
+            while ( mIsPaused ){ try { sleep( 10 ); } catch ( InterruptedException e ) { e.printStackTrace(); } }
 
             try {             
                 if ( mNeedNewAction && mWorldState != null  ){
