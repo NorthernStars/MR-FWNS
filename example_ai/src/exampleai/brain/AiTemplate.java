@@ -15,7 +15,7 @@ public class AiTemplate extends Thread implements ArtificialIntelligence {
     RawWorldData mWorldState = null;
     Action mAction = null;
     
-    boolean mNeedNewAction = true;    
+    boolean mNeedNewAction = false;    
     boolean mIsStarted = false;
     boolean mIsPaused = false;
     
