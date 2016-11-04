@@ -26,9 +26,7 @@ public class GoalKeeper extends AiTemplate {
 	
 	@Override
 	public Action startWorking( RawWorldData aWorldData ){
-    	
-		System.out.println("Ha");
-		
+    			
 		Action vBotAction = null;
                    
         // Getting current play mode

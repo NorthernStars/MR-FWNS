@@ -12,12 +12,12 @@ import essentials.core.BotInformation.Teams;
 public class AiTemplate extends Thread implements ArtificialIntelligence {
 
     protected BotInformation mSelf = null;
-    private RawWorldData mWorldState = null;
-    private Action mAction = null;
+    volatile private RawWorldData mWorldState = null;
+    volatile private Action mAction = null;
     
-    protected boolean mNeedNewAction = false;    
-    private boolean mIsStarted = false;
-    private boolean mIsPaused = false;
+    volatile protected boolean mNeedNewAction = false;    
+    volatile private boolean mIsStarted = false;
+    volatile private boolean mIsPaused = false;
     
     @Override
     public void initializeAI( BotInformation aOneSelf ) {        
