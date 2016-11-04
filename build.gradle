@@ -45,6 +45,22 @@ project(':mrbotkicore'){
 	    }
 	}
 
+}
+
+task buildBinarys(type: Copy) {
+	dependsOn clean
+	dependsOn project('mrbotkicore').assembleDist 
+	from 'mrbotkicore/build/distributions'
+    into 'dist'
+}
+
+configure(buildBinarys) {   
+    group = 'build'
+    description = 'Builds the binarys and deposits them in ./dist'
+}
+
+clean {
+	delete 'dist/'
 } 
 
 project(':mrbotkiessentials'){
