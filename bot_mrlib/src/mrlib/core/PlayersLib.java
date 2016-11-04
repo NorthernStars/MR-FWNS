@@ -320,25 +320,39 @@ public class PlayersLib {
 	}
 	
 	/**
-	 * Return if an enemy has the same angle as a specific {@link ReferencePoint} +- {@code moveAngleNoTurn} in {@link MoveLib}
+	 * Return if an enemy has the same angle as a specific {@link ReferencePoint} +- {@code angle} in {@link MoveLib}
 	 * 
 	 * @param aWorldState	{@link RawWorldData} from the server
 	 * @param refPoint		{@link ReferencePoint}
+	 * @param angle			{@link Double} angle
 	 * @returns 			{@code true} if enemy is in way from agent to {@code refPoint}, {@code false} othweise.
 	 * */
-	public static boolean isEnemyOnWayToRefPoint(RawWorldData aWorldState, ReferencePoint refPoint){
+	public static boolean isEnemyOnWayToRefPoint(RawWorldData aWorldState, ReferencePoint refPoint, double angle){		
+		// prepare angles
+		double vAngleLeft = refPoint.getAngleToPoint()-angle;
+		double vAngleRight = refPoint.getAngleToPoint()+angle;
+		
+		// check if angles exceed maximum angles
 		
 		List<FellowPlayer> vOpponents = aWorldState.getListOfOpponents();
 		for ( FellowPlayer a: vOpponents){
-			if(a.getAngleToPlayer() > refPoint.getAngleToPoint()+10 || a.getAngleToPlayer() < refPoint.getAngleToPoint()-10){
-				return false;
+			
+			double vAngleToPlayer = a.getAngleToPlayer();
+			
+			if( vAngleToPlayer >= vAngleLeft && vAngleToPlayer <= vAngleRight ){
+					return true;
 			}
-			else{
+			
+			if( vAngleRight > 180.0 && (vAngleToPlayer <= (-360+vAngleRight) || vAngleToPlayer >= vAngleLeft) ){
+				return true;
+			}
+			
+			if( vAngleLeft < -180.0 && (vAngleToPlayer >= (360+vAngleLeft) || vAngleToPlayer <= vAngleRight ) ){
 				return true;
 			}
 		}
 		
-		return true;
+		return false;
 	}
 	
 	/**
