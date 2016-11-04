@@ -1,0 +1,87 @@
+allprojects {
+    
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    
+
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven {
+            url "https://maven.repository.redhat.com/ga/"
+        }
+        
+    }
+    
+    dependencies {
+        compile 'org.apache.logging.log4j:log4j-api:2.7'
+        compile 'org.apache.logging.log4j:log4j-core:2.7'
+        compile 'net.jcip:jcip-annotations:1.0.0.redhat-8'
+        
+        testCompile 'junit:junit:4.12'
+    }
+    
+    
+}
+
+project(':mrbotkicore'){
+
+	apply plugin: 'application'
+	mainClassName = "core.Main"
+
+    dependencies {
+        compile project(':mrbotkiessentials')
+        compile project(':mrbotkinetwork')
+        compile project(':mrbotkiexample')
+        compile 'commons-cli:commons-cli:1.2+'
+    }
+    
+    sourceSets {
+	    main {
+	        resources {
+	            srcDirs = ["src/main/xml"]
+	            includes = ["**/*.xml"]
+	        }
+	    }
+	}
+
+} 
+
+project(':mrbotkiessentials'){
+
+}
+ 
+project(':mrbotkinetwork'){
+
+    dependencies {
+        compile project(':mrbotkiessentials')
+    }
+
+}
+
+project(':mrbotkiremotecontrol'){
+
+    dependencies {
+        compile project(':mrbotkinetwork')
+        compile project(':mrbotkiessentials')
+    }
+
+}
+
+project(':mrbotkitools'){
+
+    dependencies {
+        compile project(':mrbotkiessentials')
+    }
+
+}
+
+project(':mrbotkiexample'){
+
+    dependencies {
+        compile project(':mrbotkitools')
+        compile project(':mrbotkiessentials')
+    }
+
+}
+

@@ -1,14 +1,13 @@
-*.*
-*
+bin
+build
+dist
+logs
 
-!.gitignore
-!.classpath
-!.project
+gradle
+.gradle
 
-!*.txt
-
-!*.xml
-!*/src/**/*.*
-!*.zip
-'*.tar
-!*.gz
+**/.settings
+**/.classpath
+**/.project
+**/.metadata
+**/.recommenders
