@@ -4,8 +4,8 @@ import essentials.communication.Action;
 
 public class Kick implements Action {
 
-	private double mAngle;
-	private float mForce;
+	private final double mAngle;
+	private final float mForce;
 	
 	public Kick( double aAngle, float aForce){
 		
@@ -18,5 +18,15 @@ public class Kick implements Action {
 	public String getXMLString() {
 		return "<command> <kick> <angle>" + mAngle + "</angle> <force>" + mForce + "</force> </kick> </command>";
 	}
+
+	public double getAngle() {
+		return mAngle;
+	}
+
+	public float getForce() {
+		return mForce;
+	}
+	
+	
 
 }

@@ -88,6 +88,8 @@ project(':mrbotkitools'){
 
     dependencies {
         compile project(':mrbotkiessentials')
+		testCompile 'org.assertj:assertj-core:3.+'
+        
     }
 
 }

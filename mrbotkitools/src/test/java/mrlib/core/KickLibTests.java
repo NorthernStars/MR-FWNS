@@ -1,10 +1,13 @@
 package mrlib.core;
 
-import static org.junit.Assert.*;
 
+import static org.assertj.core.api.Assertions.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import essentials.communication.Action;
+import essentials.communication.action_server2008.Kick;
 
 public class KickLibTests {
 
@@ -17,8 +20,15 @@ public class KickLibTests {
 	}
 
 	@Test
-	public void testKickToDoubleFloat() {
-		fail("Not yet implemented");
+	public void testKickToWithAngleAndForce() {
+		final double testAngle = 10.0;
+		final float testForce = 50.0f;
+		Action returnAction = KickLib.kickTo(testAngle, testForce);
+		
+		assertThat(returnAction).isExactlyInstanceOf(Kick.class);
+		assertThat(((Kick) returnAction).getAngle()).isCloseTo(testAngle, withinPercentage(1));
+		assertThat(((Kick) returnAction).getForce()).isCloseTo(testForce, withinPercentage(1));
+		
 	}
 
 	@Test
