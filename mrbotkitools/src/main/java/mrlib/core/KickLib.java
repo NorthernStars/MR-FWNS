@@ -19,9 +19,9 @@ public class KickLib {
 
 	/**
 	 * Kick into a direction of an angle with a specific force.
-	 * @param aAngle	{@link Double} angle to kick to in degree
-	 * @param aForce	{@link Float} force to kick with (0.0f - 1.0f)
-	 * @return Action	{@link Action}
+	 * @param aAngle	 angle to kick to in degree
+	 * @param aForce	 force to kick with (0.0f - 1.0f)
+	 * @return Action	 returns a {@link essentials.communication.action_server2008.Kick} with given angle and force
 	 */
 	public static Action kickTo( double aAngle, float aForce ){
 		return (Action) new Kick( aAngle, aForce );
