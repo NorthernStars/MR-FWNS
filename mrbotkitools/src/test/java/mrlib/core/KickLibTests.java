@@ -33,7 +33,13 @@ public class KickLibTests {
 
 	@Test
 	public void testKickToDouble() {
-		fail("Not yet implemented");
+		final double testAngle = 10.0;
+		Action returnAction = KickLib.kickTo(testAngle);
+		assertThat(returnAction).isExactlyInstanceOf(Kick.class);
+		assertThat(((Kick) returnAction).getAngle()).isCloseTo(testAngle, withinPercentage(1));
+		assertThat(((Kick) returnAction).getForce()).isCloseTo(1.0f, withinPercentage(1));
+		
+
 	}
 
 	@Test
