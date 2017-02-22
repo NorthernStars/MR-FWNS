@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import essentials.communication.Action;
 import essentials.communication.action_server2008.Kick;
+import essentials.communication.worlddata_server2008.ReferencePoint;
 
 public class KickLibTests {
 
@@ -27,29 +28,45 @@ public class KickLibTests {
 		
 		assertThat(returnAction).isExactlyInstanceOf(Kick.class);
 		assertThat(((Kick) returnAction).getAngle()).isCloseTo(testAngle, withinPercentage(1));
-		assertThat(((Kick) returnAction).getForce()).isCloseTo(testForce, withinPercentage(1));
-		
+		assertThat(((Kick) returnAction).getForce()).isCloseTo(testForce, withinPercentage(1));		
 	}
 
 	@Test
 	public void testKickToDouble() {
 		final double testAngle = 10.0;
 		Action returnAction = KickLib.kickTo(testAngle);
+		
 		assertThat(returnAction).isExactlyInstanceOf(Kick.class);
 		assertThat(((Kick) returnAction).getAngle()).isCloseTo(testAngle, withinPercentage(1));
-		assertThat(((Kick) returnAction).getForce()).isCloseTo(1.0f, withinPercentage(1));
-		
-
+		assertThat(((Kick) returnAction).getForce()).isCloseTo(1.0f, withinPercentage(1));		
 	}
 
 	@Test
 	public void testKickToReferencePoint() {
-		fail("Not yet implemented");
+		final double testAngle = .5;
+		final double testDistance = 10.0;
+		final ReferencePoint testRefPoint = new ReferencePoint(testDistance, testAngle, true);
+		Action returnAction = KickLib.kickTo(testRefPoint);
+
+		assertThat(returnAction).isExactlyInstanceOf(Kick.class);
+		assertThat(((Kick) returnAction).getAngle()).isCloseTo(testAngle, withinPercentage(1));
+		assertThat(((Kick) returnAction).getForce()).isCloseTo(1.0f, withinPercentage(1));		
+				
 	}
 
 	@Test
 	public void testKickToReferencePointFloat() {
-		fail("Not yet implemented");
+		final double testAngle = .5;
+		final double testDistance = 10.0f;
+		final float testForce = .7f;
+		final ReferencePoint testRefPoint = new ReferencePoint(testDistance, testAngle, true);
+		Action returnAction = KickLib.kickTo(testRefPoint, testForce);
+
+		assertThat(returnAction).isExactlyInstanceOf(Kick.class);
+		assertThat(((Kick) returnAction).getAngle()).isCloseTo(testAngle, withinPercentage(1));
+		assertThat(((Kick) returnAction).getForce()).isCloseTo(testForce, withinPercentage(1));		
+		
+		
 	}
 
 	@Test
