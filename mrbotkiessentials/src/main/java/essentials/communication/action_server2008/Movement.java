@@ -31,4 +31,12 @@ public class Movement implements Action {
 		return "<command> <wheel_velocities> <right>" + mRightWheelVelocity + "</right> <left>" + mLeftWheelVelocity + "</left> </wheel_velocities> </command>";
 	}
 
+        public int getmRightWheelVelocity() {
+            return mRightWheelVelocity;
+        }
+
+        public int getmLeftWheelVelocity() {
+            return mLeftWheelVelocity;
+        }
+
 }
