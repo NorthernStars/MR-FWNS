@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import essentials.communication.Action;
 import essentials.communication.action_server2008.Kick;
+import essentials.communication.worlddata_server2008.FellowPlayer;
 import essentials.communication.worlddata_server2008.ReferencePoint;
 
 public class KickLibTests {
@@ -71,27 +72,47 @@ public class KickLibTests {
 
 	@Test
 	public void testKickToFellowPlayer() {
-		fail("Not yet implemented");
+		FellowPlayer testPlayer = new FellowPlayer();
+		double testAngle = 40.0;
+		testPlayer.set(0, testAngle, true);
+		Action returnAction = KickLib.kickTo(testPlayer);
+		
+		assertThat(returnAction).isExactlyInstanceOf(Kick.class);
+		assertThat(((Kick) returnAction).getForce()).isCloseTo(1, withinPercentage(1));
+		assertThat(((Kick) returnAction).getAngle()).isCloseTo(testAngle, withinPercentage(1));
 	}
 
 	@Test
 	public void testKickToFellowPlayerFloat() {
-		fail("Not yet implemented");
+		FellowPlayer testPlayer = new FellowPlayer();
+		double testAngle = 40.0;
+		float testForce = 0.7f;
+		testPlayer.set(0, testAngle, true);
+		Action returnAction = KickLib.kickTo(testPlayer, testForce);
+		
+		assertThat(returnAction).isExactlyInstanceOf(Kick.class);
+		assertThat(((Kick) returnAction).getForce()).isCloseTo(testForce, withinPercentage(1));
+		assertThat(((Kick) returnAction).getAngle()).isCloseTo(testAngle, withinPercentage(1));
+		
+		
 	}
 
 	@Test
 	public void testKickToNearestTeamMate() {
 		fail("Not yet implemented");
+		//TODO Get a world model
 	}
 
 	@Test
 	public void testKickToNearestOpponent() {
 		fail("Not yet implemented");
+		//TODO Get a world model
 	}
 
 	@Test
 	public void testKickToNearest() {
 		fail("Not yet implemented");
+		//TODO Get a world model
 	}
 
 }
