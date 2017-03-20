@@ -89,6 +89,7 @@ public class KickLib {
 	 * @param aWorldData	{@link RawWorldData}
 	 * @return Action		{@link Action}
 	 */
+	@Deprecated
 	public static Action kickToNearestOpponent( RawWorldData aWorldData ){
 		return kickToNearest( aWorldData, FellowPlayers.Opponents );
 	}
