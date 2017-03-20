@@ -1,0 +1,301 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>NorthernStars Mixed-Reality Framework by NorthernStars</title>
+
+    <link rel="stylesheet" href="../stylesheets/styles.css">
+    <link rel="stylesheet" href="../stylesheets/pygment_trac.css">
+    <script src="../javascripts/scale.fix.js"></script>
+    <script src="../javascripts/main.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body onload="checkJavaSyntax()">
+    <div class="wrapper">
+      <header>
+        <h1 class="header">MR-FWNS</h1>
+        <p class="header">NorthernStars Mixed-Reality Framework</p>
+
+		<hr />
+		<p class="header">MR-Framework & Example AI:</p>
+        <ul>
+        	<li><a class="buttons github" href="https://github.com/NorthernStars/MR-FWNS/releases" target="_blank">View Releases</a></li>
+</ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/NorthernStars">NorthernStars</a></p>
+
+
+      </header>
+      <section>
+      	<h2>Creating an artifical intelligence</h2>
+      	<p>
+      		This tutorial shows, how to create an artificial intelligence (AI).
+      		We mainly use <a href="https://eclipse.org/" target="_blank">Eclipse</a> for programming.
+      		But this tutorial should also work with any other IDE.
+      		This tutorial requires downloaded and extracted <i>MR-FWNS-complete</i> archive (download MR-Framework on the left side).
+      		
+      	</p>
+      	
+      	<h3>Create project.</h3>
+      	<p>
+      		Create a new java project and name it however you like, for example <i>MyAI</i>.
+      		Set up a source folder and a main package that will contain your AI. Let's say you named your main package <i>default</i>.
+      	</p>
+      	<p>
+      		Add the following jar libraries from extracted <i>MixedRealityBot</i> to your build path:
+      		<ul>
+      			<li>bot_mr.jar</li>
+			<li>all .jar-files from subfolder <i>libraries</i></li>
+      		</ul> 
+      	</p>
+      	
+      	<h3>Create AI class</h3>
+      	<p>
+      		Create a new java file with a class inside the <i>default</i> package that extends the class <code>Thread</code> and implements the interface <code>ArtificialIntelligence</code> from <code>essentials.core</code>.<br />
+      		To add all missing functions from extendes class and interface as well as some other variables, use the following template to complete your AI class:
+      	</p>
+<pre>
+public class MyAI extends Thread implements ArtificialIntelligence {
+
+    BotInformation mSelf = null;
+    RawWorldData mWorldState = null;
+    Action mAction = null;
+    
+    boolean mNeedNewAction = true;    
+    boolean mIsStarted = false;
+    boolean mIsPaused = false;
+    
+    @Override
+    public void initializeAI( BotInformation aOneSelf ) {        
+        mSelf = aOneSelf; 
+        mIsStarted = true;
+        start();        
+    }
+
+    @Override
+    public void resumeAI() {        
+        mIsPaused = false;        
+    }
+    
+    @Override
+    public void suspendAI() {        
+        mIsPaused = true;           
+    }
+    
+    /**
+     * Main function of AI
+     */
+    public void run(){
+        
+        RawWorldData vWorldState = null;
+        Action vBotAction = null;
+        
+        while ( mIsStarted ){
+            
+            while ( mIsPaused ){ try { sleep( 10 ); } catch ( InterruptedException e ) { e.printStackTrace(); } }
+
+            try {             
+                if ( mNeedNewAction && mWorldState != null  ){
+                    synchronized ( this ) {
+                        vWorldState = mWorldState;
+                    }
+                    
+                    // Getting current play mode
+                    PlayMode vPlayMode = mWorldState.getPlayMode();
+                    
+                    // Check for kick off
+                    if ( vPlayMode == PlayMode.KickOff
+                    		|| (vPlayMode == PlayMode.KickOffYellow && mSelf.getTeam() == Teams.Yellow)
+                    		|| (vPlayMode == PlayMode.KickOffBlue && mSelf.getTeam() == Teams.Blue) ){
+                    	
+                    	// --------------- KICK OFF ---------------
+                    	// --------------- KICK OFF END ---------------
+                    	
+                    }
+                    // No kick off
+                    else {
+                    	
+                    	// --------------- START AI -------------------	                    
+                    	// ---------------- END AI --------------------
+                    
+                    }
+                    
+                    // Set action
+                    synchronized ( this ) {
+                        mAction = vBotAction;
+                        mNeedNewAction = false;
+                    }                  
+                }
+                Thread.sleep( 1 );                
+            } catch ( Exception e ) {
+                e.printStackTrace();
+            }            
+            
+        }
+        
+    }
+
+    
+    @Override
+    public synchronized Action getAction() {
+        synchronized ( this ) {
+            if( mAction != null)
+                return mAction;
+        }
+        return (Action) Movement.NO_MOVEMENT;        
+    }
+
+    @Override
+    public void putWorldState( WorldData aWorldState) {
+        synchronized ( this ) {
+        	if( aWorldState instanceof RawWorldData ){
+        		mWorldState = (RawWorldData) aWorldState;
+        	}
+            if( aWorldState != null && mWorldState.getReferencePoints() != null && !mWorldState.getReferencePoints().isEmpty() ){            
+            	mNeedNewAction = true;
+            } else {
+            	mNeedNewAction = false;
+            }
+        }        
+    }
+
+    @Override
+    public void disposeAI() {        
+        mIsStarted = false;
+        mIsPaused = false;        
+    }
+    
+    @Override
+    public boolean isRunning() {
+        return mIsStarted && !mIsPaused;        
+    }
+
+	@Override
+	public boolean wantRestart() {
+		return false;
+	}
+
+    @Override
+    public void executeCommand( String arg0 ) {
+    }
+
+}     		
+</pre>
+
+		<h3>Dealing with play modes</h3>
+		<p>
+			The template above does nothing.
+			The right place to add an intelligent behavior is after
+		</p>
+<pre>
+synchronized ( this ) {
+    vWorldState = mWorldState;
+}
+</pre>
+		<p>
+			inside the surrounding if statement.
+			The template above already contains some stuff there.
+			It gets the current play mode (<code>PlayMode vPlayMode = mWorldState.getPlayMode();</code>).<br />
+			The play mode could be a value from enum <code>PlayMode</code> from package <code>essentials.communication.worlddata_server2008</code>.
+			Currently two cases are implemented.
+			The first one occurs if the play mode is a general <i>KickOff</i>, <i>KickOffYellow</i> or <i>KickOffBlue</i>.
+		</p>
+<pre>
+if ( vPlayMode == PlayMode.KickOff
+	|| (vPlayMode == PlayMode.KickOffYellow && mSelf.getTeam() == Teams.Yellow)
+	|| (vPlayMode == PlayMode.KickOffBlue && mSelf.getTeam() == Teams.Blue) )
+</pre>
+		<p>
+		You can add your own behavior between the two comments
+		<code>KICK OFF</code> and <code>KICK OFF END</code>.
+		</p>
+		<p>
+		For example add the following lines:
+		</p>
+<pre>
+if ( vWorldState.getBallPosition() != null ){
+	vBotAction = MoveLib.runTo( vWorldState.getBallPosition()  );
+}
+else {
+	vBotAction = MoveLib.runTo( vWorldState.getFieldCenter() );
+}
+</pre
+		<p>
+			During kick off this makes the agent running to the current ball position, if there's a ball or to run to the fields center, if there's no ball.
+		</p>
+		
+		<h3>Main behavior</h3>
+		<p>
+			The else statement after the kick off section contains the behavior if the play mode isn't a kick off.
+			Here you can add an behavior between the comments <code>START AI</code> and <code>END AI</code>.
+			So add the following code:
+		</p>
+<pre>
+// check if ball is available
+if ( vWorldState.getBallPosition() != null ){
+	                    	
+	// get ball position
+	BallPosition ballPos = vWorldState.getBallPosition();
+		                    	
+	// check if bot can kick
+	if ( ballPos.getDistanceToBall() < mSelf.getGamevalue( GamevalueNames.KickRange ) ){                 
+		// kick
+		ReferencePoint goalMid = PositionLib.getMiddleOfGoal( vWorldState, mSelf.getTeam() );
+		vBotAction = KickLib.kickTo( goalMid ); 
+	
+	} else {
+		// move to ball
+		vBotAction = MoveLib.runTo( ballPos );
+	}	 
+	                    	
+}
+</pre>
+		<p>
+			The first if statement checks if there's a ball. If there's no ball the agent does nothing.
+			If there's a ball the current ball position is saved in the variable <code>ballPos</code>.
+		</p>
+		<p>
+			The next if statement checks if the agent can kick the ball.
+			For that the distance to the ball is compared to a game value called <i>KickRange</i>.
+			The kick range is the range the ball has to be within so that the agent can kick the ball.
+		</p>
+		<p>
+			To get a game value the object <code>mSelf</code> storing information about the current agent is used.
+			All available game values are stored in the enum <code>GamevalueNames</code> from package <code>essentials.core</code>.
+			The function <code>mSelf.getGamevalue()</code> gets a specific value.
+		</p>
+		<p>
+			So if the agent can kick the ball, it retrieves the middle of the enemies goal using the function <code>PositionLib.getMiddleOfGoal()</code>
+			that requires the current world model, stored in <code>vWorldState</code> and the team of the current agent.
+			After the agent got the position of the goal middle it kicks the ball into that direction using the function <code>KickLib.kickTo()</code>.
+		</p>
+		<p>
+			If the agent couldn't kick the ball it moves toward the balls position using the function <code>MoveLib.runTo()</code>.
+		</p>
+		
+		<h3>Agents origin</h3>
+		<p>
+			The current world model stored inside <code>vWorldState</code> (using the template above) has it's origin in the middle of the current agent.
+			So the center of the world for a robot is itself.
+			Other objects in the world like several reference points like goal poles, field center and so on are described in polar coordinate space using an
+			angle and a distance to the object.
+			The agent always views toward zero degree.
+			You can also use cartesian coordinates by calling the function <code>getXOfPoint()</code> and <code>getYOfPoint</code> on any reference point.
+			Doing this the cartesian coordinates are calculated so it's recommended to use polar coordinate space as much as possible (sometimes it's not and therefor you can use catersian coordinates).
+		</p>
+      	
+      	
+      	<p><a class="back" href="javascript: history.back()">Back</a></p>
+	  </section>
+      <footer>
+        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
