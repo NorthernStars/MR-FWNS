@@ -210,7 +210,23 @@ public class RawWorldData implements WorldData{
         return getReferencePoint( ReferencePointName.BlueGoalAreaFrontTop );
         
     }
-
+	
+	@XmlTransient
+	public void setOpponentPlayer(FellowPlayer player){
+		mListOfOpponents =  mListOfOpponents != null ? mListOfOpponents : new ArrayList<FellowPlayer>();
+		mListOfOpponents.add(player);
+	}
+	@XmlTransient
+	public void setFellowPlayer(FellowPlayer player){
+		mListOfTeamMates =  mListOfTeamMates != null ? mListOfTeamMates : new ArrayList<FellowPlayer>();
+		mListOfTeamMates.add(player);
+	}
+	@XmlTransient
+	public void setBallPosition(ReferencePoint ballPos){
+		mBallPosition = mBallPosition != null ? mBallPosition : new BallPosition();
+		mBallPosition.set(20, 45, true);
+	}
+	
     @XmlTransient
     public List<ReferencePoint> getReferencePoints() {
         return mReferencePoints;
