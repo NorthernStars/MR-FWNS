@@ -9,6 +9,7 @@ import org.junit.Test;
 import essentials.communication.Action;
 import essentials.communication.action_server2008.Kick;
 import essentials.communication.worlddata_server2008.FellowPlayer;
+import essentials.communication.worlddata_server2008.RawWorldData;
 import essentials.communication.worlddata_server2008.ReferencePoint;
 
 public class KickLibTests {
@@ -99,20 +100,52 @@ public class KickLibTests {
 
 	@Test
 	public void testKickToNearestTeamMate() {
-		fail("Not yet implemented");
-		//TODO Get a world model
+		RawWorldData rawWorldData = setScenario();
+				
+		Action returnAction = KickLib.kickToNearestTeamMate(rawWorldData);
+
+		assertThat(returnAction).isExactlyInstanceOf(Kick.class);
+		assertThat(((Kick) returnAction).getAngle()).isCloseTo(-90.0, withinPercentage(1));
+		assertThat(((Kick) returnAction).getForce()).isCloseTo(1.0f, withinPercentage(1));
+		
+		
 	}
 
 	@Test
 	public void testKickToNearestOpponent() {
-		fail("Not yet implemented");
-		//TODO Get a world model
+		RawWorldData rawWorldData = setScenario();
+		
+		Action returnAction = KickLib.kickToNearestOpponent(rawWorldData);
+
+		assertThat(returnAction).isExactlyInstanceOf(Kick.class);
+		assertThat(((Kick) returnAction).getAngle()).isCloseTo(55.0, withinPercentage(1));
+		assertThat(((Kick) returnAction).getForce()).isCloseTo(1.0f, withinPercentage(1));
 	}
 
 	@Test
 	public void testKickToNearest() {
-		fail("Not yet implemented");
-		//TODO Get a world model
+		RawWorldData rawWorldData = setScenario();
+		
+		Action returnAction = KickLib.kickToNearest(rawWorldData);
+
+		assertThat(returnAction).isExactlyInstanceOf(Kick.class);
+		assertThat(((Kick) returnAction).getAngle()).isCloseTo(-90.0, withinPercentage(1));
+		assertThat(((Kick) returnAction).getForce()).isCloseTo(1.0f, withinPercentage(1));
+	}
+	
+	private RawWorldData setScenario(){
+		
+		RawWorldData rawWorldData = new RawWorldData();
+		FellowPlayer player1 = new FellowPlayer(0, "TestBot", true, 200.0, -90.0, 0.0);
+		FellowPlayer player2 = new FellowPlayer(1, "TestBot2", true, 300.0, -80.0, 0.0);
+		FellowPlayer oPlayer1 = new FellowPlayer(1, "OpponentBot2", true, 800.0, 55.0, 0.0);
+		FellowPlayer oPlayer2 = new FellowPlayer(1, "OpponentBot2", true, 900.0, 66.0, 0.0);
+		rawWorldData.setFellowPlayer(player1);
+		rawWorldData.setFellowPlayer(player2);
+		rawWorldData.setOpponentPlayer(oPlayer1);
+		rawWorldData.setOpponentPlayer(oPlayer2);
+		
+		return rawWorldData;
 	}
 
 }
