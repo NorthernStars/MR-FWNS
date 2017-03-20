@@ -67,17 +67,17 @@ public class MoveLib {
 	 */
 	public static Action runTo( double vAngle ) {
 
-		// no turn fwd
+        // no turn, moving fwd
         if( vAngle >= -moveAngleNoTurn && vAngle <= moveAngleNoTurn ){            
             return (Action) new Movement( 100, 100 );            
         }
         
-        // turn depending on angle fwd
+        // turn depending on angle, moving fwd
         if( vAngle > -moveAngleTurnAndMove && vAngle < -moveAngleNoTurn ){            
             return (Action) new Movement( 100, 100 + (int) vAngle );            
         }
         
-        // turn depending on angle fwd
+        // turn depending on angle, moving fwd
         if( vAngle > moveAngleNoTurn && vAngle < moveAngleTurnAndMove ){            
             return (Action) new Movement( 100 - (int) vAngle, 100 );            
         }
@@ -92,17 +92,17 @@ public class MoveLib {
             return (Action) new Movement( -100, 100 );            
         }
         
-        // turn depending on angle bwd
+        // turn depending on angle, moving bwd
         if( vAngle > -(180-moveAngleNoTurn) && vAngle < -(180-moveAngleTurnAndMove) ){            
             return (Action) new Movement( -100, 100 + (int) vAngle );            
         }
         
-        // turn depending on angle bwd
+        // turn depending on angle, moving bwd
         if( vAngle > (180-moveAngleTurnAndMove) && vAngle < (180-moveAngleNoTurn) ){            
             return (Action) new Movement( 100 - (int) vAngle, -100 );            
         }
         
-        // no turn bwd
+        // no turn, moving bwd
         if( ( vAngle >= (180-moveAngleNoTurn) && vAngle <= 180 )
         		|| ( vAngle <= -(180-moveAngleNoTurn) && vAngle >= -180 ) ){            
             return (Action) new Movement( -100, -100 );            
