@@ -18,7 +18,7 @@ public class KickLibTests {
 
 	@Before
 	public void setUp() throws Exception {
-		worldModel = TestScenario.setScenario();
+		worldModel = TestScenario.getExampleWorldModel();
 	}
 
 	@After
@@ -107,7 +107,7 @@ public class KickLibTests {
 		Action returnAction = KickLib.kickToNearestTeamMate(worldModel);
 
 		assertThat(returnAction).isExactlyInstanceOf(Kick.class);
-		assertThat(((Kick) returnAction).getAngle()).isCloseTo(-90.0, withinPercentage(1));
+		assertThat(((Kick) returnAction).getAngle()).isCloseTo(TestScenario.fellow1_Angle, withinPercentage(1));
 		assertThat(((Kick) returnAction).getForce()).isCloseTo(1.0f, withinPercentage(1));
 		
 		
@@ -119,7 +119,7 @@ public class KickLibTests {
 		Action returnAction = KickLib.kickToNearestOpponent(worldModel);
 
 		assertThat(returnAction).isExactlyInstanceOf(Kick.class);
-		assertThat(((Kick) returnAction).getAngle()).isCloseTo(55.0, withinPercentage(1));
+		assertThat(((Kick) returnAction).getAngle()).isCloseTo(TestScenario.opponent1_Angle, withinPercentage(1));
 		assertThat(((Kick) returnAction).getForce()).isCloseTo(1.0f, withinPercentage(1));
 	}
 
@@ -129,7 +129,7 @@ public class KickLibTests {
 		Action returnAction = KickLib.kickToNearest(worldModel);
 
 		assertThat(returnAction).isExactlyInstanceOf(Kick.class);
-		assertThat(((Kick) returnAction).getAngle()).isCloseTo(-90.0, withinPercentage(1));
+		assertThat(((Kick) returnAction).getAngle()).isCloseTo(TestScenario.fellow1_Angle, withinPercentage(1));
 		assertThat(((Kick) returnAction).getForce()).isCloseTo(1.0f, withinPercentage(1));
 	}
 	

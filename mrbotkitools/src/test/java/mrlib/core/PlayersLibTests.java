@@ -12,17 +12,20 @@ import essentials.communication.Action;
 import essentials.communication.action_server2008.Kick;
 import essentials.communication.worlddata_server2008.FellowPlayer;
 import essentials.communication.worlddata_server2008.RawWorldData;
+import essentials.constants.Default;
 import essentials.core.BotInformation;
+import essentials.core.BotInformation.GamevalueNames;
 
 public class PlayersLibTests {
 
-	public RawWorldData worldModel;
+	RawWorldData worldModel;
+	BotInformation vBotInformation;
 	
 	
 	
 	@Before
 	public void setUp() throws Exception {
-		worldModel = TestScenario.setScenario();
+		worldModel = TestScenario.getExampleWorldModel();
 	}
 
 	@After
@@ -32,19 +35,45 @@ public class PlayersLibTests {
 	@Test
 	public void testGetNearestMate() {
 
-
 		FellowPlayer returnPlayer = PlayersLib.getNearestMate(worldModel, new BotInformation());
 		
 		assertThat(returnPlayer).isExactlyInstanceOf(FellowPlayer.class);
-		assertThat(returnPlayer.getDistanceToPlayer()).isCloseTo(200.0, withinPercentage(1));
-		assertThat(returnPlayer.getAngleToPlayer()).isCloseTo(-90.0, withinPercentage(1));
-		
-		
+		assertThat(returnPlayer.getDistanceToPlayer()).isCloseTo(TestScenario.fellow1_Distance, withinPercentage(1));
+		assertThat(returnPlayer.getAngleToPlayer()).isCloseTo(TestScenario.fellow1_Angle, withinPercentage(1));
+				
 	}
 
 	@Test
 	public void testIsEnemyAroundRawWorldDataBotInformation() {
-		fail("Not yet implemented");
+
+		
+		BotInformation vSelf = new BotInformation();
+		
+		//Case 1
+		boolean testAround = PlayersLib.isEnemyAround(worldModel, vSelf);
+		assertThat(testAround).isEqualTo(false);
+		
+		
+		//Case 2 (barely out of range)
+		FellowPlayer nearestOpponent = PlayersLib.getNearestOpponent(worldModel);
+		nearestOpponent.setDistanceToPoint((Default.KickRange)*2+0.01);
+		testAround = PlayersLib.isEnemyAround(worldModel, vSelf);
+		assertThat(testAround).isEqualTo(false);
+
+		
+		//Case 3 (exact in range)
+		nearestOpponent.setDistanceToPoint((Default.KickRange)*2);
+		testAround = PlayersLib.isEnemyAround(worldModel, vSelf);
+		assertThat(testAround).isEqualTo(true);
+		
+		//Case 4 (barely in range)
+		nearestOpponent.setDistanceToPoint((Default.KickRange)*2-0.01);
+		testAround = PlayersLib.isEnemyAround(worldModel, vSelf);
+		assertThat(testAround).isEqualTo(true);
+		
+		
+		worldModel = TestScenario.getExampleWorldModel();
+		
 	}
 
 	@Test

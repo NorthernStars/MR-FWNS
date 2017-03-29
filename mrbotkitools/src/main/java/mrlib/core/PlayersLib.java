@@ -39,6 +39,28 @@ public class PlayersLib {
 
 		return nearestMate;
 	}
+	
+	 /**
+     * Returns nearest Opponent, doesn't check if something is inbetween or not.
+     * @param vWorldState 	{@link RawWorldData} from the Server
+     * @return 				{@link FellowPlayer} with the shortest distance to oneself
+     */
+	public static FellowPlayer getNearestOpponent(RawWorldData vWorldState){
+        List<FellowPlayer> vOpponents = vWorldState.getListOfOpponents();
+        
+		FellowPlayer nearestOpponent = null;
+    	for( FellowPlayer a : vOpponents){
+			if( nearestOpponent == null || a.getDistanceToPlayer() < nearestOpponent.getDistanceToPlayer()){
+				nearestOpponent = a;
+			}                    				
+		
+		}
+
+		return nearestOpponent;
+	}
+	
+	
+	
 	 /**
      * Check if Enemy is within 2 x kick range of the bot
      * @param vWorldState	{@link RawWorldData} from the Server
@@ -48,7 +70,7 @@ public class PlayersLib {
 	public static boolean isEnemyAround(RawWorldData vWorldState, BotInformation mSelf){
 		List<FellowPlayer> vOpponents = vWorldState.getListOfOpponents();
 		for( FellowPlayer p : vOpponents){
-			if(p.getDistanceToPlayer() < 2*mSelf.getGamevalue( GamevalueNames.KickRange )){
+			if(p.getDistanceToPlayer() <= 2*mSelf.getGamevalue( GamevalueNames.KickRange )){
 				return true;
 			}
 		}
@@ -66,7 +88,7 @@ public class PlayersLib {
 	public static boolean isEnemyAround(RawWorldData vWorldState, BotInformation mSelf, double range){
 		List<FellowPlayer> vOpponents = vWorldState.getListOfOpponents();
 		for( FellowPlayer p : vOpponents){
-			if(p.getDistanceToPlayer() < range ){
+			if(p.getDistanceToPlayer() <= range ){
 				return true;
 			}
 		}
@@ -85,7 +107,7 @@ public class PlayersLib {
 	public static boolean isEnemyAroundMate(RawWorldData vWorldState, BotInformation mSelf, FellowPlayer teamMate){
 		List<FellowPlayer> vOpponents = vWorldState.getListOfOpponents();
 		for( FellowPlayer p : vOpponents){
-			if(PlayersLib.getDistanceBetweenTwoPlayers(p, teamMate) < 2*mSelf.getGamevalue( GamevalueNames.KickRange ) ){
+			if(PlayersLib.getDistanceBetweenTwoPlayers(p, teamMate) <= 2*mSelf.getGamevalue( GamevalueNames.KickRange ) ){
 				return true;
 			}
 		}

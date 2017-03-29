@@ -2,6 +2,7 @@ package mrlib.core;
 
 import essentials.communication.worlddata_server2008.FellowPlayer;
 import essentials.communication.worlddata_server2008.RawWorldData;
+import essentials.core.BotInformation;
 
 class TestScenario {
 	
@@ -19,8 +20,10 @@ class TestScenario {
 	
 	static double opponent2_Distance = 900.0;
 	static double opponent2_Angle = 66.0;
+	
+	
 
-	static RawWorldData setScenario(){
+	static RawWorldData getExampleWorldModel(){
 		
 		RawWorldData rawWorldData = new RawWorldData();
 		FellowPlayer player1 = new FellowPlayer(0, "TestBot", true, fellow1_Distance, fellow1_Angle, 0.0);
@@ -35,6 +38,11 @@ class TestScenario {
 		
 		return rawWorldData;
 	}
+	
+	/*static BotInformation testBotInfo(){
+		
+		return null;
+	}*/
 	
 	
 }
