@@ -156,7 +156,7 @@ public class MoveLib {
 			return (Action) new Movement(-100,100);
 		}
 		
-		// 50% speed turn right
+		// 100% speed turn right
 		if(vAngle <= -moveAngleTurnAndMove && vAngle >= -(180-moveAngleTurnAndMove)){
 			return (Action) new Movement(100,-100);
 		}
