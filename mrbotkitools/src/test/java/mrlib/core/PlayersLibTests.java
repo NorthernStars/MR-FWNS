@@ -1,15 +1,28 @@
 package mrlib.core;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.withinPercentage;
 import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import essentials.communication.Action;
+import essentials.communication.action_server2008.Kick;
+import essentials.communication.worlddata_server2008.FellowPlayer;
+import essentials.communication.worlddata_server2008.RawWorldData;
+import essentials.core.BotInformation;
+
 public class PlayersLibTests {
 
+	public RawWorldData worldModel;
+	
+	
+	
 	@Before
 	public void setUp() throws Exception {
+		worldModel = TestScenario.setScenario();
 	}
 
 	@After
@@ -18,7 +31,15 @@ public class PlayersLibTests {
 
 	@Test
 	public void testGetNearestMate() {
-		fail("Not yet implemented");
+
+
+		FellowPlayer returnPlayer = PlayersLib.getNearestMate(worldModel, new BotInformation());
+		
+		assertThat(returnPlayer).isExactlyInstanceOf(FellowPlayer.class);
+		assertThat(returnPlayer.getDistanceToPlayer()).isCloseTo(200.0, withinPercentage(1));
+		assertThat(returnPlayer.getAngleToPlayer()).isCloseTo(-90.0, withinPercentage(1));
+		
+		
 	}
 
 	@Test
@@ -100,5 +121,7 @@ public class PlayersLibTests {
 	public void testGetDistanceBetweenPlayerAndPoint() {
 		fail("Not yet implemented");
 	}
+
+
 
 }
