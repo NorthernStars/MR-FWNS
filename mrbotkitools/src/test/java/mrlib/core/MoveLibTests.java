@@ -195,7 +195,108 @@ public class MoveLibTests {
         
 	@Test
 	public void testTurnToReferencePoint() {
-		fail("Not yet implemented");
+            final double testDistance = 10.0;
+            
+            // no turn
+            double testAngle = 5.0;
+            ReferencePoint testRefPoint = new ReferencePoint(testDistance, testAngle, true);
+            Action returnAction = MoveLib.turnTo(testRefPoint);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
+            
+            // no turn
+            testAngle = 175.0;
+            testRefPoint = new ReferencePoint(testDistance, testAngle, true);
+            returnAction = MoveLib.turnTo(testRefPoint);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
+            
+            // 100% speed turn left
+            testAngle = 80.0;
+            testRefPoint = new ReferencePoint(testDistance, testAngle, true);
+            returnAction = MoveLib.turnTo(testRefPoint);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(-100);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(100);
+            
+            // 100% speed turn right
+            testAngle = -80.0;
+            testRefPoint = new ReferencePoint(testDistance, testAngle, true);
+            returnAction = MoveLib.turnTo(testRefPoint);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(100);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(-100);
+
+            // 50% speed turn left
+            testAngle = 40.0;
+            testRefPoint = new ReferencePoint(testDistance, testAngle, true);
+            returnAction = MoveLib.turnTo(testRefPoint);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(-50);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(50);
+            
+            // 50% speed turn left
+            testAngle = -140.0;
+            testRefPoint = new ReferencePoint(testDistance, testAngle, true);
+            returnAction = MoveLib.turnTo(testRefPoint);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(-50);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(50);
+            
+            // 50% speed turn right
+            testAngle = -40.0;
+            testRefPoint = new ReferencePoint(testDistance, testAngle, true);
+            returnAction = MoveLib.turnTo(testRefPoint);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(50);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(-50);
+            
+            // 50% speed turn right
+            testAngle = 140.0;
+            testRefPoint = new ReferencePoint(testDistance, testAngle, true);
+            returnAction = MoveLib.turnTo(testRefPoint);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(50);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(-50);
+            
+            // 25% speed turn left
+            testAngle = 15.0;
+            testRefPoint = new ReferencePoint(testDistance, testAngle, true);
+            returnAction = MoveLib.turnTo(testRefPoint);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(-25);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(25);
+            
+            // 25% speed turn left
+            testAngle = -165.0;
+            testRefPoint = new ReferencePoint(testDistance, testAngle, true);
+            returnAction = MoveLib.turnTo(testRefPoint);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(-25);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(25);
+            
+            // 25% speed turn right
+            testAngle = -15.0;
+            testRefPoint = new ReferencePoint(testDistance, testAngle, true);
+            returnAction = MoveLib.turnTo(testRefPoint);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(25);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(-25);
+            
+            // 25% speed turn right
+            testAngle = 165.0;
+            testRefPoint = new ReferencePoint(testDistance, testAngle, true);
+            returnAction = MoveLib.turnTo(testRefPoint);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(25);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(-25);
+            
+            // Wrong value
+            testAngle = 190.0;
+            testRefPoint = new ReferencePoint(testDistance, testAngle, true);
+            returnAction = MoveLib.turnTo(testRefPoint);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
 	}
 
 	@Test
@@ -210,7 +311,93 @@ public class MoveLibTests {
 
 	@Test
 	public void testTurnToDouble() {
-		fail("Not yet implemented");
+            // no turn
+            double testAngle = 5.0;
+            Action returnAction = MoveLib.turnTo(testAngle);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
+            
+            // no turn
+            testAngle = 175.0;
+            returnAction = MoveLib.turnTo(testAngle);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
+            
+            // 100% speed turn left
+            testAngle = 80.0;
+            returnAction = MoveLib.turnTo(testAngle);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(-100);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(100);
+            
+            // 100% speed turn right
+            testAngle = -80.0;
+            returnAction = MoveLib.turnTo(testAngle);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(100);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(-100);
+
+            // 50% speed turn left
+            testAngle = 40.0;
+            returnAction = MoveLib.turnTo(testAngle);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(-50);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(50);
+            
+            // 50% speed turn left
+            testAngle = -140.0;
+            returnAction = MoveLib.turnTo(testAngle);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(-50);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(50);
+            
+            // 50% speed turn right
+            testAngle = -40.0;
+            returnAction = MoveLib.turnTo(testAngle);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(50);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(-50);
+            
+            // 50% speed turn right
+            testAngle = 140.0;
+            returnAction = MoveLib.turnTo(testAngle);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(50);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(-50);
+            
+            // 25% speed turn left
+            testAngle = 15.0;
+            returnAction = MoveLib.turnTo(testAngle);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(-25);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(25);
+            
+            // 25% speed turn left
+            testAngle = -165.0;
+            returnAction = MoveLib.turnTo(testAngle);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(-25);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(25);
+            
+            // 25% speed turn right
+            testAngle = -15.0;
+            returnAction = MoveLib.turnTo(testAngle);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(25);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(-25);
+            
+            // 25% speed turn right
+            testAngle = 165.0;
+            returnAction = MoveLib.turnTo(testAngle);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(25);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(-25);
+            
+            // Wrong value
+            testAngle = 190.0;
+            returnAction = MoveLib.turnTo(testAngle);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
 	}
 
 }
