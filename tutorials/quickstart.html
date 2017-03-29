@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>NorthernStars Mixed-Reality Framework by NorthernStars</title>
+
+    <link rel="stylesheet" href="../stylesheets/styles.css">
+    <link rel="stylesheet" href="../stylesheets/pygment_trac.css">
+    <script src="../javascripts/scale.fix.js"></script>
+    <script src="../javascripts/main.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body onload="checkJavaSyntax()">
+    <div class="wrapper">
+      <header>
+        <h1 class="header">MR-FWNS</h1>
+        <p class="header">NorthernStars Mixed-Reality Framework</p>
+
+		<hr />
+		<p class="header">MR-Framework & Example AI:</p>
+        <ul>
+        	<li><a class="buttons github" href="https://github.com/NorthernStars/MR-FWNS/releases" target="_blank">View Releases</a></li>
+	</ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/NorthernStars">NorthernStars</a></p>
+
+
+      </header>
+      <section>
+      	<h2>Quick-Start Guide</h2>
+      	<p>
+      		This guide shows how to quickly start an example artifical intelligence (ok maybe it's not really intelligent) using the MR-FWNS.<br />
+      	</p>
+      	
+      	<h4>1. Download</h4>
+      	<p>
+      		All you need is to download the <i>MR-Framework</i> from the side menu.
+      		After downloading the <i>MixedRealityBot</i> archive, unpack it.
+      	</p>
+      	<p>
+    		You also have to download a Mixed-Reality server. If you don't have one, simply use our <a href="http://northernstars.github.io/mrserver" target="_blank">Mixed-Reality Server</a>.   				
+      	</p>
+      	
+      	<h4>2. Starting Mixed-Reality Server</h4>
+      	<p>
+      		If you didn't started your Mixed-Reality server, do it now. Open ports for two teams and whatever you have to set up a new Mixed-Reality game. In terminal type:<br />
+		<br />
+      		<code>java -jar mrserver-runnable.jar -cf defaultserver.config -sl scenarios/mrscenariofootball.jar -sc mrscenariofootball.core.ScenarioCore -sc_al</code>
+      	</p>
+      	
+      	<h4>3. Starting bot remotecontrol</h4>
+      	<p>
+      		Now start the <i>bot_remotecontrol.jar</i> from MR-FWNS by simply double clicking it or use a terminal and type:<br />
+		<br />
+      		<code>java -jar bot_remotecontrol.jar</code>
+      	</p>
+      	
+      	<h4>4. Load jars</h4>
+      	<p>
+      		The bot remotecontrol needs to know the location of the jars of the ai core framework and the bot ai.
+      		Use the buttons on top of bot remotecontrol to load the core file (default: <i>bot_mr.jar</i>) and bot ai file (default: <i>ais/example_ai.jar</i>). 
+      	</p>
+      	
+      	<h4>5. Start a bot</h4>
+      	<p>
+      		At the top of the bot remotecontrol you can edit connection settings for your bot.
+      		Enter server ip, server port and select a team color and AI class (For now it doesn't matter wich AI class you choose).
+      		Click <i>Start bot</i> to start your bot. The bot is shown in bot remotecontrol and should appear in your MixedReality server too.
+      	</p>
+      	
+      	<h4>Stop a bot</h4>
+      	<p>
+      		Klick the <i>Stop bot</i> button at the bot you started, to stop it or simply close the bot remotecontrol to stop all running bots.
+      	</p>
+      	
+      	<p><a class="back" href="javascript: history.back()">Back</a></p>
+	  </section>
+      <footer>
+        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
