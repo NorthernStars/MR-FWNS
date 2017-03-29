@@ -3,6 +3,8 @@ package mrlib.core;
 import essentials.communication.Action;
 import essentials.communication.action_server2008.Movement;
 import essentials.communication.worlddata_server2008.BallPosition;
+import essentials.communication.worlddata_server2008.FellowPlayer;
+import essentials.communication.worlddata_server2008.RawWorldData;
 import essentials.communication.worlddata_server2008.ReferencePoint;
 import static org.assertj.core.api.Assertions.*;
 import org.junit.After;
@@ -21,9 +23,6 @@ public class MoveLibTests {
 	}
 
 	@Test
-        /**
-         * @todo Movement überprüfen
-         */
 	public void testRunToReferencePoint() {
 
             final double testDistance = 10.0;
@@ -111,7 +110,94 @@ public class MoveLibTests {
 
 	@Test
 	public void testRunToFellowPlayer() {
-		fail("Not yet implemented");
+            
+            FellowPlayer testFellowPlayer;
+            final int testAId = 0;
+            final String testANickname = "Test Fellow Player";
+            final Boolean testAStatus = true;
+            final double testADistanceToPlayer = 10.0;
+            double testAAngleToPlayer;
+            double testAOrientation = 0.0;
+            
+            // no turn, moving fwd
+            testAAngleToPlayer = .5;
+            testFellowPlayer = new FellowPlayer(testAId, testANickname, testAStatus, testADistanceToPlayer, testAAngleToPlayer, testAOrientation);
+            Action returnAction = MoveLib.runTo(testFellowPlayer);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(100);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(100);
+
+            // turn depending on angle, moving fwd
+            testAAngleToPlayer = -50.0;
+            testFellowPlayer = new FellowPlayer(testAId, testANickname, testAStatus, testADistanceToPlayer, testAAngleToPlayer, testAOrientation);
+            returnAction = MoveLib.runTo(testFellowPlayer);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(100+(int)testAAngleToPlayer);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(100);
+
+            // turn depending on angle, moving fwd
+            testAAngleToPlayer = 40.0;
+            testFellowPlayer = new FellowPlayer(testAId, testANickname, testAStatus, testADistanceToPlayer, testAAngleToPlayer, testAOrientation);
+            returnAction = MoveLib.runTo(testFellowPlayer);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(100);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(100-(int)testAAngleToPlayer);
+
+            // turn on place left
+            testAAngleToPlayer = -80.0;
+            testFellowPlayer = new FellowPlayer(testAId, testANickname, testAStatus, testADistanceToPlayer, testAAngleToPlayer, testAOrientation);
+            returnAction = MoveLib.runTo(testFellowPlayer);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(-100);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(100);
+            
+            // turn on place right
+            testAAngleToPlayer = 80.0;
+            testFellowPlayer = new FellowPlayer(testAId, testANickname, testAStatus, testADistanceToPlayer, testAAngleToPlayer, testAOrientation);
+            returnAction = MoveLib.runTo(testFellowPlayer);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(100);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(-100);
+            
+            // turn depending on angle, moving bwd
+            testAAngleToPlayer = -150.0;
+            testFellowPlayer = new FellowPlayer(testAId, testANickname, testAStatus, testADistanceToPlayer, testAAngleToPlayer, testAOrientation);
+            returnAction = MoveLib.runTo(testFellowPlayer);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(100+(int)testAAngleToPlayer);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(-100);
+            
+            // turn depending on angle, moving bwd
+            testAAngleToPlayer = 150.0;
+            testFellowPlayer = new FellowPlayer(testAId, testANickname, testAStatus, testADistanceToPlayer, testAAngleToPlayer, testAOrientation);
+            returnAction = MoveLib.runTo(testFellowPlayer);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(-100);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(100-(int)testAAngleToPlayer);
+            
+            // no turn, moving bwd
+            testAAngleToPlayer = 175.0;
+            testFellowPlayer = new FellowPlayer(testAId, testANickname, testAStatus, testADistanceToPlayer, testAAngleToPlayer, testAOrientation);
+            returnAction = MoveLib.runTo(testFellowPlayer);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(-100);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(-100);
+            
+            // no turn, moving bwd
+            testAAngleToPlayer = -175.0;
+            testFellowPlayer = new FellowPlayer(testAId, testANickname, testAStatus, testADistanceToPlayer, testAAngleToPlayer, testAOrientation);
+            returnAction = MoveLib.runTo(testFellowPlayer);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(-100);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(-100);
+            
+            // Wrong value
+            testAAngleToPlayer = 190.0;
+            testFellowPlayer = new FellowPlayer(testAId, testANickname, testAStatus, testADistanceToPlayer, testAAngleToPlayer, testAOrientation);
+            returnAction = MoveLib.runTo(testFellowPlayer);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
+                
 	}
 
 	@Test
@@ -398,6 +484,21 @@ public class MoveLibTests {
             returnAction = MoveLib.turnTo(testAngle);
             assertThat(returnAction).isExactlyInstanceOf(Movement.class);
             assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
+	}
+        
+        private RawWorldData setScenario(){
+		
+		RawWorldData rawWorldData = new RawWorldData();
+		FellowPlayer player1 = new FellowPlayer(0, "TestBot", true, 200.0, -90.0, 0.0);
+		FellowPlayer player2 = new FellowPlayer(1, "TestBot2", true, 300.0, -80.0, 0.0);
+		FellowPlayer oPlayer1 = new FellowPlayer(0, "OpponentBot2", true, 800.0, 55.0, 0.0);
+		FellowPlayer oPlayer2 = new FellowPlayer(1, "OpponentBot2", true, 900.0, 66.0, 0.0);
+		rawWorldData.setFellowPlayer(player1);
+		rawWorldData.setFellowPlayer(player2);
+		rawWorldData.setOpponentPlayer(oPlayer1);
+		rawWorldData.setOpponentPlayer(oPlayer2);
+		
+		return rawWorldData;
 	}
 
 }
