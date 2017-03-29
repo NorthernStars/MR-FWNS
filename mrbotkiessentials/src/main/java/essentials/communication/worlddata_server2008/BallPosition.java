@@ -8,6 +8,10 @@ public class BallPosition extends ReferencePoint {
         //mPointName = ReferencePointName.Ball;
     }
     
+    public BallPosition( double aFirstValue, double aSecondValue, boolean aPolarcoordinates ) throws IllegalArgumentException{
+        super(aFirstValue, aSecondValue, aPolarcoordinates);
+    }
+    
     @XmlTransient
     public double getDistanceToBall() {
         return getDistanceToPoint();
