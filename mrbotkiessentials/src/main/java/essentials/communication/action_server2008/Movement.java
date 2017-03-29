@@ -15,7 +15,17 @@ public class Movement implements Action {
 		mRightWheelVelocity = aRightWheelVelocity;
 
 	}
-	
+
+        public int getmRightWheelVelocity()
+        {
+            return mRightWheelVelocity;
+        }
+
+        public int getmLeftWheelVelocity()
+        {
+            return mLeftWheelVelocity;
+        }
+  
 	@Override
 	public String getXMLString() {
 		return "<command> <wheel_velocities> <right>" + mRightWheelVelocity + "</right> <left>" + mLeftWheelVelocity + "</left> </wheel_velocities> </command>";
