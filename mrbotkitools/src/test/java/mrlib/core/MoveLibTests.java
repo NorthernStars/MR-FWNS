@@ -4,7 +4,6 @@ import essentials.communication.Action;
 import essentials.communication.action_server2008.Movement;
 import essentials.communication.worlddata_server2008.BallPosition;
 import essentials.communication.worlddata_server2008.FellowPlayer;
-import essentials.communication.worlddata_server2008.RawWorldData;
 import essentials.communication.worlddata_server2008.ReferencePoint;
 import static org.assertj.core.api.Assertions.*;
 import org.junit.After;
@@ -202,7 +201,90 @@ public class MoveLibTests {
 
 	@Test
 	public void testRunToBallPosition() {
-		fail("Not yet implemented");
+            final double testDistance = 10.0;
+            double testAngle;
+            BallPosition testBallPosition;
+          
+            // no turn, moving fwd
+            testAngle = .5;
+            testBallPosition = new BallPosition(testDistance, testAngle, true);
+            Action returnAction = MoveLib.runTo(testBallPosition);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(100);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(100);
+
+            // turn depending on angle, moving fwd
+            testAngle = -50.0;
+            testBallPosition = new BallPosition(testDistance, testAngle, true);
+            returnAction = MoveLib.runTo(testBallPosition);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(100+(int)testAngle);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(100);
+
+            // turn depending on angle, moving fwd
+            testAngle = 40.0;
+            testBallPosition = new BallPosition(testDistance, testAngle, true);
+            returnAction = MoveLib.runTo(testBallPosition);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(100);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(100-(int)testAngle);
+
+            // turn on place left
+            testAngle = -80.0;
+            testBallPosition = new BallPosition(testDistance, testAngle, true);
+            returnAction = MoveLib.runTo(testBallPosition);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(-100);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(100);
+            
+            // turn on place right
+            testAngle = 80.0;
+            testBallPosition = new BallPosition(testDistance, testAngle, true);
+            returnAction = MoveLib.runTo(testBallPosition);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(100);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(-100);
+            
+            // turn depending on angle, moving bwd
+            testAngle = -150.0;
+            testBallPosition = new BallPosition(testDistance, testAngle, true);
+            returnAction = MoveLib.runTo(testBallPosition);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(100+(int)testAngle);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(-100);
+            
+            // turn depending on angle, moving bwd
+            testAngle = 150.0;
+            testBallPosition = new BallPosition(testDistance, testAngle, true);
+            returnAction = MoveLib.runTo(testBallPosition);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(-100);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(100-(int)testAngle);
+            
+            // no turn, moving bwd
+            testAngle = 175.0;
+            testBallPosition = new BallPosition(testDistance, testAngle, true);
+            returnAction = MoveLib.runTo(testBallPosition);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(-100);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(-100);
+            
+            // no turn, moving bwd
+            testAngle = -175.0;
+            testBallPosition = new BallPosition(testDistance, testAngle, true);
+            returnAction = MoveLib.runTo(testBallPosition);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(-100);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(-100);
+            
+            // Wrong value
+            testAngle = 190.0;
+            testBallPosition = new BallPosition(testDistance, testAngle, true);
+            returnAction = MoveLib.runTo(testBallPosition);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
+                
+                
 	}
 
 	@Test
@@ -499,7 +581,110 @@ public class MoveLibTests {
 
 	@Test
 	public void testTurnToBallPosition() {
-		fail("Not yet implemented");
+            final double testDistance = 10.0;
+            double testAngle;
+            BallPosition testBallPosition;
+            
+            // no turn
+            testAngle = 5.0;
+            testBallPosition = new BallPosition(testDistance, testAngle, true);
+            Action returnAction = MoveLib.turnTo(testBallPosition);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
+            
+            // no turn
+            testAngle = 175.0;
+            testBallPosition = new BallPosition(testDistance, testAngle, true);
+            returnAction = MoveLib.turnTo(testBallPosition);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
+            
+            // 100% speed turn left
+            testAngle = 80.0;
+            testBallPosition = new BallPosition(testDistance, testAngle, true);
+            returnAction = MoveLib.turnTo(testBallPosition);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(-100);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(100);
+            
+            // 100% speed turn right
+            testAngle = -80.0;
+            testBallPosition = new BallPosition(testDistance, testAngle, true);
+            returnAction = MoveLib.turnTo(testBallPosition);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(100);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(-100);
+
+            // 50% speed turn left
+            testAngle = 40.0;
+            testBallPosition = new BallPosition(testDistance, testAngle, true);
+            returnAction = MoveLib.turnTo(testBallPosition);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(-50);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(50);
+            
+            // 50% speed turn left
+            testAngle = -140.0;
+            testBallPosition = new BallPosition(testDistance, testAngle, true);
+            returnAction = MoveLib.turnTo(testBallPosition);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(-50);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(50);
+            
+            // 50% speed turn right
+            testAngle = -40.0;
+            testBallPosition = new BallPosition(testDistance, testAngle, true);
+            returnAction = MoveLib.turnTo(testBallPosition);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(50);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(-50);
+            
+            // 50% speed turn right
+            testAngle = 140.0;
+            testBallPosition = new BallPosition(testDistance, testAngle, true);
+            returnAction = MoveLib.turnTo(testBallPosition);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(50);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(-50);
+            
+            // 25% speed turn left
+            testAngle = 15.0;
+            testBallPosition = new BallPosition(testDistance, testAngle, true);
+            returnAction = MoveLib.turnTo(testBallPosition);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(-25);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(25);
+            
+            // 25% speed turn left
+            testAngle = -165.0;
+            testBallPosition = new BallPosition(testDistance, testAngle, true);
+            returnAction = MoveLib.turnTo(testBallPosition);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(-25);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(25);
+            
+            // 25% speed turn right
+            testAngle = -15.0;
+            testBallPosition = new BallPosition(testDistance, testAngle, true);
+            returnAction = MoveLib.turnTo(testBallPosition);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(25);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(-25);
+            
+            // 25% speed turn right
+            testAngle = 165.0;
+            testBallPosition = new BallPosition(testDistance, testAngle, true);
+            returnAction = MoveLib.turnTo(testBallPosition);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(25);
+            assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(-25);
+            
+            // Wrong value
+            testAngle = 190.0;
+            testBallPosition = new BallPosition(testDistance, testAngle, true);
+            returnAction = MoveLib.turnTo(testBallPosition);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
 	}
 
 	@Test
@@ -593,19 +778,4 @@ public class MoveLibTests {
             assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
 	}
         
-        private RawWorldData setScenario(){
-		
-		RawWorldData rawWorldData = new RawWorldData();
-		FellowPlayer player1 = new FellowPlayer(0, "TestBot", true, 200.0, -90.0, 0.0);
-		FellowPlayer player2 = new FellowPlayer(1, "TestBot2", true, 300.0, -80.0, 0.0);
-		FellowPlayer oPlayer1 = new FellowPlayer(0, "OpponentBot2", true, 800.0, 55.0, 0.0);
-		FellowPlayer oPlayer2 = new FellowPlayer(1, "OpponentBot2", true, 900.0, 66.0, 0.0);
-		rawWorldData.setFellowPlayer(player1);
-		rawWorldData.setFellowPlayer(player2);
-		rawWorldData.setOpponentPlayer(oPlayer1);
-		rawWorldData.setOpponentPlayer(oPlayer2);
-		
-		return rawWorldData;
-	}
-
 }
