@@ -45,6 +45,8 @@ class TestScenario {
 		BallPosition ballPos = new BallPosition();
 		ballPos.set(new ReferencePoint(ballDistance, ballAngle, true));
 		
+		rawWorldData.setBallPosition(ballPos);
+		
 		return rawWorldData;
 	}
 	
