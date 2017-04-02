@@ -83,7 +83,7 @@ public class PositionLib {
     
     
     /**
-     * Returns the middle of enemies goal.
+     * Returns the middle of opponents goal.
      * @param aWorldData		{@link RawWorldData}
      * @param aTeam 			Own {@link Teams} information
      * @return ReferencePoint	{@link ReferencePoint} of middle of enemies goal.
