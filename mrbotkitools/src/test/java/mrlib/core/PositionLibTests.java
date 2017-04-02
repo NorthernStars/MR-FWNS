@@ -1,8 +1,10 @@
 package mrlib.core;
 
 import essentials.communication.worlddata_server2008.BallPosition;
+import essentials.communication.worlddata_server2008.FellowPlayer;
 import essentials.communication.worlddata_server2008.RawWorldData;
 import essentials.communication.worlddata_server2008.ReferencePoint;
+import essentials.core.BotInformation;
 
 import static org.assertj.core.api.Assertions.*;
 import org.junit.After;
@@ -164,7 +166,25 @@ public class PositionLibTests {
 
 	@Test
 	public void testAmINearestMateToPoint() {
-		fail("Not yet implemented");
+            BotInformation testBotInfo = new BotInformation();
+            testBotInfo.setVtId(20);
+            testBotInfo.setRcId(20);
+            RawWorldData testWorldData = TestScenario.getExampleWorldModel();
+            ReferencePoint testReferencePoint;
+            Boolean result;
+           
+            testReferencePoint = new ReferencePoint(6.0,7.0, false);
+            result = PositionLib.amINearestMateToPoint(testWorldData, testReferencePoint, testBotInfo);
+            assertThat(result).isExactlyInstanceOf(Boolean.class);
+            assertThat(((Boolean) result).booleanValue()).isEqualTo(true);
+            
+            testWorldData = TestScenario.getExampleWorldModel();
+            FellowPlayer testFellowPlayer = new FellowPlayer(21, "Nearest Mate", true, 5.83, 30.96, 0.0);
+            testWorldData.setFellowPlayer(testFellowPlayer);
+            result = PositionLib.amINearestMateToPoint(testWorldData, testReferencePoint, testBotInfo);
+            assertThat(result).isExactlyInstanceOf(Boolean.class);
+            assertThat(((Boolean) result).booleanValue()).isEqualTo(false);
+            
 	}
 
 	@Test
