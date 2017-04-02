@@ -12,6 +12,7 @@ import essentials.communication.Action;
 import essentials.communication.action_server2008.Kick;
 import essentials.communication.worlddata_server2008.FellowPlayer;
 import essentials.communication.worlddata_server2008.RawWorldData;
+import essentials.communication.worlddata_server2008.ReferencePoint;
 import essentials.constants.Default;
 import essentials.core.BotInformation;
 import essentials.core.BotInformation.GamevalueNames;
@@ -38,8 +39,8 @@ public class PlayersLibTests {
 		FellowPlayer returnPlayer = PlayersLib.getNearestMate(worldModel, new BotInformation());
 		
 		assertThat(returnPlayer).isExactlyInstanceOf(FellowPlayer.class);
-		assertThat(returnPlayer.getDistanceToPlayer()).isCloseTo(TestScenario.fellow1_Distance, withinPercentage(1));
-		assertThat(returnPlayer.getAngleToPlayer()).isCloseTo(TestScenario.fellow1_Angle, withinPercentage(1));
+		assertThat(returnPlayer.getDistanceToPlayer()).isCloseTo(TestScenario.fellow1Distance, withinPercentage(1));
+		assertThat(returnPlayer.getAngleToPlayer()).isCloseTo(TestScenario.fellow1Angle, withinPercentage(1));
 				
 	}
 
@@ -71,23 +72,79 @@ public class PlayersLibTests {
 		testAround = PlayersLib.isEnemyAround(worldModel, vSelf);
 		assertThat(testAround).isEqualTo(true);
 		
-		
+		//Switch Model back to testDefault
 		worldModel = TestScenario.getExampleWorldModel();
 		
 	}
 
 	@Test
 	public void testIsEnemyAroundRawWorldDataBotInformationDouble() {
-		fail("Not yet implemented");
+
+		BotInformation vSelf = new BotInformation();
+		
+		//Case 1
+		boolean testAround = PlayersLib.isEnemyAround(worldModel,vSelf, 700.0);
+		assertThat(testAround).isEqualTo(false);
+		
+		
+		//Case 2: Barely out of range
+		testAround = PlayersLib.isEnemyAround(worldModel, vSelf, 799.99);
+		assertThat(testAround).isEqualTo(false);
+
+		
+		//Case 3: Exact in range
+		testAround = PlayersLib.isEnemyAround(worldModel, vSelf, 800.0);
+		assertThat(testAround).isEqualTo(true);
+		
+		//Case 4: Barely in range
+		testAround = PlayersLib.isEnemyAround(worldModel, vSelf, 802.0);
+		assertThat(testAround).isEqualTo(true);
+		
+		//Switch Model back to testDefault
+		worldModel = TestScenario.getExampleWorldModel();
+		
 	}
 
 	@Test
 	public void testIsEnemyAroundMate() {
-		fail("Not yet implemented");
+
+		BotInformation vSelf = new BotInformation();
+		FellowPlayer testMate = new FellowPlayer();
+		testMate.set(new ReferencePoint(700, 55, true));
+		
+		//Case 1: 100mm away
+		boolean testAround = PlayersLib.isEnemyAroundMate(worldModel, vSelf, testMate);
+		assertThat(testAround).isEqualTo(false);
+		
+		//Case 2: 51mm away (barely out of range)
+		testMate.setDistanceToPoint(749);
+		testAround = PlayersLib.isEnemyAroundMate(worldModel, vSelf, testMate);
+		assertThat(testAround).isEqualTo(false);
+
+		//Case 2: exact in range
+		testMate.setDistanceToPoint(750);
+		testAround = PlayersLib.isEnemyAroundMate(worldModel, vSelf, testMate);
+		assertThat(testAround).isEqualTo(true);
+
+		//Case 2: 49mm away (barely in range)
+		testMate.setDistanceToPoint(750);
+		testAround = PlayersLib.isEnemyAroundMate(worldModel, vSelf, testMate);
+		assertThat(testAround).isEqualTo(true);
+
+		//Switch Model back to testDefault
+		worldModel = TestScenario.getExampleWorldModel();
 	}
 
 	@Test
 	public void testGetDistanceBetweenPlayerAndBall() {
+
+		/*worldModel = TestScenario.getExampleWorldModel();
+		BotInformation vSelf = new BotInformation();
+		
+		FellowPlayer P1 = new FellowPlayer(7, "Bob", true, TestScenario.ballDistance + 20, TestScenario.ballAngle, 0);
+		P1 = PlayersLib.getNearestMate(worldModel, vSelf);
+		double testDistance = PlayersLib.getDistanceBetweenPlayerAndBall(P1, worldModel.getBallPosition());
+		assertThat(testDistance).isCloseTo(20, withinPercentage(0.1));*/
 		fail("Not yet implemented");
 	}
 
