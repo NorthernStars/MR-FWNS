@@ -24,8 +24,8 @@ class TestScenario {
 	static double opponent2Angle = 66.0;
 	
 	
-	static double ballDistance = 30.0;
-	static double ballAngle = 15.0;
+	static double ballDistance = 20.0;
+	static double ballAngle = 45.0;
 	
 	
 
@@ -42,8 +42,7 @@ class TestScenario {
 		rawWorldData.setOpponentPlayer(oPlayer1);
 		rawWorldData.setOpponentPlayer(oPlayer2);
 		
-		BallPosition ballPos = new BallPosition();
-		ballPos.set(new ReferencePoint(ballDistance, ballAngle, true));
+		BallPosition ballPos = new BallPosition(ballDistance, ballAngle, true);
 		
 		rawWorldData.setBallPosition(ballPos);
 		

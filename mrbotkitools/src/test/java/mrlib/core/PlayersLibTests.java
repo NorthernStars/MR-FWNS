@@ -9,7 +9,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import essentials.communication.Action;
+import essentials.communication.WorldData;
 import essentials.communication.action_server2008.Kick;
+import essentials.communication.worlddata_server2008.BallPosition;
 import essentials.communication.worlddata_server2008.FellowPlayer;
 import essentials.communication.worlddata_server2008.RawWorldData;
 import essentials.communication.worlddata_server2008.ReferencePoint;
@@ -138,19 +140,32 @@ public class PlayersLibTests {
 	@Test
 	public void testGetDistanceBetweenPlayerAndBall() {
 
-		/*worldModel = TestScenario.getExampleWorldModel();
-		BotInformation vSelf = new BotInformation();
+		worldModel = TestScenario.getExampleWorldModel();
 		
-		FellowPlayer P1 = new FellowPlayer(7, "Bob", true, TestScenario.ballDistance + 20, TestScenario.ballAngle, 0);
-		P1 = PlayersLib.getNearestMate(worldModel, vSelf);
+		FellowPlayer P1 = new FellowPlayer();
+		P1.set(new ReferencePoint(TestScenario.ballDistance+20, TestScenario.ballAngle, true));
+		worldModel.setFellowPlayer(P1);
+						
 		double testDistance = PlayersLib.getDistanceBetweenPlayerAndBall(P1, worldModel.getBallPosition());
-		assertThat(testDistance).isCloseTo(20, withinPercentage(0.1));*/
-		fail("Not yet implemented");
+		assertThat(testDistance).isCloseTo(20, withinPercentage(0.1));
+		
+		P1.setAngleToPoint(-135.0); //opposite angle to 45°
+		testDistance = PlayersLib.getDistanceBetweenPlayerAndBall(P1, worldModel.getBallPosition());
+		assertThat(testDistance).isCloseTo((2*TestScenario.ballDistance + 20), withinPercentage(0.1));
+		
+		P1.set(654, 123, true);
+		
+		double testDistance2 = PositionLib.getDistanceBetweenTwoRefPoints(P1, worldModel.getBallPosition()); 
+		testDistance = PlayersLib.getDistanceBetweenPlayerAndBall(P1, worldModel.getBallPosition());
+		assertThat(testDistance).isCloseTo((testDistance2), withinPercentage(0.1));
+		
 	}
 
 	@Test
 	public void testGetNearestMateWithoutEnemyAround() {
 		fail("Not yet implemented");
+		//BotInformation vSelf = new BotInformation();
+		//PlayersLib.getNearestMateWithoutEnemyAround(worldModel, vSelf);
 	}
 
 	@Test
