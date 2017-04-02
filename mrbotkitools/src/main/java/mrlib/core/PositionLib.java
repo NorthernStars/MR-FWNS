@@ -352,12 +352,21 @@ public class PositionLib {
 		FellowPlayer closest_player = null;
 		for ( FellowPlayer p: vTeamMates){
 			
-			double distNew = aRefPoint.sub(p).getDistanceToPoint();
-			double distOld = aRefPoint.sub(closest_player).getDistanceToPoint();
-			
-			if(closest_player == null || distNew < distOld){
+                        if(closest_player != null)
+                        {
+                            double distNew = aRefPoint.sub(p).getDistanceToPoint();
+                            double distOld = aRefPoint.sub(closest_player).getDistanceToPoint();
+                            
+                            if(distNew < distOld){
 				closest_player = p;
-			}
+                            }
+                        }
+                        else
+                        {
+                            closest_player = p;
+                        }
+			
+			
 			
 		}
 		
