@@ -92,7 +92,15 @@ public class PositionLibTests {
 
 	@Test
 	public void testGetDistanceBetweenTwoRefPoints() {
-		fail("Not yet implemented");
+            ReferencePoint testReferencePointA;
+            ReferencePoint testReferencePointB;
+            double distance;
+            
+            testReferencePointA = new ReferencePoint(-2.5, 7, false);
+            testReferencePointB = new ReferencePoint(1.5,4, false);
+            distance = PositionLib.getDistanceBetweenTwoRefPoints(testReferencePointA, testReferencePointB);
+            assertThat(distance).isExactlyInstanceOf(Double.class);
+            assertThat(((Double) distance).doubleValue()).isCloseTo(5, withinPercentage(1));
 	}
 
 	@Test
