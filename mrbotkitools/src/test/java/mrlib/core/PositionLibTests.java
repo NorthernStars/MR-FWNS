@@ -110,7 +110,21 @@ public class PositionLibTests {
 
 	@Test
 	public void testGetAngleBetweenTwoReferencePoints() {
-		fail("Not yet implemented");
+            ReferencePoint testReferencePointA;
+            ReferencePoint testReferencePointB;
+            double angle;
+            
+            testReferencePointA = new ReferencePoint(-1.5,6,false);
+            testReferencePointB = new ReferencePoint(1.5,7,false);
+            angle = PositionLib.getAngleBetweenTwoReferencePoints(testReferencePointA, testReferencePointB);
+            assertThat(angle).isExactlyInstanceOf(Double.class);
+            assertThat(((Double) angle).doubleValue()).isCloseTo(26.13, withinPercentage(1));
+            
+            testReferencePointA = new ReferencePoint(1.5,5,false);
+            testReferencePointB = new ReferencePoint(-2,4,false);
+            angle = PositionLib.getAngleBetweenTwoReferencePoints(testReferencePointA, testReferencePointB);
+            assertThat(angle).isExactlyInstanceOf(Double.class);
+            assertThat(((Double) angle).doubleValue()).isCloseTo(43.26, withinPercentage(1));
 	}
 
 	@Test
