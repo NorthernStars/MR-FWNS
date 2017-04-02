@@ -1,8 +1,10 @@
 package mrlib.core;
 
 import essentials.communication.worlddata_server2008.BallPosition;
+import essentials.communication.worlddata_server2008.FellowPlayer;
 import essentials.communication.worlddata_server2008.RawWorldData;
 import essentials.communication.worlddata_server2008.ReferencePoint;
+import essentials.core.BotInformation;
 
 import static org.assertj.core.api.Assertions.*;
 import org.junit.After;
@@ -92,7 +94,15 @@ public class PositionLibTests {
 
 	@Test
 	public void testGetDistanceBetweenTwoRefPoints() {
-		fail("Not yet implemented");
+            ReferencePoint testReferencePointA;
+            ReferencePoint testReferencePointB;
+            double distance;
+            
+            testReferencePointA = new ReferencePoint(-2.5, 7, false);
+            testReferencePointB = new ReferencePoint(1.5,4, false);
+            distance = PositionLib.getDistanceBetweenTwoRefPoints(testReferencePointA, testReferencePointB);
+            assertThat(distance).isExactlyInstanceOf(Double.class);
+            assertThat(((Double) distance).doubleValue()).isCloseTo(5, withinPercentage(1));
 	}
 
 	@Test
@@ -102,12 +112,46 @@ public class PositionLibTests {
 
 	@Test
 	public void testGetAngleBetweenTwoReferencePoints() {
-		fail("Not yet implemented");
+            ReferencePoint testReferencePointA;
+            ReferencePoint testReferencePointB;
+            double angle;
+            
+            testReferencePointA = new ReferencePoint(-1.5,6,false);
+            testReferencePointB = new ReferencePoint(1.5,7,false);
+            angle = PositionLib.getAngleBetweenTwoReferencePoints(testReferencePointA, testReferencePointB);
+            assertThat(angle).isExactlyInstanceOf(Double.class);
+            assertThat(((Double) angle).doubleValue()).isCloseTo(26.13, withinPercentage(1));
+            
+            testReferencePointA = new ReferencePoint(1.5,5,false);
+            testReferencePointB = new ReferencePoint(-2,4,false);
+            angle = PositionLib.getAngleBetweenTwoReferencePoints(testReferencePointA, testReferencePointB);
+            assertThat(angle).isExactlyInstanceOf(Double.class);
+            assertThat(((Double) angle).doubleValue()).isCloseTo(43.26, withinPercentage(1));
 	}
 
 	@Test
 	public void testIsBotInQuadrangle() {
-		fail("Not yet implemented");
+            ReferencePoint testReferencePointA;
+            ReferencePoint testReferencePointB;
+            ReferencePoint testReferencePointC;
+            ReferencePoint testReferencePointD;
+            Boolean result;
+            
+            testReferencePointA = new ReferencePoint(1,6,false);
+            testReferencePointB = new ReferencePoint(-2,4,false);
+            testReferencePointC = new ReferencePoint(-2.5,-1,false);
+            testReferencePointD = new ReferencePoint(1.5,-2,false);
+            result = PositionLib.isBotInQuadrangle(testReferencePointA, testReferencePointB, testReferencePointC, testReferencePointD);
+            assertThat(result).isExactlyInstanceOf(Boolean.class);
+            assertThat(((Boolean) result).booleanValue()).isEqualTo(true);
+            
+            testReferencePointA = new ReferencePoint(1,6,false);
+            testReferencePointB = new ReferencePoint(-2,4,false);
+            testReferencePointC = new ReferencePoint(-2,2,false);
+            testReferencePointD = new ReferencePoint(-0.5,2,false);
+            result = PositionLib.isBotInQuadrangle(testReferencePointA, testReferencePointB, testReferencePointC, testReferencePointD);
+            assertThat(result).isExactlyInstanceOf(Boolean.class);
+            assertThat(((Boolean) result).booleanValue()).isEqualTo(false);
 	}
 
 	@Test
@@ -122,7 +166,25 @@ public class PositionLibTests {
 
 	@Test
 	public void testAmINearestMateToPoint() {
-		fail("Not yet implemented");
+            BotInformation testBotInfo = new BotInformation();
+            testBotInfo.setVtId(20);
+            testBotInfo.setRcId(20);
+            RawWorldData testWorldData = TestScenario.getExampleWorldModel();
+            ReferencePoint testReferencePoint;
+            Boolean result;
+           
+            testReferencePoint = new ReferencePoint(6.0,7.0, false);
+            result = PositionLib.amINearestMateToPoint(testWorldData, testReferencePoint, testBotInfo);
+            assertThat(result).isExactlyInstanceOf(Boolean.class);
+            assertThat(((Boolean) result).booleanValue()).isEqualTo(true);
+            
+            testWorldData = TestScenario.getExampleWorldModel();
+            FellowPlayer testFellowPlayer = new FellowPlayer(21, "Nearest Mate", true, 5.83, 30.96, 0.0);
+            testWorldData.setFellowPlayer(testFellowPlayer);
+            result = PositionLib.amINearestMateToPoint(testWorldData, testReferencePoint, testBotInfo);
+            assertThat(result).isExactlyInstanceOf(Boolean.class);
+            assertThat(((Boolean) result).booleanValue()).isEqualTo(false);
+            
 	}
 
 	@Test

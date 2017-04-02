@@ -238,7 +238,7 @@ public class PositionLib {
      * Calculates angle between two reference points
      * @param aRefPoint0	{@link ReferencePoint}
      * @param aRefPoint1	{@link ReferencePoint}
-     * @return				{@link Double} agnle between {@code aRefPoint0} and {@code aRefPoint1}.
+     * @return				{@link Double} angle between {@code aRefPoint0} and {@code aRefPoint1}.
      */
 	public static double getAngleBetweenTwoReferencePoints( ReferencePoint aRefPoint0, ReferencePoint aRefPoint1 ){
 		   
@@ -352,12 +352,21 @@ public class PositionLib {
 		FellowPlayer closest_player = null;
 		for ( FellowPlayer p: vTeamMates){
 			
-			double distNew = aRefPoint.sub(p).getDistanceToPoint();
-			double distOld = aRefPoint.sub(closest_player).getDistanceToPoint();
-			
-			if(closest_player == null || distNew < distOld){
+                        if(closest_player != null)
+                        {
+                            double distNew = aRefPoint.sub(p).getDistanceToPoint();
+                            double distOld = aRefPoint.sub(closest_player).getDistanceToPoint();
+                            
+                            if(distNew < distOld){
 				closest_player = p;
-			}
+                            }
+                        }
+                        else
+                        {
+                            closest_player = p;
+                        }
+			
+			
 			
 		}
 		
