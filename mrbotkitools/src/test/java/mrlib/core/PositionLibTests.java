@@ -1,7 +1,8 @@
 package mrlib.core;
 
-import static org.junit.Assert.*;
+import essentials.communication.worlddata_server2008.ReferencePoint;
 
+import static org.assertj.core.api.Assertions.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +19,37 @@ public class PositionLibTests {
 
 	@Test
 	public void testGetMiddleOfTwoReferencePoints() {
-		fail("Not yet implemented");
+            ReferencePoint testReferencePointA;
+            ReferencePoint testReferencePointB;
+            ReferencePoint returnReferencePoint;
+            
+            testReferencePointA = new ReferencePoint(-3, 5, false);
+            testReferencePointB = new ReferencePoint(2, 5, false);
+            returnReferencePoint = PositionLib.getMiddleOfTwoReferencePoints(testReferencePointA, testReferencePointB);
+            assertThat(returnReferencePoint).isExactlyInstanceOf(ReferencePoint.class);
+            assertThat(((ReferencePoint) returnReferencePoint).getXOfPoint()).isCloseTo(-0.5, withinPercentage(1));
+            assertThat(((ReferencePoint) returnReferencePoint).getYOfPoint()).isCloseTo(5, withinPercentage(1));
+            
+            testReferencePointA = new ReferencePoint(-2, 5, false);
+            testReferencePointB = new ReferencePoint(3, 5, false);
+            returnReferencePoint = PositionLib.getMiddleOfTwoReferencePoints(testReferencePointA, testReferencePointB);
+            assertThat(returnReferencePoint).isExactlyInstanceOf(ReferencePoint.class);
+            assertThat(((ReferencePoint) returnReferencePoint).getXOfPoint()).isCloseTo(0.5, withinPercentage(1));
+            assertThat(((ReferencePoint) returnReferencePoint).getYOfPoint()).isCloseTo(5, withinPercentage(1));
+            
+            testReferencePointA = new ReferencePoint(-3, 5, false);
+            testReferencePointB = new ReferencePoint(2.5, -1, false);
+            returnReferencePoint = PositionLib.getMiddleOfTwoReferencePoints(testReferencePointA, testReferencePointB);
+            assertThat(returnReferencePoint).isExactlyInstanceOf(ReferencePoint.class);
+            assertThat(((ReferencePoint) returnReferencePoint).getXOfPoint()).isCloseTo(-0.25, withinPercentage(1));
+            assertThat(((ReferencePoint) returnReferencePoint).getYOfPoint()).isCloseTo(2, withinPercentage(1));
+            
+            testReferencePointA = new ReferencePoint(-2.5, 1, false);
+            testReferencePointB = new ReferencePoint(2.5, -1, false);
+            returnReferencePoint = PositionLib.getMiddleOfTwoReferencePoints(testReferencePointA, testReferencePointB);
+            assertThat(returnReferencePoint).isExactlyInstanceOf(ReferencePoint.class);
+            assertThat(((ReferencePoint) returnReferencePoint).getXOfPoint()).isCloseTo(-0.25, withinPercentage(1));
+            assertThat(((ReferencePoint) returnReferencePoint).getYOfPoint()).isCloseTo(0, withinPercentage(1));         
 	}
 
 	@Test
