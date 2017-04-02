@@ -238,7 +238,7 @@ public class PositionLib {
      * Calculates angle between two reference points
      * @param aRefPoint0	{@link ReferencePoint}
      * @param aRefPoint1	{@link ReferencePoint}
-     * @return				{@link Double} agnle between {@code aRefPoint0} and {@code aRefPoint1}.
+     * @return				{@link Double} angle between {@code aRefPoint0} and {@code aRefPoint1}.
      */
 	public static double getAngleBetweenTwoReferencePoints( ReferencePoint aRefPoint0, ReferencePoint aRefPoint1 ){
 		   
