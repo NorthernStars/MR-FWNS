@@ -129,7 +129,27 @@ public class PositionLibTests {
 
 	@Test
 	public void testIsBotInQuadrangle() {
-		fail("Not yet implemented");
+            ReferencePoint testReferencePointA;
+            ReferencePoint testReferencePointB;
+            ReferencePoint testReferencePointC;
+            ReferencePoint testReferencePointD;
+            Boolean result;
+            
+            testReferencePointA = new ReferencePoint(1,6,false);
+            testReferencePointB = new ReferencePoint(-2,4,false);
+            testReferencePointC = new ReferencePoint(-2.5,-1,false);
+            testReferencePointD = new ReferencePoint(1.5,-2,false);
+            result = PositionLib.isBotInQuadrangle(testReferencePointA, testReferencePointB, testReferencePointC, testReferencePointD);
+            assertThat(result).isExactlyInstanceOf(Boolean.class);
+            assertThat(((Boolean) result).booleanValue()).isEqualTo(true);
+            
+            testReferencePointA = new ReferencePoint(1,6,false);
+            testReferencePointB = new ReferencePoint(-2,4,false);
+            testReferencePointC = new ReferencePoint(-2,2,false);
+            testReferencePointD = new ReferencePoint(-0.5,2,false);
+            result = PositionLib.isBotInQuadrangle(testReferencePointA, testReferencePointB, testReferencePointC, testReferencePointD);
+            assertThat(result).isExactlyInstanceOf(Boolean.class);
+            assertThat(((Boolean) result).booleanValue()).isEqualTo(false);
 	}
 
 	@Test
