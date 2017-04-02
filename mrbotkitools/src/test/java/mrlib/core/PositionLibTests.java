@@ -1,5 +1,7 @@
 package mrlib.core;
 
+import essentials.communication.worlddata_server2008.BallPosition;
+import essentials.communication.worlddata_server2008.RawWorldData;
 import essentials.communication.worlddata_server2008.ReferencePoint;
 
 import static org.assertj.core.api.Assertions.*;
@@ -64,7 +66,28 @@ public class PositionLibTests {
 
 	@Test
 	public void testIsBallInRangeOfRefPoint() {
-		fail("Not yet implemented");
+                BallPosition testBallPos;
+                ReferencePoint testReferencePoint;
+                Boolean returnValue;
+                
+                testReferencePoint = new ReferencePoint(2, 6, false);
+                testBallPos = new BallPosition(1.5, 6, false);
+                returnValue = PositionLib.isBallInRangeOfRefPoint(testBallPos, testReferencePoint, 1);
+                assertThat(returnValue).isExactlyInstanceOf(Boolean.class);
+                assertThat(((Boolean) returnValue).booleanValue()).isEqualTo(true);
+                
+                testReferencePoint = new ReferencePoint(3, 4, false);
+                testBallPos = new BallPosition(0.5, 6, false);
+                returnValue = PositionLib.isBallInRangeOfRefPoint(testBallPos, testReferencePoint, 2);
+                assertThat(returnValue).isExactlyInstanceOf(Boolean.class);
+                assertThat(((Boolean) returnValue).booleanValue()).isEqualTo(false);
+                
+                testReferencePoint = new ReferencePoint(0.5, 7, false);
+                testBallPos = new BallPosition(1.5, 6, false);
+                returnValue = PositionLib.isBallInRangeOfRefPoint(testBallPos, testReferencePoint, 4);
+                assertThat(returnValue).isExactlyInstanceOf(Boolean.class);
+                assertThat(((Boolean) returnValue).booleanValue()).isEqualTo(true);
+                
 	}
 
 	@Test
