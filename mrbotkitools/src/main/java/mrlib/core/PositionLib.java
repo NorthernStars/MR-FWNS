@@ -28,7 +28,7 @@ public class PositionLib {
      * @param aRefPoint0 	First {@link ReferencePoint}
      * @param aRefPoint1 	Second {@link ReferencePoint}
      * 
-     * @return {@link ReferencePoint} in middle between {@code aRefPoint0} and {@code aRerfPoint1}.
+     * @return {@link ReferencePoint} in middle between {@code aRefPoint0} and {@code aRefPoint1}.
      */
     public static ReferencePoint getMiddleOfTwoReferencePoints( ReferencePoint aRefPoint0, ReferencePoint aRefPoint1 ){
     	
@@ -83,7 +83,7 @@ public class PositionLib {
     
     
     /**
-     * Returns the middle of enemies goal.
+     * Returns the middle of opponents goal.
      * @param aWorldData		{@link RawWorldData}
      * @param aTeam 			Own {@link Teams} information
      * @return ReferencePoint	{@link ReferencePoint} of middle of enemies goal.
