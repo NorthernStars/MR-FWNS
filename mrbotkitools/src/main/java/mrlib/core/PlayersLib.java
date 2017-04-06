@@ -181,6 +181,7 @@ public class PlayersLib {
      * @param mSelf 		{@link BotInformation} of the agent
      * @return 				Teammate {@link FellowPlayer} where no enemy is around in 2x kick range
      */
+	@Deprecated //Does not work if FellowPlayer has ID 0
 	public static FellowPlayer getNearestMateWithoutEnemyAround(RawWorldData vWorldState, BotInformation mSelf){
         List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
 		FellowPlayer nearestMate = null;
@@ -244,6 +245,7 @@ public class PlayersLib {
      * @param mSelf			{@link BotInformation} of the agent
      * @return 				{@code true} if bot is the closest to the ball, {@code fale} otherwise.
      */
+	//TODO: function needs parameter ballPos while BallPosition is already in RawWorldData
 	public static boolean amINearestToBall(RawWorldData vWorldState, BallPosition ballPos, BotInformation mSelf){
 		List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
 		vTeamMates.add(new FellowPlayer(mSelf.getVtId(), mSelf.getBotname(), true, 0, 0, 0) );
@@ -277,7 +279,8 @@ public class PlayersLib {
 		// check teammates
 		for( FellowPlayer p : aWorldState.getListOfTeamMates() ){
 			// calculate distance to from player to ball
-			double d = p.sub( ballPos ).getDistanceToPoint();
+			//double d = p.sub( ballPos ).getDistanceToPoint();
+			double d = PositionLib.getDistanceBetweenTwoRefPoints(p, aWorldState.getBallPosition());
 			
 			// check if player if nearest to ball
 			if( d < distToBall || distToBall < 0 ){

@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.withinPercentage;
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +24,7 @@ import essentials.core.BotInformation.GamevalueNames;
 public class PlayersLibTests {
 
 	RawWorldData worldModel;
-	BotInformation vBotInformation;
+	BotInformation vBotInformation = new BotInformation();
 	
 	
 	
@@ -50,28 +52,27 @@ public class PlayersLibTests {
 	public void testIsEnemyAroundRawWorldDataBotInformation() {
 
 		
-		BotInformation vSelf = new BotInformation();
 		
 		//Case 1
-		boolean testAround = PlayersLib.isEnemyAround(worldModel, vSelf);
+		boolean testAround = PlayersLib.isEnemyAround(worldModel, vBotInformation);
 		assertThat(testAround).isEqualTo(false);
 		
 		
 		//Case 2 (barely out of range)
 		FellowPlayer nearestOpponent = PlayersLib.getNearestOpponent(worldModel);
 		nearestOpponent.setDistanceToPoint((Default.KickRange)*2+0.01);
-		testAround = PlayersLib.isEnemyAround(worldModel, vSelf);
+		testAround = PlayersLib.isEnemyAround(worldModel, vBotInformation);
 		assertThat(testAround).isEqualTo(false);
 
 		
 		//Case 3 (exact in range)
 		nearestOpponent.setDistanceToPoint((Default.KickRange)*2);
-		testAround = PlayersLib.isEnemyAround(worldModel, vSelf);
+		testAround = PlayersLib.isEnemyAround(worldModel, vBotInformation);
 		assertThat(testAround).isEqualTo(true);
 		
 		//Case 4 (barely in range)
 		nearestOpponent.setDistanceToPoint((Default.KickRange)*2-0.01);
-		testAround = PlayersLib.isEnemyAround(worldModel, vSelf);
+		testAround = PlayersLib.isEnemyAround(worldModel, vBotInformation);
 		assertThat(testAround).isEqualTo(true);
 		
 		//Switch Model back to testDefault
@@ -82,24 +83,23 @@ public class PlayersLibTests {
 	@Test
 	public void testIsEnemyAroundRawWorldDataBotInformationDouble() {
 
-		BotInformation vSelf = new BotInformation();
 		
 		//Case 1
-		boolean testAround = PlayersLib.isEnemyAround(worldModel,vSelf, 700.0);
+		boolean testAround = PlayersLib.isEnemyAround(worldModel,vBotInformation, 700.0);
 		assertThat(testAround).isEqualTo(false);
 		
 		
 		//Case 2: Barely out of range
-		testAround = PlayersLib.isEnemyAround(worldModel, vSelf, 799.99);
+		testAround = PlayersLib.isEnemyAround(worldModel, vBotInformation, 799.99);
 		assertThat(testAround).isEqualTo(false);
 
 		
 		//Case 3: Exact in range
-		testAround = PlayersLib.isEnemyAround(worldModel, vSelf, 800.0);
+		testAround = PlayersLib.isEnemyAround(worldModel, vBotInformation, 800.0);
 		assertThat(testAround).isEqualTo(true);
 		
 		//Case 4: Barely in range
-		testAround = PlayersLib.isEnemyAround(worldModel, vSelf, 802.0);
+		testAround = PlayersLib.isEnemyAround(worldModel, vBotInformation, 802.0);
 		assertThat(testAround).isEqualTo(true);
 		
 		//Switch Model back to testDefault
@@ -110,27 +110,26 @@ public class PlayersLibTests {
 	@Test
 	public void testIsEnemyAroundMate() {
 
-		BotInformation vSelf = new BotInformation();
 		FellowPlayer testMate = new FellowPlayer();
 		testMate.set(new ReferencePoint(700, 55, true));
 		
 		//Case 1: 100mm away
-		boolean testAround = PlayersLib.isEnemyAroundMate(worldModel, vSelf, testMate);
+		boolean testAround = PlayersLib.isEnemyAroundMate(worldModel, vBotInformation, testMate);
 		assertThat(testAround).isEqualTo(false);
 		
 		//Case 2: 51mm away (barely out of range)
 		testMate.setDistanceToPoint(749);
-		testAround = PlayersLib.isEnemyAroundMate(worldModel, vSelf, testMate);
+		testAround = PlayersLib.isEnemyAroundMate(worldModel, vBotInformation, testMate);
 		assertThat(testAround).isEqualTo(false);
 
 		//Case 2: exact in range
 		testMate.setDistanceToPoint(750);
-		testAround = PlayersLib.isEnemyAroundMate(worldModel, vSelf, testMate);
+		testAround = PlayersLib.isEnemyAroundMate(worldModel, vBotInformation, testMate);
 		assertThat(testAround).isEqualTo(true);
 
 		//Case 2: 49mm away (barely in range)
 		testMate.setDistanceToPoint(750);
-		testAround = PlayersLib.isEnemyAroundMate(worldModel, vSelf, testMate);
+		testAround = PlayersLib.isEnemyAroundMate(worldModel, vBotInformation, testMate);
 		assertThat(testAround).isEqualTo(true);
 
 		//Switch Model back to testDefault
@@ -159,17 +158,20 @@ public class PlayersLibTests {
 		testDistance = PlayersLib.getDistanceBetweenPlayerAndBall(P1, worldModel.getBallPosition());
 		assertThat(testDistance).isCloseTo((testDistance2), withinPercentage(0.1));
 		
+
+		worldModel = TestScenario.getExampleWorldModel();
+		
 	}
 
 	@Test
 	public void testGetNearestMateWithoutEnemyAround() {
 		//fail("Not yet implemented");
 		//Test not yet completed
-		BotInformation vSelf = new BotInformation();
-		FellowPlayer chosenOne = PlayersLib.getNearestMateWithoutEnemyAround(worldModel, vSelf);
+		FellowPlayer chosenOne = PlayersLib.getNearestMateWithoutEnemyAround(worldModel, vBotInformation);
 		
-		assertThat(chosenOne.getDistanceToPlayer()).isCloseTo(PlayersLib.getNearestMate(worldModel, vSelf).getDistanceToPlayer(), withinPercentage(0.1));
+		assertThat(chosenOne.getDistanceToPlayer()).isCloseTo(PlayersLib.getNearestMate(worldModel, vBotInformation).getDistanceToPlayer(), withinPercentage(0.1));
 		//TODO: Test without players
+		//TODO: Continue tests when function is fixed
 	}
 
 	@Test
@@ -179,12 +181,26 @@ public class PlayersLibTests {
 
 	@Test
 	public void testAmINearestToBall() {
-		fail("Not yet implemented");
+		List<FellowPlayer> allPlayers = worldModel.getListOfTeamMates();
+		allPlayers.addAll(worldModel.getListOfOpponents());
+		
+		Boolean amINear = PlayersLib.amINearestToBall(worldModel, worldModel.getBallPosition(), vBotInformation);
+		assertThat(amINear).isEqualTo(true);
+		
+		//TODO: Add more TestCases when setBallPosition is fixed
+		
 	}
 
 	@Test
 	public void testNearestMateToBall() {
-		fail("Not yet implemented");
+		//fail("Not yet implemented");
+		
+		FellowPlayer mateWithBalls = PlayersLib.nearestMateToBall(worldModel);
+		
+		assertThat(mateWithBalls.getDistanceToPlayer()).isCloseTo(TestScenario.fellow1Distance, withinPercentage(0.1));
+		assertThat(mateWithBalls.getAngleToPlayer()).isCloseTo(TestScenario.fellow1Angle, withinPercentage(0.1));
+		
+		
 	}
 
 	@Test
