@@ -163,9 +163,13 @@ public class PlayersLibTests {
 
 	@Test
 	public void testGetNearestMateWithoutEnemyAround() {
-		fail("Not yet implemented");
-		//BotInformation vSelf = new BotInformation();
-		//PlayersLib.getNearestMateWithoutEnemyAround(worldModel, vSelf);
+		//fail("Not yet implemented");
+		//Test not yet completed
+		BotInformation vSelf = new BotInformation();
+		FellowPlayer chosenOne = PlayersLib.getNearestMateWithoutEnemyAround(worldModel, vSelf);
+		
+		assertThat(chosenOne.getDistanceToPlayer()).isCloseTo(PlayersLib.getNearestMate(worldModel, vSelf).getDistanceToPlayer(), withinPercentage(0.1));
+		//TODO: Test without players
 	}
 
 	@Test
