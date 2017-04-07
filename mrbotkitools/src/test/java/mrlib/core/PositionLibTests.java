@@ -189,8 +189,40 @@ public class PositionLibTests {
 
 	@Test
 	public void testLawOfCosine() {
-		fail("Not yet implemented");
-	}
+            double testSideA;
+            double testSideB;
+            double testSideC;
+            double angle;
+
+            testSideA = 15.9;
+            testSideB = 14.5;
+            testSideC = 22.5;
+            angle = PositionLib.lawOfCosine(testSideA, testSideB, testSideC);
+            assertThat(angle).isExactlyInstanceOf(Double.class);
+            assertThat(((Double) angle).doubleValue()).isCloseTo(39.9, withinPercentage(1));
+            
+            testSideA = 12.1;
+            testSideB = 10.4;
+            testSideC = 22.5;
+            angle = PositionLib.lawOfCosine(testSideA, testSideB, testSideC);
+            assertThat(angle).isExactlyInstanceOf(Double.class);
+            assertThat(((Double) angle).doubleValue()).isCloseTo(0.0, withinPercentage(1));
+            
+            testSideA = 10.81;
+            testSideB = 37.04;
+            testSideC = 31.0;
+            angle = PositionLib.lawOfCosine(testSideA, testSideB, testSideC);
+            assertThat(angle).isExactlyInstanceOf(Double.class);
+            assertThat(((Double) angle).doubleValue()).isCloseTo(116.0, withinPercentage(1));
+            
+//            testSideA = -44.5;
+//            testSideB = 55.3;
+//            testSideC = 22.3;
+//            angle = PositionLib.lawOfCosine(testSideA, testSideB, testSideC);
+//            assertThat(angle).isExactlyInstanceOf(Double.class);
+//            assertThat(((Double) angle).doubleValue()).isCloseTo(0.0, withinPercentage(1));
+                
+        }
 
 	@Test
 	public void testIsBallInTriangle() {
