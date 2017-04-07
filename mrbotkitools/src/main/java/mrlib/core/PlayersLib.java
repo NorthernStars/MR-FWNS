@@ -280,7 +280,7 @@ public class PlayersLib {
 		for( FellowPlayer p : aWorldState.getListOfTeamMates() ){
 			// calculate distance to from player to ball
 			//double d = p.sub( ballPos ).getDistanceToPoint();
-			double d = PositionLib.getDistanceBetweenTwoRefPoints(p, aWorldState.getBallPosition());
+			double d = PositionLib.getDistanceBetweenTwoRefPoints(p, ballPos);
 			
 			// check if player if nearest to ball
 			if( d < distToBall || distToBall < 0 ){
@@ -306,7 +306,8 @@ public class PlayersLib {
 		// check teammates
 		for( FellowPlayer p : aWorldState.getListOfOpponents() ){
 			// calculate distance to from player to ball
-			double d = p.sub( ballPos ).getDistanceToPoint();
+			//double d = p.sub( ballPos ).getDistanceToPoint();
+			double d = PositionLib.getDistanceBetweenTwoRefPoints(ballPos, p);
 			
 			// check if player if nearest to ball
 			if( d < distToBall || distToBall < 0 ){
@@ -352,6 +353,8 @@ public class PlayersLib {
 	 * @param angle			{@link Double} angle
 	 * @returns 			{@code true} if enemy is in way from agent to {@code refPoint}, {@code false} othweise.
 	 * */
+	@Deprecated //Function does now check if RefPoint is in front of opponent
+	//TODO: Check if distance to refpoint is > distance fo opponent before returning true
 	public static boolean isEnemyOnWayToRefPoint(RawWorldData aWorldState, ReferencePoint refPoint, double angle){		
 		// prepare angles
 		double vAngleLeft = refPoint.getAngleToPoint()-angle;
@@ -402,7 +405,7 @@ public class PlayersLib {
 		}
 		if(Math.abs(ref1Angle-ref2Angle) > 180){
 			for ( FellowPlayer a: vOpponents){
-				if(a.getAngleToPlayer() < ref2Angle && a.getAngleToPlayer() > -180 || a.getAngleToPlayer() > ref1Angle && a.getAngleToPlayer() < 180){
+				if(a.getAngleToPlayer() <= ref2Angle && a.getAngleToPlayer() >= -180 || a.getAngleToPlayer() >= ref1Angle && a.getAngleToPlayer() <= 180){
 					return true;
 				}
 				else{
@@ -412,7 +415,7 @@ public class PlayersLib {
 		}
 		else{
 			for ( FellowPlayer a: vOpponents){
-				if(a.getAngleToPlayer() > ref2Angle && a.getAngleToPlayer() < ref1Angle){
+				if(a.getAngleToPlayer() >= ref2Angle && a.getAngleToPlayer() <= ref1Angle){
 					return true;
 				}
 				else{
@@ -445,7 +448,7 @@ public class PlayersLib {
 		}
 		if(Math.abs(ref1Angle-ref2Angle) > 180){
 			
-				if(enemy.getAngleToPlayer() < ref2Angle && enemy.getAngleToPlayer() > -180 || enemy.getAngleToPlayer() > ref1Angle && enemy.getAngleToPlayer() < 180){
+				if(enemy.getAngleToPlayer() <= ref2Angle && enemy.getAngleToPlayer() >= -180 || enemy.getAngleToPlayer() >= ref1Angle && enemy.getAngleToPlayer() <= 180){
 					return true;
 				}
 				else{
@@ -455,7 +458,7 @@ public class PlayersLib {
 		}
 		else{
 			
-				if(enemy.getAngleToPlayer() > ref2Angle && enemy.getAngleToPlayer() < ref1Angle){
+				if(enemy.getAngleToPlayer() >= ref2Angle && enemy.getAngleToPlayer() <= ref1Angle){
 					return true;
 				}
 				else{

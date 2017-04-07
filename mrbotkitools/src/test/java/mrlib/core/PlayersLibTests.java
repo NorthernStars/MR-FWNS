@@ -194,38 +194,124 @@ public class PlayersLibTests {
 	@Test
 	public void testNearestMateToBall() {
 		//fail("Not yet implemented");
-		
 		FellowPlayer mateWithBalls = PlayersLib.nearestMateToBall(worldModel);
 		
 		assertThat(mateWithBalls.getDistanceToPlayer()).isCloseTo(TestScenario.fellow1Distance, withinPercentage(0.1));
 		assertThat(mateWithBalls.getAngleToPlayer()).isCloseTo(TestScenario.fellow1Angle, withinPercentage(0.1));
+		
+		FellowPlayer P1 = new FellowPlayer();
+		P1.set(new ReferencePoint(TestScenario.ballDistance+20, TestScenario.ballAngle, true));
+		worldModel.setFellowPlayer(P1);
+		
+		mateWithBalls = PlayersLib.nearestMateToBall(worldModel);
+		
+		assertThat(mateWithBalls.getDistanceToPlayer()).isCloseTo(P1.getDistanceToPlayer(), withinPercentage(0.1));
+		assertThat(mateWithBalls.getAngleToPlayer()).isCloseTo(P1.getAngleToPlayer(), withinPercentage(0.1));
+		
+		worldModel = TestScenario.getExampleWorldModel();
 		
 		
 	}
 
 	@Test
 	public void testNearestOpponentToBall() {
-		fail("Not yet implemented");
+		FellowPlayer opponentWithBalls = PlayersLib.nearestOpponentToBall(worldModel);
+		
+		assertThat(opponentWithBalls.getDistanceToPlayer()).isCloseTo(TestScenario.opponent1Distance, withinPercentage(0.1));
+		assertThat(opponentWithBalls.getAngleToPlayer()).isCloseTo(TestScenario.opponent1Angle, withinPercentage(0.1));
+		
+		
+		FellowPlayer P1 = new FellowPlayer();
+		P1.set(new ReferencePoint(TestScenario.ballDistance+20, TestScenario.ballAngle, true));
+		worldModel.setOpponentPlayer(P1);
+		
+		opponentWithBalls=PlayersLib.nearestOpponentToBall(worldModel);
+		
+		assertThat(opponentWithBalls.getDistanceToPlayer()).isCloseTo(P1.getDistanceToPlayer(), withinPercentage(0.1));
+		assertThat(opponentWithBalls.getAngleToPlayer()).isCloseTo(P1.getAngleToPlayer(), withinPercentage(0.1));
+		
+		worldModel = TestScenario.getExampleWorldModel();
 	}
 
 	@Test
 	public void testNearestPlayerToBall() {
-		fail("Not yet implemented");
+		FellowPlayer opponentWithBalls = PlayersLib.nearestOpponentToBall(worldModel);
+		
+		assertThat(opponentWithBalls.getDistanceToPlayer()).isCloseTo(TestScenario.opponent1Distance, withinPercentage(0.1));
+		assertThat(opponentWithBalls.getAngleToPlayer()).isCloseTo(TestScenario.opponent1Angle, withinPercentage(0.1));
+
+		FellowPlayer P1 = new FellowPlayer();
+		P1.set(new ReferencePoint(TestScenario.ballDistance+20, TestScenario.ballAngle, true));
+		worldModel.setOpponentPlayer(P1);
+		
+		opponentWithBalls=PlayersLib.nearestOpponentToBall(worldModel);
+		
+		assertThat(opponentWithBalls.getDistanceToPlayer()).isCloseTo(P1.getDistanceToPlayer(), withinPercentage(0.1));
+		assertThat(opponentWithBalls.getAngleToPlayer()).isCloseTo(P1.getAngleToPlayer(), withinPercentage(0.1));
+
+		worldModel = TestScenario.getExampleWorldModel();
 	}
 
 	@Test
 	public void testIsEnemyOnWayToRefPoint() {
-		fail("Not yet implemented");
+		
+		//Case 1: Enemy direct between refpoint and Player
+		ReferencePoint testRefPoint = new ReferencePoint(TestScenario.opponent1Distance, TestScenario.opponent1Angle, true);
+		testRefPoint.setDistanceToPoint(TestScenario.opponent1Distance + 30);
+		Boolean testBool = PlayersLib.isEnemyOnWayToRefPoint(worldModel, testRefPoint, 0);
+		
+		assertThat(testBool).isEqualTo(true);
+
+		//Case 2: Enemy behind refpoint
+		testRefPoint.setDistanceToPoint(TestScenario.opponent1Distance - 20);
+		testBool = PlayersLib.isEnemyOnWayToRefPoint(worldModel, testRefPoint, 0);
+		
+		assertThat(testBool).isEqualTo(false);
+		
+		//TODO: More test cases when distance check is implemented
 	}
 
 	@Test
 	public void testIsEnemyInCorridorBetweenTwoRefPoints() {
-		fail("Not yet implemented");
+		//Case 1: Player in small corridor angle
+		ReferencePoint testRefPoint1 = new ReferencePoint(0, TestScenario.opponent1Angle -10, true);
+		ReferencePoint testRefPoint2 = new ReferencePoint(0, TestScenario.opponent1Angle +10, true);
+
+		Boolean testBool = PlayersLib.isEnemyInCorridorBetweenTwoRefPoints(worldModel, testRefPoint1, testRefPoint2);
+		assertThat(testBool).isEqualTo(true);
+		
+		//Case 2: Player borderline inside corridor angle
+		testRefPoint1 = new ReferencePoint(7500, TestScenario.opponent1Angle, true);
+		testRefPoint2 = new ReferencePoint(0, TestScenario.opponent1Angle, true);
+
+		testBool = PlayersLib.isEnemyInCorridorBetweenTwoRefPoints(worldModel, testRefPoint1, testRefPoint2);
+		assertThat(testBool).isEqualTo(true);
+		
+		//Case 3: No player inside corridor
+		testRefPoint1 = new ReferencePoint(0, TestScenario.opponent1Angle-20, true);
+		testRefPoint2 = new ReferencePoint(0, TestScenario.opponent1Angle-10, true);
+
+		testBool = PlayersLib.isEnemyInCorridorBetweenTwoRefPoints(worldModel, testRefPoint1, testRefPoint2);
+		assertThat(testBool).isEqualTo(false);
+		
 	}
 
 	@Test
 	public void testIsSpecificEnemyInAngleBetweenTwoRefPoints() {
-		fail("Not yet implemented");
+		//Case 1: Player in small corridor angle
+		ReferencePoint testRefPoint1 = new ReferencePoint(0, TestScenario.opponent1Angle -10, true);
+		ReferencePoint testRefPoint2 = new ReferencePoint(0, TestScenario.opponent1Angle +10, true);
+		FellowPlayer o1 = new FellowPlayer();
+		o1 = worldModel.getListOfOpponents().get(0);
+
+		Boolean testBool = PlayersLib.isSpecificEnemyInAngleBetweenTwoRefPoints(o1, testRefPoint1, testRefPoint2);
+		assertThat(testBool).isEqualTo(true);
+		
+		testRefPoint1.set(new ReferencePoint(0, TestScenario.opponent1Angle -20, true));
+		testRefPoint2.set(new ReferencePoint(0, TestScenario.opponent1Angle -30, true));
+		
+		testBool = PlayersLib.isSpecificEnemyInAngleBetweenTwoRefPoints(o1, testRefPoint1, testRefPoint2);
+		assertThat(testBool).isEqualTo(false);
 	}
 
 	@Test
