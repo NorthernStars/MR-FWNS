@@ -181,7 +181,7 @@ public class PlayersLib {
      * @param mSelf 		{@link BotInformation} of the agent
      * @return 				Teammate {@link FellowPlayer} where no enemy is around in 2x kick range
      */
-	@Deprecated //Does not work if FellowPlayer has ID 0
+	@Deprecated //TODO Does not work if FellowPlayer has ID 0
 	public static FellowPlayer getNearestMateWithoutEnemyAround(RawWorldData vWorldState, BotInformation mSelf){
         List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
 		FellowPlayer nearestMate = null;
@@ -353,12 +353,11 @@ public class PlayersLib {
 	 * @param angle			{@link Double} angle
 	 * @returns 			{@code true} if enemy is in way from agent to {@code refPoint}, {@code false} othweise.
 	 * */
-	@Deprecated //Function does now check if RefPoint is in front of opponent
-	//TODO: Check if distance to refpoint is > distance fo opponent before returning true
 	public static boolean isEnemyOnWayToRefPoint(RawWorldData aWorldState, ReferencePoint refPoint, double angle){		
 		// prepare angles
 		double vAngleLeft = refPoint.getAngleToPoint()-angle;
 		double vAngleRight = refPoint.getAngleToPoint()+angle;
+		double distanceToRefPoint = refPoint.getDistanceToPoint();
 		
 		// check if angles exceed maximum angles
 		
@@ -367,17 +366,22 @@ public class PlayersLib {
 			
 			double vAngleToPlayer = a.getAngleToPlayer();
 			
-			if( vAngleToPlayer >= vAngleLeft && vAngleToPlayer <= vAngleRight ){
+			if(distanceToRefPoint > a.getDistanceToPlayer())
+			{
+				if( vAngleToPlayer >= vAngleLeft && vAngleToPlayer <= vAngleRight ){
 					return true;
-			}
+				}
 			
-			if( vAngleRight > 180.0 && (vAngleToPlayer <= (-360+vAngleRight) || vAngleToPlayer >= vAngleLeft) ){
-				return true;
-			}
+				if( vAngleRight > 180.0 && (vAngleToPlayer <= (-360+vAngleRight) || vAngleToPlayer >= vAngleLeft) ){
+					return true;
+				}
 			
-			if( vAngleLeft < -180.0 && (vAngleToPlayer >= (360+vAngleLeft) || vAngleToPlayer <= vAngleRight ) ){
-				return true;
+				if( vAngleLeft < -180.0 && (vAngleToPlayer >= (360+vAngleLeft) || vAngleToPlayer <= vAngleRight ) ){
+					return true;
+				}	
+				
 			}
+				
 		}
 		
 		return false;
