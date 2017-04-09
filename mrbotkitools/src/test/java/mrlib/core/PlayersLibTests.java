@@ -268,7 +268,20 @@ public class PlayersLibTests {
 		
 		assertThat(testBool).isEqualTo(false);
 		
-		//TODO: More test cases when distance check is implemented
+		//Case 3: Enemy slightly in way, function call without tolerance
+		testRefPoint.setDistanceToPoint(TestScenario.opponent1Distance + 30);
+		testRefPoint.setAngleToPoint(testRefPoint.getAngleToPoint() + 0.5);
+		testBool = PlayersLib.isEnemyOnWayToRefPoint(worldModel, testRefPoint, 0);
+		
+		assertThat(testBool).isEqualTo(false);
+		
+		//Case 4: Enemy slightly in way, function call without tolerance
+		testRefPoint.setAngleToPoint(testRefPoint.getAngleToPoint() + 0.5);
+		testBool = PlayersLib.isEnemyOnWayToRefPoint(worldModel, testRefPoint, 1.2);
+		
+		assertThat(testBool).isEqualTo(true);
+		
+		
 	}
 
 	@Test
@@ -345,7 +358,11 @@ public class PlayersLibTests {
 
 	@Test
 	public void testGetDistanceBetweenPlayerAndPoint() {
-		fail("Not yet implemented");
+		fail("Function is deprecated, status unclear");
+//		FellowPlayer P1 = new FellowPlayer();
+//		P1.set(new ReferencePoint(77,66,true));
+//		ReferencePoint P2 = new ReferencePoint(66, 66, true);
+//		double testDistance = PlayersLib.getDistanceBetweenPlayerAndPoint(P1, P2);
 	}
 
 
