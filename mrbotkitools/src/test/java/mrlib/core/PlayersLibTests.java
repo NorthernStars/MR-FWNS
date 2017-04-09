@@ -316,12 +316,31 @@ public class PlayersLibTests {
 
 	@Test
 	public void testHasMateTheBall() {
-		fail("Not yet implemented");
+
+		Boolean testTeamBall = PlayersLib.hasMateTheBall(worldModel, vBotInformation);
+		assertThat(testTeamBall).isEqualTo(false);
+		
+		FellowPlayer P1 = new FellowPlayer();
+		P1.set(new ReferencePoint(20, 45,true));
+		worldModel.setFellowPlayer(P1);
+		
+		testTeamBall = PlayersLib.hasMateTheBall(worldModel, vBotInformation);
+		assertThat(testTeamBall).isEqualTo(true);
+		
 	}
 
 	@Test
 	public void testIsEnemyNearBall() {
-		fail("Not yet implemented");
+		Boolean testEnemyBall = PlayersLib.isEnemyNearBall(worldModel, vBotInformation);
+		assertThat(testEnemyBall).isEqualTo(false);
+		
+		FellowPlayer P1 = new FellowPlayer();
+		P1.set(new ReferencePoint(20, 45,true));
+		worldModel.setOpponentPlayer(P1);
+		
+		testEnemyBall = PlayersLib.isEnemyNearBall(worldModel, vBotInformation);
+		assertThat(testEnemyBall).isEqualTo(true);
+		
 	}
 
 	@Test

@@ -488,10 +488,8 @@ public class PlayersLib {
 				if(dist < botInfo.getGamevalue(GamevalueNames.KickRange)){
 					return true;
 				}
-				else{
-					return false;
-				}
 			}
+			
 		}
 		
 		return false;
@@ -514,9 +512,6 @@ public class PlayersLib {
 			dist = PlayersLib.getDistanceBetweenPlayerAndBall(a, ball);
 			if(dist < botInfo.getGamevalue(GamevalueNames.KickRange)*2){
 				return true;
-			}
-			else{
-				return false;
 			}
 		}
 		
