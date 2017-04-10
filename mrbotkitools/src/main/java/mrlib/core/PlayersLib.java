@@ -181,7 +181,6 @@ public class PlayersLib {
      * @param mSelf 		{@link BotInformation} of the agent
      * @return 				Teammate {@link FellowPlayer} where no enemy is around in 2x kick range
      */
-	@Deprecated //TODO Does not work if FellowPlayer has ID 0
 	public static FellowPlayer getNearestMateWithoutEnemyAround(RawWorldData vWorldState, BotInformation mSelf){
         List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
 		FellowPlayer nearestMate = null;
@@ -204,15 +203,17 @@ public class PlayersLib {
      * @param mSelf			{@link BotInformation} of the agent
      * @return 				Teammate {@link FellowPlayer} with a enemy around but the enemy furthest away
      */
+	@Deprecated //TODO: Check if function is necessary
 	public static FellowPlayer getMateWithEnemyNearButFurthestAway(RawWorldData vWorldState, BotInformation mSelf){
         List<FellowPlayer> vOpponents = vWorldState.getListOfOpponents();
         List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
-        List<FellowPlayer> nearestEnemys = new ArrayList<FellowPlayer>();
+        List<FellowPlayer> nearestEnemies = new ArrayList<FellowPlayer>();
 		FellowPlayer bestMate = null;
 		FellowPlayer nearestOpponent = null;
 		double dist_old = 0;
 		int counter=0, bestIndex = 0;
 		
+		//Put nearest opponent for each mate in nearestEnemies, count them
 		for( FellowPlayer a : vTeamMates){
 			for( FellowPlayer p : vOpponents){
     					
@@ -220,14 +221,16 @@ public class PlayersLib {
     						nearestOpponent = p;
     						dist_old = PlayersLib.getDistanceBetweenTwoPlayers(p, a);
     					}
+    					
     		}
-    		nearestEnemys.add(nearestOpponent);
-			counter++;
+			dist_old = 0;
+    		nearestEnemies.add(nearestOpponent);
+			counter++; //TODO: Was bringt das? Wird ja eh wieder auf 0 gesetzt
     	}
 		counter = 0;
     	for ( FellowPlayer a: vTeamMates){
     		if ( (bestMate == null)
-    				|| PlayersLib.getDistanceBetweenTwoPlayers(a, nearestEnemys.get(counter)) > PlayersLib.getDistanceBetweenTwoPlayers(bestMate, nearestEnemys.get(bestIndex))){
+    				|| PlayersLib.getDistanceBetweenTwoPlayers(a, nearestEnemies.get(counter)) > PlayersLib.getDistanceBetweenTwoPlayers(bestMate, nearestEnemies.get(bestIndex))){
     			bestMate = a;
     			bestIndex = counter;
     		}

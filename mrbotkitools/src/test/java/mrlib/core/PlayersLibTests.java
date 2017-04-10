@@ -28,9 +28,11 @@ public class PlayersLibTests {
 	
 	
 	
+	
 	@Before
 	public void setUp() throws Exception {
 		worldModel = TestScenario.getExampleWorldModel();
+		vBotInformation.setVtId(100);
 	}
 
 	@After
@@ -165,18 +167,25 @@ public class PlayersLibTests {
 
 	@Test
 	public void testGetNearestMateWithoutEnemyAround() {
-		//fail("Not yet implemented");
-		//Test not yet completed
+
 		FellowPlayer chosenOne = PlayersLib.getNearestMateWithoutEnemyAround(worldModel, vBotInformation);
-		
 		assertThat(chosenOne.getDistanceToPlayer()).isCloseTo(PlayersLib.getNearestMate(worldModel, vBotInformation).getDistanceToPlayer(), withinPercentage(0.1));
-		//TODO: Test without players
-		//TODO: Continue tests when function is fixed
+		FellowPlayer oldChosenOne = chosenOne;
+		
+		//P1 should not become nearest as opponent1 is around
+		FellowPlayer P1 = new FellowPlayer();
+		P1.set(new ReferencePoint(TestScenario.opponent1Distance - 5, TestScenario.opponent1Angle, true));
+		chosenOne = PlayersLib.getNearestMateWithoutEnemyAround(worldModel, vBotInformation);
+		
+		assertThat(chosenOne.getDistanceToPlayer()).isCloseTo(oldChosenOne.getDistanceToPlayer(), withinPercentage(0.1));
+
 	}
 
 	@Test
 	public void testGetMateWithEnemyNearButFurthestAway() {
-		fail("Not yet implemented");
+		fail("Function is deprecated, status unclear");
+
+		FellowPlayer chosenOne = PlayersLib.getMateWithEnemyNearButFurthestAway(worldModel, vBotInformation);
 	}
 
 	@Test
