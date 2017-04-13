@@ -3,7 +3,6 @@ build
 dist
 logs
 
-gradle
 .gradle
 
 **/.settings
