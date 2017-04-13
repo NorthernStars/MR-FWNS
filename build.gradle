@@ -1,3 +1,18 @@
+plugins {
+  id "java"
+  id "eclipse"
+  id "jacoco"
+  id "org.sonarqube" version "2.3"
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectName", "MixedReality :: Client"
+        property "sonar.projectKey", "werthersechte-github:mrClient"
+        property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
+    }
+}
+
 allprojects {
     
     apply plugin: 'java'
@@ -20,7 +35,10 @@ allprojects {
         
         testCompile 'junit:junit:4.12'
     }
-    
+
+    test {
+        ignoreFailures = true
+    }
     
 }
 
