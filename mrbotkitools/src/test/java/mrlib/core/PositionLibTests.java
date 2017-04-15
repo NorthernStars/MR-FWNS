@@ -53,7 +53,14 @@ public class PositionLibTests {
             returnReferencePoint = PositionLib.getMiddleOfTwoReferencePoints(testReferencePointA, testReferencePointB);
             assertThat(returnReferencePoint).isExactlyInstanceOf(ReferencePoint.class);
             assertThat(((ReferencePoint) returnReferencePoint).getXOfPoint()).isCloseTo(-0.25, withinPercentage(1));
-            assertThat(((ReferencePoint) returnReferencePoint).getYOfPoint()).isCloseTo(0, withinPercentage(1));         
+            assertThat(((ReferencePoint) returnReferencePoint).getYOfPoint()).isCloseTo(0, withinPercentage(1));  
+            
+            testReferencePointA = new ReferencePoint(-3, 5, false);
+            testReferencePointB = new ReferencePoint(-4, 2, false);
+            returnReferencePoint = PositionLib.getMiddleOfTwoReferencePoints(testReferencePointA, testReferencePointB);
+            assertThat(returnReferencePoint).isExactlyInstanceOf(ReferencePoint.class);
+            assertThat(((ReferencePoint) returnReferencePoint).getXOfPoint()).isCloseTo(-3.5, withinPercentage(1));
+            assertThat(((ReferencePoint) returnReferencePoint).getYOfPoint()).isCloseTo(3.5, withinPercentage(1));
 	}
 
 	@Test
