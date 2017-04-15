@@ -414,13 +414,13 @@ public class PositionLib {
     	double distBallToA = PositionLib.getDistanceBetweenTwoRefPoints(pointA, ballpos);
     	double distBallToB = PositionLib.getDistanceBetweenTwoRefPoints(pointB, ballpos);
     	double distBallToC = PositionLib.getDistanceBetweenTwoRefPoints(pointC, ballpos);
-    	//Is Beta greater?
+        //Is Beta greater?
     	if(lawOfCosine(distB, distA, distC) > lawOfCosine(distBallToA, distBallToB, distC)){
     		//Is Epsilon greater?
     		
-    		if(lawOfCosine(distC, distA, distB) > lawOfCosine(distBallToB, distBallToC, distA)){
+    		if(lawOfCosine(distA, distB, distC) > lawOfCosine(distBallToB, distBallToC, distA)){
     			//Is Alpha greater?
-    			if(lawOfCosine(distA, distB, distC) > lawOfCosine(distBallToC, distBallToA, distB)){
+    			if(lawOfCosine(distA, distC, distB) > lawOfCosine(distBallToC, distBallToA, distB)){
     				
     				return true;
     				
