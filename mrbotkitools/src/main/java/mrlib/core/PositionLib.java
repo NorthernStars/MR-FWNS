@@ -89,7 +89,7 @@ public class PositionLib {
      * @return ReferencePoint	{@link ReferencePoint} of middle of enemies goal.
      */
     public static ReferencePoint getMiddleOfGoal( RawWorldData aWorldData, Teams aTeam ){       
-        ReferencePoint rGoalMiddle = new ReferencePoint( 0.0 , 0.0, true );
+        ReferencePoint rGoalMiddle;
         ReferencePoint vGoalTop = null;
         ReferencePoint vGoalBottom = null;
         
@@ -114,7 +114,7 @@ public class PositionLib {
      * @return ReferencePoint	{@link ReferencePoint} of middle of own goal.
      */
     public static ReferencePoint getMiddleOfOwnGoal( RawWorldData aWorldData, Teams aTeam ){       
-        ReferencePoint rOwnGoalMiddle = new ReferencePoint( 0.0 , 0.0, true );
+        ReferencePoint rOwnGoalMiddle;
         ReferencePoint vGoalTop = null;
         ReferencePoint vGoalBottom = null;
         
@@ -141,7 +141,10 @@ public class PositionLib {
      */
     public static boolean isBallInRangeOfRefPoint(BallPosition ballPos, ReferencePoint aRefPoint, double range){
     	
-    	double a, b, wa, wb;
+    	double a;
+        double b;
+        double wa;
+        double wb;
         
         if( ballPos.getAngleToBall() > aRefPoint.getAngleToPoint() ){
             
@@ -160,12 +163,7 @@ public class PositionLib {
         }
         double c = Math.sqrt( a*a + b*b - 2 * a * b * Math.cos(Math.toRadians(Math.abs(wa - wb))));
     	
-        if(c < range){
-        	return true;
-        }
-        else{
-        	return false;
-        }
+        return c < range;
     }
     
     /**
@@ -176,7 +174,10 @@ public class PositionLib {
      */
     public static double getDistanceBetweenTwoRefPoints(ReferencePoint aRefPoint0, ReferencePoint aRefPoint1){
     	
-    	double a, b, wa, wb;
+    	double a;
+        double b;
+        double wa;
+        double wb;
         
             
         a = aRefPoint0.getDistanceToPoint();
@@ -185,9 +186,7 @@ public class PositionLib {
         wb = aRefPoint1.getAngleToPoint();
          
        
-        double c = Math.sqrt( a*a + b*b - 2 * a * b * Math.cos(Math.toRadians(Math.abs(wa - wb))));
-    	
-       return c;
+        return Math.sqrt( a*a + b*b - 2 * a * b * Math.cos(Math.toRadians(Math.abs(wa - wb))));
     }
 
     /**
@@ -199,7 +198,7 @@ public class PositionLib {
         ReferencePoint vBestPoint = null;
         double vBestAngle = 0;
         
-        ArrayList<ReferencePoint> vEligiblePoints = new ArrayList<ReferencePoint>();
+        ArrayList<ReferencePoint> vEligiblePoints = new ArrayList<>();
 
         vEligiblePoints.add( aWorldData.getFieldCenter() );
         vEligiblePoints.add( aWorldData.getCenterLineTop() );
@@ -242,7 +241,8 @@ public class PositionLib {
      */
 	public static double getAngleBetweenTwoReferencePoints( ReferencePoint aRefPoint0, ReferencePoint aRefPoint1 ){
 		   
-	    double wa, wb;
+	    double wa;
+            double wb;
 	    
 	    if( aRefPoint0.getAngleToPoint() > aRefPoint1.getAngleToPoint() ){
 	        
@@ -277,16 +277,20 @@ public class PositionLib {
 	 * @return				{@code true} if bot is inside quadrilateral {@code aRefPoint0} to {@code aRefPoint3}, {@code false} otherwise.
 	 */
 	public static boolean isBotInQuadrangle(ReferencePoint aRefPoint0, ReferencePoint aRefPoint1, ReferencePoint aRefPoint2, ReferencePoint aRefPoint3){
-		double angle1, angle2, angle3, angle4;
-		angle1= PositionLib.getAngleBetweenTwoReferencePoints(aRefPoint0, aRefPoint1);
-		angle2= PositionLib.getAngleBetweenTwoReferencePoints(aRefPoint1, aRefPoint2);
-		angle3= PositionLib.getAngleBetweenTwoReferencePoints(aRefPoint2, aRefPoint3);
-		angle4= PositionLib.getAngleBetweenTwoReferencePoints(aRefPoint3, aRefPoint0);
-		if(angle1+angle2+angle3+angle4 < 361 && angle1+angle2+angle3+angle4 > 359){
-			return true;
-		}else {
-			return false;
-		}
+            double angle1;
+            double angle2;
+            double angle3;
+            double angle4;
+
+            angle1= PositionLib.getAngleBetweenTwoReferencePoints(aRefPoint0, aRefPoint1);
+            angle2= PositionLib.getAngleBetweenTwoReferencePoints(aRefPoint1, aRefPoint2);
+            angle3= PositionLib.getAngleBetweenTwoReferencePoints(aRefPoint2, aRefPoint3);
+            angle4= PositionLib.getAngleBetweenTwoReferencePoints(aRefPoint3, aRefPoint0);
+            if(angle1+angle2+angle3+angle4 < 361 && angle1+angle2+angle3+angle4 > 359){
+                    return true;
+            }else {
+                    return false;
+            }
 	}
 	
 	/**
@@ -295,10 +299,10 @@ public class PositionLib {
 	 * @return				{@code true} if bot is inside soccer field, {@code false} othwerwise.
 	 */
 	public static boolean isMeselfOutOfBounds( RawWorldData aWorldData ){
-		return isBotInQuadrangle(aWorldData.getBlueFieldCornerTop(),
-				aWorldData.getBlueFieldCornerBottom(),
-				aWorldData.getYellowFieldCornerBottom(),
-				aWorldData.getYellowFieldCornerTop());
+            return isBotInQuadrangle(aWorldData.getBlueFieldCornerTop(),
+                            aWorldData.getBlueFieldCornerBottom(),
+                            aWorldData.getYellowFieldCornerBottom(),
+                            aWorldData.getYellowFieldCornerTop());
 	}
 	
 	
@@ -314,27 +318,27 @@ public class PositionLib {
 	 */
 	public static boolean isBallInQuadrangle(ReferencePoint aRefPoint0, ReferencePoint aRefPoint1, ReferencePoint aRefPoint2, ReferencePoint aRefPoint3, BallPosition ballPos){
 		
-		/*
-		* TODO: Complete function to get if the Ball is in an area of 4 ReferencePoints
-		* */
-		
-		double smallestX = 0;
-		@SuppressWarnings("unused")
-		double secondsmallestX = 0;
+            /*
+            * TODO: Complete function to get if the Ball is in an area of 4 ReferencePoints
+            * */
+
+            double smallestX = 0;
+            @SuppressWarnings("unused")
+            double secondsmallestX = 0;
 //		double biggestX = 0;
-		
-		smallestX = aRefPoint0.getXOfPoint();
-		if(aRefPoint1.getXOfPoint() < smallestX)
-			secondsmallestX = smallestX;
-			smallestX = aRefPoint1.getXOfPoint();
-		if(aRefPoint2.getXOfPoint() < smallestX)
-			secondsmallestX = smallestX;
-			smallestX = aRefPoint2.getXOfPoint();
-		if(aRefPoint3.getXOfPoint() < smallestX)
-			secondsmallestX = smallestX;
-			smallestX = aRefPoint3.getXOfPoint();
-		
-		return true;
+
+            smallestX = aRefPoint0.getXOfPoint();
+            if(aRefPoint1.getXOfPoint() < smallestX)
+                    secondsmallestX = smallestX;
+                    smallestX = aRefPoint1.getXOfPoint();
+            if(aRefPoint2.getXOfPoint() < smallestX)
+                    secondsmallestX = smallestX;
+                    smallestX = aRefPoint2.getXOfPoint();
+            if(aRefPoint3.getXOfPoint() < smallestX)
+                    secondsmallestX = smallestX;
+                    smallestX = aRefPoint3.getXOfPoint();
+
+            return true;
 		
 	}
 	
@@ -352,29 +356,23 @@ public class PositionLib {
 		FellowPlayer closest_player = null;
 		for ( FellowPlayer p: vTeamMates){
 			
-                        if(closest_player != null)
-                        {
-                            double distNew = aRefPoint.sub(p).getDistanceToPoint();
-                            double distOld = aRefPoint.sub(closest_player).getDistanceToPoint();
-                            
-                            if(distNew < distOld){
-				closest_player = p;
-                            }
-                        }
-                        else
-                        {
+                    if(closest_player != null)
+                    {
+                        double distNew = aRefPoint.sub(p).getDistanceToPoint();
+                        double distOld = aRefPoint.sub(closest_player).getDistanceToPoint();
+
+                        if(distNew < distOld){
                             closest_player = p;
                         }
-			
-			
-			
+                    }
+                    else
+                    {
+                        closest_player = p;
+                    }
+	
 		}
 		
-		if(closest_player.getId() == aSelf.getVtId()){
-			return true;
-		}
-			
-		return false;
+		return closest_player != null && closest_player.getId() == aSelf.getVtId();
 	}
 
 	
@@ -386,10 +384,7 @@ public class PositionLib {
 	 * @return				{@code double} angle in degree opposing side {@code distB}.
 	 */
 	public static double lawOfCosine(double distA, double distB, double distC){
-		/*
-    	 * TODO : Complete UnitTest ( function tested for few cases )
-    	 * */
-    	return Math.toDegrees(Math.acos(((distA*distA+distC*distC-distB*distB)/(2*distA*distC))));
+    	return Math.toDegrees(Math.acos((distA*distA+distC*distC-distB*distB)/(2*distA*distC)));
     }
     
 	
@@ -401,12 +396,7 @@ public class PositionLib {
 	 * @param ballpos			{@link ReferencePoint}
 	 * @return				{@code true} if {@code ballpos} is in triangle of {@code pointA}, {@code pointB}, {@code pointC}.
 	 */
-    public static boolean IsBallInTriangle(ReferencePoint pointA, ReferencePoint pointB, ReferencePoint pointC, ReferencePoint ballpos){
-    	
-    	/*
-    	 * TODO : Complete UnitTest ( function tested for few cases )
-    	 * */
-    	
+    public static boolean IsBallInTriangle(ReferencePoint pointA, ReferencePoint pointB, ReferencePoint pointC, ReferencePoint ballpos){  	
     	double distA = PositionLib.getDistanceBetweenTwoRefPoints(pointB, pointC);
     	double distB = PositionLib.getDistanceBetweenTwoRefPoints(pointA, pointC);
     	double distC = PositionLib.getDistanceBetweenTwoRefPoints(pointA, pointB);
@@ -419,12 +409,8 @@ public class PositionLib {
     		//Is Epsilon greater?
     		
     		if(lawOfCosine(distA, distB, distC) > lawOfCosine(distBallToB, distBallToC, distA)){
-    			//Is Alpha greater?
-    			if(lawOfCosine(distA, distC, distB) > lawOfCosine(distBallToC, distBallToA, distB)){
-    				
-    				return true;
-    				
-    			} else return false;
+                        //Is Alpha greater?
+                        return lawOfCosine(distA, distC, distB) > lawOfCosine(distBallToC, distBallToA, distB);
     		} else return false;
     	} else return false;
     }
