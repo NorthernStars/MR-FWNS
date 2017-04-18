@@ -49,10 +49,5 @@ class TestScenario {
 		return rawWorldData;
 	}
 	
-	/*static BotInformation testBotInfo(){
-		
-		return null;
-	}*/
-	
 	
 }
