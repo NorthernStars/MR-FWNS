@@ -85,7 +85,20 @@ public class PositionLibTests {
 
 	@Test
 	public void testGetMiddleOfOwnGoal() {
-		fail("Not yet implemented");
+            RawWorldData testWorldData = TestScenario.getExampleWorldModel(
+                    TestScenario.xmlExampleWorldData
+            );
+            ReferencePoint returnValue;
+            
+            returnValue = PositionLib.getMiddleOfOwnGoal(testWorldData, Teams.Yellow);
+            assertThat(returnValue).isExactlyInstanceOf(ReferencePoint.class);
+            assertThat(((ReferencePoint) returnValue).getXOfPoint()).isCloseTo(-128.0, withinPercentage(1));
+            assertThat(((ReferencePoint) returnValue).getYOfPoint()).isCloseTo(-35.0, withinPercentage(1));
+            
+            returnValue = PositionLib.getMiddleOfOwnGoal(testWorldData, Teams.Blue);
+            assertThat(returnValue).isExactlyInstanceOf(ReferencePoint.class);
+            assertThat(((ReferencePoint) returnValue).getXOfPoint()).isCloseTo(653.0, withinPercentage(1));
+            assertThat(((ReferencePoint) returnValue).getYOfPoint()).isCloseTo(-35.0, withinPercentage(1));
 	}
 
 	@Test
