@@ -49,5 +49,8 @@ class TestScenario {
 		return rawWorldData;
 	}
 	
-	
+	static RawWorldData getExampleWorldModel(String xmlString)
+        {
+            return RawWorldData.createRawWorldDataFromXML(xmlString);
+        }
 }
