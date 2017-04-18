@@ -191,7 +191,14 @@ public class PositionLibTests {
 
 	@Test
 	public void testIsMeselfOutOfBounds() {
-		fail("Not yet implemented");
+            RawWorldData testWorldData = TestScenario.getExampleWorldModel(
+                    TestScenario.xmlExampleWorldData
+            );
+            Boolean result;
+            
+            result = PositionLib.isMeselfOutOfBounds(testWorldData);
+            assertThat(result).isExactlyInstanceOf(Boolean.class);
+            assertThat(((Boolean) result).booleanValue()).isEqualTo(true);
 	}
 
 	@Test
