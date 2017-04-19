@@ -146,7 +146,7 @@ public class ReferencePoint{
     
     public void setYOfPoint( double aYValue ) {
 
-        mX = aYValue;
+        mY = aYValue;
         set( mX, mY, false );
         
     }
