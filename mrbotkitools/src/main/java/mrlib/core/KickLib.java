@@ -24,7 +24,7 @@ public class KickLib {
 	 * @return Action	 returns a {@link essentials.communication.action_server2008.Kick} with given angle and force
 	 */
 	public static Action kickTo( double aAngle, float aForce ){
-		return (Action) new Kick( aAngle, aForce );
+		return new Kick( aAngle, aForce );
 	}
 	
 	/**
@@ -88,6 +88,7 @@ public class KickLib {
 	 * Kick to nearest opponent.
 	 * @param aWorldData	{@link RawWorldData}
 	 * @return Action		{@link Action}
+	 * @deprecated			Questionable sense
 	 */
 	@Deprecated
 	public static Action kickToNearestOpponent( RawWorldData aWorldData ){
@@ -141,7 +142,7 @@ public class KickLib {
             
         }
 
-        return (Action) Movement.NO_MOVEMENT;        
+        return  Movement.NO_MOVEMENT;        
     }
 	
 }
