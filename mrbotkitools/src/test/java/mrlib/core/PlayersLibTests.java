@@ -202,7 +202,6 @@ public class PlayersLibTests {
 
 	@Test
 	public void testNearestMateToBall() {
-		//fail("Not yet implemented");
 		FellowPlayer mateWithBalls = PlayersLib.nearestMateToBall(worldModel);
 		
 		assertThat(mateWithBalls.getDistanceToPlayer()).isCloseTo(TestScenario.fellow1Distance, withinPercentage(0.1));
@@ -329,6 +328,7 @@ public class PlayersLibTests {
 		Boolean testBool = PlayersLib.isSpecificEnemyInAngleBetweenTwoRefPoints(o1, testRefPoint1, testRefPoint2);
 		assertThat(testBool).isEqualTo(true);
 		
+		//Case 2: Player not in corridor angle
 		testRefPoint1.set(new ReferencePoint(0, TestScenario.opponent1Angle -20, true));
 		testRefPoint2.set(new ReferencePoint(0, TestScenario.opponent1Angle -30, true));
 		

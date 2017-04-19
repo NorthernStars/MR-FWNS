@@ -202,6 +202,7 @@ public class PlayersLib {
      * @param vWorldState	{@link RawWorldData} from the Server
      * @param mSelf			{@link BotInformation} of the agent
      * @return 				Teammate {@link FellowPlayer} with a enemy around but the enemy furthest away
+     * @deprecated 			functionality unclear
      */
 	@Deprecated //TODO: Check if function is necessary
 	public static FellowPlayer getMateWithEnemyNearButFurthestAway(RawWorldData vWorldState, BotInformation mSelf){
@@ -345,7 +346,7 @@ public class PlayersLib {
 		double dMate = teammate.sub( ballPos ).getDistanceToPoint();
 		double dOpponent = opponent.sub( ballPos ).getDistanceToPoint();
 		
-		return ( dMate < dOpponent ? teammate : opponent );
+		return  dMate < dOpponent ? teammate : opponent ;
 	}
 	
 	/**
@@ -455,22 +456,15 @@ public class PlayersLib {
 		}
 		if(Math.abs(ref1Angle-ref2Angle) > 180){
 			
-				if(enemy.getAngleToPlayer() <= ref2Angle && enemy.getAngleToPlayer() >= -180 || enemy.getAngleToPlayer() >= ref1Angle && enemy.getAngleToPlayer() <= 180){
-					return true;
-				}
-				else{
-					return false;
-				}
-			
+
+				return(enemy.getAngleToPlayer() <= ref2Angle && enemy.getAngleToPlayer() >= -180 
+						|| enemy.getAngleToPlayer() >= ref1Angle && enemy.getAngleToPlayer() <= 180);
+				
+				
 		}
 		else{
 			
-				if(enemy.getAngleToPlayer() >= ref2Angle && enemy.getAngleToPlayer() <= ref1Angle){
-					return true;
-				}
-				else{
-				return false;
-				}
+				return(enemy.getAngleToPlayer() >= ref2Angle && enemy.getAngleToPlayer() <= ref1Angle);
 			
 		}
 		
