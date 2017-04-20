@@ -17,7 +17,7 @@ import essentials.core.ArtificialIntelligence;
 import fwns_network.server_2008.NetworkCommunication;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Core.class})
+@PrepareForTest({Core.class, FromServerManagement.class})
 @PowerMockIgnore({"javax.management.*"})
 public class FromServerManagementTest {
 
@@ -164,10 +164,35 @@ public class FromServerManagementTest {
 		verify(mLoggerMock).info("FromServerManagement stopped.");
 		
 	}
-
+	
 	@Test
-	public void testClose() {
-		fail("Not yet implemented");
+	public void testCloseWhenNotAlive() {
+		FromServerManagement vSaveToCompare = FromServerManagement.getInstance();
+				
+		assertThat(vSaveToCompare.isAlive()).isFalse();
+		vSaveToCompare.close();
+		assertThat(vSaveToCompare.isAlive()).isFalse();
+		verify(mLoggerMock).info("FromServerManagement closed.");
+		
+		assertThat(vSaveToCompare).isNotEqualTo(FromServerManagement.getInstance());
+		
+	}
+	
+	@Test
+	public void testCloseWhenAlive() {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( null );
+
+		FromServerManagement vSaveToCompare = FromServerManagement.getInstance();
+		
+		vSaveToCompare.startManagement();
+		
+		vSaveToCompare.close();
+		assertThat(vSaveToCompare.isAlive()).isFalse();
+		verify(mLoggerMock).info("FromServerManagement closed.");
+		
+		assertThat(vSaveToCompare).isNotEqualTo(FromServerManagement.getInstance());
+		
 	}
 
 	@Test
