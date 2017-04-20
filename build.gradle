@@ -9,7 +9,7 @@ sonarqube {
     properties {
         property "sonar.projectName", "MixedReality :: Client"
         property "sonar.projectKey", "werthersechte-github:mrClient"
-        property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
+        property "sonar.jacoco.reportPaths", "${project.buildDir}/jacoco/test.exec"
     }
 }
 
