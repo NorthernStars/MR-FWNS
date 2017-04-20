@@ -99,13 +99,15 @@ public class FromServerManagement extends Thread{
 		
 	    }
 	    if( isAlive()){
-	          
+	        
+	    	mSuspended = false;
+	    	
 	        while(isAlive()){ 
     		    try {
                     Thread.sleep( 10 );
-                } catch ( InterruptedException e ) {
+                } catch ( Exception vException ) {
     
-                    Core.getLogger().error( "Error stopping FromServerManagement.", e );
+                    Core.getLogger().error( "Error stopping FromServerManagement.", vException );
     
                 } 
 	        }
