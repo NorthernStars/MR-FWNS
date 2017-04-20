@@ -190,6 +190,7 @@ public class FromServerManagement extends Thread{
 	}
 	
 
+	//TODO: This is not tested and pretty bad -> make it better
     boolean mStatusChanged = false;
     private void notifyControlServer(){
     	if( (System.currentTimeMillis() - mLastReceivedMessage.get() ) > 132 && mStatusChanged ){
