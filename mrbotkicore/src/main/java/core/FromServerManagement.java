@@ -15,7 +15,7 @@ import fwns_network.botremotecontrol.BotStatusType;
 @ThreadSafe
 public class FromServerManagement extends Thread{
 
-    private static FromServerManagement INSTANCE;
+    private static FromServerManagement sINSTANCE;
     
     FromServerManagement(){
         
@@ -25,20 +25,20 @@ public class FromServerManagement extends Thread{
 
     public static FromServerManagement getInstance() {
         
-        if( FromServerManagement.INSTANCE == null){
-            FromServerManagement.INSTANCE = new FromServerManagement();
+        if( FromServerManagement.sINSTANCE == null){
+            FromServerManagement.sINSTANCE = new FromServerManagement();
         }
         
-        return FromServerManagement.INSTANCE;
+        return FromServerManagement.sINSTANCE;
         
     }
     
     public void close(){
         
-        if(FromServerManagement.INSTANCE != null) {
+        if(FromServerManagement.sINSTANCE != null) {
             
             getInstance().stopManagement();
-            FromServerManagement.INSTANCE = null;
+            FromServerManagement.sINSTANCE = null;
             Core.getLogger().info( "FromServerManagement closed." );
             
         }
