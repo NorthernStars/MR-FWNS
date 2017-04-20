@@ -408,10 +408,21 @@ public class FromServerManagementTest {
 		mSUT.startManagement();
 		
 		assertThat(mSUT.isAlive()).isTrue();
+		await().atMost(2, SECONDS).untilAsserted(()->verify(mArtificialIntelligenceMock, atLeast(1)).putWorldState(vTestData));
+	}
 
-		await().atMost(2, SECONDS).untilAsserted(()->verify(mArtificialIntelligenceMock, atLeast(1)).putWorldState(new RawWorldData()));
+	@Test
+	public void testLoseServerConnectionWhileRecievingMessages() throws Exception {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( mArtificialIntelligenceMock );
+		doReturn(new RawWorldData().toXMLString()).when(mNetworkCommunicationMock).getDatagramm(1000);
+		
+		mSUT.startManagement();
+		
+		assertThat(mSUT.isAlive()).isTrue();
+		when(mCoreMock.getServerConnection()).thenReturn( null );
+		assertThat(mSUT.isAlive()).isTrue();
+		await().atMost(2, SECONDS).untilAsserted(()->verify(mLoggerMock, atLeast(1)).debug( "NetworkCommunication cannot be NULL when running FromServerManagement." ));
 	}
 	
-	
-
 }
