@@ -25,6 +25,7 @@ import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import essentials.communication.WorldData;
 import essentials.communication.worlddata_server2008.RawWorldData;
 import essentials.core.ArtificialIntelligence;
 import fwns_network.server_2008.NetworkCommunication;
@@ -383,5 +384,34 @@ public class FromServerManagementTest {
 		await().atMost(2, SECONDS).untilAsserted(()->verify(mLoggerMock, atLeast(1)).error("Error receiving messages from server null"));
 		verify(mLoggerMock, atLeast(1)).catching( Level.ERROR, vTestException);
 	}
+
+	@Test
+	public void testRecieveMessagesWithoutAI() throws Exception {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( null );
+		
+		mSUT.startManagement();
+		
+		assertThat(mSUT.isAlive()).isTrue();
+		await().atMost(2, SECONDS).untilAsserted(()->assertThat(mSUT.isReceivingMessages()).isFalse());
+
+		await().atMost(2, SECONDS).untilAsserted(()->verify(mLoggerMock, atLeast(1)).debug( "Without actual AI all messages from the server will be discarded." ));
+	}
+
+	@Test
+	public void testRecieveMessagesWithAI() throws Exception {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( mArtificialIntelligenceMock );
+		WorldData vTestData = RawWorldData.createRawWorldDataFromXML("<rawWorldData><time>0</time><agent_id>20</agent_id><nickname>TestBot</nickname><status>found</status></rawWorldData>");
+		doReturn(((RawWorldData)vTestData).toXMLString()).when(mNetworkCommunicationMock).getDatagramm(1000);
+		
+		mSUT.startManagement();
+		
+		assertThat(mSUT.isAlive()).isTrue();
+
+		await().atMost(2, SECONDS).untilAsserted(()->verify(mArtificialIntelligenceMock, atLeast(1)).putWorldState(new RawWorldData()));
+	}
+	
+	
 
 }

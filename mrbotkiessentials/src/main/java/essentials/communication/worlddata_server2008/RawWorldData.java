@@ -275,7 +275,91 @@ public class RawWorldData implements WorldData{
                 + ", mReferencePoints=" + mReferencePoints + "]";
     }
     
-    
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + mAgentId;
+		result = prime * result
+				+ ((mAgentNickname == null) ? 0 : mAgentNickname.hashCode());
+		result = prime * result
+				+ ((mAgentStatus == null) ? 0 : mAgentStatus.hashCode());
+		result = prime * result
+				+ ((mBallPosition == null) ? 0 : mBallPosition.hashCode());
+		result = prime
+				* result
+				+ ((mListOfOpponents == null) ? 0 : mListOfOpponents.hashCode());
+		result = prime
+				* result
+				+ ((mListOfTeamMates == null) ? 0 : mListOfTeamMates.hashCode());
+		result = prime * result + mMaxNumberOfAgents;
+		result = prime * result
+				+ ((mPlayMode == null) ? 0 : mPlayMode.hashCode());
+		long temp;
+		temp = Double.doubleToLongBits(mPlayTime);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime
+				* result
+				+ ((mReferencePoints == null) ? 0 : mReferencePoints.hashCode());
+		result = prime * result + ((mScore == null) ? 0 : mScore.hashCode());
+		return result;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		RawWorldData other = (RawWorldData) obj;
+		if (mAgentId != other.mAgentId)
+			return false;
+		if (mAgentNickname == null) {
+			if (other.mAgentNickname != null)
+				return false;
+		} else if (!mAgentNickname.equals(other.mAgentNickname))
+			return false;
+		if (mAgentStatus == null) {
+			if (other.mAgentStatus != null)
+				return false;
+		} else if (!mAgentStatus.equals(other.mAgentStatus))
+			return false;
+		if (mBallPosition == null) {
+			if (other.mBallPosition != null)
+				return false;
+		} else if (!mBallPosition.equals(other.mBallPosition))
+			return false;
+		if (mListOfOpponents == null) {
+			if (other.mListOfOpponents != null)
+				return false;
+		} else if (!mListOfOpponents.equals(other.mListOfOpponents))
+			return false;
+		if (mListOfTeamMates == null) {
+			if (other.mListOfTeamMates != null)
+				return false;
+		} else if (!mListOfTeamMates.equals(other.mListOfTeamMates))
+			return false;
+		if (mMaxNumberOfAgents != other.mMaxNumberOfAgents)
+			return false;
+		if (mPlayMode != other.mPlayMode)
+			return false;
+		if (Double.doubleToLongBits(mPlayTime) != Double
+				.doubleToLongBits(other.mPlayTime))
+			return false;
+		if (mReferencePoints == null) {
+			if (other.mReferencePoints != null)
+				return false;
+		} else if (!mReferencePoints.equals(other.mReferencePoints))
+			return false;
+		if (mScore == null) {
+			if (other.mScore != null)
+				return false;
+		} else if (!mScore.equals(other.mScore))
+			return false;
+		return true;
+	}
 	
 }
 /*
