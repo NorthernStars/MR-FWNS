@@ -35,8 +35,6 @@ public class FromServerManagementTest {
 		when(Core.getInstance()).thenReturn(mCoreMock);
 		when(Core.getLogger()).thenReturn(mLoggerMock);
 		
-		
-		
 		mSUT = new FromServerManagement();
 	}
 
@@ -90,18 +88,58 @@ public class FromServerManagementTest {
 	}
 
 	@Test
-	public void testStart() {
-		fail("Not yet implemented");
+	public void testStartWithoutNetworkConnection() {
+		when(mCoreMock.getServerConnection()).thenReturn( null );
+		
+		try{
+			mSUT.start();
+			fail("Expected Nullpointerexception");
+		} catch( Exception vExpectedException ) {
+			assertThat(vExpectedException).isInstanceOf(NullPointerException.class);
+			assertThat(vExpectedException.getMessage()).isEqualToIgnoringCase( "NetworkCommunication cannot be NULL when starting FromServerManagement." );
+		}
 	}
 
 	@Test
-	public void testRun() {
-		fail("Not yet implemented");
+	public void testStartWithNetworkConnectionAndNotAlive() {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( null );
+		
+		mSUT.start();
+		
+		assertThat(mSUT.isAlive()).isTrue();
+		verify(mLoggerMock).info("FromServerManagement started.");
+			
+	}
+
+	@Test
+	public void testStartWithNetworkConnectionAndAlive() {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( null );
+		
+		mSUT.start();
+		
+		try{
+			mSUT.startManagement();
+			fail("Expected IllegalThreadStateException");
+		} catch( Exception vExpectedException ) {
+			assertThat(vExpectedException).isInstanceOf(IllegalThreadStateException.class);
+			assertThat(vExpectedException.getMessage()).isEqualToIgnoringCase( "FromServerManagement can not be started again." );
+		}
+			
+	}
+
+	@Test
+	public void testNameOfThread() {
+		assertThat(mSUT.getName()).isEqualToIgnoringCase("FromServerManagement");
 	}
 
 	@Test
 	public void testGetInstance() {
-		fail("Not yet implemented");
+		FromServerManagement vSaveToCompare = FromServerManagement.getInstance();
+		
+		assertThat(vSaveToCompare).isInstanceOf(FromServerManagement.class);
+		assertThat(vSaveToCompare).isEqualTo(FromServerManagement.getInstance());
 	}
 
 	@Test
