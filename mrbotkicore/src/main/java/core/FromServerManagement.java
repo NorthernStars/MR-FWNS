@@ -185,7 +185,7 @@ public class FromServerManagement extends Thread{
 
     public boolean isReceivingMessages(){
         
-        return (isAlive() && (System.currentTimeMillis() - mLastReceivedMessage.get()) < 100);
+        return isAlive() && (System.currentTimeMillis() - mLastReceivedMessage.get()) < 100;
         
     }
     
