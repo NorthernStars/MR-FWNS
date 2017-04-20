@@ -33,12 +33,16 @@ public class FromServerManagement extends Thread{
         
     }
     
+    private static synchronized void setInstanceNull(){
+    	FromServerManagement.sINSTANCE = null;
+    }
+    
     public void close(){
         
         if(FromServerManagement.sINSTANCE != null) {
             
             getInstance().stopManagement();
-            FromServerManagement.sINSTANCE = null;
+            setInstanceNull();
             Core.getLogger().info( "FromServerManagement closed." );
             
         }
