@@ -9,7 +9,9 @@ sonarqube {
     properties {
         property "sonar.projectName", "MixedReality :: Client"
         property "sonar.projectKey", "werthersechte-github:mrClient"
-        property "sonar.jacoco.reportPaths", "${project.buildDir}/jacoco/test.exec"
+        property "sonar.jacoco.reportPaths", "${rootProject.buildDir}/jacoco/test.exec"
+		property "sonar.projectVersion", "1.0"
+		property "sonar.tests", "junit"
     }
 }
 
@@ -45,7 +47,6 @@ allprojects {
     }
     
 }
-
 project(':mrbotkicore'){
 
 	apply plugin: 'application'
