@@ -47,7 +47,7 @@ public class FromServerManagement extends Thread{
 
     @GuardedBy("this") private boolean mManageMessagesFromServer = false;
     @GuardedBy("this") private boolean mSuspended = false;
-    volatile private AtomicLong mLastReceivedMessage = new AtomicLong( 0 );
+    private volatile AtomicLong mLastReceivedMessage = new AtomicLong( 0 );
 
     public void resumeManagement(){
         
