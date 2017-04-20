@@ -3,13 +3,13 @@ package core;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.atomic.AtomicLong;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
 import org.apache.logging.log4j.Level;
 
 import remotecontrol.RemoteControlServer;
-import net.jcip.annotations.GuardedBy;
-import net.jcip.annotations.ThreadSafe;
 import essentials.communication.WorldDataInterpreter;
-import essentials.communication.worlddata_server2008.RawWorldData;
 import fwns_network.botremotecontrol.BotStatusType;
 
 @ThreadSafe
@@ -17,7 +17,7 @@ public class FromServerManagement extends Thread{
 
     private static FromServerManagement INSTANCE;
     
-    private FromServerManagement(){
+    FromServerManagement(){
         
         this.setName( "FromServerManagement" );
         
@@ -83,7 +83,7 @@ public class FromServerManagement extends Thread{
 			
 		} else {
 			
-			throw new NullPointerException( "NetworkCommunication cannot be NULL when starting FromServerManagement." ) ;
+			throw new NullPointerException( "NetworkCommunication cannot be NULL when starting FromServerManagement." ) ; //TODO: do not throw when thread has already started! Throw something else
 			
 		}
 		
@@ -113,6 +113,7 @@ public class FromServerManagement extends Thread{
 		
 	}
 	
+	@Override
 	public void run(){
 		
         boolean vStatusChanged = false;
