@@ -40,6 +40,7 @@ allprojects {
         testCompile 'org.mockito:mockito-core:1.+'
         testCompile 'org.powermock:powermock-mockito-release-full:1.+'
         testCompile 'org.assertj:assertj-core:3.+'
+        testCompile 'org.awaitility:awaitility:3.+'
     }
 
     test {

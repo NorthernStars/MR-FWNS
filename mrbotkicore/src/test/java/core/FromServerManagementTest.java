@@ -1,6 +1,9 @@
 package core;
 
 import static org.mockito.Mockito.*;
+import static org.awaitility.Awaitility.*;
+import static org.awaitility.Duration.*;
+import static java.util.concurrent.TimeUnit.*;
 
 import java.io.IOException;
 import java.net.SocketException;
@@ -303,9 +306,8 @@ public class FromServerManagementTest {
 		
 		mSUT.startManagement();
 		
-		Thread.sleep(100); //TODO: better
 		assertThat(mSUT.isAlive()).isTrue();
-		assertThat(mSUT.isReceivingMessages()).isTrue();
+		await().atMost(2, SECONDS).untilAsserted(()->assertThat(mSUT.isReceivingMessages()).isTrue());
 	}
 
 
