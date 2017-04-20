@@ -8,14 +8,18 @@ import static java.util.concurrent.TimeUnit.*;
 import java.io.IOException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.util.concurrent.TimeoutException;
 
 import static org.assertj.core.api.Assertions.*;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.BDDMockito.Then;
+import org.mockito.internal.stubbing.answers.ThrowsException;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -175,6 +179,21 @@ public class FromServerManagementTest {
 	}
 	
 	@Test
+	public void testStopManagementWhenAliveAndSuspended() {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( null );
+		
+		mSUT.suspendManagement();
+		mSUT.startManagement();
+		assertThat(mSUT.isAlive()).isTrue();
+		
+		mSUT.stopManagement();
+		assertThat(mSUT.isAlive()).isFalse();
+		verify(mLoggerMock).info("FromServerManagement stopped.");
+		
+	}
+	
+	@Test
 	public void testCloseWhenNotAlive() {
 		FromServerManagement vSaveToCompare = FromServerManagement.getInstance();
 				
@@ -310,5 +329,59 @@ public class FromServerManagementTest {
 		await().atMost(2, SECONDS).untilAsserted(()->assertThat(mSUT.isReceivingMessages()).isTrue());
 	}
 
+	@Test
+	public void testRunWithoutStart() throws Exception {
+		assertThat(mSUT.isAlive()).isFalse();
+		mSUT.run();
+		assertThat(mSUT.isAlive()).isFalse();
+		assertThat(mSUT.isReceivingMessages()).isFalse();
+	}
+
+	@Test
+	public void testRunWhileSuspended() throws Exception {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( mArtificialIntelligenceMock );
+		doReturn(new RawWorldData().toXMLString()).when(mNetworkCommunicationMock).getDatagramm(1000);
+		
+		mSUT.suspendManagement();
+		mSUT.startManagement();
+		
+		assertThat(mSUT.isAlive()).isTrue();
+		await().atMost(2, SECONDS).untilAsserted(()->assertThat(mSUT.isReceivingMessages()).isFalse());
+	}
+
+	@Test
+	public void testRunWithSocketTimeOut() throws Exception {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( mArtificialIntelligenceMock );
+		
+		SocketTimeoutException vTestException = new SocketTimeoutException();
+		when(mNetworkCommunicationMock.getDatagramm(1000)).thenThrow(vTestException);
+		
+		mSUT.startManagement();
+		
+		assertThat(mSUT.isAlive()).isTrue();
+		await().atMost(2, SECONDS).untilAsserted(()->assertThat(mSUT.isReceivingMessages()).isFalse());
+
+		await().atMost(2, SECONDS).untilAsserted(()->verify(mLoggerMock, atLeast(1)).error("Receiving no messages from server null"));
+		verify(mLoggerMock, atLeast(1)).catching( Level.ERROR, vTestException);
+	}
+
+	@Test
+	public void testRunWithGenericException() throws Exception {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( mArtificialIntelligenceMock );
+		
+		NullPointerException vTestException = new NullPointerException();
+		when(mNetworkCommunicationMock.getDatagramm(1000)).thenThrow(vTestException);
+		
+		mSUT.startManagement();
+		
+		assertThat(mSUT.isAlive()).isTrue();
+		await().atMost(2, SECONDS).untilAsserted(()->assertThat(mSUT.isReceivingMessages()).isFalse());
+
+		await().atMost(2, SECONDS).untilAsserted(()->verify(mLoggerMock, atLeast(1)).error("Error receiving messages from server null"));
+		verify(mLoggerMock, atLeast(1)).catching( Level.ERROR, vTestException);
+	}
 
 }
