@@ -1,5 +1,7 @@
 package core;
 
+import java.io.IOException;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -131,40 +133,19 @@ public class FromServerManagement extends Thread{
 	@Override
 	public void run(){
 		
-        boolean vStatusChanged = false;
 	    
 		while( mManageMessagesFromServer ){
-			
-		    while( mSuspended ){ try { this.wait( 10 ); } catch ( InterruptedException e ) { e.printStackTrace(); } }
 		    
 			try {
 			
-				if( Core.getInstance().getAI() != null ) {
-					
-					if( Core.getInstance().getServerConnection() != null ) {
-						
-					    Core.getInstance().getAI().putWorldState( WorldDataInterpreter.unmarshall( Core.getInstance().getServerConnection().getDatagramm( 1000 ) ) );
-						mLastReceivedMessage.set( System.currentTimeMillis() );
-						vStatusChanged = false;
-						
-					} else {
-						
-					    Core.getLogger().debug( "NetworkCommunication cannot be NULL when running FromServerManagement." ) ;
-						
-					}
-					
-				} else {
-					
-				    Core.getLogger().debug( "Without actual AI all messages from the server will be discarded." );
-					
-				}
+				recieveMessages();
 				
 			} catch ( SocketTimeoutException vSocketTimeoutException ) {
                 
 			    Core.getLogger().error( "Receiving no messages from server " + vSocketTimeoutException.getLocalizedMessage() );
 	            Core.getLogger().catching( Level.ERROR, vSocketTimeoutException );
 	            
-		        RemoteControlServer.getInstance().changedStatus( BotStatusType.NetworkIncomingTraffic );
+	            mStatusChanged = true;
                 
             } catch ( Exception vException ) {
                 
@@ -173,15 +154,50 @@ public class FromServerManagement extends Thread{
                 
             }
 			
-			if( (System.currentTimeMillis() - mLastReceivedMessage.get() ) > 132 ){ //TODO: dynamisch mit der Zeit eines Ticks verbinden
-                
-                if( !vStatusChanged ){RemoteControlServer.getInstance().changedStatus( BotStatusType.NetworkOutgoingTraffic ); vStatusChanged = true;}
-                
-            }
+			notifyControlServer();
+			
+		    while( mSuspended && mManageMessagesFromServer ){ 
+		    	try { 
+		    		Thread.sleep( 10 ); 
+		    	} catch ( Exception vException ) {
+		    		Core.getLogger().error( "Error while suspending FromServerManagement.", vException );
+		    	} 
+		    }
 			
 		}
 		
 	}
+
+	private void recieveMessages() throws IOException {
+		if( Core.getInstance().getAI() != null ) {
+			
+			if( Core.getInstance().getServerConnection() != null ) {
+				
+			    Core.getInstance().getAI().putWorldState( WorldDataInterpreter.unmarshall( Core.getInstance().getServerConnection().getDatagramm( 1000 ) ) );
+				mLastReceivedMessage.set( System.currentTimeMillis() );
+				mStatusChanged = true;
+				
+			} else {
+				
+			    Core.getLogger().debug( "NetworkCommunication cannot be NULL when running FromServerManagement." ) ;
+				
+			}
+			
+		} else {
+			
+		    Core.getLogger().debug( "Without actual AI all messages from the server will be discarded." );
+			
+		}
+	}
+	
+
+    boolean mStatusChanged = false;
+    private void notifyControlServer(){
+    	if( (System.currentTimeMillis() - mLastReceivedMessage.get() ) > 132 && mStatusChanged ){
+    		RemoteControlServer.getInstance().changedStatus( BotStatusType.NetworkIncomingTraffic ); 
+    		mStatusChanged = false;
+        }
+    }
 
     public boolean isReceivingMessages(){
         
