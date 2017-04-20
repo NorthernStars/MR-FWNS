@@ -18,7 +18,6 @@ import org.apache.logging.log4j.core.config.LoggerConfig;
 import core.Core;
 import core.FromServerManagement;
 import core.ToServerManagement;
-
 import essentials.core.BotInformation;
 import fwns_network.botremotecontrol.BotStatusType;
 import fwns_network.botremotecontrol.LogListener;

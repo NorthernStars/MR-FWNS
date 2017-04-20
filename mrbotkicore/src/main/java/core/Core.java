@@ -7,14 +7,14 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import remotecontrol.RemoteControlServer;
-
-import net.jcip.annotations.GuardedBy;
-import net.jcip.annotations.ThreadSafe;
 import essentials.core.ArtificialIntelligence;
 import essentials.core.BotInformation;
 import fwns_network.botremotecontrol.BotStatusType;

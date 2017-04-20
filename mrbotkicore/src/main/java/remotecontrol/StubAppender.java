@@ -18,7 +18,8 @@ public final class StubAppender extends AbstractAppender {
         super(name, filter, layout);
     }
 
-    public void append(LogEvent event) {
+    @Override
+	public void append(LogEvent event) {
         RemoteControlServer.getInstance().writeToLoglistener( event );
     }
 

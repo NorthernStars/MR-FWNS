@@ -8,7 +8,6 @@ import net.jcip.annotations.ThreadSafe;
 import org.apache.logging.log4j.Level;
 
 import remotecontrol.RemoteControlServer;
-
 import essentials.communication.Action;
 import essentials.communication.action_server2008.Movement;
 import fwns_network.botremotecontrol.BotStatusType;
@@ -117,6 +116,7 @@ public class ToServerManagement extends Thread{
 		
 	}
 	
+	@Override
 	public void run(){
 	    
 	    Action vCurrentAction = null, vOldAction = null;
@@ -144,7 +144,7 @@ public class ToServerManagement extends Thread{
 						
 					} else {
 
-					    Core.getInstance().getServerConnection().sendDatagramm( (Action) Movement.NO_MOVEMENT );
+					    Core.getInstance().getServerConnection().sendDatagramm( Movement.NO_MOVEMENT );
 						Core.getLogger().debug( "Without actual AI only empty messages will be sent to the Server." );
 						if( !vStatusChanged ){RemoteControlServer.getInstance().changedStatus( BotStatusType.NetworkOutgoingTraffic ); vStatusChanged = true;}
 												
