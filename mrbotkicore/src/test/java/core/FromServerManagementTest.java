@@ -54,7 +54,7 @@ public class FromServerManagementTest {
 		try{
 			mSUT.startManagement();
 			fail("Expected Nullpointerexception");
-		} catch( NullPointerException vExpectedException ) {
+		} catch( Exception vExpectedException ) {
 			assertThat(vExpectedException).isInstanceOf(NullPointerException.class);
 			assertThat(vExpectedException.getMessage()).isEqualToIgnoringCase( "NetworkCommunication cannot be NULL when starting FromServerManagement." );
 		}
@@ -81,10 +81,10 @@ public class FromServerManagementTest {
 		
 		try{
 			mSUT.startManagement();
-			fail("Expected Nullpointerexception");
-		} catch( NullPointerException vExpectedException ) {
-			assertThat(vExpectedException).isInstanceOf(NullPointerException.class);
-			assertThat(vExpectedException.getMessage()).isEqualToIgnoringCase( "NetworkCommunication cannot be NULL when starting FromServerManagement." );
+			fail("Expected IllegalThreadStateException");
+		} catch( Exception vExpectedException ) {
+			assertThat(vExpectedException).isInstanceOf(IllegalThreadStateException.class);
+			assertThat(vExpectedException.getMessage()).isEqualToIgnoringCase( "FromServerManagement can not be started again." );
 		}
 			
 	}

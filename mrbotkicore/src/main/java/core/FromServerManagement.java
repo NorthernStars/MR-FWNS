@@ -70,9 +70,17 @@ public class FromServerManagement extends Thread{
 		
 	}
 	
-	public void startManagement() throws NullPointerException{
+	public void startManagement(){
 
-		if( Core.getInstance().getServerConnection() != null && !isAlive() ) {
+		if( Core.getInstance().getServerConnection() == null ) {
+			
+			throw new NullPointerException( "NetworkCommunication cannot be NULL when starting FromServerManagement." ) ;
+			
+		} else if ( isAlive() ){
+			
+			throw new IllegalThreadStateException( "FromServerManagement can not be started again." );
+			
+		} else {
 			synchronized (this) {
 			    
 			    mManageMessagesFromServer = true;
@@ -80,11 +88,6 @@ public class FromServerManagement extends Thread{
 			}
 			super.start();
 	        Core.getLogger().info( "FromServerManagement started." );
-			
-		} else {
-			
-			throw new NullPointerException( "NetworkCommunication cannot be NULL when starting FromServerManagement." ) ; //TODO: do not throw when thread has already started! Throw something else
-			
 		}
 		
 	}
