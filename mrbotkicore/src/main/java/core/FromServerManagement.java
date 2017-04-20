@@ -33,7 +33,7 @@ public class FromServerManagement extends Thread{
         
     }
     
-    private static synchronized void setInstanceNull(){
+    static synchronized void setInstanceNull(){
     	FromServerManagement.sINSTANCE = null;
     }
     
@@ -64,6 +64,12 @@ public class FromServerManagement extends Thread{
         
         Core.getLogger().info( "FromServerManagement suspended." );
         mSuspended = true;
+        
+    }
+    
+    public boolean isSuspended(){
+        
+        return mSuspended;
         
     }
 	

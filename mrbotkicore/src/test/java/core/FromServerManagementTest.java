@@ -1,6 +1,11 @@
 package core;
 
 import static org.mockito.Mockito.*;
+
+import java.io.IOException;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+
 import static org.assertj.core.api.Assertions.*;
 
 import org.apache.logging.log4j.Logger;
@@ -13,11 +18,12 @@ import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import essentials.communication.worlddata_server2008.RawWorldData;
 import essentials.core.ArtificialIntelligence;
 import fwns_network.server_2008.NetworkCommunication;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Core.class, FromServerManagement.class})
+@PrepareForTest({Core.class})
 @PowerMockIgnore({"javax.management.*"})
 public class FromServerManagementTest {
 
@@ -194,20 +200,113 @@ public class FromServerManagementTest {
 		assertThat(vSaveToCompare).isNotEqualTo(FromServerManagement.getInstance());
 		
 	}
-
+	
 	@Test
-	public void testResumeManagement() {
-		fail("Not yet implemented");
+	public void testCloseWhenNull() {
+
+		FromServerManagement vSaveToCompare = FromServerManagement.getInstance();
+		
+		FromServerManagement.setInstanceNull();
+		
+		vSaveToCompare.close();
+		assertThat(vSaveToCompare.isAlive()).isFalse();
+		
+		assertThat(vSaveToCompare).isNotEqualTo(FromServerManagement.getInstance());
+		
 	}
 
 	@Test
-	public void testSuspendManagement() {
-		fail("Not yet implemented");
+	public void testSuspendWhenNotAlive() {
+		
+		assertThat(mSUT.isSuspended()).isFalse();
+
+		mSUT.suspendManagement();		
+		
+		assertThat(mSUT.isSuspended()).isTrue();
+		verify(mLoggerMock).info("FromServerManagement suspended.");
+		
 	}
 
 	@Test
-	public void testIsReceivingMessages() {
-		fail("Not yet implemented");
+	public void testResumeWhenNotAlive() {
+
+		mSUT.suspendManagement();
+		
+		assertThat(mSUT.isSuspended()).isTrue();
+
+		mSUT.resumeManagement();		
+		
+		assertThat(mSUT.isSuspended()).isFalse();
+		verify(mLoggerMock).info("FromServerManagement resumed.");
+		
 	}
+
+	@Test
+	public void testSuspendWhenAlive() {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( null );
+		
+		mSUT.startManagement();
+		
+		assertThat(mSUT.isSuspended()).isFalse();
+
+		mSUT.suspendManagement();		
+		
+		assertThat(mSUT.isSuspended()).isTrue();
+		assertThat(mSUT.isAlive()).isTrue();
+		verify(mLoggerMock).info("FromServerManagement suspended.");
+		
+	}
+
+	@Test
+	public void testResumeWhenAlive() {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( null );
+		
+		mSUT.startManagement();
+
+		mSUT.suspendManagement();
+		
+		assertThat(mSUT.isSuspended()).isTrue();
+
+		mSUT.resumeManagement();		
+		
+		assertThat(mSUT.isSuspended()).isFalse();
+		assertThat(mSUT.isAlive()).isTrue();
+		verify(mLoggerMock).info("FromServerManagement resumed.");
+		
+	}
+
+	@Test
+	public void testIsReceivingMessagesWhenNotAlive() {
+		assertThat(mSUT.isAlive()).isFalse();
+		
+		assertThat(mSUT.isReceivingMessages()).isFalse();
+	}
+
+	@Test
+	public void testIsReceivingMessagesWhenAliveAndNoMessages() {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( null );
+		
+		mSUT.startManagement();
+		
+		assertThat(mSUT.isAlive()).isTrue();
+		assertThat(mSUT.isReceivingMessages()).isFalse();
+	}
+
+	@Test
+	public void testIsReceivingMessagesWhenAliveAndIncomingMessages() throws Exception {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( mArtificialIntelligenceMock );
+		doReturn(new RawWorldData().toXMLString()).when(mNetworkCommunicationMock).getDatagramm(1000);
+		
+		mSUT.startManagement();
+		
+		Thread.sleep(100); //TODO: better
+		assertThat(mSUT.isAlive()).isTrue();
+		assertThat(mSUT.isReceivingMessages()).isTrue();
+	}
+
 
 }
