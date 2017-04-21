@@ -9,24 +9,15 @@ public class Main {
         System.setProperty("Bot", ManagementFactory.getRuntimeMXBean().getName() + "" );
         Core.getLogger().info("Starting Bot(" + ManagementFactory.getRuntimeMXBean().getName() + ")" );
         
-        {
-            String vParameters = "";
-            
-            for ( String vParameter: aCommandline) {
-                
-                vParameters += vParameter + " ";
-                
-            }
-            
-            Core.getLogger().info("Parameters: " + vParameters);
+        StringBuilder vParameters = new StringBuilder();
+        for ( String vParameter: aCommandline) {
+            vParameters.append(vParameter).append(" "); 
         }
+        Core.getLogger().info("Parameters: " + vParameters.toString());
         
-        Core Botcore;
         try {
             
-            Botcore = Core.getInstance();
-            
-            Botcore.startBot( aCommandline );
+        	Core.getInstance().startBot( aCommandline );
             
         } catch ( Exception e ) {
 
