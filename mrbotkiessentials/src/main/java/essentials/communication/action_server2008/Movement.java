@@ -31,4 +31,29 @@ public class Movement implements Action {
 		return "<command> <wheel_velocities> <right>" + mRightWheelVelocity + "</right> <left>" + mLeftWheelVelocity + "</left> </wheel_velocities> </command>";
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + mLeftWheelVelocity;
+		result = prime * result + mRightWheelVelocity;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Movement other = (Movement) obj;
+		if (mLeftWheelVelocity != other.mLeftWheelVelocity)
+			return false;
+		if (mRightWheelVelocity != other.mRightWheelVelocity)
+			return false;
+		return true;
+	}
+
 }
