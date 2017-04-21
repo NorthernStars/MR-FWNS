@@ -457,6 +457,27 @@ public class ToServerManagementTest {
 	}
 
 	@Test
+	public void testSendNullMessagesWithAI() throws Exception {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( mArtificialIntelligenceMock );
+		when(mArtificialIntelligenceMock.getAction()).thenAnswer(new Answer<Action>() {
+			@Override
+			public Action answer(InvocationOnMock invocation) throws Throwable {
+				int vI = (int)(Math.random()*100)%2;
+				return Math.random()>0.5?null:new Movement(vI, vI);
+			}
+		});
+		
+		mSUT.startManagement();
+		
+		assertThat(mSUT.isAlive()).isTrue();
+		await().atMost(2, SECONDS).untilAsserted(()->verify(mNetworkCommunicationMock, atLeast(1)).sendDatagramm(new Movement(0,0)));
+		await().atMost(2, SECONDS).untilAsserted(()->verify(mNetworkCommunicationMock, atLeast(1)).sendDatagramm(new Movement(1,1)));
+		
+		verify(mNetworkCommunicationMock, never()).sendDatagramm((Action)null);
+	}
+
+	@Test
 	public void testLoseServerConnectionWhileSendingMessages() throws Exception {
 		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
 		when(mCoreMock.getAI()).thenReturn( mArtificialIntelligenceMock );
