@@ -53,12 +53,18 @@ public class ToServerManagement extends Thread{
     
 	@GuardedBy("this") private boolean mManageMessagesToServer = false;
     @GuardedBy("this") private boolean mSuspended = false;
-    volatile private AtomicLong mLastSendMessage = new AtomicLong( 0 );
+    private volatile AtomicLong mLastSendMessage = new AtomicLong( 0 );
 
     public void resumeManagement(){
         
         Core.getLogger().info( "ToServerManagement resumed." );
         mSuspended = false;
+        
+    }
+    
+    public boolean isSuspended(){
+        
+        return mSuspended;
         
     }
     
@@ -69,12 +75,6 @@ public class ToServerManagement extends Thread{
         
     }
     
-    public boolean isSuspended(){
-        
-        return mSuspended;
-        
-    }
-    
 	@Override
 	public void start(){
 		
@@ -82,7 +82,7 @@ public class ToServerManagement extends Thread{
 		
 	}
 	
-	public void startManagement() throws NullPointerException{
+	public void startManagement(){
 		
 		if( Core.getInstance().getServerConnection() == null ) {
 			
@@ -121,9 +121,9 @@ public class ToServerManagement extends Thread{
             while(isAlive()){ 
                 try {
                     Thread.sleep( 10 );
-                } catch ( InterruptedException e ) {
+                } catch ( Exception vException ) {
     
-                    Core.getLogger().error( "Error stopping ToServerManagement.", e );
+                    Core.getLogger().error( "Error stopping ToServerManagement.", vException );
                     
                 } 
             }
@@ -194,7 +194,7 @@ public class ToServerManagement extends Thread{
 	
 	public boolean isSendingMessages(){
 	    
-	    return (isAlive() && (System.currentTimeMillis() - mLastSendMessage.get() ) < 100);
+	    return isAlive() && (System.currentTimeMillis() - mLastSendMessage.get() ) < 100;
 	    
 	}
 	
