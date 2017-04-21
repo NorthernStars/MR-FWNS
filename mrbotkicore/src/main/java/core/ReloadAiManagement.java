@@ -2,7 +2,7 @@ package core;
 
 public class ReloadAiManagement extends Thread{
 
-    private static ReloadAiManagement INSTANCE;
+    private static ReloadAiManagement sINSTANCE;
     
     ReloadAiManagement(){
         
@@ -12,24 +12,27 @@ public class ReloadAiManagement extends Thread{
 
     public static ReloadAiManagement getInstance() {
         
-        if( ReloadAiManagement.INSTANCE == null){
-            ReloadAiManagement.INSTANCE = new ReloadAiManagement();
+        if( ReloadAiManagement.sINSTANCE == null){
+            ReloadAiManagement.sINSTANCE = new ReloadAiManagement();
         }
         
-        return ReloadAiManagement.INSTANCE;
+        return ReloadAiManagement.sINSTANCE;
         
+    }
+    
+    static synchronized void setInstanceNull(){
+    	ReloadAiManagement.sINSTANCE = null;
     }
     
     public void close(){
         
-        Core.getLogger().info( "RestartAiServerManagement closing." );
-        if( ReloadAiManagement.INSTANCE != null ) {
+        if( ReloadAiManagement.sINSTANCE != null ) {
             
             stopManagement();
-            ReloadAiManagement.INSTANCE = null;
+            setInstanceNull();
+            Core.getLogger().info( "RestartAiServerManagement closed." );
             
         }
-        Core.getLogger().info( "RestartAiServerManagement closed." );
         
     }
     

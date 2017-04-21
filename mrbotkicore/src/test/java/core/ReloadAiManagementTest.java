@@ -6,6 +6,7 @@ import static org.awaitility.Duration.*;
 import static java.util.concurrent.TimeUnit.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -111,5 +112,73 @@ public class ReloadAiManagementTest {
 		assertThat(vSaveToCompare).isInstanceOf(ReloadAiManagement.class);
 		assertThat(vSaveToCompare).isEqualTo(ReloadAiManagement.getInstance());
 	}
+	
+	@Test
+	public void testStopManagementWhenNotAlive() {
+		when(mCoreMock.getAI()).thenReturn( null );
+		
+		assertThat(mSUT.isAlive()).isFalse();
+		mSUT.stopManagement();
+		assertThat(mSUT.isAlive()).isFalse();
+		verify(mLoggerMock, never()).info("RestartAiServerManagement stopped.");
+		
+	}
+	
+	@Test
+	public void testStopManagementWhenAlive() {
+		when(mCoreMock.getAI()).thenReturn( null );
+		
+		mSUT.startManagement();
+		assertThat(mSUT.isAlive()).isTrue();
+		
+		mSUT.stopManagement();
+		assertThat(mSUT.isAlive()).isFalse();
+		verify(mLoggerMock).info("RestartAiServerManagement stopped.");
+		
+	}
+	
+	@Test
+	public void testCloseWhenNotAlive() {
+		ReloadAiManagement vSaveToCompare = ReloadAiManagement.getInstance();
+				
+		assertThat(vSaveToCompare.isAlive()).isFalse();
+		vSaveToCompare.close();
+		assertThat(vSaveToCompare.isAlive()).isFalse();
+		verify(mLoggerMock).info("RestartAiServerManagement closed.");
+		
+		assertThat(vSaveToCompare).isNotEqualTo(ReloadAiManagement.getInstance());
+		
+	}
+	
+	@Test
+	public void testCloseWhenAlive() {
+		when(mCoreMock.getAI()).thenReturn( null );
 
+		ReloadAiManagement vSaveToCompare = ReloadAiManagement.getInstance();
+		
+		vSaveToCompare.startManagement();
+		assertThat(vSaveToCompare.isAlive()).isTrue();
+		
+		vSaveToCompare.close();
+		assertThat(vSaveToCompare.isAlive()).isFalse();
+		verify(mLoggerMock).info("RestartAiServerManagement closed.");
+		
+		assertThat(vSaveToCompare).isNotEqualTo(ReloadAiManagement.getInstance());
+		
+	}
+	
+	@Test
+	public void testCloseWhenNull() {
+
+		ReloadAiManagement vSaveToCompare = ReloadAiManagement.getInstance();
+		
+		ReloadAiManagement.setInstanceNull();
+		
+		vSaveToCompare.close();
+		assertThat(vSaveToCompare.isAlive()).isFalse();
+		
+		assertThat(vSaveToCompare).isNotEqualTo(ReloadAiManagement.getInstance());
+		
+	}
+	
 }
