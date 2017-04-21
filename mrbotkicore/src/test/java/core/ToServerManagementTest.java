@@ -183,5 +183,49 @@ public class ToServerManagementTest {
 		verify(mLoggerMock).info("ToServerManagement stopped.");
 		
 	}
+	
+	@Test
+	public void testCloseWhenNotAlive() {
+		ToServerManagement vSaveToCompare = ToServerManagement.getInstance();
+				
+		assertThat(vSaveToCompare.isAlive()).isFalse();
+		vSaveToCompare.close();
+		assertThat(vSaveToCompare.isAlive()).isFalse();
+		verify(mLoggerMock).info("ToServerManagement closed.");
+		
+		assertThat(vSaveToCompare).isNotEqualTo(ToServerManagement.getInstance());
+		
+	}
+	
+	@Test
+	public void testCloseWhenAlive() {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( null );
+
+		ToServerManagement vSaveToCompare = ToServerManagement.getInstance();
+		
+		vSaveToCompare.startManagement();
+		
+		vSaveToCompare.close();
+		assertThat(vSaveToCompare.isAlive()).isFalse();
+		verify(mLoggerMock).info("ToServerManagement closed.");
+		
+		assertThat(vSaveToCompare).isNotEqualTo(ToServerManagement.getInstance());
+		
+	}
+	
+	@Test
+	public void testCloseWhenNull() {
+
+		ToServerManagement vSaveToCompare = ToServerManagement.getInstance();
+		
+		ToServerManagement.setInstanceNull();
+		
+		vSaveToCompare.close();
+		assertThat(vSaveToCompare.isAlive()).isFalse();
+		
+		assertThat(vSaveToCompare).isNotEqualTo(ToServerManagement.getInstance());
+		
+	}
 
 }
