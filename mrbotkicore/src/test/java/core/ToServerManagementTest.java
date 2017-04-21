@@ -144,5 +144,44 @@ public class ToServerManagementTest {
 		assertThat(vSaveToCompare).isInstanceOf(ToServerManagement.class);
 		assertThat(vSaveToCompare).isEqualTo(ToServerManagement.getInstance());
 	}
+	
+	@Test
+	public void testStopManagementWhenNotAlive() {
+		
+		assertThat(mSUT.isAlive()).isFalse();
+		mSUT.stopManagement();
+		assertThat(mSUT.isAlive()).isFalse();
+		verify(mLoggerMock, never()).info("ToServerManagement stopped.");
+		
+	}
+	
+	@Test
+	public void testStopManagementWhenAlive() {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( null );
+		
+		mSUT.startManagement();
+		assertThat(mSUT.isAlive()).isTrue();
+		
+		mSUT.stopManagement();
+		assertThat(mSUT.isAlive()).isFalse();
+		verify(mLoggerMock).info("ToServerManagement stopped.");
+		
+	}
+	
+	@Test
+	public void testStopManagementWhenAliveAndSuspended() {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( null );
+		
+		mSUT.suspendManagement();
+		mSUT.startManagement();
+		assertThat(mSUT.isAlive()).isTrue();
+		
+		mSUT.stopManagement();
+		assertThat(mSUT.isAlive()).isFalse();
+		verify(mLoggerMock).info("ToServerManagement stopped.");
+		
+	}
 
 }

@@ -104,6 +104,8 @@ public class ToServerManagement extends Thread{
 	    
 	    if( isAlive()){
 	      
+	    	resumeManagement();
+	    	
             while(isAlive()){ 
                 try {
                     Thread.sleep( 10 );
@@ -128,7 +130,7 @@ public class ToServerManagement extends Thread{
 	    
 		while( mManageMessagesToServer ){
             
-            while( mSuspended ){ try { this.wait( 10 ); } catch ( InterruptedException e ) { e.printStackTrace(); } }
+            while( mSuspended ){ try { Thread.sleep( 10 ); } catch ( InterruptedException e ) { e.printStackTrace(); } }
 			
 			try {
 				
