@@ -17,7 +17,7 @@ public class ToServerManagement extends Thread{
 
     private static ToServerManagement INSTANCE;
     
-    private ToServerManagement(){
+    ToServerManagement(){
         
         this.setName( "ToServerManagement" );
         
@@ -72,19 +72,23 @@ public class ToServerManagement extends Thread{
 	
 	public void startManagement() throws NullPointerException{
 		
-		if( Core.getInstance().getServerConnection() != null && !isAlive() ) {
-		 
-		    synchronized (this) {
+		if( Core.getInstance().getServerConnection() == null ) {
+			
+			throw new NullPointerException( "NetworkCommunication cannot be NULL when starting ToServerManagement." ) ;
+			
+		} else if ( isAlive() ){
+			
+			throw new IllegalThreadStateException( "ToServerManagement can not be started again." );
+			
+		} else {
+		    
+			synchronized (this) {
 	             
 		        mManageMessagesToServer = true;
 		    
 		    }
 			super.start();
             Core.getLogger().info( "ToServerManagement started." );
-			
-		} else {
-		    
-			throw new NullPointerException( "NetworkCommunication cannot be NULL when starting ToServerManagement." ) ;
 			
 		}
 		
