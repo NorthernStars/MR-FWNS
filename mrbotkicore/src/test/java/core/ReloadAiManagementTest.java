@@ -99,4 +99,17 @@ public class ReloadAiManagementTest {
 			
 	}
 
+	@Test
+	public void testNameOfThread() {
+		assertThat(mSUT.getName()).isEqualToIgnoringCase("RestartAiManagement");
+	}
+
+	@Test
+	public void testGetInstance() {
+		ReloadAiManagement vSaveToCompare = ReloadAiManagement.getInstance();
+		
+		assertThat(vSaveToCompare).isInstanceOf(ReloadAiManagement.class);
+		assertThat(vSaveToCompare).isEqualTo(ReloadAiManagement.getInstance());
+	}
+
 }
