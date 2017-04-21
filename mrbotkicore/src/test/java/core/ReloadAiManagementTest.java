@@ -1,9 +1,16 @@
 package core;
 
-import static org.mockito.Mockito.*;
-import static org.awaitility.Awaitility.*;
-import static java.util.concurrent.TimeUnit.*;
-import static org.assertj.core.api.Assertions.*;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
 
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
