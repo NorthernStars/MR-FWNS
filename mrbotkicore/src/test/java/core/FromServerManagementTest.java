@@ -337,23 +337,32 @@ public class FromServerManagementTest {
 
 	@Test
 	public void testRunWithoutStart() throws Exception {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( mArtificialIntelligenceMock );
+		doReturn(new RawWorldData().toXMLString()).when(mNetworkCommunicationMock).getDatagramm(1000);
+		
 		assertThat(mSUT.isAlive()).isFalse();
 		mSUT.run();
 		assertThat(mSUT.isAlive()).isFalse();
 		assertThat(mSUT.isReceivingMessages()).isFalse();
+		
+		verifyZeroInteractions(mArtificialIntelligenceMock);
 	}
 
 	@Test
 	public void testRunWhileSuspended() throws Exception {
 		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
 		when(mCoreMock.getAI()).thenReturn( mArtificialIntelligenceMock );
-		doReturn(new RawWorldData().toXMLString()).when(mNetworkCommunicationMock).getDatagramm(1000);
+		WorldData vTestData = RawWorldData.createRawWorldDataFromXML("<rawWorldData><time>0</time><agent_id>20</agent_id><nickname>TestBot</nickname><status>found</status></rawWorldData>");
+		doReturn(((RawWorldData)vTestData).toXMLString()).when(mNetworkCommunicationMock).getDatagramm(1000);
 		
 		mSUT.suspendManagement();
 		mSUT.startManagement();
 		
 		assertThat(mSUT.isAlive()).isTrue();
 		await().atMost(2, SECONDS).untilAsserted(()->assertThat(mSUT.isReceivingMessages()).isFalse());
+		
+		verify(mArtificialIntelligenceMock, atMost(1)).putWorldState(vTestData);
 	}
 
 	@Test
@@ -371,6 +380,8 @@ public class FromServerManagementTest {
 
 		await().atMost(2, SECONDS).untilAsserted(()->verify(mLoggerMock, atLeast(1)).error("Receiving no messages from server null"));
 		verify(mLoggerMock, atLeast(1)).catching( Level.ERROR, vTestException);
+		
+		verifyZeroInteractions(mArtificialIntelligenceMock);
 	}
 
 	@Test
