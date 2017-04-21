@@ -132,4 +132,17 @@ public class ToServerManagementTest {
 			
 	}
 
+	@Test
+	public void testNameOfThread() {
+		assertThat(mSUT.getName()).isEqualToIgnoringCase("ToServerManagement");
+	}
+
+	@Test
+	public void testGetInstance() {
+		ToServerManagement vSaveToCompare = ToServerManagement.getInstance();
+		
+		assertThat(vSaveToCompare).isInstanceOf(ToServerManagement.class);
+		assertThat(vSaveToCompare).isEqualTo(ToServerManagement.getInstance());
+	}
+
 }
