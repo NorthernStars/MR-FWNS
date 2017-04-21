@@ -6,16 +6,25 @@ import static org.awaitility.Duration.*;
 import static java.util.concurrent.TimeUnit.*;
 import static org.assertj.core.api.Assertions.*;
 
+import java.net.SocketTimeoutException;
+
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MoveAction;
+
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import essentials.communication.Action;
+import essentials.communication.action_server2008.Movement;
+import essentials.communication.worlddata_server2008.RawWorldData;
 import essentials.core.ArtificialIntelligence;
 import fwns_network.server_2008.NetworkCommunication;
 
@@ -288,6 +297,51 @@ public class ToServerManagementTest {
 		assertThat(mSUT.isAlive()).isTrue();
 		verify(mLoggerMock).info("ToServerManagement resumed.");
 		
+	}
+
+	@Test
+	public void testIsSendingMessagesWhenNotAlive() {
+		assertThat(mSUT.isAlive()).isFalse();
+		
+		assertThat(mSUT.isSendingMessages()).isFalse();
+	}
+
+	@Test
+	public void testIsSendingMessagesWhenAliveAndHasNoAction() {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( mArtificialIntelligenceMock );
+		when(mArtificialIntelligenceMock.getAction()).thenAnswer(new Answer<Action>() {
+			@Override
+			public Action answer(InvocationOnMock invocation) throws Throwable {
+				return new Movement((int)(Math.random()*100), (int)(Math.random()*100));
+			}
+		});
+		
+		mSUT.startManagement();
+		
+		assertThat(mSUT.isAlive()).isTrue();
+		await().atMost(2, SECONDS).untilAsserted(()->assertThat(mSUT.isSendingMessages()).isTrue());
+		when(mArtificialIntelligenceMock.getAction()).thenReturn(Movement.NO_MOVEMENT);
+		
+		assertThat(mSUT.isAlive()).isTrue();
+		await().atMost(2, SECONDS).untilAsserted(()->assertThat(mSUT.isSendingMessages()).isFalse());
+	}
+
+	@Test
+	public void testIsSendingMessagesWhenAliveAndHasMessages() throws Exception {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( mArtificialIntelligenceMock );
+		when(mArtificialIntelligenceMock.getAction()).thenAnswer(new Answer<Action>() {
+			@Override
+			public Action answer(InvocationOnMock invocation) throws Throwable {
+				return new Movement((int)(Math.random()*100), (int)(Math.random()*100));
+			}
+		});
+		
+		mSUT.startManagement();
+		
+		assertThat(mSUT.isAlive()).isTrue();
+		await().atMost(2, SECONDS).untilAsserted(()->assertThat(mSUT.isSendingMessages()).isTrue());
 	}
 
 }
