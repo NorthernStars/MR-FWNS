@@ -45,7 +45,7 @@ public class ReloadAiManagement extends Thread{
 		
 	}
 	
-	public void startManagement() throws NullPointerException{
+	public void startManagement(){
 	    
 	    if( !isAlive() ){
 	    
@@ -69,10 +69,8 @@ public class ReloadAiManagement extends Thread{
 		        
     		    try {
                     Thread.sleep( 10 );
-                } catch ( InterruptedException e ) {
-    
-                    Core.getLogger().error( "Error stopping RestartAiServerManagement.", e );
-                    
+                } catch ( Exception vException ) {
+                    Core.getLogger().error( "Error stopping RestartAiServerManagement.", vException );
                 } 
             }
 		    
@@ -86,26 +84,21 @@ public class ReloadAiManagement extends Thread{
 	public void run(){
 		
 		while( mAiActive ){
-			
-		    if(Core.getInstance().getAI() != null && Core.getInstance().getAI().wantRestart()){
 
-                Core.getInstance().initializeAI();
-                Core.getInstance().resumeAI();
-                try {
-    		        Thread.sleep( 500 );
-    		    } catch ( InterruptedException e ) {
-    		        
-    		        Core.getLogger().error( "Error while waiting in RestartAiServerManagement.", e );
-                    
-                }
-		    }
-		    
 		    try {
-		        Thread.sleep( 50 );
-		    } catch ( InterruptedException e ) {
-		        
-		        Core.getLogger().error( "Error while waiting in RestartAiServerManagement.", e );
-                
+		    
+		    	if(Core.getInstance().getAI() != null && Core.getInstance().getAI().wantRestart()){
+
+	                Core.getInstance().initializeAI();
+	                Core.getInstance().resumeAI();
+	                
+	    		    Thread.sleep( 500 );
+			    }
+		    	
+			    Thread.sleep( 50 );
+			    
+		    } catch ( Exception vException ) {
+		        Core.getLogger().error( "Error while waiting in RestartAiServerManagement.", vException );
             } 
 		}
 		
