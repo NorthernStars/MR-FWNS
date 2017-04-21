@@ -1,20 +1,29 @@
 package core;
 
-import static org.mockito.Mockito.*;
-import static org.awaitility.Awaitility.*;
-import static org.awaitility.Duration.*;
-import static java.util.concurrent.TimeUnit.*;
-import static org.assertj.core.api.Assertions.*;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+import static org.awaitility.Awaitility.await;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.atMost;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
 
-import java.net.SocketTimeoutException;
+import java.io.IOException;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MoveAction;
-
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InOrder;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
@@ -24,7 +33,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import essentials.communication.Action;
 import essentials.communication.action_server2008.Movement;
-import essentials.communication.worlddata_server2008.RawWorldData;
 import essentials.core.ArtificialIntelligence;
 import fwns_network.server_2008.NetworkCommunication;
 
@@ -342,6 +350,130 @@ public class ToServerManagementTest {
 		
 		assertThat(mSUT.isAlive()).isTrue();
 		await().atMost(2, SECONDS).untilAsserted(()->assertThat(mSUT.isSendingMessages()).isTrue());
+	}
+
+	@Test
+	public void testRunWithoutStart() throws Exception {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( mArtificialIntelligenceMock );
+		when(mArtificialIntelligenceMock.getAction()).thenAnswer(new Answer<Action>() {
+			@Override
+			public Action answer(InvocationOnMock invocation) throws Throwable {
+				return new Movement((int)(Math.random()*100), (int)(Math.random()*100));
+			}
+		});
+		
+		assertThat(mSUT.isAlive()).isFalse();
+		mSUT.run();
+		assertThat(mSUT.isAlive()).isFalse();
+		assertThat(mSUT.isSendingMessages()).isFalse();
+
+		verifyZeroInteractions(mNetworkCommunicationMock);
+		verifyZeroInteractions(mArtificialIntelligenceMock);
+		
+	}
+
+	@Test
+	public void testRunWhileSuspended() throws Exception {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( mArtificialIntelligenceMock );
+		when(mArtificialIntelligenceMock.getAction()).thenAnswer(new Answer<Action>() {
+			@Override
+			public Action answer(InvocationOnMock invocation) throws Throwable {
+				int vI = (int)(Math.random()*100)%2;
+				return new Movement(vI, vI);
+			}
+		});
+		
+		mSUT.suspendManagement();
+		mSUT.startManagement();
+		
+		assertThat(mSUT.isAlive()).isTrue();
+		await().atMost(2, SECONDS).untilAsserted(()->assertThat(mSUT.isSendingMessages()).isFalse());
+
+		verify(mNetworkCommunicationMock, atMost(1)).sendDatagramm(new Movement(0,0));
+		verify(mNetworkCommunicationMock, atMost(1)).sendDatagramm(new Movement(1,1));
+		
+	}
+
+	@Test
+	public void testRunWithGenericException() throws Exception {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( mArtificialIntelligenceMock );
+		when(mArtificialIntelligenceMock.getAction()).thenAnswer(new Answer<Action>() {
+			@Override
+			public Action answer(InvocationOnMock invocation) throws Throwable {
+				int vI = (int)(Math.random()*100)%2;
+				return new Movement(vI, vI);
+			}
+		});
+		
+		IOException vTestException = new IOException();
+		doThrow(vTestException).when(mNetworkCommunicationMock).sendDatagramm(new Movement(0,0));
+		doThrow(vTestException).when(mNetworkCommunicationMock).sendDatagramm(new Movement(1,1));
+		
+		mSUT.startManagement();
+		
+		assertThat(mSUT.isAlive()).isTrue();
+		await().atMost(2, SECONDS).untilAsserted(()->assertThat(mSUT.isSendingMessages()).isFalse());
+
+		await().atMost(2, SECONDS).untilAsserted(()->verify(mLoggerMock, atLeast(1)).error("Error sending messages to server null"));
+		verify(mLoggerMock, atLeast(1)).catching( Level.ERROR, vTestException);
+	}
+
+	@Test
+	public void testSendMessagesWithoutAI() throws Exception {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( null );
+		
+		mSUT.startManagement();
+		
+		assertThat(mSUT.isAlive()).isTrue();
+		await().atMost(2, SECONDS).untilAsserted(()->assertThat(mSUT.isSendingMessages()).isFalse());
+
+		await().atMost(2, SECONDS).untilAsserted(()->verify(mLoggerMock, atLeast(1)).debug( "Without actual AI only empty messages will be sent to the Server." ));
+		
+		InOrder inOrder = inOrder(mNetworkCommunicationMock);
+		inOrder.verify(mNetworkCommunicationMock, atLeastOnce()).sendDatagramm(Movement.NO_MOVEMENT);
+	}
+
+	@Test
+	public void testSendMessagesWithAI() throws Exception {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( mArtificialIntelligenceMock );
+		when(mArtificialIntelligenceMock.getAction()).thenAnswer(new Answer<Action>() {
+			@Override
+			public Action answer(InvocationOnMock invocation) throws Throwable {
+				int vI = (int)(Math.random()*100)%2;
+				return new Movement(vI, vI);
+			}
+		});
+		
+		mSUT.startManagement();
+		
+		assertThat(mSUT.isAlive()).isTrue();
+		await().atMost(2, SECONDS).untilAsserted(()->verify(mNetworkCommunicationMock, atLeast(1)).sendDatagramm(new Movement(0,0)));
+		await().atMost(2, SECONDS).untilAsserted(()->verify(mNetworkCommunicationMock, atLeast(1)).sendDatagramm(new Movement(1,1)));
+	}
+
+	@Test
+	public void testLoseServerConnectionWhileSendingMessages() throws Exception {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( mArtificialIntelligenceMock );
+		when(mArtificialIntelligenceMock.getAction()).thenAnswer(new Answer<Action>() {
+			@Override
+			public Action answer(InvocationOnMock invocation) throws Throwable {
+				int vI = (int)(Math.random()*100)%2;
+				return new Movement(vI, vI);
+			}
+		});
+		
+		mSUT.startManagement();
+		
+		assertThat(mSUT.isAlive()).isTrue();
+		when(mCoreMock.getServerConnection()).thenReturn( null );
+		assertThat(mSUT.isAlive()).isTrue();
+		await().atMost(2, SECONDS).untilAsserted(()->verify(mLoggerMock, atLeast(1)).debug( "NetworkCommunication cannot be NULL when running ToServerManagement." ));
 	}
 
 }
