@@ -1,5 +1,6 @@
 package core;
 
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicLong;
 
 import net.jcip.annotations.GuardedBy;
@@ -137,36 +138,17 @@ public class ToServerManagement extends Thread{
 	@Override
 	public void run(){
 	    
-	    Action vCurrentAction = null, vOldAction = null;
-	    boolean vStatusChanged = false; //TODO: musch
+	    Action vOldAction = null;
 	    
 		while( mManageMessagesToServer ){
             
-            while( mSuspended ){ try { Thread.sleep( 10 ); } catch ( InterruptedException e ) { e.printStackTrace(); } }
-			
 			try {
 				
 				 // besser machen!
 				
 				if( Core.getInstance().getServerConnection() != null ) {
 					
-					if( Core.getInstance().getAI() != null ) {
-
-					    while( (vCurrentAction = Core.getInstance().getAI().getAction()) == vOldAction && mManageMessagesToServer ){ Thread.sleep( 0, 100 ); };
-					    Core.getLogger().debug( "Sending Action {} over {}.", vCurrentAction.getXMLString(), Core.getInstance().getServerConnection().toString() );
-					    Core.getInstance().getServerConnection().sendDatagramm( vCurrentAction );
-					    vOldAction = vCurrentAction;
-                        mLastSendMessage.set( System.currentTimeMillis() );
-                        vStatusChanged = false;
-                        
-						
-					} else {
-
-					    Core.getInstance().getServerConnection().sendDatagramm( Movement.NO_MOVEMENT );
-						Core.getLogger().debug( "Without actual AI only empty messages will be sent to the Server." );
-						if( !vStatusChanged ){RemoteControlServer.getInstance().changedStatus( BotStatusType.NetworkOutgoingTraffic ); vStatusChanged = true;}
-												
-					}
+					vOldAction = sendMassage(vOldAction);
 					
 				} else {
 				    
@@ -178,19 +160,66 @@ public class ToServerManagement extends Thread{
 			} catch ( Exception vException ) {
 				
                 Core.getLogger().error( "Error sending messages to server " + vException.getLocalizedMessage() );
-                Core.getLogger().catching( Level.ERROR, vException );
+                Core.getLogger().catching( Level.ERROR, vException ); 
+                mStatusChanged = true;
                 				
 			}
 			
-			if( (System.currentTimeMillis() - mLastSendMessage.get() ) > 132 ){ //TODO: dynamisch mit der Zeit eines Ticks verbinden
-			    
-			    if( !vStatusChanged ){RemoteControlServer.getInstance().changedStatus( BotStatusType.NetworkOutgoingTraffic ); vStatusChanged = true;}
-                
+			notifyControlServer();
+			
+			while( mSuspended ){ 
+				try { 
+					Thread.sleep( 10 ); 
+				} catch ( Exception vException ) { 
+					Core.getLogger().error( "Error suspending ToServerManagement.", vException ); 
+				} 
 			}
+			
 			
 		}
 		
 	}
+
+	private Action sendMassage(Action vOldAction) throws IOException {
+		Action vCurrentAction;
+		if( Core.getInstance().getAI() != null ) {
+
+		    while( (vCurrentAction = Core.getInstance().getAI().getAction()) == vOldAction && mManageMessagesToServer ){ 
+		    	try {
+					Thread.sleep( 0, 100 );
+				} catch ( Exception vException ) {
+					Core.getLogger().error( "Error waiting for new action.", vException ); 
+				} 
+		    }
+		    if( vCurrentAction != null ){
+			    Core.getLogger().debug( "Sending Action {} over {}.", vCurrentAction.getXMLString(), Core.getInstance().getServerConnection().toString() );
+			    Core.getInstance().getServerConnection().sendDatagramm( vCurrentAction );
+		    
+		    
+			    mLastSendMessage.set( System.currentTimeMillis() );
+			    mStatusChanged = true;
+			    
+			    return vCurrentAction;
+		    }
+		    
+		} else {
+
+		    Core.getInstance().getServerConnection().sendDatagramm( Movement.NO_MOVEMENT );
+			Core.getLogger().debug( "Without actual AI only empty messages will be sent to the Server." );
+			mStatusChanged = true;
+			
+		}
+		return vOldAction;
+	}
+
+	//TODO: This is not tested and pretty bad -> make it better
+    boolean mStatusChanged = false;
+    private void notifyControlServer(){
+    	if( (System.currentTimeMillis() - mLastSendMessage.get() ) > 132 && mStatusChanged ){
+    		RemoteControlServer.getInstance().changedStatus( BotStatusType.NetworkOutgoingTraffic ); 
+    		mStatusChanged = false;
+        }
+    }
 	
 	public boolean isSendingMessages(){
 	    
