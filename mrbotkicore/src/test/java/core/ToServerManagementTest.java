@@ -90,4 +90,46 @@ public class ToServerManagementTest {
 			
 	}
 
+	@Test
+	public void testStartWithoutNetworkConnection() {
+		when(mCoreMock.getServerConnection()).thenReturn( null );
+		
+		try{
+			mSUT.start();
+			fail("Expected Nullpointerexception");
+		} catch( Exception vExpectedException ) {
+			assertThat(vExpectedException).isInstanceOf(NullPointerException.class);
+			assertThat(vExpectedException.getMessage()).isEqualToIgnoringCase( "NetworkCommunication cannot be NULL when starting ToServerManagement." );
+		}
+	}
+
+	@Test
+	public void testStartWithNetworkConnectionAndNotAlive() {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( null );
+		
+		mSUT.start();
+		
+		assertThat(mSUT.isAlive()).isTrue();
+		verify(mLoggerMock).info("ToServerManagement started.");
+			
+	}
+
+	@Test
+	public void testStartWithNetworkConnectionAndAlive() {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( null );
+		
+		mSUT.start();
+		
+		try{
+			mSUT.startManagement();
+			fail("Expected IllegalThreadStateException");
+		} catch( Exception vExpectedException ) {
+			assertThat(vExpectedException).isInstanceOf(IllegalThreadStateException.class);
+			assertThat(vExpectedException.getMessage()).isEqualToIgnoringCase( "ToServerManagement can not be started again." );
+		}
+			
+	}
+
 }
