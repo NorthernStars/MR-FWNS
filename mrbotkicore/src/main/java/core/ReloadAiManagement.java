@@ -4,7 +4,7 @@ public class ReloadAiManagement extends Thread{
 
     private static ReloadAiManagement INSTANCE;
     
-    private ReloadAiManagement(){
+    ReloadAiManagement(){
         
         this.setName( "RestartAiManagement" );
         
