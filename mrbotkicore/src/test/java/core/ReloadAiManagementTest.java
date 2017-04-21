@@ -5,21 +5,22 @@ import static org.awaitility.Awaitility.*;
 import static org.awaitility.Duration.*;
 import static java.util.concurrent.TimeUnit.*;
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InOrder;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import essentials.communication.Action;
+import essentials.communication.action_server2008.Movement;
 import essentials.core.ArtificialIntelligence;
 
 @RunWith(PowerMockRunner.class)
@@ -178,6 +179,56 @@ public class ReloadAiManagementTest {
 		assertThat(vSaveToCompare.isAlive()).isFalse();
 		
 		assertThat(vSaveToCompare).isNotEqualTo(ReloadAiManagement.getInstance());
+		
+	}
+
+	@Test
+	public void testRunWithoutStart() throws Exception {
+		when(mCoreMock.getAI()).thenReturn( mArtificialIntelligenceMock );
+		
+		assertThat(mSUT.isAlive()).isFalse();
+		mSUT.run();
+		assertThat(mSUT.isAlive()).isFalse();
+
+		verifyZeroInteractions(mArtificialIntelligenceMock);
+	}
+
+	@Test
+	public void testRunWithoutAI() throws Exception {
+		when(mCoreMock.getAI()).thenReturn( null );
+		
+		mSUT.startManagement();
+		assertThat(mSUT.isAlive()).isTrue();
+	}
+
+	@Test
+	public void testRunWithAIAndNoNeedToRestart() throws Exception {
+		when(mCoreMock.getAI()).thenReturn( mArtificialIntelligenceMock );
+		when(mArtificialIntelligenceMock.wantRestart()).thenReturn(false);
+		
+		mSUT.startManagement();
+		assertThat(mSUT.isAlive()).isTrue();
+
+		await().atMost(2, SECONDS).untilAsserted(()->verify(mArtificialIntelligenceMock, atLeast(2)).wantRestart());
+
+		verify(mCoreMock, never()).initializeAI();
+		verify(mCoreMock, never()).resumeAI();
+		
+	}
+
+	@Test
+	public void testRunWithAIAndNeedToRestart() throws Exception {
+		when(mCoreMock.getAI()).thenReturn( mArtificialIntelligenceMock );
+		when(mArtificialIntelligenceMock.wantRestart()).thenReturn(true).thenReturn(false);
+		
+		mSUT.startManagement();
+		assertThat(mSUT.isAlive()).isTrue();
+
+		await().atMost(2, SECONDS).untilAsserted(()->verify(mArtificialIntelligenceMock, atLeast(2)).wantRestart());
+		
+		InOrder inOrder = inOrder(mCoreMock);
+		inOrder.verify(mCoreMock).initializeAI();
+		inOrder.verify(mCoreMock).resumeAI();
 		
 	}
 	
