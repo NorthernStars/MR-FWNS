@@ -91,11 +91,17 @@ public class ReloadAiManagement extends Thread{
 
                 Core.getInstance().initializeAI();
                 Core.getInstance().resumeAI();
-		        
+                try {
+    		        Thread.sleep( 500 );
+    		    } catch ( InterruptedException e ) {
+    		        
+    		        Core.getLogger().error( "Error while waiting in RestartAiServerManagement.", e );
+                    
+                }
 		    }
 		    
 		    try {
-		        Thread.sleep( 1000 );
+		        Thread.sleep( 50 );
 		    } catch ( InterruptedException e ) {
 		        
 		        Core.getLogger().error( "Error while waiting in RestartAiServerManagement.", e );
