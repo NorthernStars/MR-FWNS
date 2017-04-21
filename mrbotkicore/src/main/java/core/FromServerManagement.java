@@ -155,7 +155,7 @@ public class FromServerManagement extends Thread{
 			
 			notifyControlServer();
 			
-		    while( mSuspended && mManageMessagesFromServer ){ 
+		    while( mSuspended ){ 
 		    	try { 
 		    		Thread.sleep( 10 ); 
 		    	} catch ( Exception vException ) {
