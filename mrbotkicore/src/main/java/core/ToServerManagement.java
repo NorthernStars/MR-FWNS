@@ -152,7 +152,7 @@ public class ToServerManagement extends Thread{
 					
 					if( Core.getInstance().getAI() != null ) {
 
-					    while( (vCurrentAction = Core.getInstance().getAI().getAction()) == vOldAction ){ Thread.sleep( 0, 100 ); };
+					    while( (vCurrentAction = Core.getInstance().getAI().getAction()) == vOldAction && mManageMessagesToServer ){ Thread.sleep( 0, 100 ); };
 					    Core.getLogger().debug( "Sending Action {} over {}.", vCurrentAction.getXMLString(), Core.getInstance().getServerConnection().toString() );
 					    Core.getInstance().getServerConnection().sendDatagramm( vCurrentAction );
 					    vOldAction = vCurrentAction;
