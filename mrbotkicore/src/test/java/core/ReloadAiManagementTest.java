@@ -74,4 +74,29 @@ public class ReloadAiManagementTest {
 			
 	}
 
+	@Test
+	public void testStartWhileNotAlive() {
+		when(mCoreMock.getAI()).thenReturn( null );
+		assertThat(mSUT.isAlive()).isFalse();
+		
+		mSUT.start();
+		
+		assertThat(mSUT.isAlive()).isTrue();
+		verify(mLoggerMock).info("RestartAiServerManagement started.");
+			
+	}
+
+	@Test
+	public void testStartWhileAlive() {
+		when(mCoreMock.getAI()).thenReturn( null );
+		
+		mSUT.start();
+		assertThat(mSUT.isAlive()).isTrue();
+		
+		mSUT.start();
+		assertThat(mSUT.isAlive()).isTrue();
+		verify(mLoggerMock, times(1)).info("RestartAiServerManagement started.");
+			
+	}
+
 }
