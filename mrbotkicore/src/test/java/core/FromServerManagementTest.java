@@ -308,14 +308,19 @@ public class FromServerManagementTest {
 	}
 
 	@Test
-	public void testIsReceivingMessagesWhenAliveAndNoMessages() {
+	public void testIsReceivingMessagesWhenAliveAndNoMessages() throws IOException {
 		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
-		when(mCoreMock.getAI()).thenReturn( null );
+		when(mCoreMock.getAI()).thenReturn( mArtificialIntelligenceMock );
+		doReturn(new RawWorldData().toXMLString()).when(mNetworkCommunicationMock).getDatagramm(1000);
 		
 		mSUT.startManagement();
 		
 		assertThat(mSUT.isAlive()).isTrue();
-		assertThat(mSUT.isReceivingMessages()).isFalse();
+		await().atMost(2, SECONDS).untilAsserted(()->assertThat(mSUT.isReceivingMessages()).isTrue());
+		when(mNetworkCommunicationMock.getDatagramm(1000)).thenThrow(new SocketTimeoutException());
+		
+		assertThat(mSUT.isAlive()).isTrue();
+		await().atMost(2, SECONDS).untilAsserted(()->assertThat(mSUT.isReceivingMessages()).isFalse());
 	}
 
 	@Test
