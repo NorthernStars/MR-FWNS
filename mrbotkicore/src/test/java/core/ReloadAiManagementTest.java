@@ -2,7 +2,6 @@ package core;
 
 import static org.mockito.Mockito.*;
 import static org.awaitility.Awaitility.*;
-import static org.awaitility.Duration.*;
 import static java.util.concurrent.TimeUnit.*;
 import static org.assertj.core.api.Assertions.*;
 
@@ -12,15 +11,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import essentials.communication.Action;
-import essentials.communication.action_server2008.Movement;
 import essentials.core.ArtificialIntelligence;
 
 @RunWith(PowerMockRunner.class)
