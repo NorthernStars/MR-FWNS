@@ -69,6 +69,12 @@ public class ToServerManagement extends Thread{
         
     }
     
+    public boolean isSuspended(){
+        
+        return mSuspended;
+        
+    }
+    
 	@Override
 	public void start(){
 		

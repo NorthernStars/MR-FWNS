@@ -228,4 +228,66 @@ public class ToServerManagementTest {
 		
 	}
 
+	@Test
+	public void testSuspendWhenNotAlive() {
+		
+		assertThat(mSUT.isSuspended()).isFalse();
+
+		mSUT.suspendManagement();		
+		
+		assertThat(mSUT.isSuspended()).isTrue();
+		verify(mLoggerMock).info("ToServerManagement suspended.");
+		
+	}
+
+	@Test
+	public void testResumeWhenNotAlive() {
+
+		mSUT.suspendManagement();
+		
+		assertThat(mSUT.isSuspended()).isTrue();
+
+		mSUT.resumeManagement();		
+		
+		assertThat(mSUT.isSuspended()).isFalse();
+		verify(mLoggerMock).info("ToServerManagement resumed.");
+		
+	}
+
+	@Test
+	public void testSuspendWhenAlive() {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( null );
+		
+		mSUT.startManagement();
+		
+		assertThat(mSUT.isSuspended()).isFalse();
+
+		mSUT.suspendManagement();		
+		
+		assertThat(mSUT.isSuspended()).isTrue();
+		assertThat(mSUT.isAlive()).isTrue();
+		verify(mLoggerMock).info("ToServerManagement suspended.");
+		
+	}
+
+	@Test
+	public void testResumeWhenAlive() {
+		when(mCoreMock.getServerConnection()).thenReturn( mNetworkCommunicationMock );
+		when(mCoreMock.getAI()).thenReturn( null );
+		
+		mSUT.startManagement();
+
+		mSUT.suspendManagement();
+		
+		assertThat(mSUT.isSuspended()).isTrue();
+
+		mSUT.resumeManagement();		
+		
+		assertThat(mSUT.isSuspended()).isFalse();
+		assertThat(mSUT.isAlive()).isTrue();
+		verify(mLoggerMock).info("ToServerManagement resumed.");
+		
+	}
+
 }
