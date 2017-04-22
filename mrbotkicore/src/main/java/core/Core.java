@@ -33,37 +33,49 @@ import fwns_network.server_2008.NetworkCommunication;
 @ThreadSafe
 public class Core {
     
-    private static Core INSTANCE;
+    private static Core sINSTANCE;
  
-    private Core(){
+    Core(){
             
         mBotinformation = new BotInformation();
+        
+    }
+ 
+    Core( BotInformation aBotInformation ){
+            
+        mBotinformation = aBotInformation;
         
     }
 
     public static Core getInstance() {
         
-        if( Core.INSTANCE == null){
+        if( Core.sINSTANCE == null){
             Core.getLogger().trace( "Creating Core-instance." );
-            Core.INSTANCE = new Core();
+            Core.sINSTANCE = new Core();
         }
 
         Core.getLogger().trace( "Retrieving Core-instance." );
-        return Core.INSTANCE;
+        return Core.sINSTANCE;
         
     }
     
-    private static Logger BOTCORELOGGER = LogManager.getLogger("CORE");
-    
-    public static Logger getLogger(){
+    private static Logger sBOTCORELOGGER = LogManager.getLogger("CORE");
+
+    public static synchronized Logger getLogger(){
         
-        return BOTCORELOGGER;
+        return sBOTCORELOGGER;
+        
+    }
+    
+    static synchronized void setLogger( Logger aLogger ){
+        
+        sBOTCORELOGGER = aLogger;
         
     }
     
     public void close() {
 
-        if( INSTANCE != null ){
+        if( sINSTANCE != null ){
             Core.getLogger().info( mBotinformation.getBotname() + "(" + mBotinformation.getRcId() + "/" + mBotinformation.getVtId() + ") closeing!" );
             disposeAI();
             stopServermanagements();
@@ -72,7 +84,7 @@ public class Core {
             RemoteControlServer.getInstance().close();
             
             Core.getLogger().info( mBotinformation.getBotname() + "(" + mBotinformation.getRcId() + "/" + mBotinformation.getVtId() + ") closed!" );
-            INSTANCE = null;
+            sINSTANCE = null;
         }
         
         // Hier kein System.exit( status ) das das das beenden des Bots verhindert
