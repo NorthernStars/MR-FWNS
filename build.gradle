@@ -3,6 +3,7 @@ plugins {
   id "eclipse"
   id "jacoco"
   id "org.sonarqube" version "2.3"
+  id 'net.nemerosa.versioning' version '2.0.0'
 }
 
 sonarqube {
@@ -10,9 +11,13 @@ sonarqube {
         property "sonar.projectName", "MixedReality :: Client"
         property "sonar.projectKey", "werthersechte-github:mrClient"
         property "sonar.jacoco.reportPaths", "${rootProject.buildDir}/jacoco/test.exec"
-		property "sonar.projectVersion", "1.0"
+		property "sonar.projectVersion", versioning.info.full
 		property "sonar.tests", "junit"
     }
+}
+
+versioning {
+   scm = 'git'
 }
 
 allprojects {
@@ -21,7 +26,8 @@ allprojects {
     apply plugin: 'eclipse'
 	apply plugin: 'jacoco'
     
-
+    version = versioning.info.full
+    
     repositories {
         jcenter()
         mavenCentral()
