@@ -434,9 +434,17 @@ public class Core {
     synchronized public NetworkCommunication getServerConnection() {
         return mServerConnection;
     }
+    
+    synchronized void setServerConnection( NetworkCommunication aNetworkCommunication ) {
+        mServerConnection = aNetworkCommunication;
+    }
 
     synchronized public ArtificialIntelligence getAI() {
         return mAI;
+    }
+
+    synchronized void setAI( ArtificialIntelligence aAI ) {
+        mAI = aAI;
     }
 
 }
