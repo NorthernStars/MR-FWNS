@@ -778,4 +778,27 @@ public class MoveLibTests {
             assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
 	}
         
+        @Test
+        public void testGetMoveAngleNotTurn(){
+            double angle;
+            angle = MoveLib.getMoveAngleNoTurn();
+            assertThat(angle).isExactlyInstanceOf(Double.class);
+            assertThat(angle).isCloseTo(10.0, withinPercentage(1)); 
+        }
+        
+        @Test
+        public void testGetMoveAngleTurnAndMove(){
+            double angle;
+            angle = MoveLib.getMoveAngleTurnAndMove();
+            assertThat(angle).isExactlyInstanceOf(Double.class);
+            assertThat(angle).isCloseTo(60.0, withinPercentage(1)); 
+        }
+        
+        @Test
+        public void testGetTurnAngleSlowSpeed(){
+            double angle;
+            angle = MoveLib.getTurnAngleSlowSpeed();
+            assertThat(angle).isExactlyInstanceOf(Double.class);
+            assertThat(angle).isCloseTo(25.0, withinPercentage(1)); 
+        }
 }
