@@ -59,6 +59,10 @@ public class Core {
         
     }
     
+    static synchronized void setInstanceNull(){
+    	Core.sINSTANCE = null;
+    }
+    
     private static Logger sBOTCORELOGGER = LogManager.getLogger("CORE");
 
     public static synchronized Logger getLogger(){
@@ -84,7 +88,7 @@ public class Core {
             RemoteControlServer.getInstance().close();
             
             Core.getLogger().info( mBotinformation.getBotname() + "(" + mBotinformation.getRcId() + "/" + mBotinformation.getVtId() + ") closed!" );
-            sINSTANCE = null;
+            setInstanceNull();
         }
         
         // Hier kein System.exit( status ) das das das beenden des Bots verhindert

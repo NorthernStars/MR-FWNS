@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Spy;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -32,7 +33,7 @@ public class CoreTest {
 	ToServerManagement mToServerManagementMock = mock(ToServerManagement.class);
 	
 	BotInformation mBotInformationMock = mock(BotInformation.class);
-	
+
 	Core mSUT;
 	
 	@Before
@@ -50,6 +51,8 @@ public class CoreTest {
 		
 		PowerMockito.mockStatic(ToServerManagement.class);
 		when(ToServerManagement.getInstance()).thenReturn(mToServerManagementMock);
+		
+		mSUT = spy(new Core(mBotInformationMock));
 	}
 
 	@After
@@ -70,6 +73,50 @@ public class CoreTest {
 		assertThat(mSUT).isInstanceOf(Core.class);
 		assertThat(mSUT).isEqualTo(Core.getInstance());
 		assertThat(mSUT.getBotinformation()).isEqualTo(Core.getInstance().getBotinformation());
+	}
+
+	@Test
+	public void testGetLogger() {
+		Logger vLoggerToTest = Core.getLogger();
+		
+		assertThat(vLoggerToTest).isInstanceOf(Logger.class);
+		assertThat(vLoggerToTest).isEqualTo(Core.getLogger());
+	}
+
+	@Test
+	public void testCloseWithInstance() {
+		Core.getInstance();
+		when(mBotInformationMock.getBotname()).thenReturn("TestBot");
+		when(mBotInformationMock.getRcId()).thenReturn(10);
+		when(mBotInformationMock.getVtId()).thenReturn(11);
+		
+		mSUT.close();
+		
+		verify(mSUT).disposeAI();
+		verify(mSUT).stopServermanagements();
+		verify(mSUT).stopServerConnection();
+		verify(mReloadAiManagementMock).close();
+		verify(mRemoteControlServerMock).close();
+		
+		verify(mLoggerMock).info( mBotInformationMock.getBotname() + "(" + mBotInformationMock.getRcId() + "/" + mBotInformationMock.getVtId() + ") closed!" );
+	}
+
+	@Test
+	public void testCloseWithoutInstance() {
+		Core.setInstanceNull();
+		when(mBotInformationMock.getBotname()).thenReturn("TestBot");
+		when(mBotInformationMock.getRcId()).thenReturn(10);
+		when(mBotInformationMock.getVtId()).thenReturn(11);
+		
+		mSUT.close();
+		
+		verify(mSUT, never()).disposeAI();
+		verify(mSUT, never()).stopServermanagements();
+		verify(mSUT, never()).stopServerConnection();
+		verify(mReloadAiManagementMock, never()).close();
+		verify(mRemoteControlServerMock, never()).close();
+		
+		verify(mLoggerMock, never()).info( mBotInformationMock.getBotname() + "(" + mBotInformationMock.getRcId() + "/" + mBotInformationMock.getVtId() + ") closed!" );
 	}
 
 }
