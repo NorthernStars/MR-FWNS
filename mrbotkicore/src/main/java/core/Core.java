@@ -96,7 +96,7 @@ public class Core {
     }
     
     @GuardedBy("this") private BotInformation mBotinformation;
-    @GuardedBy("this") volatile private ArtificialIntelligence mAI;
+    @GuardedBy("this") private volatile ArtificialIntelligence mAI;
     @GuardedBy("this") private NetworkCommunication mServerConnection;
     
     /**
@@ -129,10 +129,8 @@ public class Core {
                 RemoteControlServer.getInstance().startRemoteServer();
                 initializeAI();
                 ReloadAiManagement.getInstance().startManagement();
-                if( startServerConnection( 3 ) ){
-                                    
-                } else if( mAI != null ){
-                    
+                if( !startServerConnection( 3 ) && mAI != null ){
+                	
                     suspendAI();
                     Core.getLogger().error( "Could not connect to Server. AI suspended" );
                     
