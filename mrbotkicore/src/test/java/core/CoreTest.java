@@ -100,7 +100,7 @@ public class CoreTest {
 		verify(mReloadAiManagementMock).close();
 		verify(mRemoteControlServerMock).close();
 		
-		verify(mLoggerMock).info( mBotInformationMock.getBotname() + "(" + mBotInformationMock.getRcId() + "/" + mBotInformationMock.getVtId() + ") closed!" );
+		verify(mLoggerMock).info( "{}({}/{}) closed!", mBotInformationMock.getBotname(), mBotInformationMock.getRcId(), mBotInformationMock.getVtId() );
 	}
 
 	@Test
@@ -118,7 +118,7 @@ public class CoreTest {
 		verify(mReloadAiManagementMock, never()).close();
 		verify(mRemoteControlServerMock, never()).close();
 		
-		verify(mLoggerMock, never()).info( mBotInformationMock.getBotname() + "(" + mBotInformationMock.getRcId() + "/" + mBotInformationMock.getVtId() + ") closed!" );
+		verify(mLoggerMock, never()).info( "{}({}/{}) closed!", mBotInformationMock.getBotname(), mBotInformationMock.getRcId(), mBotInformationMock.getVtId() );
 	}
 
 	@Test

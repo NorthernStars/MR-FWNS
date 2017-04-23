@@ -80,14 +80,13 @@ public class Core {
     public void close() {
 
         if( sINSTANCE != null ){
-            Core.getLogger().info( mBotinformation.getBotname() + "(" + mBotinformation.getRcId() + "/" + mBotinformation.getVtId() + ") closeing!" );
             disposeAI();
             stopServermanagements();
             stopServerConnection();
             ReloadAiManagement.getInstance().close();
             RemoteControlServer.getInstance().close();
             
-            Core.getLogger().info( mBotinformation.getBotname() + "(" + mBotinformation.getRcId() + "/" + mBotinformation.getVtId() + ") closed!" );
+            Core.getLogger().info( "{}({}/{}) closed!", mBotinformation.getBotname(), mBotinformation.getRcId(), mBotinformation.getVtId());
             setInstanceNull();
         }
         
