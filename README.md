@@ -48,6 +48,9 @@ Maybe you get somethign like this:
 -bn 0 -tn "Test" -t blau -ids 0 -s 192.168.178.22:3310 -aiarc "${workspace_loc:example_ai}/bin" -aicl "exampleai.brain.AI" -aiarg 0
 ```
 
+Code-Quality
+============
+See at: https://sonarqube.com/dashboard?id=werthersechte-github%3AmrClient
 
 LICENCE
 =======
