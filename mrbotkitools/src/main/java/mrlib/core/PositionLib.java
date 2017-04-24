@@ -38,7 +38,10 @@ public class PositionLib {
         //TODO: Funktionen auslagern
         // Merke Seitenhalbierende hat nix! mit Winkelhalbiernder zu tun! Geogebra nutzen...
         
-        double a, b, wa, wb;
+        double a;
+        double b;
+        double wa;
+        double wb;
         
         if( aRefPoint0.getAngleToPoint() > aRefPoint1.getAngleToPoint() ){
             
@@ -286,11 +289,7 @@ public class PositionLib {
             angle2= PositionLib.getAngleBetweenTwoReferencePoints(aRefPoint1, aRefPoint2);
             angle3= PositionLib.getAngleBetweenTwoReferencePoints(aRefPoint2, aRefPoint3);
             angle4= PositionLib.getAngleBetweenTwoReferencePoints(aRefPoint3, aRefPoint0);
-            if(angle1+angle2+angle3+angle4 < 361 && angle1+angle2+angle3+angle4 > 359){
-                    return true;
-            }else {
-                    return false;
-            }
+            return angle1+angle2+angle3+angle4 < 361 && angle1+angle2+angle3+angle4 > 359;
 	}
 	
 	/**
@@ -353,26 +352,26 @@ public class PositionLib {
 		List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
 		vTeamMates.add(new FellowPlayer(aSelf.getVtId(),"me", true,0,0,0) );
 		
-		FellowPlayer closest_player = null;
+		FellowPlayer closestPlayer = null;
 		for ( FellowPlayer p: vTeamMates){
 			
-                    if(closest_player != null)
+                    if(closestPlayer != null)
                     {
                         double distNew = aRefPoint.sub(p).getDistanceToPoint();
-                        double distOld = aRefPoint.sub(closest_player).getDistanceToPoint();
+                        double distOld = aRefPoint.sub(closestPlayer).getDistanceToPoint();
 
                         if(distNew < distOld){
-                            closest_player = p;
+                            closestPlayer = p;
                         }
                     }
                     else
                     {
-                        closest_player = p;
+                        closestPlayer = p;
                     }
 	
 		}
 		
-		return closest_player != null && closest_player.getId() == aSelf.getVtId();
+		return closestPlayer != null && closestPlayer.getId() == aSelf.getVtId();
 	}
 
 	

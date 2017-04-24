@@ -69,46 +69,46 @@ public class MoveLib {
 
         // no turn, moving fwd
         if( vAngle >= -moveAngleNoTurn && vAngle <= moveAngleNoTurn ){            
-            return (Action) new Movement( 100, 100 );            
+            return new Movement( 100, 100 );            
         }
         
         // turn depending on angle, moving fwd
         if( vAngle > -moveAngleTurnAndMove && vAngle < -moveAngleNoTurn ){            
-            return (Action) new Movement( 100, 100 + (int) vAngle );            
+            return new Movement( 100, 100 + (int) vAngle );            
         }
         
         // turn depending on angle, moving fwd
         if( vAngle > moveAngleNoTurn && vAngle < moveAngleTurnAndMove ){            
-            return (Action) new Movement( 100 - (int) vAngle, 100 );            
+            return new Movement( 100 - (int) vAngle, 100 );            
         }
         
         // turn on place left
         if( vAngle >= -(180-moveAngleTurnAndMove) && vAngle <= -moveAngleTurnAndMove ){            
-            return (Action) new Movement( 100, -100 );            
+            return new Movement( 100, -100 );            
         }
         
         // turn on place right
         if( vAngle >= moveAngleTurnAndMove && vAngle <= (180-moveAngleTurnAndMove) ){            
-            return (Action) new Movement( -100, 100 );            
+            return new Movement( -100, 100 );            
         }
         
         // turn depending on angle, moving bwd
         if( vAngle > -(180-moveAngleNoTurn) && vAngle < -(180-moveAngleTurnAndMove) ){            
-            return (Action) new Movement( -100, 100 + (int) vAngle );            
+            return new Movement( -100, 100 + (int) vAngle );            
         }
         
         // turn depending on angle, moving bwd
         if( vAngle > (180-moveAngleTurnAndMove) && vAngle < (180-moveAngleNoTurn) ){            
-            return (Action) new Movement( 100 - (int) vAngle, -100 );            
+            return new Movement( 100 - (int) vAngle, -100 );            
         }
         
         // no turn, moving bwd
         if( ( vAngle >= (180-moveAngleNoTurn) && vAngle <= 180 )
         		|| ( vAngle <= -(180-moveAngleNoTurn) && vAngle >= -180 ) ){            
-            return (Action) new Movement( -100, -100 );            
+            return new Movement( -100, -100 );            
         }
 
-        return (Action) Movement.NO_MOVEMENT;
+        return Movement.NO_MOVEMENT;
     }
 	
     /**
@@ -148,44 +148,44 @@ public class MoveLib {
         // no turn
         if(vAngle < moveAngleNoTurn && vAngle > -moveAngleNoTurn
                         || vAngle > (180-moveAngleNoTurn) && vAngle < -(180-moveAngleNoTurn)){
-                return (Action) Movement.NO_MOVEMENT;
+                return Movement.NO_MOVEMENT;
         }
 
         // 100% speed turn left
         if(vAngle >= moveAngleTurnAndMove && vAngle <= (180-moveAngleTurnAndMove)){
-                return (Action) new Movement(-100,100);
+                return new Movement(-100,100);
         }
 
         // 100% speed turn right
         if(vAngle <= -moveAngleTurnAndMove && vAngle >= -(180-moveAngleTurnAndMove)){
-                return (Action) new Movement(100,-100);
+                return new Movement(100,-100);
         }
 
         // 50% speed turn left
         if((vAngle >= turnAngleSlowSpeed && vAngle <= moveAngleTurnAndMove)
                         || vAngle < -(180-moveAngleTurnAndMove) && vAngle > -(180-turnAngleSlowSpeed)){
-                return (Action) new Movement(-50,50);
+                return new Movement(-50,50);
         }
 
         // 50% speed turn right
         if((vAngle < -turnAngleSlowSpeed && vAngle >= -moveAngleTurnAndMove)
                         || vAngle > (180-moveAngleTurnAndMove) && vAngle < (180-turnAngleSlowSpeed)){
-                return (Action) new Movement(50,-50);
+                return new Movement(50,-50);
         }
 
         // 25% speed turn left
         if((vAngle >= moveAngleNoTurn && vAngle <= turnAngleSlowSpeed)
                         || vAngle < -(180-turnAngleSlowSpeed) && vAngle > -(180-moveAngleNoTurn)){
-                return (Action) new Movement(-25,25);
+                return new Movement(-25,25);
         }
 
         // 25% speed turn right
         if((vAngle < -moveAngleNoTurn && vAngle >= -turnAngleSlowSpeed)
                         || vAngle > (180-turnAngleSlowSpeed) && vAngle < (180-moveAngleNoTurn)){
-                return (Action) new Movement(25,-25);
+                return new Movement(25,-25);
         }
 
-        return (Action) Movement.NO_MOVEMENT;
+        return Movement.NO_MOVEMENT;
 
     }
     
