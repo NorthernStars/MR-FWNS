@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InOrder;
 import org.mockito.Spy;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
@@ -220,6 +221,39 @@ public class CoreTest {
 		mSUT.startBot(vTestCommandline);
 		
 		verify(mLoggerMock).error( "Fehler beim initialisiern der Grundfunktionen", vTestException );
+	}
+
+	@Test
+	public void testdisposeAiWithoutAi() {
+		
+		assertThat(mSUT.getAI()).isNull();
+		
+		mSUT.disposeAI();
+		
+		assertThat(mSUT.getAI()).isNull();
+		
+		verify(mLoggerMock, never()).info( "Disposed AI " + mBotInformationMock.getAIClassname() + " from " + mBotInformationMock.getAIArchive() );
+	}
+
+	@Test
+	public void testdisposeAiWithAi() {
+		
+		ArtificialIntelligence vArtificialIntelligenceMock = mock(ArtificialIntelligence.class);
+		mSUT.setAI(vArtificialIntelligenceMock);
+
+		assertThat(mSUT.getAI()).isNotNull();
+		assertThat(mSUT.getAI()).isEqualTo(vArtificialIntelligenceMock);
+		
+		mSUT.disposeAI();
+		
+		InOrder inOrder = inOrder(mSUT, vArtificialIntelligenceMock);
+		inOrder.verify(mSUT).suspendServermanagements();
+		inOrder.verify(vArtificialIntelligenceMock).disposeAI();
+		inOrder.verify(mSUT).resumeServermanagements();
+		
+		assertThat(mSUT.getAI()).isNull();
+		
+		verify(mLoggerMock).info( "Disposed AI " + mBotInformationMock.getAIClassname() + " from " + mBotInformationMock.getAIArchive() );
 	}
 
 }
