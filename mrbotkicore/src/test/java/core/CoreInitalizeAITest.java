@@ -10,6 +10,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
@@ -22,11 +23,12 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import remotecontrol.RemoteControlServer;
+import essentials.core.ArtificialIntelligence;
 import essentials.core.BotInformation;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ReloadAiManagement.class, RemoteControlServer.class, FromServerManagement.class, ToServerManagement.class, CommandLineOptions.class})
-@PowerMockIgnore({"javax.management.*", "essentials.core.*"})
+@PowerMockIgnore({"javax.management.*", "essentials.core.*", "core.TestAi"})
 public class CoreInitalizeAITest {
 	
 	Logger mLoggerMock = mock(Logger.class);
@@ -68,10 +70,76 @@ public class CoreInitalizeAITest {
 		mBotInformationMock.setAIArchive("src/test/java/core/test.jar");
 		mBotInformationMock.setAIClassname("exampleai.brain.Striker");
 		
-		mSUT.initializeAI();
+		assertThat(mSUT.initializeAI()).isTrue();
 
 		InOrder inOrder = inOrder(mSUT);
 		inOrder.verify(mSUT).suspendServermanagements();
 		inOrder.verify(mSUT).resumeServermanagements();
+
+		assertThat(mSUT.getAI()).isInstanceOf(ArtificialIntelligence.class);
+		
+		verify(mLoggerMock).info("Loaded AI " + mBotInformationMock.getAIClassname() + " from " + mBotInformationMock.getAIArchive());
 	}
+
+	@Test
+	public void testInitalizeAIWithJarAndClassWithOtherAiThatIsNotRunning() {
+
+		mBotInformationMock.setAIArchive("src/test/java/core/test.jar");
+		mBotInformationMock.setAIClassname("exampleai.brain.Striker");
+		
+		TestAi vTestAi = new TestAi();
+		mSUT.setAI(vTestAi);
+		
+		assertThat(mSUT.initializeAI()).isTrue();
+
+		InOrder inOrder = inOrder(mSUT);
+		inOrder.verify(mSUT, never()).disposeAI();
+		inOrder.verify(mSUT).suspendServermanagements();
+		inOrder.verify(mSUT).resumeServermanagements();
+		
+		verify(mSUT, never()).disposeAI();
+
+		assertThat(mSUT.getAI()).isInstanceOf(ArtificialIntelligence.class);
+		assertThat(mSUT.getAI()).isNotEqualTo(vTestAi);
+		
+		verify(mLoggerMock).info("Loaded AI " + mBotInformationMock.getAIClassname() + " from " + mBotInformationMock.getAIArchive());
+	}
+
+	@Test
+	public void testInitalizeAIWithJarAndClassWithOtherAiThatIsRunning() {
+
+		mBotInformationMock.setAIArchive("src/test/java/core/test.jar");
+		mBotInformationMock.setAIClassname("exampleai.brain.Striker");
+		
+		TestAi vTestAi = new TestAi();
+		vTestAi.setRunning(true);
+		mSUT.setAI(vTestAi);
+		
+		assertThat(mSUT.initializeAI()).isTrue();
+
+		InOrder inOrder = inOrder(mSUT);
+		inOrder.verify(mSUT).disposeAI();
+		inOrder.verify(mSUT).suspendServermanagements();
+		inOrder.verify(mSUT).resumeServermanagements();
+
+		assertThat(mSUT.getAI()).isInstanceOf(ArtificialIntelligence.class);
+		assertThat(mSUT.getAI()).isNotEqualTo(vTestAi);
+		
+		verify(mLoggerMock).info("Loaded AI " + mBotInformationMock.getAIClassname() + " from " + mBotInformationMock.getAIArchive());
+	}
+
+	@Test
+	public void testInitalizeAI() {
+
+		RuntimeException vRuntimeExceptionTest = new RuntimeException("TestShit");
+		doThrow(vRuntimeExceptionTest).when(mSUT).suspendServermanagements();
+		assertThat(mSUT.initializeAI()).isFalse();
+
+		assertThat(mSUT.getAI()).isNull();
+
+		verify(mLoggerMock, never()).info("Loaded AI " + mBotInformationMock.getAIClassname() + " from " + mBotInformationMock.getAIArchive());
+		verify(mLoggerMock).error( "Error loading AI " + mBotInformationMock.getAIClassname() + " from " + mBotInformationMock.getAIArchive() + " " + vRuntimeExceptionTest.getLocalizedMessage() );
+		verify(mLoggerMock).catching( Level.ERROR, vRuntimeExceptionTest );
+	}
+	
 }
