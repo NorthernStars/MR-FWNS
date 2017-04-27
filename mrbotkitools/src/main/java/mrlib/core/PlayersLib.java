@@ -151,25 +151,8 @@ public class PlayersLib {
      * @return 				Distance from {@code p} to {@code otherPLayer} as {@link Double}
      */
 	private static double getDistanceBetweenTwoPlayers(FellowPlayer p,FellowPlayer otherPlayer) {
-		double a, b, wa, wb;
-        
-        if( p.getAngleToPlayer() > otherPlayer.getAngleToPlayer() ){
-            
-            a = p.getDistanceToPlayer();
-            wa = p.getAngleToPlayer();
-            b = otherPlayer.getDistanceToPlayer();
-            wb = otherPlayer.getAngleToPlayer();
-            
-        } else {
-
-            a = otherPlayer.getDistanceToPlayer();
-            wa = otherPlayer.getAngleToPlayer(); 
-            b = p.getDistanceToPlayer();
-            wb = p.getAngleToPlayer();
-            
-        }
-    	
-		return Math.sqrt( a*a + b*b - 2 * a * b * Math.cos(Math.toRadians(Math.abs(wa - wb))));
+		    	
+		return PositionLib.getDistanceBetweenTwoRefPoints(p, otherPlayer);
 	}
 	
 	/**
@@ -180,28 +163,8 @@ public class PlayersLib {
      * @return 			Distance from {@code p} to {@code ballPos} as {@link Double}
      */
 	public static double getDistanceBetweenPlayerAndBall(FellowPlayer p, BallPosition ballPos) {
-		double a;
-		double b;
-		double wa;
-		double wb;
-        
-        if( p.getAngleToPlayer() > ballPos.getAngleToBall() ){
-            
-            a = p.getDistanceToPlayer();
-            wa = p.getAngleToPlayer();
-            b = ballPos.getDistanceToBall();
-            wb = ballPos.getAngleToBall();
-            
-        } else {
 
-            a = ballPos.getDistanceToBall();
-            wa = ballPos.getAngleToBall(); 
-            b = p.getDistanceToPlayer();
-            wb = p.getAngleToPlayer();
-            
-        }
-    	
-		return Math.sqrt( a*a + b*b - 2 * a * b * Math.cos(Math.toRadians(Math.abs(wa - wb))));
+		return PositionLib.getDistanceBetweenTwoRefPoints(p, ballPos);
 	}
 	
 	/**
