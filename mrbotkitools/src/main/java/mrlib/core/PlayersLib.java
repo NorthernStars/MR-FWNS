@@ -30,6 +30,7 @@ public class PlayersLib {
         List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
         
 		FellowPlayer nearestMate = null;
+		if (vTeamMates.size() == 0) return nearestMate;
     	for( FellowPlayer a : vTeamMates){
 			if( nearestMate == null || a.getDistanceToPlayer() < nearestMate.getDistanceToPlayer()){
 				nearestMate = a;
@@ -62,13 +63,12 @@ public class PlayersLib {
         List<FellowPlayer> vOpponents = vWorldState.getListOfOpponents();
         
 		FellowPlayer nearestOpponent = null;
+		if (vOpponents.get(0) == null) return nearestOpponent;
     	for( FellowPlayer a : vOpponents){
 			if( nearestOpponent == null || a.getDistanceToPlayer() < nearestOpponent.getDistanceToPlayer()){
 				nearestOpponent = a;
 			}                    				
-		
-		}
-
+				}
 		return nearestOpponent;
 	}
 	
@@ -334,12 +334,9 @@ public class PlayersLib {
 		FellowPlayer teammate = nearestMateToBall(aWorldState);
 		FellowPlayer opponent = nearestOpponentToBall(aWorldState);
 		
-		if( teammate == null ){
-			return opponent;
-		}
-		else if( opponent == null ){
-			return teammate;
-		}
+		if(teammate == null && opponent == null) return null;
+		else if( teammate == null )	return opponent;
+		else if( opponent == null ) return teammate;
 		
 		// caluclate distances
 		BallPosition ballPos = aWorldState.getBallPosition();
