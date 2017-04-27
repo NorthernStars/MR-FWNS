@@ -265,21 +265,19 @@ public class PlayersLib {
 	//TODO: function needs parameter ballPos while BallPosition is already in RawWorldData
 	public static boolean amINearestToBall(RawWorldData vWorldState, BallPosition ballPos, BotInformation mSelf){
 		List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
-		vTeamMates.add(new FellowPlayer(mSelf.getVtId(), mSelf.getBotname(), true, 0, 0, 0) );
 		
-		FellowPlayer closest_player = null;
-		for ( FellowPlayer a: vTeamMates){
-			if(closest_player == null
-					|| PlayersLib.getDistanceBetweenPlayerAndBall(a, ballPos) < PlayersLib.getDistanceBetweenPlayerAndBall(closest_player, ballPos)){
+		//I am closest as default
+		FellowPlayer closest_player = (new FellowPlayer(mSelf.getVtId(), mSelf.getBotname(), true, 0, 0, 0) );
+		
+		for(FellowPlayer a: vTeamMates)
+		{
+			if( PlayersLib.getDistanceBetweenPlayerAndBall(a, ballPos) < PlayersLib.getDistanceBetweenPlayerAndBall(closest_player, ballPos)){
 				closest_player = a;
 			}
 		}
 		
-		if(closest_player.getId() == mSelf.getVtId()){
-			return true;
-		}
+		return (closest_player.getId() == mSelf.getVtId());
 		
-		return false;
 	}
 	
 	/**
@@ -296,7 +294,6 @@ public class PlayersLib {
 		// check teammates
 		for( FellowPlayer p : aWorldState.getListOfTeamMates() ){
 			// calculate distance to from player to ball
-			//double d = p.sub( ballPos ).getDistanceToPoint();
 			double d = PositionLib.getDistanceBetweenTwoRefPoints(p, ballPos);
 			
 			// check if player if nearest to ball
@@ -323,7 +320,6 @@ public class PlayersLib {
 		// check teammates
 		for( FellowPlayer p : aWorldState.getListOfOpponents() ){
 			// calculate distance to from player to ball
-			//double d = p.sub( ballPos ).getDistanceToPoint();
 			double d = PositionLib.getDistanceBetweenTwoRefPoints(ballPos, p);
 			
 			// check if player if nearest to ball
@@ -424,6 +420,7 @@ public class PlayersLib {
 			ref1Angle = refPoint2.getAngleToPoint();
 			ref2Angle = refPoint1.getAngleToPoint();
 		}
+		//TODO: Das kann so nicht funktionieren (returnt immer true/false im ersten Durchlauf)
 		if(Math.abs(ref1Angle-ref2Angle) > 180){
 			for ( FellowPlayer a: vOpponents){
 				if(a.getAngleToPlayer() <= ref2Angle && a.getAngleToPlayer() >= -180 || a.getAngleToPlayer() >= ref1Angle && a.getAngleToPlayer() <= 180){
