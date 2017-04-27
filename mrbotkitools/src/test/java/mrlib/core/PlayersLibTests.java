@@ -47,13 +47,22 @@ public class PlayersLibTests {
 		assertThat(returnPlayer).isExactlyInstanceOf(FellowPlayer.class);
 		assertThat(returnPlayer.getDistanceToPlayer()).isCloseTo(TestScenario.fellow1Distance, withinPercentage(1));
 		assertThat(returnPlayer.getAngleToPlayer()).isCloseTo(TestScenario.fellow1Angle, withinPercentage(1));
-				
+		
+		FellowPlayer nearerPlayer = new FellowPlayer(9,"Homer",true,TestScenario.fellow1Distance-20, TestScenario.fellow1Angle, 0);
+		worldModel.setFellowPlayer(nearerPlayer);
+		
+		returnPlayer = PlayersLib.getNearestMate(worldModel, new BotInformation());
+		
+		assertThat(returnPlayer).isExactlyInstanceOf(FellowPlayer.class);
+		assertThat(returnPlayer.getDistanceToPlayer()).isCloseTo(TestScenario.fellow1Distance-20, withinPercentage(1));
+		assertThat(returnPlayer.getAngleToPlayer()).isCloseTo(TestScenario.fellow1Angle, withinPercentage(1));
+		
+		worldModel = TestScenario.getExampleWorldModel();
 	}
 
 	@Test
 	public void testIsEnemyAroundRawWorldDataBotInformation() {
 
-		
 		
 		//Case 1
 		boolean testAround = PlayersLib.isEnemyAround(worldModel, vBotInformation);
@@ -102,6 +111,33 @@ public class PlayersLibTests {
 		
 		//Case 4: Barely in range
 		testAround = PlayersLib.isEnemyAround(worldModel, vBotInformation, 802.0);
+		assertThat(testAround).isEqualTo(true);
+		
+		//Switch Model back to testDefault
+		worldModel = TestScenario.getExampleWorldModel();
+		
+	}
+	
+	@Test
+	public void testIsEnemyAroundRawWorldDataDouble() {
+
+		
+		//Case 1
+		boolean testAround = PlayersLib.isEnemyAround(worldModel, 700.0);
+		assertThat(testAround).isEqualTo(false);
+		
+		
+		//Case 2: Barely out of range
+		testAround = PlayersLib.isEnemyAround(worldModel, 799.99);
+		assertThat(testAround).isEqualTo(false);
+
+		
+		//Case 3: Exact in range
+		testAround = PlayersLib.isEnemyAround(worldModel, 800.0);
+		assertThat(testAround).isEqualTo(true);
+		
+		//Case 4: Barely in range
+		testAround = PlayersLib.isEnemyAround(worldModel, 802.0);
 		assertThat(testAround).isEqualTo(true);
 		
 		//Switch Model back to testDefault

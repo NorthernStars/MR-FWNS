@@ -80,12 +80,26 @@ public class PlayersLib {
 	 /**
      * Check if Enemy is within a specific range
      * @param vWorldState 	{@link RawWorldData} from the Server
-     * @param mSelf			{@link BotInformation} of the agent
+     * @param mSelf			{@link BotInformation} of the agent (not used)
+     * @param range			{@link Double} range in mm
+     * @deprecated
+     * @return 				{@code true} if there is an enemy in a specific range around the agent,
+     * 						{@code false} othwerise
+     */
+	@Deprecated
+	public static boolean isEnemyAround(RawWorldData vWorldState, BotInformation mSelf, double range){
+	
+		return isEnemyAround(vWorldState, range);
+	}
+	
+	 /**
+     * Check if Enemy is within a specific range
+     * @param vWorldState 	{@link RawWorldData} from the Server
      * @param range			{@link Double} range in mm
      * @return 				{@code true} if there is an enemy in a specific range around the agent,
      * 						{@code false} othwerise
      */
-	public static boolean isEnemyAround(RawWorldData vWorldState, BotInformation mSelf, double range){
+	public static boolean isEnemyAround(RawWorldData vWorldState, double range){
 		List<FellowPlayer> vOpponents = vWorldState.getListOfOpponents();
 		for( FellowPlayer p : vOpponents){
 			if(p.getDistanceToPlayer() <= range ){
@@ -95,6 +109,8 @@ public class PlayersLib {
 	
 		return false;
 	}
+	
+	
 	
 	/**
      * Check if Enemy is around a specific teammate in range of 2x kick range.
@@ -139,9 +155,9 @@ public class PlayersLib {
             wb = p.getAngleToPlayer();
             
         }
-        double c = Math.sqrt( a*a + b*b - 2 * a * b * Math.cos(Math.toRadians(Math.abs(wa - wb))));
+        //double c = Math.sqrt( a*a + b*b - 2 * a * b * Math.cos(Math.toRadians(Math.abs(wa - wb))));
     	
-		return c;
+		return Math.sqrt( a*a + b*b - 2 * a * b * Math.cos(Math.toRadians(Math.abs(wa - wb))));
 	}
 	
 	/**
