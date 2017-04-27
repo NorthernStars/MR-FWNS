@@ -283,19 +283,19 @@ public class PlayersLibTests {
 
 	@Test
 	public void testNearestPlayerToBall() {
-		FellowPlayer opponentWithBalls = PlayersLib.nearestOpponentToBall(worldModel);
+		FellowPlayer unknownWithBalls = PlayersLib.nearestPlayerToBall(worldModel);
 		
-		assertThat(opponentWithBalls.getDistanceToPlayer()).isCloseTo(TestScenario.opponent1Distance, withinPercentage(0.1));
-		assertThat(opponentWithBalls.getAngleToPlayer()).isCloseTo(TestScenario.opponent1Angle, withinPercentage(0.1));
+		assertThat(unknownWithBalls.getDistanceToPlayer()).isCloseTo(TestScenario.fellow1Distance, withinPercentage(0.1));
+		assertThat(unknownWithBalls.getAngleToPlayer()).isCloseTo(TestScenario.fellow1Angle, withinPercentage(0.1));
 
 		FellowPlayer P1 = new FellowPlayer();
 		P1.set(new ReferencePoint(TestScenario.ballDistance+20, TestScenario.ballAngle, true));
 		worldModel.setOpponentPlayer(P1);
+	
+		unknownWithBalls=PlayersLib.nearestOpponentToBall(worldModel);
 		
-		opponentWithBalls=PlayersLib.nearestOpponentToBall(worldModel);
-		
-		assertThat(opponentWithBalls.getDistanceToPlayer()).isCloseTo(P1.getDistanceToPlayer(), withinPercentage(0.1));
-		assertThat(opponentWithBalls.getAngleToPlayer()).isCloseTo(P1.getAngleToPlayer(), withinPercentage(0.1));
+		assertThat(unknownWithBalls.getDistanceToPlayer()).isCloseTo(P1.getDistanceToPlayer(), withinPercentage(0.1));
+		assertThat(unknownWithBalls.getAngleToPlayer()).isCloseTo(P1.getAngleToPlayer(), withinPercentage(0.1));
 
 		worldModel = TestScenario.getExampleWorldModel();
 	}

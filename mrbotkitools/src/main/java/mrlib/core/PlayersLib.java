@@ -343,8 +343,8 @@ public class PlayersLib {
 		
 		// caluclate distances
 		BallPosition ballPos = aWorldState.getBallPosition();
-		double dMate = teammate.sub( ballPos ).getDistanceToPoint();
-		double dOpponent = opponent.sub( ballPos ).getDistanceToPoint();
+		double dMate = PositionLib.getDistanceBetweenTwoRefPoints(teammate, ballPos);
+		double dOpponent = PositionLib.getDistanceBetweenTwoRefPoints(opponent, ballPos);
 		
 		return  dMate < dOpponent ? teammate : opponent ;
 	}
