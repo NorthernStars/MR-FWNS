@@ -221,7 +221,7 @@ public class RawWorldData implements WorldData{
 		mListOfTeamMates =  mListOfTeamMates != null ? mListOfTeamMates : new ArrayList<FellowPlayer>();
 		mListOfTeamMates.add(player);
 	}
-	@XmlTransient
+	
 	public void setBallPosition(BallPosition ballPos){
 		mBallPosition = ballPos != null ? ballPos : new BallPosition();
 	}
