@@ -221,10 +221,9 @@ public class RawWorldData implements WorldData{
 		mListOfTeamMates =  mListOfTeamMates != null ? mListOfTeamMates : new ArrayList<FellowPlayer>();
 		mListOfTeamMates.add(player);
 	}
-	@XmlTransient @Deprecated //Function ignores parameters and sets fix values
-	public void setBallPosition(ReferencePoint ballPos){
-		mBallPosition = mBallPosition != null ? mBallPosition : new BallPosition();
-		mBallPosition.set(20, 45, true);
+	@XmlTransient
+	public void setBallPosition(BallPosition ballPos){
+		mBallPosition = ballPos != null ? ballPos : new BallPosition();
 	}
 	
     @XmlTransient

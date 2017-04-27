@@ -385,6 +385,9 @@ public class PlayersLibTests {
 		testTeamBall = PlayersLib.hasMateTheBall(worldModel, vBotInformation);
 		assertThat(testTeamBall).isEqualTo(true);
 		
+		BallPosition bPos = null;
+		worldModel.setBallPosition(bPos);
+		
 	}
 
 	@Test
