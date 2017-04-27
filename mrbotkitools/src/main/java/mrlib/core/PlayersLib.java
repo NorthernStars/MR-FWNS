@@ -26,7 +26,7 @@ public class PlayersLib {
      * @param mSelf 		{@link BotInformation} of the agent
      * @return 				{@link FellowPlayer} with the shortest distance to oneself
      */
-	public static FellowPlayer getNearestMate(RawWorldData vWorldState, BotInformation mSelf){
+	public static FellowPlayer getNearestMate(RawWorldData vWorldState){
         List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
         
 		FellowPlayer nearestMate = null;
@@ -36,9 +36,22 @@ public class PlayersLib {
 			}                    				
 		
 		}
-
 		return nearestMate;
 	}
+	
+	 /**
+     * Legacy AI Support. Returns nearest Teammate, doesn't check if something is inbetween or not.
+     * @param vWorldState 	{@link RawWorldData} from the Server
+     * @param mSelf 		{@link BotInformation} of the agent
+     * @deprecated
+     * @return 				{@link FellowPlayer} with the shortest distance to oneself
+     */
+	@Deprecated
+	public static FellowPlayer getNearestMate(RawWorldData vWorldState, BotInformation mSelf){
+		return getNearestMate(vWorldState);
+	}
+	
+	
 	
 	 /**
      * Returns nearest Opponent, doesn't check if something is inbetween or not.
@@ -167,7 +180,10 @@ public class PlayersLib {
      * @return 			Distance from {@code p} to {@code ballPos} as {@link Double}
      */
 	public static double getDistanceBetweenPlayerAndBall(FellowPlayer p, BallPosition ballPos) {
-		double a, b, wa, wb;
+		double a;
+		double b;
+		double wa;
+		double wb;
         
         if( p.getAngleToPlayer() > ballPos.getAngleToBall() ){
             
@@ -536,23 +552,9 @@ public class PlayersLib {
      * @param p			{@link FellowPlayer} whose distance to the point should be calculated
      * @param refPoint	{@link ReferencePoint} to which the distance of the player should be calculated
      * @return 			Distance between {@code p} and {@code refPoint} as {@link Double}.
-     * @deprecated		Use {@code sub(aReferencePoint)} function of {@link ReferencePoint}
      * 					or {@link FellowPlayer} to calculate distance.
      */
-	@Deprecated
 	public static double getDistanceBetweenPlayerAndPoint(FellowPlayer player,ReferencePoint refPoint) {
-//		double a, b, wa, wb;
-//        
-//        
-//        a = player.getDistanceToPoint();
-//        wa = player.getAngleToPoint();
-//        b = refPoint.getDistanceToPoint();
-//        wb = refPoint.getAngleToPoint();
-//         
-//       
-//        double c = Math.sqrt( a*a + b*b - 2 * a * b * Math.cos(Math.toRadians(Math.abs(wa - wb))));
-//    	
-//       return c;
-		return player.sub( refPoint ).getDistanceToPoint();
+		return PositionLib.getDistanceBetweenTwoRefPoints(player, refPoint);
 	}
 }

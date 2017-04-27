@@ -403,11 +403,19 @@ public class PlayersLibTests {
 
 	@Test
 	public void testGetDistanceBetweenPlayerAndPoint() {
-		fail("Function is deprecated, status unclear");
-//		FellowPlayer P1 = new FellowPlayer();
-//		P1.set(new ReferencePoint(77,66,true));
-//		ReferencePoint P2 = new ReferencePoint(66, 66, true);
-//		double testDistance = PlayersLib.getDistanceBetweenPlayerAndPoint(P1, P2);
+		FellowPlayer P1 = new FellowPlayer();
+		P1.set(new ReferencePoint(77,TestScenario.fellow1Angle,true));
+		
+		ReferencePoint P2 = new ReferencePoint(66.0, TestScenario.fellow1Angle, true);
+		
+		double testDistance = PlayersLib.getDistanceBetweenPlayerAndPoint(P1, P2);
+		assertThat(testDistance).isEqualTo(11.0);
+	
+		P1 = PlayersLib.getNearestMate(worldModel);
+		
+		testDistance = PlayersLib.getDistanceBetweenPlayerAndPoint(P1, P2);
+		assertThat(testDistance).isEqualTo(P1.getDistanceToPlayer() - 66.0);
+		
 	}
 
 
