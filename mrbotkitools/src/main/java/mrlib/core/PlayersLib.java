@@ -155,7 +155,6 @@ public class PlayersLib {
             wb = p.getAngleToPlayer();
             
         }
-        //double c = Math.sqrt( a*a + b*b - 2 * a * b * Math.cos(Math.toRadians(Math.abs(wa - wb))));
     	
 		return Math.sqrt( a*a + b*b - 2 * a * b * Math.cos(Math.toRadians(Math.abs(wa - wb))));
 	}
@@ -185,9 +184,8 @@ public class PlayersLib {
             wb = p.getAngleToPlayer();
             
         }
-        double c = Math.sqrt( a*a + b*b - 2 * a * b * Math.cos(Math.toRadians(Math.abs(wa - wb))));
     	
-		return c;
+		return Math.sqrt( a*a + b*b - 2 * a * b * Math.cos(Math.toRadians(Math.abs(wa - wb))));
 	}
 	
 	/**
@@ -202,11 +200,10 @@ public class PlayersLib {
 		FellowPlayer nearestMate = null;
 		
     	for( FellowPlayer p : vTeamMates){
-    		if( nearestMate == null || p.getDistanceToPlayer() < nearestMate.getDistanceToPlayer() ){
-    			if( !PlayersLib.isEnemyAroundMate(vWorldState, mSelf, p)
-    					&& p.getId() != mSelf.getVtId() ) {
+    		if(( nearestMate == null || p.getDistanceToPlayer() < nearestMate.getDistanceToPlayer())
+    				&& (!PlayersLib.isEnemyAroundMate(vWorldState, mSelf, p)
+					&& p.getId() != mSelf.getVtId())){
     				nearestMate = p;
-    			}
     		}
     	}
 		return nearestMate;
