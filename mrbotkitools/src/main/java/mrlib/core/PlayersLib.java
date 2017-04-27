@@ -234,28 +234,40 @@ public class PlayersLib {
 	}
 	
 	/**
-     * Check if the agent is the nearest to the ball.
+     * Legacy AI support.Check if the agent is the nearest to the ball.
      * 
      * @param vWorldState	{@link RawWorldData} from the Server
      * @param ballPos 		{@link BallPosition} of the ball
      * @param mSelf			{@link BotInformation} of the agent
      * @return 				{@code true} if bot is the closest to the ball, {@code fale} otherwise.
      */
-	//TODO: function needs parameter ballPos while BallPosition is already in RawWorldData
 	public static boolean amINearestToBall(RawWorldData vWorldState, BallPosition ballPos, BotInformation mSelf){
+		return amINearestToBall(vWorldState, mSelf);
+	}
+		
+	
+	/**
+     * Check if the agent is the nearest to the ball. Checks teammates only!
+     * 
+     * @param vWorldState	{@link RawWorldData} from the Server
+     * @param ballPos 		{@link BallPosition} of the ball
+     * @param mSelf			{@link BotInformation} of the agent
+     * @return 				{@code true} if bot is the closest to the ball, {@code fale} otherwise.
+     */
+	public static boolean amINearestToBall(RawWorldData vWorldState, BotInformation mSelf){
 		List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
 		
 		//I am closest as default
-		FellowPlayer closest_player = (new FellowPlayer(mSelf.getVtId(), mSelf.getBotname(), true, 0, 0, 0) );
+		FellowPlayer closestPlayer = new FellowPlayer(mSelf.getVtId(), mSelf.getBotname(), true, 0, 0, 0) ;
 		
 		for(FellowPlayer a: vTeamMates)
 		{
-			if( PlayersLib.getDistanceBetweenPlayerAndBall(a, ballPos) < PlayersLib.getDistanceBetweenPlayerAndBall(closest_player, ballPos)){
-				closest_player = a;
+			if( PlayersLib.getDistanceBetweenPlayerAndBall(a, vWorldState.getBallPosition()) < PlayersLib.getDistanceBetweenPlayerAndBall(closestPlayer, vWorldState.getBallPosition())){
+				closestPlayer = a;
 			}
 		}
 		
-		return (closest_player.getId() == mSelf.getVtId());
+		return closestPlayer.getId() == mSelf.getVtId();
 		
 	}
 	

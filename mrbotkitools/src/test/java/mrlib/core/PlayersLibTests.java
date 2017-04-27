@@ -232,7 +232,11 @@ public class PlayersLibTests {
 		Boolean amINear = PlayersLib.amINearestToBall(worldModel, worldModel.getBallPosition(), vBotInformation);
 		assertThat(amINear).isEqualTo(true);
 		
-		//TODO: Add more TestCases when setBallPosition is fixed
+		worldModel.setBallPosition(new BallPosition(TestScenario.fellow1Distance + 20, TestScenario.fellow1Angle, true));
+		amINear = PlayersLib.amINearestToBall(worldModel, worldModel.getBallPosition(), vBotInformation);
+		assertThat(amINear).isEqualTo(false);
+		
+		worldModel = TestScenario.getExampleWorldModel();
 		
 	}
 
