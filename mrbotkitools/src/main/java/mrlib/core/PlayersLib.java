@@ -399,14 +399,11 @@ public class PlayersLib {
 			ref1Angle = refPoint2.getAngleToPoint();
 			ref2Angle = refPoint1.getAngleToPoint();
 		}
-		//TODO: Das kann so nicht funktionieren (returnt immer true/false im ersten Durchlauf)
+
 		if(Math.abs(ref1Angle-ref2Angle) > 180){
 			for ( FellowPlayer a: vOpponents){
 				if(a.getAngleToPlayer() <= ref2Angle && a.getAngleToPlayer() >= -180 || a.getAngleToPlayer() >= ref1Angle && a.getAngleToPlayer() <= 180){
 					return true;
-				}
-				else{
-					return false;
 				}
 			}
 		}
@@ -415,12 +412,9 @@ public class PlayersLib {
 				if(a.getAngleToPlayer() >= ref2Angle && a.getAngleToPlayer() <= ref1Angle){
 					return true;
 				}
-				else{
-				return false;
-				}
 			}
 		}
-		return true;
+		return false;
 	}
 	
 	/**
@@ -446,14 +440,13 @@ public class PlayersLib {
 		if(Math.abs(ref1Angle-ref2Angle) > 180){
 			
 
-				return(enemy.getAngleToPlayer() <= ref2Angle && enemy.getAngleToPlayer() >= -180 
-						|| enemy.getAngleToPlayer() >= ref1Angle && enemy.getAngleToPlayer() <= 180);
-				
+				return enemy.getAngleToPlayer() <= ref2Angle && enemy.getAngleToPlayer() >= -180 
+						|| enemy.getAngleToPlayer() >= ref1Angle && enemy.getAngleToPlayer() <= 180;
 				
 		}
 		else{
 			
-				return(enemy.getAngleToPlayer() >= ref2Angle && enemy.getAngleToPlayer() <= ref1Angle);
+				return enemy.getAngleToPlayer() >= ref2Angle && enemy.getAngleToPlayer() <= ref1Angle;
 			
 		}
 		
