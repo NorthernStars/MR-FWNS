@@ -293,7 +293,7 @@ public class PositionLibTests {
             testRefPointA = new ReferencePoint(0.5, -1, false);
             testRefPointB = new ReferencePoint(-0.5, 3, false);
             testRefPointC = new ReferencePoint(-1.5, -1, false);
-            result = PositionLib.IsBallInTriangle(testRefPointA, testRefPointB, testRefPointC, testBallPos);
+            result = PositionLib.isBallInTriangle(testRefPointA, testRefPointB, testRefPointC, testBallPos);
             assertThat(result).isExactlyInstanceOf(Boolean.class);
             assertThat(((Boolean) result).booleanValue()).isEqualTo(true);
             
@@ -301,17 +301,17 @@ public class PositionLibTests {
             testRefPointA = new ReferencePoint(1,1,false);
             testRefPointB = new ReferencePoint(0,3, false);
             testRefPointC = new ReferencePoint(1,3, false);
-            result = PositionLib.IsBallInTriangle(testRefPointA, testRefPointB, testRefPointC, testBallPos);
+            result = PositionLib.isBallInTriangle(testRefPointA, testRefPointB, testRefPointC, testBallPos);
             assertThat(result).isExactlyInstanceOf(Boolean.class);
             assertThat(((Boolean) result).booleanValue()).isEqualTo(false);
             
             testBallPos = new BallPosition(0.5, 4, false);
-            result = PositionLib.IsBallInTriangle(testRefPointA, testRefPointB, testRefPointC, testBallPos);
+            result = PositionLib.isBallInTriangle(testRefPointA, testRefPointB, testRefPointC, testBallPos);
             assertThat(result).isExactlyInstanceOf(Boolean.class);
             assertThat(((Boolean) result).booleanValue()).isEqualTo(false);
             
             testBallPos = new BallPosition(1.5, 2, false);
-            result = PositionLib.IsBallInTriangle(testRefPointA, testRefPointB, testRefPointC, testBallPos);
+            result = PositionLib.isBallInTriangle(testRefPointA, testRefPointB, testRefPointC, testBallPos);
             assertThat(result).isExactlyInstanceOf(Boolean.class);
             assertThat(((Boolean) result).booleanValue()).isEqualTo(false);
 	}
