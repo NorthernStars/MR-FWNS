@@ -62,6 +62,16 @@ public class PositionLibTests {
             assertThat(returnReferencePoint).isExactlyInstanceOf(ReferencePoint.class);
             assertThat(((ReferencePoint) returnReferencePoint).getXOfPoint()).isCloseTo(-3.5, withinPercentage(1));
             assertThat(((ReferencePoint) returnReferencePoint).getYOfPoint()).isCloseTo(3.5, withinPercentage(1));
+            
+            testReferencePointA = new ReferencePoint(0, -1, false);
+            testReferencePointB = new ReferencePoint(0, 5, false);
+            returnReferencePoint = PositionLib.getMiddleOfTwoReferencePoints(testReferencePointA, testReferencePointB);
+            assertThat(returnReferencePoint).isExactlyInstanceOf(ReferencePoint.class);
+//            todo: Rundungsfehler bei x und y
+//            assertThat(((ReferencePoint) returnReferencePoint).getXOfPoint()).isCloseTo(0, withinPercentage(1));
+//            assertThat(((ReferencePoint) returnReferencePoint).getYOfPoint()).isCloseTo(2, withinPercentage(1));
+            assertThat(((ReferencePoint) returnReferencePoint).getDistanceToPoint()).isCloseTo(2, withinPercentage(1));
+            assertThat(((ReferencePoint) returnReferencePoint).getAngleToPoint()).isCloseTo(90.0, withinPercentage(1));
 	}
 
 	@Test
