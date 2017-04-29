@@ -31,13 +31,7 @@ public class PositionLib {
      * @return {@link ReferencePoint} in middle between {@code aRefPoint0} and {@code aRefPoint1}.
      */
     public static ReferencePoint getMiddleOfTwoReferencePoints( ReferencePoint aRefPoint0, ReferencePoint aRefPoint1 ){
-    	
-    	    	
-        //TODO: vieleicht noch mehr testen!
-        //TODO: schoener machen
-        //TODO: Funktionen auslagern
-        // Merke Seitenhalbierende hat nix! mit Winkelhalbiernder zu tun! Geogebra nutzen...
-        
+
         double a;
         double b;
         double wa;
@@ -395,7 +389,7 @@ public class PositionLib {
 	 * @param ballpos			{@link ReferencePoint}
 	 * @return				{@code true} if {@code ballpos} is in triangle of {@code pointA}, {@code pointB}, {@code pointC}.
 	 */
-    public static boolean IsBallInTriangle(ReferencePoint pointA, ReferencePoint pointB, ReferencePoint pointC, ReferencePoint ballpos){  	
+    public static boolean isBallInTriangle(ReferencePoint pointA, ReferencePoint pointB, ReferencePoint pointC, ReferencePoint ballpos){  	
     	double distA = PositionLib.getDistanceBetweenTwoRefPoints(pointB, pointC);
     	double distB = PositionLib.getDistanceBetweenTwoRefPoints(pointA, pointC);
     	double distC = PositionLib.getDistanceBetweenTwoRefPoints(pointA, pointB);
