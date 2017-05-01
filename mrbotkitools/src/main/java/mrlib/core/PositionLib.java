@@ -314,24 +314,11 @@ public class PositionLib {
             /*
             * TODO: Complete function to get if the Ball is in an area of 4 ReferencePoints
             * */
-
-            double smallestX = 0;
-            @SuppressWarnings("unused")
-            double secondsmallestX = 0;
-//		double biggestX = 0;
-
-            smallestX = aRefPoint0.getXOfPoint();
-            if(aRefPoint1.getXOfPoint() < smallestX)
-                    secondsmallestX = smallestX;
-                    smallestX = aRefPoint1.getXOfPoint();
-            if(aRefPoint2.getXOfPoint() < smallestX)
-                    secondsmallestX = smallestX;
-                    smallestX = aRefPoint2.getXOfPoint();
-            if(aRefPoint3.getXOfPoint() < smallestX)
-                    secondsmallestX = smallestX;
-                    smallestX = aRefPoint3.getXOfPoint();
-
-            return true;
+            
+            return isBallInTriangle(aRefPoint0, aRefPoint1, aRefPoint2, ballPos) 
+                    || isBallInTriangle(aRefPoint0, aRefPoint3, aRefPoint2, ballPos);
+            
+            
 		
 	}
 	
