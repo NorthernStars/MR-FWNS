@@ -324,6 +324,11 @@ public class PositionLibTests {
             result = PositionLib.isBallInTriangle(testRefPointA, testRefPointB, testRefPointC, testBallPos);
             assertThat(result).isExactlyInstanceOf(Boolean.class);
             assertThat((result).booleanValue()).isEqualTo(false);
+            
+            testBallPos = new BallPosition(1.5, 2.69, false);
+            result = PositionLib.isBallInTriangle(testRefPointA, testRefPointB, testRefPointC, testBallPos);
+            assertThat(result).isExactlyInstanceOf(Boolean.class);
+            assertThat((result).booleanValue()).isEqualTo(false);
 	}
 
 }
