@@ -305,7 +305,7 @@ public class PositionLibTests {
             testRefPointC = new ReferencePoint(-1.5, -1, false);
             result = PositionLib.isBallInTriangle(testRefPointA, testRefPointB, testRefPointC, testBallPos);
             assertThat(result).isExactlyInstanceOf(Boolean.class);
-            assertThat(((Boolean) result).booleanValue()).isEqualTo(true);
+            assertThat((result).booleanValue()).isEqualTo(true);
             
             testBallPos = new BallPosition(0, 1, false);
             testRefPointA = new ReferencePoint(1,1,false);
@@ -313,17 +313,17 @@ public class PositionLibTests {
             testRefPointC = new ReferencePoint(1,3, false);
             result = PositionLib.isBallInTriangle(testRefPointA, testRefPointB, testRefPointC, testBallPos);
             assertThat(result).isExactlyInstanceOf(Boolean.class);
-            assertThat(((Boolean) result).booleanValue()).isEqualTo(false);
+            assertThat((result).booleanValue()).isEqualTo(false);
             
             testBallPos = new BallPosition(0.5, 4, false);
             result = PositionLib.isBallInTriangle(testRefPointA, testRefPointB, testRefPointC, testBallPos);
             assertThat(result).isExactlyInstanceOf(Boolean.class);
-            assertThat(((Boolean) result).booleanValue()).isEqualTo(false);
+            assertThat((result).booleanValue()).isEqualTo(false);
             
             testBallPos = new BallPosition(1.5, 2, false);
             result = PositionLib.isBallInTriangle(testRefPointA, testRefPointB, testRefPointC, testBallPos);
             assertThat(result).isExactlyInstanceOf(Boolean.class);
-            assertThat(((Boolean) result).booleanValue()).isEqualTo(false);
+            assertThat((result).booleanValue()).isEqualTo(false);
 	}
 
 }
