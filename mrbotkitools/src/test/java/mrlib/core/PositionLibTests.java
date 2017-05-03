@@ -228,59 +228,7 @@ public class PositionLibTests {
 
 	@Test
 	public void testIsBallInQuadrangle() {
-            ReferencePoint testReferencePointA;
-            ReferencePoint testReferencePointB;
-            ReferencePoint testReferencePointC;
-            ReferencePoint testReferencePointD;
-            BallPosition testBallPos;
-            Boolean result;
-            
-            //Ball is in a triangle
-            testReferencePointA = new ReferencePoint(-3.5,2.5,false);
-            testReferencePointB = new ReferencePoint(-1.5,4,false);
-            testReferencePointC = new ReferencePoint(0,2.5,false);
-            testReferencePointD = new ReferencePoint(-2,1,false);
-            testBallPos = new BallPosition(-2, 3, false);
-            result = PositionLib.isBallInQuadrangle(testReferencePointA, testReferencePointB, testReferencePointC, testReferencePointD,testBallPos);
-            assertThat(result).isExactlyInstanceOf(Boolean.class);
-            assertThat(((Boolean) result).booleanValue()).isEqualTo(true);
-            
-            //Ball is in the center
-            testBallPos = new BallPosition(-1.75, 2.5, false);
-            result = PositionLib.isBallInQuadrangle(testReferencePointA, testReferencePointB, testReferencePointC, testReferencePointD,testBallPos);
-            assertThat(result).isExactlyInstanceOf(Boolean.class);
-            assertThat(((Boolean) result).booleanValue()).isEqualTo(true);
-            
-            //Ball is out of the quadrangle
-            testBallPos = new BallPosition(-3, 4, false);
-            result = PositionLib.isBallInQuadrangle(testReferencePointA, testReferencePointB, testReferencePointC, testReferencePointD,testBallPos);
-            assertThat(result).isExactlyInstanceOf(Boolean.class);
-            assertThat(((Boolean) result).booleanValue()).isEqualTo(false);
-            
-            //Quadrangle corners are not having a good position
-            testReferencePointA = new ReferencePoint(-0.5,2,false);
-            testReferencePointB = new ReferencePoint(-1.5,4.5,false);
-            testReferencePointC = new ReferencePoint(-0.5,4,false);
-            testReferencePointD = new ReferencePoint(-2,2,false);
-            testBallPos = new BallPosition(-1, 4, false);
-            result = PositionLib.isBallInQuadrangle(testReferencePointA, testReferencePointB, testReferencePointC, testReferencePointD,testBallPos);
-            assertThat(result).isExactlyInstanceOf(Boolean.class);
-            assertThat(((Boolean) result).booleanValue()).isEqualTo(true);
-            
-//            //Quadrangle corners are not having a good position, ball either
-//            testBallPos = new BallPosition(-1.5, 3, false);
-//            result = PositionLib.isBallInQuadrangle(testReferencePointA, testReferencePointB, testReferencePointC, testReferencePointD,testBallPos);
-//            assertThat(result).isExactlyInstanceOf(Boolean.class);
-//            assertThat(((Boolean) result).booleanValue()).isEqualTo(true);
-            
-//            testReferencePointA = new ReferencePoint(-0.5,2,false);
-//            testReferencePointB = new ReferencePoint(-1.5,2.5,false);
-//            testReferencePointC = new ReferencePoint(-2.73,4.57,false);
-//            testReferencePointD = new ReferencePoint(-2,2,false);
-//            testBallPos = new BallPosition(-1.35, 2.71, false);
-//            result = PositionLib.isBallInQuadrangle(testReferencePointA, testReferencePointB, testReferencePointC, testReferencePointD,testBallPos);
-//            assertThat(result).isExactlyInstanceOf(Boolean.class);
-//            assertThat(((Boolean) result).booleanValue()).isEqualTo(false);
+		fail("Not yet implemented");
 	}
 
 	@Test
