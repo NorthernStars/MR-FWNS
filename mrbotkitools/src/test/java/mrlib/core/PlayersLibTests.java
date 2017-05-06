@@ -296,6 +296,14 @@ public class PlayersLibTests {
 		
 		assertThat(unknownWithBalls.getDistanceToPlayer()).isCloseTo(P1.getDistanceToPlayer(), withinPercentage(0.1));
 		assertThat(unknownWithBalls.getAngleToPlayer()).isCloseTo(P1.getAngleToPlayer(), withinPercentage(0.1));
+		
+		RawWorldData vModel = new RawWorldData();
+		vModel.setOpponentPlayer(P1);
+		
+		FellowPlayer hauntedOpponentWithBalls = PlayersLib.nearestPlayerToBall(vModel);
+		
+		assertThat(unknownWithBalls.getDistanceToPlayer()).isCloseTo(P1.getDistanceToPlayer(), withinPercentage(0.1));
+		assertThat(unknownWithBalls.getAngleToPlayer()).isCloseTo(P1.getAngleToPlayer(), withinPercentage(0.1));
 
 		worldModel = TestScenario.getExampleWorldModel();
 	}
