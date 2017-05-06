@@ -62,6 +62,16 @@ public class PositionLibTests {
             assertThat(returnReferencePoint).isExactlyInstanceOf(ReferencePoint.class);
             assertThat(((ReferencePoint) returnReferencePoint).getXOfPoint()).isCloseTo(-3.5, withinPercentage(1));
             assertThat(((ReferencePoint) returnReferencePoint).getYOfPoint()).isCloseTo(3.5, withinPercentage(1));
+            
+            testReferencePointA = new ReferencePoint(0, -1, false);
+            testReferencePointB = new ReferencePoint(0, 5, false);
+            returnReferencePoint = PositionLib.getMiddleOfTwoReferencePoints(testReferencePointA, testReferencePointB);
+            assertThat(returnReferencePoint).isExactlyInstanceOf(ReferencePoint.class);
+//            todo: Rundungsfehler bei x und y
+//            assertThat(((ReferencePoint) returnReferencePoint).getXOfPoint()).isCloseTo(0, withinPercentage(1));
+//            assertThat(((ReferencePoint) returnReferencePoint).getYOfPoint()).isCloseTo(2, withinPercentage(1));
+            assertThat(((ReferencePoint) returnReferencePoint).getDistanceToPoint()).isCloseTo(2, withinPercentage(1));
+            assertThat(((ReferencePoint) returnReferencePoint).getAngleToPoint()).isCloseTo(90.0, withinPercentage(1));
 	}
 
 	@Test
@@ -144,20 +154,19 @@ public class PositionLibTests {
 	public void testGetBestPointAwayFromBall() {
             RawWorldData rawWorldData = TestScenario.getExampleWorldModel(TestScenario.xmlExampleWorldData);
             ReferencePoint result;
-            ReferencePoint ballPos;
+            BallPosition ballPos;
             
             result = PositionLib.getBestPointAwayFromBall(rawWorldData);
             assertThat(result).isExactlyInstanceOf(ReferencePoint.class);
             assertThat(((ReferencePoint) result).getXOfPoint()).isCloseTo(-59.0, withinPercentage(1));
             assertThat(((ReferencePoint) result).getYOfPoint()).isCloseTo(44.0, withinPercentage(1));
             
-            //TODO: Add more TestCases when setBallPosition is fixed
-//            ballPos = new BallPosition(141.42, 225, true);
-//            rawWorldData.setBallPosition(ballPos);
-//            result = PositionLib.getBestPointAwayFromBall(rawWorldData);
-//            assertThat(result).isExactlyInstanceOf(ReferencePoint.class);
-//            assertThat(((ReferencePoint) result).getDistanceToPoint()).isCloseTo(585.66, withinPercentage(1));
-//            assertThat(((ReferencePoint) result).getAngleToPoint()).isCloseTo(4.31, withinPercentage(1));
+            ballPos = new BallPosition(141.42, 225, true);
+            rawWorldData.setBallPosition(ballPos);
+            result = PositionLib.getBestPointAwayFromBall(rawWorldData);
+            assertThat(result).isExactlyInstanceOf(ReferencePoint.class);
+            assertThat(((ReferencePoint) result).getDistanceToPoint()).isCloseTo(585.66, withinPercentage(1));
+            assertThat(((ReferencePoint) result).getAngleToPoint()).isCloseTo(4.31, withinPercentage(1));
 	}
 
 	@Test
@@ -293,27 +302,32 @@ public class PositionLibTests {
             testRefPointA = new ReferencePoint(0.5, -1, false);
             testRefPointB = new ReferencePoint(-0.5, 3, false);
             testRefPointC = new ReferencePoint(-1.5, -1, false);
-            result = PositionLib.IsBallInTriangle(testRefPointA, testRefPointB, testRefPointC, testBallPos);
+            result = PositionLib.isBallInTriangle(testRefPointA, testRefPointB, testRefPointC, testBallPos);
             assertThat(result).isExactlyInstanceOf(Boolean.class);
-            assertThat(((Boolean) result).booleanValue()).isEqualTo(true);
+            assertThat((result).booleanValue()).isEqualTo(true);
             
             testBallPos = new BallPosition(0, 1, false);
             testRefPointA = new ReferencePoint(1,1,false);
             testRefPointB = new ReferencePoint(0,3, false);
             testRefPointC = new ReferencePoint(1,3, false);
-            result = PositionLib.IsBallInTriangle(testRefPointA, testRefPointB, testRefPointC, testBallPos);
+            result = PositionLib.isBallInTriangle(testRefPointA, testRefPointB, testRefPointC, testBallPos);
             assertThat(result).isExactlyInstanceOf(Boolean.class);
-            assertThat(((Boolean) result).booleanValue()).isEqualTo(false);
+            assertThat((result).booleanValue()).isEqualTo(false);
             
             testBallPos = new BallPosition(0.5, 4, false);
-            result = PositionLib.IsBallInTriangle(testRefPointA, testRefPointB, testRefPointC, testBallPos);
+            result = PositionLib.isBallInTriangle(testRefPointA, testRefPointB, testRefPointC, testBallPos);
             assertThat(result).isExactlyInstanceOf(Boolean.class);
-            assertThat(((Boolean) result).booleanValue()).isEqualTo(false);
+            assertThat((result).booleanValue()).isEqualTo(false);
             
             testBallPos = new BallPosition(1.5, 2, false);
-            result = PositionLib.IsBallInTriangle(testRefPointA, testRefPointB, testRefPointC, testBallPos);
+            result = PositionLib.isBallInTriangle(testRefPointA, testRefPointB, testRefPointC, testBallPos);
             assertThat(result).isExactlyInstanceOf(Boolean.class);
-            assertThat(((Boolean) result).booleanValue()).isEqualTo(false);
+            assertThat((result).booleanValue()).isEqualTo(false);
+            
+            testBallPos = new BallPosition(1.5, 2.69, false);
+            result = PositionLib.isBallInTriangle(testRefPointA, testRefPointB, testRefPointC, testBallPos);
+            assertThat(result).isExactlyInstanceOf(Boolean.class);
+            assertThat((result).booleanValue()).isEqualTo(false);
 	}
 
 }

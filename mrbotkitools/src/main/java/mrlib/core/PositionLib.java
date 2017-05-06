@@ -31,13 +31,7 @@ public class PositionLib {
      * @return {@link ReferencePoint} in middle between {@code aRefPoint0} and {@code aRefPoint1}.
      */
     public static ReferencePoint getMiddleOfTwoReferencePoints( ReferencePoint aRefPoint0, ReferencePoint aRefPoint1 ){
-    	
-    	    	
-        //TODO: vieleicht noch mehr testen!
-        //TODO: schoener machen
-        //TODO: Funktionen auslagern
-        // Merke Seitenhalbierende hat nix! mit Winkelhalbiernder zu tun! Geogebra nutzen...
-        
+
         double a;
         double b;
         double wa;
@@ -320,24 +314,11 @@ public class PositionLib {
             /*
             * TODO: Complete function to get if the Ball is in an area of 4 ReferencePoints
             * */
-
-            double smallestX = 0;
-            @SuppressWarnings("unused")
-            double secondsmallestX = 0;
-//		double biggestX = 0;
-
-            smallestX = aRefPoint0.getXOfPoint();
-            if(aRefPoint1.getXOfPoint() < smallestX)
-                    secondsmallestX = smallestX;
-                    smallestX = aRefPoint1.getXOfPoint();
-            if(aRefPoint2.getXOfPoint() < smallestX)
-                    secondsmallestX = smallestX;
-                    smallestX = aRefPoint2.getXOfPoint();
-            if(aRefPoint3.getXOfPoint() < smallestX)
-                    secondsmallestX = smallestX;
-                    smallestX = aRefPoint3.getXOfPoint();
-
-            return true;
+            
+            return isBallInTriangle(aRefPoint0, aRefPoint1, aRefPoint2, ballPos) 
+                    || isBallInTriangle(aRefPoint0, aRefPoint3, aRefPoint2, ballPos);
+            
+            
 		
 	}
 	
@@ -395,7 +376,7 @@ public class PositionLib {
 	 * @param ballpos			{@link ReferencePoint}
 	 * @return				{@code true} if {@code ballpos} is in triangle of {@code pointA}, {@code pointB}, {@code pointC}.
 	 */
-    public static boolean IsBallInTriangle(ReferencePoint pointA, ReferencePoint pointB, ReferencePoint pointC, ReferencePoint ballpos){  	
+    public static boolean isBallInTriangle(ReferencePoint pointA, ReferencePoint pointB, ReferencePoint pointC, ReferencePoint ballpos){  	
     	double distA = PositionLib.getDistanceBetweenTwoRefPoints(pointB, pointC);
     	double distB = PositionLib.getDistanceBetweenTwoRefPoints(pointA, pointC);
     	double distC = PositionLib.getDistanceBetweenTwoRefPoints(pointA, pointB);
