@@ -314,11 +314,13 @@ public class PlayersLibTests {
 
 	@Test
 	public void testNearestPlayerToBall() {
+		//Case 1: FellowPlayer 1 is nearest
 		FellowPlayer unknownWithBalls = PlayersLib.nearestPlayerToBall(worldModel);
 		
 		assertThat(unknownWithBalls.getDistanceToPlayer()).isCloseTo(TestScenario.fellow1Distance, withinPercentage(0.1));
 		assertThat(unknownWithBalls.getAngleToPlayer()).isCloseTo(TestScenario.fellow1Angle, withinPercentage(0.1));
 
+		//Case 2: New Opponent Player P1 is neareest
 		FellowPlayer P1 = new FellowPlayer();
 		P1.set(new ReferencePoint(TestScenario.ballDistance+20, TestScenario.ballAngle, true));
 		worldModel.setOpponentPlayer(P1);
@@ -328,6 +330,7 @@ public class PlayersLibTests {
 		assertThat(unknownWithBalls.getDistanceToPlayer()).isCloseTo(P1.getDistanceToPlayer(), withinPercentage(0.1));
 		assertThat(unknownWithBalls.getAngleToPlayer()).isCloseTo(P1.getAngleToPlayer(), withinPercentage(0.1));
 		
+		//Case 3: P1 is FellowPlayer with no Opponent Player
 		worldModel = new RawWorldData();
 		worldModel.setFellowPlayer(P1);
 		worldModel.setBallPosition(new BallPosition(TestScenario.ballDistance, TestScenario.ballAngle, true));
@@ -337,7 +340,8 @@ public class PlayersLibTests {
 		assertThat(unknownWithBalls.getDistanceToPlayer()).isCloseTo(P1.getDistanceToPlayer(), withinPercentage(0.1));
 		assertThat(unknownWithBalls.getAngleToPlayer()).isCloseTo(P1.getAngleToPlayer(), withinPercentage(0.1));
 		worldModel.setBallPosition(new BallPosition(TestScenario.ballDistance, TestScenario.ballAngle, true));
-		
+
+		//Case 3.1: P1 is OpponentPlayer with no FellowPlayer
 		worldModel = new RawWorldData();
 		worldModel.setOpponentPlayer(P1);
 		worldModel.setBallPosition(new BallPosition(TestScenario.ballDistance, TestScenario.ballAngle, true));
@@ -347,14 +351,13 @@ public class PlayersLibTests {
 		assertThat(unknownWithBalls.getDistanceToPlayer()).isCloseTo(P1.getDistanceToPlayer(), withinPercentage(0.1));
 		assertThat(unknownWithBalls.getAngleToPlayer()).isCloseTo(P1.getAngleToPlayer(), withinPercentage(0.1));
 		
-		RawWorldData vModel = new RawWorldData();
-		vModel.setOpponentPlayer(P1);
+		worldModel = new RawWorldData();
+		//Case 4: No player
 		
-		FellowPlayer hauntedOpponentWithBalls = PlayersLib.nearestPlayerToBall(vModel);
+		FellowPlayer hauntedOpponentWithBalls = PlayersLib.nearestPlayerToBall(worldModel);
 		
-		assertThat(unknownWithBalls.getDistanceToPlayer()).isCloseTo(P1.getDistanceToPlayer(), withinPercentage(0.1));
-		assertThat(unknownWithBalls.getAngleToPlayer()).isCloseTo(P1.getAngleToPlayer(), withinPercentage(0.1));
-
+		assertThat(hauntedOpponentWithBalls).isEqualTo(null);
+		
 		worldModel = TestScenario.getExampleWorldModel();
 	}
 
