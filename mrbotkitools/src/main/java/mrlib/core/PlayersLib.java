@@ -426,12 +426,12 @@ public class PlayersLib {
 
 		if(Math.abs(ref1Angle-ref2Angle) > 180){
 			for ( FellowPlayer a: vOpponents){
-				return a.getAngleToPlayer() >= ref2Angle && a.getAngleToPlayer() >= -180 || a.getAngleToPlayer() <= ref1Angle && a.getAngleToPlayer() <= 180;
+				if(a.getAngleToPlayer() >= ref2Angle && a.getAngleToPlayer() >= -180 || a.getAngleToPlayer() <= ref1Angle && a.getAngleToPlayer() <= 180) return true;
 			}
 		}
 		else{
 			for ( FellowPlayer a: vOpponents){
-				return a.getAngleToPlayer() >= ref2Angle && a.getAngleToPlayer() <= ref1Angle;
+				if(a.getAngleToPlayer() >= ref2Angle && a.getAngleToPlayer() <= ref1Angle) return true;
 			}
 		}
 		return false;

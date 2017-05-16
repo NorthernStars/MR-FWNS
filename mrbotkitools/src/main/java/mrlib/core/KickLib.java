@@ -111,7 +111,7 @@ public class KickLib {
 	 * @return Action			{@link Action}
 	 */
 	private static Action kickToNearest( RawWorldData aWorldData, FellowPlayers aFellowPlayers ){		
-        ArrayList<FellowPlayer> vSpieler = new ArrayList<FellowPlayer>();
+        ArrayList<FellowPlayer> vSpieler = new ArrayList<>();
         
         // get a list of players
         if( aWorldData.getListOfOpponents() != null

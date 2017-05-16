@@ -131,6 +131,13 @@ public class KickLibTests {
 		assertThat(returnAction).isExactlyInstanceOf(Kick.class);
 		assertThat(((Kick) returnAction).getAngle()).isCloseTo(TestScenario.fellow1Angle, withinPercentage(1));
 		assertThat(((Kick) returnAction).getForce()).isCloseTo(1.0f, withinPercentage(1));
+		
+		worldModel = new RawWorldData();
+
+		returnAction = KickLib.kickToNearest(worldModel);
+
+		assertThat(returnAction).isEqualTo(null);
+
 	}
 	
 	}
