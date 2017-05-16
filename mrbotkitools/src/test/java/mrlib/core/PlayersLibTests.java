@@ -238,9 +238,10 @@ public class PlayersLibTests {
 
 	@Test
 	public void testGetMateWithEnemyNearButFurthestAway() {
-		fail("Function is deprecated, status unclear");
 
 		FellowPlayer chosenOne = PlayersLib.getMateWithEnemyNearButFurthestAway(worldModel, vBotInformation);
+		assertThat(chosenOne.getDistanceToPlayer()).isEqualTo(TestScenario.fellow2Distance);
+		
 	}
 
 	@Test

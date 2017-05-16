@@ -198,9 +198,7 @@ public class PlayersLib {
      * @param vWorldState	{@link RawWorldData} from the Server
      * @param mSelf			{@link BotInformation} of the agent
      * @return 				Teammate {@link FellowPlayer} with a enemy around but the enemy furthest away
-     * @deprecated 			functionality unclear
      */
-	@Deprecated //TODO: Check if function is necessary
 	public static FellowPlayer getMateWithEnemyNearButFurthestAway(RawWorldData vWorldState, BotInformation mSelf){
         List<FellowPlayer> vOpponents = vWorldState.getListOfOpponents();
         List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
@@ -222,7 +220,6 @@ public class PlayersLib {
     		}
 			dist_old = 0;
     		nearestEnemies.add(nearestOpponent);
-			counter++; //TODO: Was bringt das? Wird ja eh wieder auf 0 gesetzt
     	}
 		counter = 0;
     	for ( FellowPlayer a: vTeamMates){
