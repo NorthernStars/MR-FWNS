@@ -487,8 +487,21 @@ public class PlayersLibTests {
 		testBool = PlayersLib.isEnemyInCorridorBetweenTwoAngles(worldModel, 230, 175);
 		assertThat(testBool).isEqualTo(true);
 		
-		//P1.setAngleToPoint(200);
+		P1.setAngleToPoint(178);
 		
+		testBool = PlayersLib.isEnemyInCorridorBetweenTwoAngles(worldModel, 190, 175);
+		assertThat(testBool).isEqualTo(false);
+		
+		testBool = PlayersLib.isEnemyInCorridorBetweenTwoAngles(worldModel, 230, 175);
+		assertThat(testBool).isEqualTo(true);
+		
+		P1.setAngleToPoint(165);
+		testBool = PlayersLib.isEnemyInCorridorBetweenTwoAngles(worldModel, -50, -190);
+		assertThat(testBool).isEqualTo(false);
+		
+		testBool = PlayersLib.isEnemyInCorridorBetweenTwoAngles(worldModel, -50, -200);
+		assertThat(testBool).isEqualTo(true);
+
 		P1.setAngleToPoint(165);
 		testBool = PlayersLib.isEnemyInCorridorBetweenTwoAngles(worldModel, -50, -190);
 		assertThat(testBool).isEqualTo(false);
