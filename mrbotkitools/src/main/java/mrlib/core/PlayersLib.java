@@ -450,7 +450,6 @@ public class PlayersLib {
 		}
 		else if(angle2<-180)
 		{
-			//todo: check inversity
 			angle2 +=360;
 			return isEnemyInCorridorBetweenTwoAngles(aWorldState, 180, angle2) 
 					|| isEnemyInCorridorBetweenTwoAngles(aWorldState, angle1, -180);
