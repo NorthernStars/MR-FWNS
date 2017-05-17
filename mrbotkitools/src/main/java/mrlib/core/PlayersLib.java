@@ -412,28 +412,61 @@ public class PlayersLib {
 	 * @returns 			{@code true} if an enemy is in angle between {@code refPoint1} and {@code RefPoint2}, {@code false} otherwise.
 	 * */
 	public static boolean isEnemyInCorridorBetweenTwoRefPoints(RawWorldData aWorldState, ReferencePoint refPoint1, ReferencePoint refPoint2){
-		double ref1Angle = 0;
-		double ref2Angle = 0;
-		List<FellowPlayer> vOpponents = aWorldState.getListOfOpponents();
-		if(refPoint1.getAngleToPoint() > refPoint2.getAngleToPoint()){
-			ref1Angle = refPoint1.getAngleToPoint();
-			ref2Angle = refPoint2.getAngleToPoint();
+		return isEnemyInCorridorBetweenTwoAngles(aWorldState, refPoint1.getAngleToPoint(), refPoint2.getAngleToPoint());
+		
+	}
+	
+	/**
+	 * Return if an enemy is in angle between two {@link ReferencePoint}s.
+	 * 
+	 * @param aWorldState	{@link RawWorldData} from the server
+	 * @param angle1		First {@link double}
+	 * @param angle2		Second {@link double}
+	 * @returns 			{@code true} if an enemy is in angle between {@code angle1} and {@code angle2}, {@code false} otherwise.
+	 * */
+	public static boolean isEnemyInCorridorBetweenTwoAngles(RawWorldData aWorldState, double angle1, double angle2)
+	{
+		//switch angles
+		if(angle2>angle1)
+		{
+			double angleX = angle2;
+			angle2=angle1;
+			angle1=angleX;
 		}
-		else {
-			ref1Angle = refPoint2.getAngleToPoint();
-			ref2Angle = refPoint1.getAngleToPoint();
+		
+		//Invalid values
+		if(angle1-angle2>=180)
+		{
+			System.out.println("Invalid parameters! Corridor must not exceed 180°");
+			return false;
 		}
 
-		if(Math.abs(ref1Angle-ref2Angle) > 180){
-			for ( FellowPlayer a: vOpponents){
-				if(a.getAngleToPlayer() >= ref2Angle && a.getAngleToPlayer() >= -180 || a.getAngleToPlayer() <= ref1Angle && a.getAngleToPlayer() <= 180) return true;
-			}
+		//split angles if exceeding +-180
+		if(angle1>180)
+		{
+			angle1 -= 360;
+			return isEnemyInCorridorBetweenTwoAngles(aWorldState, 180, angle2) 
+					|| isEnemyInCorridorBetweenTwoAngles(aWorldState, angle1, -180);
 		}
-		else{
-			for ( FellowPlayer a: vOpponents){
-				if(a.getAngleToPlayer() >= ref2Angle && a.getAngleToPlayer() <= ref1Angle) return true;
-			}
+		else if(angle2<-180)
+		{
+			//todo: check inversity
+			angle2 +=360;
+			return isEnemyInCorridorBetweenTwoAngles(aWorldState, 180, angle2) 
+					|| isEnemyInCorridorBetweenTwoAngles(aWorldState, angle1, -180);
 		}
+		else
+		{
+			List<FellowPlayer> vOpponents = aWorldState.getListOfOpponents();
+			for(FellowPlayer a: vOpponents)
+			{
+				if(a.getAngleToPlayer() >= angle2 && a.getAngleToPlayer() <= angle1) return true;
+			}
+			
+		}
+		
+		
+		
 		return false;
 	}
 	
@@ -527,4 +560,6 @@ public class PlayersLib {
 	public static double getDistanceBetweenPlayerAndPoint(FellowPlayer player,ReferencePoint refPoint) {
 		return PositionLib.getDistanceBetweenTwoRefPoints(player, refPoint);
 	}
+	
+	
 }

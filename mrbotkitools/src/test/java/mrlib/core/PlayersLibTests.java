@@ -467,12 +467,35 @@ public class PlayersLibTests {
 		testBool = PlayersLib.isEnemyInCorridorBetweenTwoRefPoints(worldModel, testRefPoint1, testRefPoint2);
 		assertThat(testBool).isEqualTo(false);
 		
-		//Case 4: Very large corridor
+		//Case 4: Very large corridor - supposed to fail because angle is too large
 		testRefPoint1 = new ReferencePoint(0, TestScenario.opponent1Angle-100, true);
 		testRefPoint2 = new ReferencePoint(0, TestScenario.opponent1Angle+100, true);
 
+		
 		testBool = PlayersLib.isEnemyInCorridorBetweenTwoRefPoints(worldModel, testRefPoint1, testRefPoint2);
+		assertThat(testBool).isEqualTo(false);
+		
+		//Borderline cases crossing the +-180° mark
+		worldModel=new RawWorldData();
+		FellowPlayer P1 = new FellowPlayer();
+		P1.set(new ReferencePoint(100, -135, true));
+		worldModel.setOpponentPlayer(P1);
+		
+		testBool = PlayersLib.isEnemyInCorridorBetweenTwoAngles(worldModel, 190, 180);
+		assertThat(testBool).isEqualTo(false);
+		
+		testBool = PlayersLib.isEnemyInCorridorBetweenTwoAngles(worldModel, 230, 180);
 		assertThat(testBool).isEqualTo(true);
+		
+		P1.setAngleToPoint(165);
+		testBool = PlayersLib.isEnemyInCorridorBetweenTwoAngles(worldModel, -50, -190);
+		assertThat(testBool).isEqualTo(false);
+		
+		testBool = PlayersLib.isEnemyInCorridorBetweenTwoAngles(worldModel, -50, -200);
+		assertThat(testBool).isEqualTo(true);
+		
+		
+		
 		
 	}
 
