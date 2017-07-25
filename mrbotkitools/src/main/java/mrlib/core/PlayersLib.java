@@ -395,11 +395,8 @@ public class PlayersLib {
 				if( vAngleLeft < -180.0 && (vAngleToPlayer >= (360+vAngleLeft) || vAngleToPlayer <= vAngleRight ) ){
 					return true;
 				}	
-				
 			}
-				
 		}
-		
 		return false;
 	}
 	
@@ -413,50 +410,39 @@ public class PlayersLib {
 	 * */
 	public static boolean isEnemyInCorridorBetweenTwoRefPoints(RawWorldData aWorldState, ReferencePoint refPoint1, ReferencePoint refPoint2){
 		return isEnemyInCorridorBetweenTwoAngles(aWorldState, refPoint1.getAngleToPoint(), refPoint2.getAngleToPoint());
-		
 	}
 	
 	/**
 	 * Return if an enemy is in angle between two {@link ReferencePoint}s.
 	 * 
 	 * @param aWorldState	{@link RawWorldData} from the server
-	 * @param angle1		First {@link double}
-	 * @param angle2		Second {@link double}
-	 * @returns 			{@code true} if an enemy is in angle between {@code angle1} and {@code angle2}, {@code false} otherwise.
+	 * @param angle1		First {@link double} (-180 to 180)
+	 * @param angle2		Second {@link double} (-180 to 180)
+	 * @returns 			{@code true} if an enemy is in angle between {@code angle1} and {@code angle2}, {@code false} otherwise. Always takes the small angle between the points.
 	 * */
 	public static boolean isEnemyInCorridorBetweenTwoAngles(RawWorldData aWorldState, double pAngle1, double pAngle2)
 	{
-		
-		double angle1 = pAngle1;
-		double angle2 = pAngle2;
-		
-		//switch angles if necessary
-		if(angle2>angle1)
-		{
-			double angleX = angle2;
-			angle2=angle1;
-			angle1=angleX;
-		}
-		
-		//Invalid values
-		if(angle1-angle2>=180)
-		{
-			System.out.println("Invalid parameters! Corridor must not exceed 180°");
-			return false;
-		}
+		//todo: throw if angle exceeds +-180
+		double angle1 = 0;
+		double angle2 = 0;
 
-		//split angles if exceeding +-180
-		if(angle1>180)
+		if(pAngle1 > pAngle2)
 		{
-			angle1 -= 360;
-			return isEnemyInCorridorBetweenTwoAngles(aWorldState, 180, angle2) 
-					|| isEnemyInCorridorBetweenTwoAngles(aWorldState, angle1, -180);
+			angle1 = pAngle1;
+			angle2 = pAngle2;
 		}
-		else if(angle2<-180)
+		else 
 		{
-			angle2 +=360;
-			return isEnemyInCorridorBetweenTwoAngles(aWorldState, 180, angle2) 
-					|| isEnemyInCorridorBetweenTwoAngles(aWorldState, angle1, -180);
+			angle1 = pAngle2;
+			angle2 = pAngle1;
+		}
+	
+		
+		//Angle infront or behind
+		if(angle1 - angle2 > 180)
+		{
+			return isEnemyInCorridorBetweenTwoAngles(aWorldState, 180, angle1)
+					|| isEnemyInCorridorBetweenTwoAngles(aWorldState, angle2, -180);
 		}
 		else
 		{
@@ -465,12 +451,9 @@ public class PlayersLib {
 			{
 				if(a.getAngleToPlayer() >= angle2 && a.getAngleToPlayer() <= angle1) return true;
 			}
-			
 		}
-		
-		
-		
 		return false;
+		
 	}
 	
 	/**
@@ -482,27 +465,41 @@ public class PlayersLib {
 	 * @returns 		{@code true} if {@code enemy} is in angle between {@code refPoint1} and {@code refPoint2}, {@code false} otherwise.
 	 * */
 	public static boolean isSpecificEnemyInAngleBetweenTwoRefPoints(FellowPlayer enemy, ReferencePoint refPoint1, ReferencePoint refPoint2){
-		double ref1Angle = 0;
-		double ref2Angle = 0;
+		return isSpecificEnemyInAngleBetweenTwoRefPoints(enemy, refPoint1.getAngleToPoint(), refPoint2.getAngleToPoint());
+	}
+	/**
+	 * Return if an specific enemy is corridor of two {@link ReferencePoint}s.
+	 * 
+	 * @param enemy 	{@link FellowPlayer} who should be checked upon
+	 * @param refPoint1	First {@link ReferencePoint}
+	 * @param refPoint2 Seconds {@link ReferencePoint}
+	 * @returns 		{@code true} if {@code enemy} is in angle between {@code refPoint1} and {@code refPoint2}, {@code false} otherwise.A lways takes the small angle between the points.
+	 * */
+	public static boolean isSpecificEnemyInAngleBetweenTwoRefPoints(FellowPlayer enemy, double pAngle1, double pAngle2){
+		double angle1 = 0;
+		double angle2 = 0;
 		
-		if(refPoint1.getAngleToPoint() > refPoint2.getAngleToPoint()){
-			ref1Angle = refPoint1.getAngleToPoint();
-			ref2Angle = refPoint2.getAngleToPoint();
+		
+		if(pAngle1 > pAngle2)
+		{
+			angle1 = pAngle1;
+			angle2 = pAngle2;
 		}
-		else {
-			ref1Angle = refPoint2.getAngleToPoint();
-			ref2Angle = refPoint1.getAngleToPoint();
+		else 
+		{
+			angle1 = pAngle2;
+			angle2 = pAngle1;
 		}
-		if(Math.abs(ref1Angle-ref2Angle) > 180){
-			return enemy.getAngleToPlayer() >= ref2Angle && enemy.getAngleToPlayer() >= -180 
-						|| enemy.getAngleToPlayer() <= ref1Angle && enemy.getAngleToPlayer() <= 180;
+		if(angle1-angle2 > 180){
+			return isSpecificEnemyInAngleBetweenTwoRefPoints(enemy, 180, angle1)
+					|| isSpecificEnemyInAngleBetweenTwoRefPoints(enemy, angle2, -180);
 				
 		}
 		else{
-			return enemy.getAngleToPlayer() >= ref2Angle && enemy.getAngleToPlayer() <= ref1Angle;
+			return enemy.getAngleToPlayer() >= angle2 && enemy.getAngleToPlayer() <= angle1;
 		}
-		
 	}
+		
 	
 	/**
 	 * Check if any of the teammates is in the kick range around the current {@link BallPosition} of the ball

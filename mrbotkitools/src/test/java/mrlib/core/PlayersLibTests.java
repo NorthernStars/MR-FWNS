@@ -439,7 +439,7 @@ public class PlayersLibTests {
 		Boolean testBool = PlayersLib.isEnemyInCorridorBetweenTwoRefPoints(worldModel, testRefPoint1, testRefPoint2);
 		assertThat(testBool).isEqualTo(true);
 		
-		//Case 1.2: Player in small corridor angle
+		//Case 1.2: Switched order of refpoints
 		 testRefPoint1 = new ReferencePoint(0, TestScenario.opponent1Angle -10, true);
 		 testRefPoint2 = new ReferencePoint(0, TestScenario.opponent1Angle +10, true);
 
@@ -447,7 +447,7 @@ public class PlayersLibTests {
 		assertThat(testBool).isEqualTo(true);
 		
 		//Case 2: Player borderline inside corridor angle
-		testRefPoint1 = new ReferencePoint(7500, TestScenario.opponent1Angle, true);
+		testRefPoint1 = new ReferencePoint(0, TestScenario.opponent1Angle, true);
 		testRefPoint2 = new ReferencePoint(0, TestScenario.opponent1Angle, true);
 
 		testBool = PlayersLib.isEnemyInCorridorBetweenTwoRefPoints(worldModel, testRefPoint1, testRefPoint2);
@@ -467,50 +467,12 @@ public class PlayersLibTests {
 		testBool = PlayersLib.isEnemyInCorridorBetweenTwoRefPoints(worldModel, testRefPoint1, testRefPoint2);
 		assertThat(testBool).isEqualTo(false);
 		
-		//Case 4: Very large corridor - supposed to fail because angle is too large
+		//Case 4: Very large corridor - supposed to fail because angle is too large, opposite angle is chosen
 		testRefPoint1 = new ReferencePoint(0, TestScenario.opponent1Angle-100, true);
 		testRefPoint2 = new ReferencePoint(0, TestScenario.opponent1Angle+100, true);
-
 		
 		testBool = PlayersLib.isEnemyInCorridorBetweenTwoRefPoints(worldModel, testRefPoint1, testRefPoint2);
 		assertThat(testBool).isEqualTo(false);
-		
-		//Borderline cases crossing the +-180° mark
-		worldModel=new RawWorldData();
-		FellowPlayer P1 = new FellowPlayer();
-		P1.set(new ReferencePoint(100, -135, true));
-		worldModel.setOpponentPlayer(P1);
-		
-		testBool = PlayersLib.isEnemyInCorridorBetweenTwoAngles(worldModel, 190, 175);
-		assertThat(testBool).isEqualTo(false);
-		
-		testBool = PlayersLib.isEnemyInCorridorBetweenTwoAngles(worldModel, 230, 175);
-		assertThat(testBool).isEqualTo(true);
-		
-		P1.setAngleToPoint(178);
-		
-		testBool = PlayersLib.isEnemyInCorridorBetweenTwoAngles(worldModel, 190, 175);
-		assertThat(testBool).isEqualTo(false);
-		
-		testBool = PlayersLib.isEnemyInCorridorBetweenTwoAngles(worldModel, 230, 175);
-		assertThat(testBool).isEqualTo(true);
-		
-		P1.setAngleToPoint(165);
-		testBool = PlayersLib.isEnemyInCorridorBetweenTwoAngles(worldModel, -50, -190);
-		assertThat(testBool).isEqualTo(false);
-		
-		testBool = PlayersLib.isEnemyInCorridorBetweenTwoAngles(worldModel, -50, -200);
-		assertThat(testBool).isEqualTo(true);
-
-		P1.setAngleToPoint(165);
-		testBool = PlayersLib.isEnemyInCorridorBetweenTwoAngles(worldModel, -50, -190);
-		assertThat(testBool).isEqualTo(false);
-		
-		testBool = PlayersLib.isEnemyInCorridorBetweenTwoAngles(worldModel, -50, -200);
-		assertThat(testBool).isEqualTo(true);
-		
-		
-		
 		
 	}
 
@@ -522,7 +484,7 @@ public class PlayersLibTests {
 		FellowPlayer o1 = new FellowPlayer();
 		o1 = worldModel.getListOfOpponents().get(0);
 
-		Boolean testBool = PlayersLib.isSpecificEnemyInAngleBetweenTwoRefPoints(o1, testRefPoint1, testRefPoint2);
+		Boolean testBool = PlayersLib.isSpecificEnemyInAngleBetweenTwoRefPoints(o1, testRefPoint1.getAngleToPoint(), testRefPoint2.getAngleToPoint());
 		assertThat(testBool).isEqualTo(true);
 		
 
@@ -530,30 +492,30 @@ public class PlayersLibTests {
 		 testRefPoint1 = new ReferencePoint(0, TestScenario.opponent1Angle -10, true);
 		 testRefPoint2 = new ReferencePoint(0, TestScenario.opponent1Angle +10, true);
 
-		testBool = PlayersLib.isSpecificEnemyInAngleBetweenTwoRefPoints(o1, testRefPoint2, testRefPoint1);
+		testBool = PlayersLib.isSpecificEnemyInAngleBetweenTwoRefPoints(o1, testRefPoint2.getAngleToPoint(), testRefPoint1.getAngleToPoint());
 		assertThat(testBool).isEqualTo(true);
 		
 		//Case 2: Player not in angle
 		testRefPoint1.set(new ReferencePoint(0, TestScenario.opponent1Angle -20, true));
 		testRefPoint2.set(new ReferencePoint(0, TestScenario.opponent1Angle -30, true));
 		
-		testBool = PlayersLib.isSpecificEnemyInAngleBetweenTwoRefPoints(o1, testRefPoint1, testRefPoint2);
+		testBool = PlayersLib.isSpecificEnemyInAngleBetweenTwoRefPoints(o1, testRefPoint1.getAngleToPoint(), testRefPoint2.getAngleToPoint());
 		assertThat(testBool).isEqualTo(false);
 
 		//Case 2.2: Player not in angle (other side)
 		testRefPoint1.set(new ReferencePoint(0, TestScenario.opponent1Angle +20, true));
 		testRefPoint2.set(new ReferencePoint(0, TestScenario.opponent1Angle +30, true));
 		
-		testBool = PlayersLib.isSpecificEnemyInAngleBetweenTwoRefPoints(o1, testRefPoint1, testRefPoint2);
+		testBool = PlayersLib.isSpecificEnemyInAngleBetweenTwoRefPoints(o1, testRefPoint1.getAngleToPoint(), testRefPoint2.getAngleToPoint());
 		assertThat(testBool).isEqualTo(false);
 		
 		
-		//Case 3: Very large corridor
+		//Case 3: Very large corridor - returns no because function takes the opposite angle
 		testRefPoint1 = new ReferencePoint(0, TestScenario.opponent1Angle-100, true);
 		testRefPoint2 = new ReferencePoint(0, TestScenario.opponent1Angle+100, true);
 
-		testBool = PlayersLib.isSpecificEnemyInAngleBetweenTwoRefPoints(o1, testRefPoint1, testRefPoint2);
-		assertThat(testBool).isEqualTo(true);
+		testBool = PlayersLib.isSpecificEnemyInAngleBetweenTwoRefPoints(o1, testRefPoint1.getAngleToPoint(), testRefPoint2.getAngleToPoint());
+		assertThat(testBool).isEqualTo(false);
 	}
 
 	@Test
