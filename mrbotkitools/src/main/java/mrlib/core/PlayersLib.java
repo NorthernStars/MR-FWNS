@@ -45,10 +45,8 @@ public class PlayersLib {
      * Legacy AI Support. Returns nearest Teammate, doesn't check if something is inbetween or not.
      * @param vWorldState 	{@link RawWorldData} from the Server
      * @param mSelf 		{@link BotInformation} of the agent
-     * @deprecated
      * @return 				{@link FellowPlayer} with the shortest distance to oneself
      */
-	@Deprecated
 	public static FellowPlayer getNearestMate(RawWorldData vWorldState, BotInformation mSelf){
 		return getNearestMate(vWorldState);
 	}
