@@ -160,8 +160,8 @@ public class PositionLibTests {
             
             result = PositionLib.getBestPointAwayFromBall(rawWorldData);
             assertThat(result).isExactlyInstanceOf(ReferencePoint.class);
-            assertThat(result.getXOfPoint()).isCloseTo(-59.0, withinPercentage(1));
-            assertThat(result.getYOfPoint()).isCloseTo(44.0, withinPercentage(1));
+            assertThat(result.getDistanceToPoint()).isCloseTo(585.66, withinPercentage(1));
+            assertThat(result.getAngleToPoint()).isCloseTo(4.31, withinPercentage(1));
             
             ballPos = new BallPosition(141.42, 225, true);
             rawWorldData.setBallPosition(ballPos);

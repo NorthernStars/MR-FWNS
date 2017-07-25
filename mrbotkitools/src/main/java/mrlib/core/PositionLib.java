@@ -168,17 +168,17 @@ public class PositionLib {
         vEligiblePoints.add( aWorldData.getYellowGoalAreaFrontTop() );
         
         double vPointToBallAngle = 0;
-        
+        double bestDistance = 0;
+
         for( ReferencePoint vPoint : vEligiblePoints ){
             
-            vPointToBallAngle = Math.max( vPoint.getAngleToPoint(), aWorldData.getBallPosition().getAngleToBall() ) - Math.min( vPoint.getAngleToPoint(), aWorldData.getBallPosition().getAngleToBall() );
-            if( vPointToBallAngle > 180 ){                
-                vPointToBallAngle = 360 - vPointToBallAngle;                
-            }
-            
-            if( vPointToBallAngle > vBestAngle ){                
+            double distance = Math.sqrt((vPoint.getXOfPoint()-aWorldData.getBallPosition().getXOfPoint())*(vPoint.getXOfPoint()-aWorldData.getBallPosition().getXOfPoint())+
+                    (vPoint.getYOfPoint()-aWorldData.getBallPosition().getYOfPoint())*(vPoint.getYOfPoint()-aWorldData.getBallPosition().getYOfPoint()));
+
+            if (distance > bestDistance)
+            {
                 vBestPoint = vPoint;
-                vBestAngle = vPointToBallAngle;                
+                bestDistance = distance;
             }
             
             
