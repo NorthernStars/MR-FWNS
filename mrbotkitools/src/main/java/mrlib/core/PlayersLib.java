@@ -202,7 +202,7 @@ public class PlayersLib {
 	{
 		List<FellowPlayer> vOpponents = vWorldState.getListOfOpponents();
         List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
-        List<FellowPlayer> nearestEnemies = new ArrayList<FellowPlayer>();
+        List<FellowPlayer> nearestEnemies = new ArrayList<>();
 		FellowPlayer bestMate = null;
 		FellowPlayer nearestOpponent = null;
 		double distOld = 0;
@@ -424,9 +424,13 @@ public class PlayersLib {
 	 * @param angle2		Second {@link double}
 	 * @returns 			{@code true} if an enemy is in angle between {@code angle1} and {@code angle2}, {@code false} otherwise.
 	 * */
-	public static boolean isEnemyInCorridorBetweenTwoAngles(RawWorldData aWorldState, double angle1, double angle2)
+	public static boolean isEnemyInCorridorBetweenTwoAngles(RawWorldData aWorldState, double pAngle1, double pAngle2)
 	{
-		//switch angles
+		
+		double angle1 = pAngle1;
+		double angle2 = pAngle2;
+		
+		//switch angles if necessary
 		if(angle2>angle1)
 		{
 			double angleX = angle2;
