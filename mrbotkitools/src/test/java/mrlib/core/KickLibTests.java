@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import essentials.communication.Action;
 import essentials.communication.action_server2008.Kick;
+import essentials.communication.action_server2008.Movement;
 import essentials.communication.worlddata_server2008.FellowPlayer;
 import essentials.communication.worlddata_server2008.RawWorldData;
 import essentials.communication.worlddata_server2008.ReferencePoint;
@@ -136,7 +137,7 @@ public class KickLibTests {
 
 		returnAction = KickLib.kickToNearest(worldModel);
 
-		assertThat(returnAction).isEqualTo(null);
+		assertThat(returnAction).isEqualTo(Movement.NO_MOVEMENT);
 
 	}
 	
