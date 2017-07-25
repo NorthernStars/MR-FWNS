@@ -267,10 +267,10 @@ public class PositionLib {
 	
 	/**
 	 * Calculates if bot is inside quadrilateral of four {@link ReferencePoint}s.
-	 * @param aRefPoint0	{@link ReferencePoint}
-	 * @param aRefPoint1	{@link ReferencePoint}
-	 * @param aRefPoint2	{@link ReferencePoint}
-	 * @param aRefPoint3	{@link ReferencePoint}
+	 * @param aRefPoint0    {@link ReferencePoint}
+	 * @param aRefPoint1    {@link ReferencePoint}
+	 * @param aRefPoint2    {@link ReferencePoint}
+	 * @param aRefPoint3 	{@link ReferencePoint}
 	 * @return				{@code true} if bot is inside quadrilateral {@code aRefPoint0} to {@code aRefPoint3}, {@code false} otherwise.
 	 */
 	public static boolean isBotInQuadrangle(ReferencePoint aRefPoint0, ReferencePoint aRefPoint1, ReferencePoint aRefPoint2, ReferencePoint aRefPoint3){
@@ -300,22 +300,18 @@ public class PositionLib {
 	
 	
 	/**
-	 * Calculates if ball is inside qaudrilateral of four {@link ReferencePoint}s.
-	 * ATTENTION: FUNCTION IS NOT WORKING! DON'T USE!
-	 * @param aRefPoint0	{@link ReferencePoint}
-	 * @param aRefPoint1	{@link ReferencePoint}
-	 * @param aRefPoint2	{@link ReferencePoint}
-	 * @param aRefPoint3	{@link ReferencePoint}
+	 * Calculates if ball is inside a confex Quadrangle
+	 * @param aRefPoint0 Down left Corner 	{@link ReferencePoint}
+	 * @param aRefPoint1 Down right Corner	{@link ReferencePoint}
+	 * @param aRefPoint2 Up right Corner	{@link ReferencePoint}
+	 * @param aRefPoint3 Up left Corner	{@link ReferencePoint}
 	 * @param ballPos		{@link BallPosition}
 	 * @return				{@code true} if {@code ballPos} is inside quadrilateral {@code aRefPoint0} to {@code aRefPoint3}, {@code false} otherwise.
 	 */
-	public static boolean isBallInQuadrangle(ReferencePoint aRefPoint0, ReferencePoint aRefPoint1, ReferencePoint aRefPoint2, ReferencePoint aRefPoint3, BallPosition ballPos){
-		
-            /*
-            * TODO: Complete function to get if the Ball is in an area of 4 ReferencePoints
-            * */
+	public static boolean isBallInConvexQuadrangle(ReferencePoint aRefPoint0, ReferencePoint aRefPoint1, ReferencePoint aRefPoint2, ReferencePoint aRefPoint3, BallPosition ballPos){
+
             
-            return isBallInTriangle(aRefPoint0, aRefPoint1, aRefPoint2, ballPos) 
+        return isBallInTriangle(aRefPoint0, aRefPoint1, aRefPoint2, ballPos)
                     || isBallInTriangle(aRefPoint0, aRefPoint3, aRefPoint2, ballPos);
             
             
