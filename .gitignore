@@ -11,3 +11,6 @@ logs
 **/.metadata
 **/.recommenders
 **/docs
+
+.idea/
+/.gitignore

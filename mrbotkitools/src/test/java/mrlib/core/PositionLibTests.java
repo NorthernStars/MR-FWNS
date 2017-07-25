@@ -8,6 +8,8 @@ import essentials.core.BotInformation;
 import essentials.core.BotInformation.Teams;
 
 import static org.assertj.core.api.Assertions.*;
+
+import javafx.geometry.Pos;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -210,7 +212,7 @@ public class PositionLibTests {
             testReferencePointD = new ReferencePoint(-0.5,2,false);
             result = PositionLib.isBotInQuadrangle(testReferencePointA, testReferencePointB, testReferencePointC, testReferencePointD);
             assertThat(result).isExactlyInstanceOf(Boolean.class);
-            assertThat(((Boolean) result).booleanValue()).isEqualTo(false);
+            assertThat(result.booleanValue()).isEqualTo(false);
 	}
 
 	@Test
@@ -222,13 +224,38 @@ public class PositionLibTests {
             
             result = PositionLib.isMeselfOutOfBounds(testWorldData);
             assertThat(result).isExactlyInstanceOf(Boolean.class);
-            assertThat(((Boolean) result).booleanValue()).isEqualTo(true);
+            assertThat(result.booleanValue()).isEqualTo(true);
 	}
 
 	@Test
-	public void testIsBallInQuadrangle() {
-		fail("Not yet implemented");
-	}
+	public void testIsBallInConvexQuadrangle() {
+
+
+	    BallPosition ballPosition;
+        ReferencePoint leftDown;
+        ReferencePoint rightDown;
+        ReferencePoint rightUp;
+        ReferencePoint leftUp;
+        Boolean result;
+
+        ballPosition = new BallPosition(1,2.5,false);
+        leftDown = new ReferencePoint(1.5,1,false);
+        rightDown = new ReferencePoint(2.5,0,false);
+        rightUp = new ReferencePoint(3.5,2,false);
+        leftUp = new ReferencePoint(2,3,false);
+
+        result = PositionLib.isBallInConvexQuadrangle(leftDown,rightDown,rightUp,leftUp,ballPosition);
+        assertThat(result).isExactlyInstanceOf(Boolean.class);
+        assertThat(result.booleanValue()).isEqualTo(false);
+
+        ballPosition = new BallPosition(2.5,2,false);
+
+        result = PositionLib.isBallInConvexQuadrangle(leftDown,rightDown,rightUp,leftUp,ballPosition);
+        assertThat(result).isExactlyInstanceOf(Boolean.class);
+        assertThat(result.booleanValue()).isEqualTo(true);
+
+
+    }
 
 	@Test
 	public void testAmINearestMateToPoint() {
