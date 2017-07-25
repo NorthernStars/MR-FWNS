@@ -172,8 +172,7 @@ public class PositionLib {
 
         for( ReferencePoint vPoint : vEligiblePoints ){
             
-            double distance = Math.sqrt((vPoint.getXOfPoint()-aWorldData.getBallPosition().getXOfPoint())*(vPoint.getXOfPoint()-aWorldData.getBallPosition().getXOfPoint())+
-                    (vPoint.getYOfPoint()-aWorldData.getBallPosition().getYOfPoint())*(vPoint.getYOfPoint()-aWorldData.getBallPosition().getYOfPoint()));
+            double distance = getDistanceBetweenTwoRefPoints(vPoint,aWorldData.getBallPosition());
 
             if (distance > bestDistance)
             {
