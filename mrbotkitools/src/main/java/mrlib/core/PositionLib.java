@@ -32,64 +32,22 @@ public class PositionLib {
      */
     public static ReferencePoint getMiddleOfTwoReferencePoints( ReferencePoint aRefPoint0, ReferencePoint aRefPoint1 ){
 
-        double a;
-        double b;
-        double wa;
-        double wb;
-        
-        if( aRefPoint0.getAngleToPoint() > aRefPoint1.getAngleToPoint() ){
-            
-            a = aRefPoint0.getDistanceToPoint();
-            wa = aRefPoint0.getAngleToPoint();
-            b = aRefPoint1.getDistanceToPoint();
-            wb =aRefPoint1.getAngleToPoint();
-            
-        } else {
+        return new ReferencePoint((aRefPoint0.getXOfPoint()+aRefPoint1.getXOfPoint())/2,(aRefPoint0.getYOfPoint()+aRefPoint1.getYOfPoint())/2, false);
 
-            a = aRefPoint1.getDistanceToPoint();
-            wa =aRefPoint1.getAngleToPoint(); 
-            b = aRefPoint0.getDistanceToPoint();
-            wb = aRefPoint0.getAngleToPoint();
-            
-        }
-        double c = Math.sqrt( a*a + b*b - 2 * a * b * Math.cos(Math.toRadians(Math.abs(wa - wb))));
-        double sc = Math.sqrt( (2 * ( a*a + b*b )) - c*c ) / 2;
-        
-        double gamma = Math.abs( Math.toDegrees(Math.acos((sc*sc + b*b - 0.25*c*c) / (2*sc*b))));
-        
-        if ( wa < wb + 180){
-            
-            gamma = wb + gamma;
-            
-        } else {
-            
-            gamma = wb - gamma;
-            
-        }
-       
-        if (gamma > 180 ){
-        	gamma = gamma - 360;
-        }
-        if (gamma < -180){
-        	gamma = gamma + 360;
-        }
-
-        return new ReferencePoint(sc,gamma, true);
-     
     }
-    
-    
+
+
     /**
      * Returns the middle of opponents goal.
      * @param aWorldData		{@link RawWorldData}
      * @param aTeam 			Own {@link Teams} information
      * @return ReferencePoint	{@link ReferencePoint} of middle of enemies goal.
      */
-    public static ReferencePoint getMiddleOfGoal( RawWorldData aWorldData, Teams aTeam ){       
+    public static ReferencePoint getMiddleOfGoal( RawWorldData aWorldData, Teams aTeam ){
         ReferencePoint rGoalMiddle;
         ReferencePoint vGoalTop = null;
         ReferencePoint vGoalBottom = null;
-        
+
         // get goal
         if( aTeam == Teams.Yellow ) {
             vGoalTop = aWorldData.getBlueGoalCornerTop();
@@ -99,22 +57,22 @@ public class PositionLib {
             vGoalTop = aWorldData.getYellowGoalCornerTop();
             vGoalBottom = aWorldData.getYellowGoalCornerBottom();
         }
-        
-        rGoalMiddle = PositionLib.getMiddleOfTwoReferencePoints(vGoalTop, vGoalBottom);     
+
+        rGoalMiddle = PositionLib.getMiddleOfTwoReferencePoints(vGoalTop, vGoalBottom);
         return rGoalMiddle;
     }
-    
+
     /**
      * Returns the middle of own goal.
      * @param aWorldData		{@link RawWorldData}
      * @param aTeam 			Own {@link Teams} information
      * @return ReferencePoint	{@link ReferencePoint} of middle of own goal.
      */
-    public static ReferencePoint getMiddleOfOwnGoal( RawWorldData aWorldData, Teams aTeam ){       
+    public static ReferencePoint getMiddleOfOwnGoal( RawWorldData aWorldData, Teams aTeam ){
         ReferencePoint rOwnGoalMiddle;
         ReferencePoint vGoalTop = null;
         ReferencePoint vGoalBottom = null;
-        
+
         // get goal
         if( aTeam == Teams.Blue ) {
             vGoalTop = aWorldData.getBlueGoalCornerTop();
@@ -124,11 +82,11 @@ public class PositionLib {
             vGoalTop = aWorldData.getYellowGoalCornerTop();
             vGoalBottom = aWorldData.getYellowGoalCornerBottom();
         }
-        
-        rOwnGoalMiddle = PositionLib.getMiddleOfTwoReferencePoints(vGoalTop, vGoalBottom);     
+
+        rOwnGoalMiddle = PositionLib.getMiddleOfTwoReferencePoints(vGoalTop, vGoalBottom);
         return rOwnGoalMiddle;
     }
-    
+
     /**
      * Calculates if ball is in specific range around {@link ReferencePoint}.
      * @param ballPos	{@link BallPosition}
@@ -137,32 +95,32 @@ public class PositionLib {
      * @return			{@code true} if {@code ballPos} is in {@code range} around {@code aRefPoint}, {@code false} otherwise.
      */
     public static boolean isBallInRangeOfRefPoint(BallPosition ballPos, ReferencePoint aRefPoint, double range){
-    	
+
     	double a;
         double b;
         double wa;
         double wb;
-        
+
         if( ballPos.getAngleToBall() > aRefPoint.getAngleToPoint() ){
-            
+
             a = ballPos.getDistanceToBall();
             wa = ballPos.getAngleToBall();
             b = aRefPoint.getDistanceToPoint();
             wb = aRefPoint.getAngleToPoint();
-            
+
         } else {
 
             a = aRefPoint.getDistanceToPoint();
-            wa = aRefPoint.getAngleToPoint(); 
+            wa = aRefPoint.getAngleToPoint();
             b = ballPos.getDistanceToBall();
             wb = ballPos.getAngleToBall();
-            
+
         }
         double c = Math.sqrt( a*a + b*b - 2 * a * b * Math.cos(Math.toRadians(Math.abs(wa - wb))));
-    	
+
         return c < range;
     }
-    
+
     /**
      * Calculates the distance between two {@link ReferencePoint}.
      * @param aRefPoint0	{@link ReferencePoint}
@@ -210,17 +168,17 @@ public class PositionLib {
         vEligiblePoints.add( aWorldData.getYellowGoalAreaFrontTop() );
         
         double vPointToBallAngle = 0;
-        
+        double bestDistance = 0;
+
         for( ReferencePoint vPoint : vEligiblePoints ){
             
-            vPointToBallAngle = Math.max( vPoint.getAngleToPoint(), aWorldData.getBallPosition().getAngleToBall() ) - Math.min( vPoint.getAngleToPoint(), aWorldData.getBallPosition().getAngleToBall() );
-            if( vPointToBallAngle > 180 ){                
-                vPointToBallAngle = 360 - vPointToBallAngle;                
-            }
-            
-            if( vPointToBallAngle > vBestAngle ){                
+            double distance = Math.sqrt((vPoint.getXOfPoint()-aWorldData.getBallPosition().getXOfPoint())*(vPoint.getXOfPoint()-aWorldData.getBallPosition().getXOfPoint())+
+                    (vPoint.getYOfPoint()-aWorldData.getBallPosition().getYOfPoint())*(vPoint.getYOfPoint()-aWorldData.getBallPosition().getYOfPoint()));
+
+            if (distance > bestDistance)
+            {
                 vBestPoint = vPoint;
-                vBestAngle = vPointToBallAngle;                
+                bestDistance = distance;
             }
             
             
@@ -313,8 +271,8 @@ public class PositionLib {
             
         return isBallInTriangle(aRefPoint0, aRefPoint1, aRefPoint2, ballPos)
                     || isBallInTriangle(aRefPoint0, aRefPoint3, aRefPoint2, ballPos);
-            
-            
+
+
 		
 	}
 	
@@ -351,7 +309,7 @@ public class PositionLib {
 		return closestPlayer != null && closestPlayer.getId() == aSelf.getVtId();
 	}
 
-	
+
 	/**
 	 * Calculates angle between side A and C (opposite side B) {@link double}.
 	 * @param distA			{@link double}
@@ -363,7 +321,7 @@ public class PositionLib {
     	return Math.toDegrees(Math.acos((distA*distA+distC*distC-distB*distB)/(2*distA*distC)));
     }
     
-	
+
 	/**
 	 * Checks if Ball is in Triangle of 3 ReferencePoints {@link ReferencePoint}.
 	 * @param pointA			{@link ReferencePoint}

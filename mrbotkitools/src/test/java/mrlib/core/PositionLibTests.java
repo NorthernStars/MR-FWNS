@@ -34,36 +34,36 @@ public class PositionLibTests {
             testReferencePointB = new ReferencePoint(2, 5, false);
             returnReferencePoint = PositionLib.getMiddleOfTwoReferencePoints(testReferencePointA, testReferencePointB);
             assertThat(returnReferencePoint).isExactlyInstanceOf(ReferencePoint.class);
-            assertThat(((ReferencePoint) returnReferencePoint).getXOfPoint()).isCloseTo(-0.5, withinPercentage(1));
-            assertThat(((ReferencePoint) returnReferencePoint).getYOfPoint()).isCloseTo(5, withinPercentage(1));
+            assertThat(returnReferencePoint.getXOfPoint()).isCloseTo(-0.5, withinPercentage(1));
+            assertThat(returnReferencePoint.getYOfPoint()).isCloseTo(5, withinPercentage(1));
             
             testReferencePointA = new ReferencePoint(-2, 5, false);
             testReferencePointB = new ReferencePoint(3, 5, false);
             returnReferencePoint = PositionLib.getMiddleOfTwoReferencePoints(testReferencePointA, testReferencePointB);
             assertThat(returnReferencePoint).isExactlyInstanceOf(ReferencePoint.class);
-            assertThat(((ReferencePoint) returnReferencePoint).getXOfPoint()).isCloseTo(0.5, withinPercentage(1));
-            assertThat(((ReferencePoint) returnReferencePoint).getYOfPoint()).isCloseTo(5, withinPercentage(1));
+            assertThat(returnReferencePoint.getXOfPoint()).isCloseTo(0.5, withinPercentage(1));
+            assertThat(returnReferencePoint.getYOfPoint()).isCloseTo(5, withinPercentage(1));
             
             testReferencePointA = new ReferencePoint(-3, 5, false);
             testReferencePointB = new ReferencePoint(2.5, -1, false);
             returnReferencePoint = PositionLib.getMiddleOfTwoReferencePoints(testReferencePointA, testReferencePointB);
             assertThat(returnReferencePoint).isExactlyInstanceOf(ReferencePoint.class);
-            assertThat(((ReferencePoint) returnReferencePoint).getXOfPoint()).isCloseTo(-0.25, withinPercentage(1));
-            assertThat(((ReferencePoint) returnReferencePoint).getYOfPoint()).isCloseTo(2, withinPercentage(1));
+            assertThat(returnReferencePoint.getXOfPoint()).isCloseTo(-0.25, withinPercentage(1));
+            assertThat(returnReferencePoint.getYOfPoint()).isCloseTo(2, withinPercentage(1));
             
             testReferencePointA = new ReferencePoint(-2.5, 1, false);
             testReferencePointB = new ReferencePoint(2.5, -1, false);
             returnReferencePoint = PositionLib.getMiddleOfTwoReferencePoints(testReferencePointA, testReferencePointB);
             assertThat(returnReferencePoint).isExactlyInstanceOf(ReferencePoint.class);
-            assertThat(((ReferencePoint) returnReferencePoint).getXOfPoint()).isCloseTo(-0.25, withinPercentage(1));
-            assertThat(((ReferencePoint) returnReferencePoint).getYOfPoint()).isCloseTo(0, withinPercentage(1));  
+            assertThat(returnReferencePoint.getXOfPoint()).isCloseTo(0, withinPercentage(1));
+            assertThat(returnReferencePoint.getYOfPoint()).isCloseTo(0, withinPercentage(1));
             
             testReferencePointA = new ReferencePoint(-3, 5, false);
             testReferencePointB = new ReferencePoint(-4, 2, false);
             returnReferencePoint = PositionLib.getMiddleOfTwoReferencePoints(testReferencePointA, testReferencePointB);
             assertThat(returnReferencePoint).isExactlyInstanceOf(ReferencePoint.class);
-            assertThat(((ReferencePoint) returnReferencePoint).getXOfPoint()).isCloseTo(-3.5, withinPercentage(1));
-            assertThat(((ReferencePoint) returnReferencePoint).getYOfPoint()).isCloseTo(3.5, withinPercentage(1));
+            assertThat(returnReferencePoint.getXOfPoint()).isCloseTo(-3.5, withinPercentage(1));
+            assertThat(returnReferencePoint.getYOfPoint()).isCloseTo(3.5, withinPercentage(1));
             
             testReferencePointA = new ReferencePoint(0, -1, false);
             testReferencePointB = new ReferencePoint(0, 5, false);
@@ -72,8 +72,8 @@ public class PositionLibTests {
 //            todo: Rundungsfehler bei x und y
 //            assertThat(((ReferencePoint) returnReferencePoint).getXOfPoint()).isCloseTo(0, withinPercentage(1));
 //            assertThat(((ReferencePoint) returnReferencePoint).getYOfPoint()).isCloseTo(2, withinPercentage(1));
-            assertThat(((ReferencePoint) returnReferencePoint).getDistanceToPoint()).isCloseTo(2, withinPercentage(1));
-            assertThat(((ReferencePoint) returnReferencePoint).getAngleToPoint()).isCloseTo(90.0, withinPercentage(1));
+            assertThat(returnReferencePoint.getDistanceToPoint()).isCloseTo(2, withinPercentage(1));
+            assertThat(returnReferencePoint.getAngleToPoint()).isCloseTo(90.0, withinPercentage(1));
 	}
 
 	@Test
@@ -85,13 +85,13 @@ public class PositionLibTests {
             
             returnValue = PositionLib.getMiddleOfGoal(testWorldData, Teams.Blue);
             assertThat(returnValue).isExactlyInstanceOf(ReferencePoint.class);
-            assertThat(((ReferencePoint) returnValue).getXOfPoint()).isCloseTo(-128.0, withinPercentage(1));
-            assertThat(((ReferencePoint) returnValue).getYOfPoint()).isCloseTo(-35.0, withinPercentage(1));
+            assertThat(returnValue.getXOfPoint()).isCloseTo(-128.0, withinPercentage(1));
+            assertThat(returnValue.getYOfPoint()).isCloseTo(-35.0, withinPercentage(1));
             
             returnValue = PositionLib.getMiddleOfGoal(testWorldData, Teams.Yellow);
             assertThat(returnValue).isExactlyInstanceOf(ReferencePoint.class);
-            assertThat(((ReferencePoint) returnValue).getXOfPoint()).isCloseTo(653.0, withinPercentage(1));
-            assertThat(((ReferencePoint) returnValue).getYOfPoint()).isCloseTo(-35.0, withinPercentage(1));
+            assertThat(returnValue.getXOfPoint()).isCloseTo(653.0, withinPercentage(1));
+            assertThat(returnValue.getYOfPoint()).isCloseTo(-35.0, withinPercentage(1));
                 
 	}
 
@@ -104,13 +104,13 @@ public class PositionLibTests {
             
             returnValue = PositionLib.getMiddleOfOwnGoal(testWorldData, Teams.Yellow);
             assertThat(returnValue).isExactlyInstanceOf(ReferencePoint.class);
-            assertThat(((ReferencePoint) returnValue).getXOfPoint()).isCloseTo(-128.0, withinPercentage(1));
-            assertThat(((ReferencePoint) returnValue).getYOfPoint()).isCloseTo(-35.0, withinPercentage(1));
+            assertThat(returnValue.getXOfPoint()).isCloseTo(-128.0, withinPercentage(1));
+            assertThat(returnValue.getYOfPoint()).isCloseTo(-35.0, withinPercentage(1));
             
             returnValue = PositionLib.getMiddleOfOwnGoal(testWorldData, Teams.Blue);
             assertThat(returnValue).isExactlyInstanceOf(ReferencePoint.class);
-            assertThat(((ReferencePoint) returnValue).getXOfPoint()).isCloseTo(653.0, withinPercentage(1));
-            assertThat(((ReferencePoint) returnValue).getYOfPoint()).isCloseTo(-35.0, withinPercentage(1));
+            assertThat(returnValue.getXOfPoint()).isCloseTo(653.0, withinPercentage(1));
+            assertThat(returnValue.getYOfPoint()).isCloseTo(-35.0, withinPercentage(1));
 	}
 
 	@Test
@@ -123,19 +123,19 @@ public class PositionLibTests {
                 testBallPos = new BallPosition(1.5, 6, false);
                 returnValue = PositionLib.isBallInRangeOfRefPoint(testBallPos, testReferencePoint, 1);
                 assertThat(returnValue).isExactlyInstanceOf(Boolean.class);
-                assertThat(((Boolean) returnValue).booleanValue()).isEqualTo(true);
+                assertThat(returnValue.booleanValue()).isEqualTo(true);
                 
                 testReferencePoint = new ReferencePoint(3, 4, false);
                 testBallPos = new BallPosition(0.5, 6, false);
                 returnValue = PositionLib.isBallInRangeOfRefPoint(testBallPos, testReferencePoint, 2);
                 assertThat(returnValue).isExactlyInstanceOf(Boolean.class);
-                assertThat(((Boolean) returnValue).booleanValue()).isEqualTo(false);
+                assertThat(returnValue.booleanValue()).isEqualTo(false);
                 
                 testReferencePoint = new ReferencePoint(0.5, 7, false);
                 testBallPos = new BallPosition(1.5, 6, false);
                 returnValue = PositionLib.isBallInRangeOfRefPoint(testBallPos, testReferencePoint, 4);
                 assertThat(returnValue).isExactlyInstanceOf(Boolean.class);
-                assertThat(((Boolean) returnValue).booleanValue()).isEqualTo(true);
+                assertThat(returnValue.booleanValue()).isEqualTo(true);
                 
 	}
 
@@ -160,15 +160,15 @@ public class PositionLibTests {
             
             result = PositionLib.getBestPointAwayFromBall(rawWorldData);
             assertThat(result).isExactlyInstanceOf(ReferencePoint.class);
-            assertThat(((ReferencePoint) result).getXOfPoint()).isCloseTo(-59.0, withinPercentage(1));
-            assertThat(((ReferencePoint) result).getYOfPoint()).isCloseTo(44.0, withinPercentage(1));
+            assertThat(result.getDistanceToPoint()).isCloseTo(585.66, withinPercentage(1));
+            assertThat(result.getAngleToPoint()).isCloseTo(4.31, withinPercentage(1));
             
             ballPos = new BallPosition(141.42, 225, true);
             rawWorldData.setBallPosition(ballPos);
             result = PositionLib.getBestPointAwayFromBall(rawWorldData);
             assertThat(result).isExactlyInstanceOf(ReferencePoint.class);
-            assertThat(((ReferencePoint) result).getDistanceToPoint()).isCloseTo(585.66, withinPercentage(1));
-            assertThat(((ReferencePoint) result).getAngleToPoint()).isCloseTo(4.31, withinPercentage(1));
+            assertThat(result.getDistanceToPoint()).isCloseTo(585.66, withinPercentage(1));
+            assertThat(result.getAngleToPoint()).isCloseTo(4.31, withinPercentage(1));
 	}
 
 	@Test
@@ -204,7 +204,7 @@ public class PositionLibTests {
             testReferencePointD = new ReferencePoint(1.5,-2,false);
             result = PositionLib.isBotInQuadrangle(testReferencePointA, testReferencePointB, testReferencePointC, testReferencePointD);
             assertThat(result).isExactlyInstanceOf(Boolean.class);
-            assertThat(((Boolean) result).booleanValue()).isEqualTo(true);
+            assertThat(result.booleanValue()).isEqualTo(true);
             
             testReferencePointA = new ReferencePoint(1,6,false);
             testReferencePointB = new ReferencePoint(-2,4,false);
@@ -269,14 +269,14 @@ public class PositionLibTests {
             testReferencePoint = new ReferencePoint(6.0,7.0, false);
             result = PositionLib.amINearestMateToPoint(testWorldData, testReferencePoint, testBotInfo);
             assertThat(result).isExactlyInstanceOf(Boolean.class);
-            assertThat(((Boolean) result).booleanValue()).isEqualTo(true);
+            assertThat(result.booleanValue()).isEqualTo(true);
             
             testWorldData = TestScenario.getExampleWorldModel();
             FellowPlayer testFellowPlayer = new FellowPlayer(21, "Nearest Mate", true, 5.83, 30.96, 0.0);
             testWorldData.setFellowPlayer(testFellowPlayer);
             result = PositionLib.amINearestMateToPoint(testWorldData, testReferencePoint, testBotInfo);
             assertThat(result).isExactlyInstanceOf(Boolean.class);
-            assertThat(((Boolean) result).booleanValue()).isEqualTo(false);
+            assertThat(result.booleanValue()).isEqualTo(false);
             
 	}
 
