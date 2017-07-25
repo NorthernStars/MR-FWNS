@@ -141,4 +141,15 @@ public class KickLibTests {
 
 	}
 	
+	@Test
+	public void testKickToNearestNoPlayers()
+	{
+		worldModel = new RawWorldData();
+		Action returnAction = KickLib.kickToNearest(worldModel);
+		
+		assertThat(returnAction).isEqualTo(Movement.NO_MOVEMENT);
+		
+		worldModel = TestScenario.getExampleWorldModel();
+	
 	}
+}
