@@ -45,8 +45,8 @@ public class PlayersLibTests {
 		
 		when(mWorldDataMock.getAgentId()).thenReturn(mOwnId);
 		
-		when(mSelfMock.getRcId()).thenReturn(mWorldDataMock.getAgentId());
-		when(mSelfMock.getVtId()).thenReturn(mWorldDataMock.getAgentId());
+		when(mSelfMock.getRcId()).thenReturn(mOwnId);
+		when(mSelfMock.getVtId()).thenReturn(mOwnId);
 		when(mSelfMock.getGamevalue(GamevalueNames.KickRange)).thenReturn(Default.KickRange);
 	}
 
