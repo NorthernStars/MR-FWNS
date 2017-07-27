@@ -364,16 +364,17 @@ public class PlayersLib {
 	 * 
 	 * @param aWorldState	{@link RawWorldData} from the server
 	 * @param refPoint		{@link ReferencePoint}
-	 * @param angle			{@link Double} angle tolerance (0 for straight line)
-	 * @returns 			{@code true} if enemy is in way from agent to {@code refPoint}, {@code false} othweise.
+	 * @param angle			{@link Double} angle tolerance (0 for straight line). Max +-90°!
+	 * @returns 			{@code true} if enemy is in way from agent to {@code refPoint}, {@code false} otherwise.
 	 * */
-	public static boolean isEnemyOnWayToRefPoint(RawWorldData aWorldState, ReferencePoint refPoint, double angle){		
+	public static boolean isEnemyOnWayToRefPoint(RawWorldData aWorldState, ReferencePoint refPoint, double angle){	
+		
 		// prepare angles
 		double vAngleLeft = refPoint.getAngleToPoint()-angle;
 		double vAngleRight = refPoint.getAngleToPoint()+angle;
 		double distanceToRefPoint = refPoint.getDistanceToPoint();
 		
-		if(vAngleLeft<180) vAngleLeft+=360;
+		if(vAngleLeft<-180) vAngleLeft+=360;
 		if(vAngleRight>180) vAngleRight-=360;
 		
 		// check if angles exceed maximum angles
@@ -381,11 +382,10 @@ public class PlayersLib {
 		List<FellowPlayer> vOpponents = aWorldState.getListOfOpponents();
 		for ( FellowPlayer a: vOpponents){
 			
-			double vAngleToPlayer = a.getAngleToPlayer();
 			
 			if(distanceToRefPoint > a.getDistanceToPlayer())
 			{
-				if(isSpecificEnemyInAngleBetweenTwoRefPoints(a, 1, pAngle2)) return true;
+				if(isSpecificEnemyInAngleBetweenTwoRefPoints(a, vAngleLeft, vAngleRight)) return true;
 			}
 		}
 		return false;
