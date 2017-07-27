@@ -47,7 +47,12 @@ public class PlayersLibTests {
 	@After
 	public void tearDown() throws Exception {
 	}
-
+	
+	@Test
+	@SuppressWarnings("unused")
+	public void fuCC(){
+		PlayersLib vUseless = new PlayersLib();
+	}
 	@Test
 	public void testGetNearestMate() {
 
