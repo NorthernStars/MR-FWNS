@@ -411,7 +411,7 @@ public class PlayersLib {
 	 * */
 	public static boolean isEnemyInCorridorBetweenTwoAngles(RawWorldData aWorldState, double pAngle1, double pAngle2)
 	{
-		//todo: throw if angle exceeds +-180
+
 		double angleHigh = 0;
 		double angleLow = 0;
 
