@@ -255,11 +255,11 @@ public class PositionLib {
 	
 	
 	/**
-	 * Calculates if ball is inside a confex Quadrangle
-	 * @param aRefPoint0 Down left Corner 	{@link ReferencePoint}
-	 * @param aRefPoint1 Down right Corner	{@link ReferencePoint}
-	 * @param aRefPoint2 Up right Corner	{@link ReferencePoint}
-	 * @param aRefPoint3 Up left Corner	{@link ReferencePoint}
+	 * Calculates if ball is inside a convex Quadrangle. Needs Corners clockwise.
+	 * @param aRefPoint0 Corner	{@link ReferencePoint}
+	 * @param aRefPoint1 Corner	{@link ReferencePoint}
+	 * @param aRefPoint2 Corner	{@link ReferencePoint}
+	 * @param aRefPoint3 Corner	{@link ReferencePoint}
 	 * @param ballPos		{@link BallPosition}
 	 * @return				{@code true} if {@code ballPos} is inside quadrilateral {@code aRefPoint0} to {@code aRefPoint3}, {@code false} otherwise.
 	 */
