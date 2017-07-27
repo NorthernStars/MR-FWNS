@@ -381,12 +381,7 @@ public class PlayersLib {
 		
 		List<FellowPlayer> vOpponents = aWorldState.getListOfOpponents();
 		for ( FellowPlayer a: vOpponents){
-			
-			
-			if(distanceToRefPoint > a.getDistanceToPlayer())
-			{
-				if(isSpecificEnemyInAngleBetweenTwoRefPoints(a, vAngleLeft, vAngleRight)) return true;
-			}
+			if(distanceToRefPoint > a.getDistanceToPlayer() && isSpecificEnemyInAngleBetweenTwoRefPoints(a, vAngleLeft, vAngleRight)) return true;
 		}
 		return false;
 	}
