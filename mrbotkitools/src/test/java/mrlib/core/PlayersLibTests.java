@@ -426,28 +426,7 @@ public class PlayersLibTests {
 
 	}
 
-	@Test
-	public void testGetMateWithEnemyNearButFurthestAway() {
-
-		
-		FellowPlayer chosenOne = PlayersLib.getMateWithEnemyNearButFurthestAway(worldModel, vBotInformation);
-		assertThat(chosenOne.getDistanceToPlayer()).isCloseTo(TestScenario.fellow2Distance, withinPercentage(0.1));
-		
-
-		chosenOne = PlayersLib.getMateWithEnemyNearButFurthestAway(worldModel);
-		assertThat(chosenOne.getDistanceToPlayer()).isCloseTo(TestScenario.fellow2Distance, withinPercentage(0.1));
-
-		FellowPlayer fellowFarAway = new FellowPlayer();
-		fellowFarAway.set(new ReferencePoint(TestScenario.fellow2Distance + 50, TestScenario.fellow2Angle, true));
-		worldModel.setFellowPlayer(fellowFarAway);
-
-		chosenOne = PlayersLib.getMateWithEnemyNearButFurthestAway(worldModel);
-		assertThat(chosenOne.getDistanceToPlayer()).isCloseTo(fellowFarAway.getDistanceToPlayer(), withinPercentage(0.1));
-		
-		chosenOne = PlayersLib.getMateWithEnemyNearButFurthestAway(worldModel, vBotInformation);
-		assertThat(chosenOne.getDistanceToPlayer()).isCloseTo(fellowFarAway.getDistanceToPlayer(), withinPercentage(0.1));
-		
-	}
+	
 
 	@Test
 	public void testAmINearestToBall() {

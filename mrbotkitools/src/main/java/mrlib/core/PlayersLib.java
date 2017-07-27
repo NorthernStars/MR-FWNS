@@ -190,63 +190,6 @@ public class PlayersLib {
 		return nearestMate;
 	}
 
-	/**
-     * Selects teammate where enemies around are furthest away from teammate.
-     * 
-     * @param vWorldState	{@link RawWorldData} from the Server
-     * @return 				Teammate {@link FellowPlayer} with a enemy around but the enemy furthest away
-     * @deprecated Legacy function without sense
-     */
-	@Deprecated
-	public static FellowPlayer getMateWithEnemyNearButFurthestAway(RawWorldData vWorldState)
-	{
-		List<FellowPlayer> vOpponents = vWorldState.getListOfOpponents();
-        List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
-        List<FellowPlayer> nearestEnemies = new ArrayList<>();
-		FellowPlayer bestMate = null;
-		FellowPlayer nearestOpponent = null;
-		double distOld = 0;
-		int counter=0;
-		int bestIndex = 0;
-		
-		//Put nearest opponent for each mate in nearestEnemies, count them
-		for( FellowPlayer a : vTeamMates){
-			for( FellowPlayer p : vOpponents){
-    					
-    					if (distOld == 0 || PlayersLib.getDistanceBetweenTwoPlayers(p, a) < distOld){
-    						nearestOpponent = p;
-    						distOld = PlayersLib.getDistanceBetweenTwoPlayers(p, a);
-    					}
-    					
-    		}
-			distOld = 0;
-    		nearestEnemies.add(nearestOpponent);
-    	}
-		counter = 0;
-    	for ( FellowPlayer a: vTeamMates){
-    		if ( (bestMate == null)
-    				|| PlayersLib.getDistanceBetweenTwoPlayers(a, nearestEnemies.get(counter)) > PlayersLib.getDistanceBetweenTwoPlayers(bestMate, nearestEnemies.get(bestIndex))){
-    			bestMate = a;
-    			bestIndex = counter;
-    		}
-    		counter++;
-    	}
-		
-		return bestMate;
-	}
-
-	/**
-     * Selects teammate where enemies around are furthest away from teammate.
-     * 
-     * @param vWorldState	{@link RawWorldData} from the Server
-     * @param mSelf			{@link BotInformation} of the agent
-     * @deprecated			Old Version with unused parameter
-     * @return 				Teammate {@link FellowPlayer} with a enemy around but the enemy furthest away
-     */
-	@Deprecated //old Version
-	public static FellowPlayer getMateWithEnemyNearButFurthestAway(RawWorldData vWorldState, BotInformation mSelf){
-        return getMateWithEnemyNearButFurthestAway(vWorldState);
-	}
 	
 	/**
      * Legacy AI support.Check if the agent is the nearest to the ball.
