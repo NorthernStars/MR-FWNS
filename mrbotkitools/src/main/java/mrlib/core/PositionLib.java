@@ -151,8 +151,7 @@ public class PositionLib {
      */
     public static ReferencePoint getBestPointAwayFromBall( RawWorldData aWorldData ) {        
         ReferencePoint vBestPoint = null;
-        double vBestAngle = 0;
-        
+
         ArrayList<ReferencePoint> vEligiblePoints = new ArrayList<>();
 
         vEligiblePoints.add( aWorldData.getFieldCenter() );
@@ -166,8 +165,7 @@ public class PositionLib {
         vEligiblePoints.add( aWorldData.getYellowPenaltyAreaFrontBottom() );
         vEligiblePoints.add( aWorldData.getYellowGoalAreaFrontBottom() );
         vEligiblePoints.add( aWorldData.getYellowGoalAreaFrontTop() );
-        
-        double vPointToBallAngle = 0;
+
         double bestDistance = 0;
 
         for( ReferencePoint vPoint : vEligiblePoints ){
