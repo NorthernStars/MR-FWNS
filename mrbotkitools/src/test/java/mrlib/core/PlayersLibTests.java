@@ -74,9 +74,25 @@ public class PlayersLibTests {
 		
 		worldModel = new RawWorldData();
 		returnPlayer = PlayersLib.getNearestMate(worldModel);
-		assertThat((returnPlayer==null)).isEqualTo(true);
-		
+		assertThat((returnPlayer)).isEqualTo(null);
+				
 		worldModel = TestScenario.getExampleWorldModel();
+	}
+
+	@Test
+	public void testGetNearestOpponent() {
+		FellowPlayer returnPlayer = PlayersLib.getNearestOpponent(worldModel);
+		
+		assertThat(returnPlayer.getDistanceToPlayer()).isCloseTo(TestScenario.opponent1Distance,withinPercentage(1));
+		
+
+		worldModel = new RawWorldData();
+		returnPlayer = PlayersLib.getNearestOpponent(worldModel);
+		assertThat((returnPlayer)).isEqualTo(null);
+				
+		worldModel = TestScenario.getExampleWorldModel();
+		
+		
 	}
 
 	@Test

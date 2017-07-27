@@ -104,6 +104,13 @@ public class MoveLibTests {
             returnAction = MoveLib.runTo(testRefPoint);
             assertThat(returnAction).isExactlyInstanceOf(Movement.class);
             assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
+
+            // Wrong value
+            testAngle = -190.0;
+            testRefPoint = new ReferencePoint(testDistance, testAngle, true);
+            returnAction = MoveLib.runTo(testRefPoint);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
             
 	}
 
@@ -196,6 +203,13 @@ public class MoveLibTests {
             returnAction = MoveLib.runTo(testFellowPlayer);
             assertThat(returnAction).isExactlyInstanceOf(Movement.class);
             assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
+
+            // Wrong value
+            testAAngleToPlayer = -190.0;
+            testFellowPlayer = new FellowPlayer(testAId, testANickname, testAStatus, testADistanceToPlayer, testAAngleToPlayer, testAOrientation);
+            returnAction = MoveLib.runTo(testFellowPlayer);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
                 
 	}
 
@@ -283,6 +297,13 @@ public class MoveLibTests {
             returnAction = MoveLib.runTo(testBallPosition);
             assertThat(returnAction).isExactlyInstanceOf(Movement.class);
             assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
+
+            // Wrong value
+            testAngle = -190.0;
+            testBallPosition = new BallPosition(testDistance, testAngle, true);
+            returnAction = MoveLib.runTo(testBallPosition);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
                 
                 
 	}
@@ -355,6 +376,12 @@ public class MoveLibTests {
             
             // Wrong value
             testAngle = 190.0;
+            returnAction = MoveLib.runTo(testAngle);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
+
+            // Wrong value
+            testAngle = -190.0;
             returnAction = MoveLib.runTo(testAngle);
             assertThat(returnAction).isExactlyInstanceOf(Movement.class);
             assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
@@ -461,6 +488,13 @@ public class MoveLibTests {
             
             // Wrong value
             testAngle = 190.0;
+            testRefPoint = new ReferencePoint(testDistance, testAngle, true);
+            returnAction = MoveLib.turnTo(testRefPoint);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
+
+            // Wrong value
+            testAngle = -190.0;
             testRefPoint = new ReferencePoint(testDistance, testAngle, true);
             returnAction = MoveLib.turnTo(testRefPoint);
             assertThat(returnAction).isExactlyInstanceOf(Movement.class);
@@ -577,6 +611,13 @@ public class MoveLibTests {
             returnAction = MoveLib.turnTo(testFellowPlayer);
             assertThat(returnAction).isExactlyInstanceOf(Movement.class);
             assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
+
+            // Wrong value
+            testAAngleToPlayer = -190.0;
+            testFellowPlayer = new FellowPlayer(testAId, testANickname, testAStatus, testADistanceToPlayer, testAAngleToPlayer, testAOrientation);
+            returnAction = MoveLib.turnTo(testFellowPlayer);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
 	}
 
 	@Test
@@ -685,6 +726,13 @@ public class MoveLibTests {
             returnAction = MoveLib.turnTo(testBallPosition);
             assertThat(returnAction).isExactlyInstanceOf(Movement.class);
             assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
+
+            // Wrong value
+            testAngle = -190.0;
+            testBallPosition = new BallPosition(testDistance, testAngle, true);
+            returnAction = MoveLib.turnTo(testBallPosition);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
 	}
 
 	@Test
@@ -773,6 +821,12 @@ public class MoveLibTests {
             
             // Wrong value
             testAngle = 190.0;
+            returnAction = MoveLib.turnTo(testAngle);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
+
+            // Wrong value
+            testAngle = -190.0;
             returnAction = MoveLib.turnTo(testAngle);
             assertThat(returnAction).isExactlyInstanceOf(Movement.class);
             assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);

@@ -9,7 +9,6 @@ import essentials.core.BotInformation.Teams;
 
 import static org.assertj.core.api.Assertions.*;
 
-import javafx.geometry.Pos;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -238,22 +237,31 @@ public class PositionLibTests {
         ReferencePoint leftUp;
         Boolean result;
 
-        ballPosition = new BallPosition(1,2.5,false);
         leftDown = new ReferencePoint(1.5,1,false);
         rightDown = new ReferencePoint(2.5,0,false);
         rightUp = new ReferencePoint(3.5,2,false);
         leftUp = new ReferencePoint(2,3,false);
 
+        //Ball is not in convex Quadrangle
+        ballPosition = new BallPosition(1,2.5,false);
+
         result = PositionLib.isBallInConvexQuadrangle(leftDown,rightDown,rightUp,leftUp,ballPosition);
         assertThat(result).isExactlyInstanceOf(Boolean.class);
         assertThat(result.booleanValue()).isEqualTo(false);
 
+        //Ball is in Triangle 1
         ballPosition = new BallPosition(2.5,2,false);
 
         result = PositionLib.isBallInConvexQuadrangle(leftDown,rightDown,rightUp,leftUp,ballPosition);
         assertThat(result).isExactlyInstanceOf(Boolean.class);
         assertThat(result.booleanValue()).isEqualTo(true);
 
+        //Ball is in Triangle 2
+        ballPosition = new BallPosition(2.5,1,false);
+
+        result = PositionLib.isBallInConvexQuadrangle(leftDown,rightDown,rightUp,leftUp,ballPosition);
+        assertThat(result).isExactlyInstanceOf(Boolean.class);
+        assertThat(result.booleanValue()).isEqualTo(true);
 
     }
 

@@ -67,45 +67,76 @@ public class MoveLib {
      */
     public static Action runTo( double vAngle ) {
 
+        Action returnedAction = runForward(vAngle);
+        if (returnedAction != Movement.NO_MOVEMENT ){
+            return returnedAction;
+        }
+
+        returnedAction = runBackward(vAngle);
+        if (returnedAction != Movement.NO_MOVEMENT){
+            return returnedAction;
+        }
+
+        returnedAction = runOnPlace(vAngle);
+        if (returnedAction != Movement.NO_MOVEMENT){
+            return returnedAction;
+        }
+
+        return Movement.NO_MOVEMENT;
+
+    }
+
+    private static Action runForward( double vAngle)
+    {
         // no turn, moving fwd
-        if( vAngle >= -moveAngleNoTurn && vAngle <= moveAngleNoTurn ){            
-            return new Movement( 100, 100 );            
+        if( vAngle >= -moveAngleNoTurn && vAngle <= moveAngleNoTurn ){
+            return new Movement( 100, 100 );
         }
-        
+
         // turn depending on angle, moving fwd
-        if( vAngle > -moveAngleTurnAndMove && vAngle < -moveAngleNoTurn ){            
-            return new Movement( 100, 100 + (int) vAngle );            
+        if( vAngle > -moveAngleTurnAndMove && vAngle < -moveAngleNoTurn ){
+            return new Movement( 100, 100 + (int) vAngle );
         }
-        
+
         // turn depending on angle, moving fwd
-        if( vAngle > moveAngleNoTurn && vAngle < moveAngleTurnAndMove ){            
-            return new Movement( 100 - (int) vAngle, 100 );            
+        if( vAngle > moveAngleNoTurn && vAngle < moveAngleTurnAndMove ){
+            return new Movement( 100 - (int) vAngle, 100 );
         }
-        
-        // turn on place left
-        if( vAngle >= -(180-moveAngleTurnAndMove) && vAngle <= -moveAngleTurnAndMove ){            
-            return new Movement( 100, -100 );            
-        }
-        
-        // turn on place right
-        if( vAngle >= moveAngleTurnAndMove && vAngle <= (180-moveAngleTurnAndMove) ){            
-            return new Movement( -100, 100 );            
-        }
-        
+
+        return Movement.NO_MOVEMENT;
+    }
+
+    private static Action runBackward( double vAngle)
+    {
         // turn depending on angle, moving bwd
-        if( vAngle > -(180-moveAngleNoTurn) && vAngle < -(180-moveAngleTurnAndMove) ){            
-            return new Movement( -100, 100 + (int) vAngle );            
+        if( vAngle > -(180-moveAngleNoTurn) && vAngle < -(180-moveAngleTurnAndMove) ){
+            return new Movement( -100, 100 + (int) vAngle );
         }
-        
+
         // turn depending on angle, moving bwd
-        if( vAngle > (180-moveAngleTurnAndMove) && vAngle < (180-moveAngleNoTurn) ){            
-            return new Movement( 100 - (int) vAngle, -100 );            
+        if( vAngle > (180-moveAngleTurnAndMove) && vAngle < (180-moveAngleNoTurn) ){
+            return new Movement( 100 - (int) vAngle, -100 );
         }
-        
+
         // no turn, moving bwd
         if( ( vAngle >= (180-moveAngleNoTurn) && vAngle <= 180 )
-        		|| ( vAngle <= -(180-moveAngleNoTurn) && vAngle >= -180 ) ){            
-            return new Movement( -100, -100 );            
+                || ( vAngle <= -(180-moveAngleNoTurn) && vAngle >= -180 ) ){
+            return new Movement( -100, -100 );
+        }
+
+        return Movement.NO_MOVEMENT;
+    }
+
+    private static Action runOnPlace (double vAngle)
+    {
+        // turn on place left
+        if( vAngle >= -(180-moveAngleTurnAndMove) && vAngle <= -moveAngleTurnAndMove ){
+            return new Movement( 100, -100 );
+        }
+
+        // turn on place right
+        if( vAngle >= moveAngleTurnAndMove && vAngle <= (180-moveAngleTurnAndMove) ){
+            return new Movement( -100, 100 );
         }
 
         return Movement.NO_MOVEMENT;
@@ -140,14 +171,14 @@ public class MoveLib {
 	
     /**
      * Turn towards an angle (no movement).
-     * @param vAngle	{@link Double} angle to turn to.
+     * @param vAngle	{@link Double} angle to turn to. (-180 to 180)
      * @return			{@link Action}
      */
     public static Action turnTo(double vAngle){
 
         // no turn
         if(vAngle < moveAngleNoTurn && vAngle > -moveAngleNoTurn
-                        || vAngle > (180-moveAngleNoTurn) && vAngle < -(180-moveAngleNoTurn)){
+                        || vAngle > (180-moveAngleNoTurn) || vAngle < -(180-moveAngleNoTurn)){
                 return Movement.NO_MOVEMENT;
         }
 
