@@ -176,12 +176,6 @@ public class MoveLib {
      */
     public static Action turnTo(double vAngle){
 
-        // no turn
-        if(vAngle < moveAngleNoTurn && vAngle > -moveAngleNoTurn
-                        || vAngle > (180-moveAngleNoTurn) || vAngle < -(180-moveAngleNoTurn)){
-                return Movement.NO_MOVEMENT;
-        }
-
         Action returnedAction = turnRight(vAngle);
         if (returnedAction != Movement.NO_MOVEMENT)
         {
