@@ -614,50 +614,208 @@ public class PlayersLibTests {
 	}
 
 	@Test
-	public void testIsEnemyInCorridorBetweenTwoRefPoints() {
-		//Case 1.1: Player in small corridor angle
+	public void testIsEnemyInCorridorBetweenTwoAnglesSwitchedAngles()
+	{
+
+		double angleLeft = TestScenario.opponent1Angle -10;
+		double angleRight = TestScenario.opponent1Angle +10;
+		when(mWorldDataMock.getListOfOpponents()).thenReturn(new ArrayList<>());
+		assertThat(PlayersLib.isEnemyInCorridorBetweenTwoAngles(mWorldDataMock, angleLeft, angleRight)==PlayersLib.isEnemyInCorridorBetweenTwoAngles(mWorldDataMock, angleRight, angleLeft));
+		
+	}
+	
+	@Test
+	public void testIsEnemyInCorridorBetweenTwoRefPointsNoOpponents()
+	{
 		ReferencePoint testRefPoint1 = new ReferencePoint(0, TestScenario.opponent1Angle -10, true);
 		ReferencePoint testRefPoint2 = new ReferencePoint(0, TestScenario.opponent1Angle +10, true);
 
-		Boolean testBool = PlayersLib.isEnemyInCorridorBetweenTwoRefPoints(worldModel, testRefPoint1, testRefPoint2);
-		assertThat(testBool).isEqualTo(true);
-		
-		//Case 1.2: Switched order of refpoints
-		 testRefPoint1 = new ReferencePoint(0, TestScenario.opponent1Angle -10, true);
-		 testRefPoint2 = new ReferencePoint(0, TestScenario.opponent1Angle +10, true);
-
-		testBool = PlayersLib.isEnemyInCorridorBetweenTwoRefPoints(worldModel, testRefPoint2, testRefPoint1);
-		assertThat(testBool).isEqualTo(true);
-		
-		//Case 2: Player borderline inside corridor angle
-		testRefPoint1 = new ReferencePoint(0, TestScenario.opponent1Angle, true);
-		testRefPoint2 = new ReferencePoint(0, TestScenario.opponent1Angle, true);
-
-		testBool = PlayersLib.isEnemyInCorridorBetweenTwoRefPoints(worldModel, testRefPoint1, testRefPoint2);
-		assertThat(testBool).isEqualTo(true);
-		
-		//Case 3: No player inside corridor
-		testRefPoint1 = new ReferencePoint(0, TestScenario.opponent1Angle-20, true);
-		testRefPoint2 = new ReferencePoint(0, TestScenario.opponent1Angle-10, true);
-
-		testBool = PlayersLib.isEnemyInCorridorBetweenTwoRefPoints(worldModel, testRefPoint1, testRefPoint2);
-		assertThat(testBool).isEqualTo(false);
-		
-		//Case 3.1: No player inside corridor(other side)
-		testRefPoint1 = new ReferencePoint(0, TestScenario.opponent2Angle+20, true);
-		testRefPoint2 = new ReferencePoint(0, TestScenario.opponent2Angle+10, true);
-
-		testBool = PlayersLib.isEnemyInCorridorBetweenTwoRefPoints(worldModel, testRefPoint1, testRefPoint2);
-		assertThat(testBool).isEqualTo(false);
-		
-		//Case 4: Very large corridor - supposed to fail because angle is too large, opposite angle is chosen
-		testRefPoint1 = new ReferencePoint(0, TestScenario.opponent1Angle-100, true);
-		testRefPoint2 = new ReferencePoint(0, TestScenario.opponent1Angle+100, true);
-		
-		testBool = PlayersLib.isEnemyInCorridorBetweenTwoRefPoints(worldModel, testRefPoint1, testRefPoint2);
-		assertThat(testBool).isEqualTo(false);
-		
+		when(mWorldDataMock.getListOfOpponents()).thenReturn(new ArrayList<>());
+		assertThat(PlayersLib.isEnemyInCorridorBetweenTwoRefPoints(mWorldDataMock, testRefPoint1, testRefPoint2)).isFalse();
 	}
+	
+	@Test
+	public void testIsEnemyInCorridorBetweenTwoAnglesNoOpponents()
+	{
+		double angleLeft = TestScenario.opponent1Angle -10;
+		double angleRight = TestScenario.opponent1Angle +10;
+		
+		when(mWorldDataMock.getListOfOpponents()).thenReturn(new ArrayList<>());
+		assertThat(PlayersLib.isEnemyInCorridorBetweenTwoAngles(mWorldDataMock, angleLeft, angleRight)).isFalse();
+	}
+
+	@Test
+	public void testIsEnemyInCorridorBetweenTwoRefPointsNoOpponentsInAngle()
+	{
+		ReferencePoint testRefPoint1 = new ReferencePoint(0, 130, true);
+		ReferencePoint testRefPoint2 = new ReferencePoint(0, 150, true);
+		
+		List<FellowPlayer> vListOfOpponents = new ArrayList<>();
+		vListOfOpponents.add(new FellowPlayer(1, "", true, 200, 100, 0));
+		vListOfOpponents.add(new FellowPlayer(2, "", true, 300, 90, 0));
+		vListOfOpponents.add(new FellowPlayer(3, "", true, 400, 80, 0));
+		
+		when(mWorldDataMock.getListOfOpponents()).thenReturn(vListOfOpponents);
+
+		assertThat(PlayersLib.isEnemyInCorridorBetweenTwoRefPoints(mWorldDataMock, testRefPoint1, testRefPoint2)).isFalse();
+	}
+
+	@Test
+	public void testIsEnemyInCorridorBetweenTwoRefPointsNoOpponentsInRBackwards()
+	{
+		ReferencePoint testRefPoint1 = new ReferencePoint(0, 170, true);
+		ReferencePoint testRefPoint2 = new ReferencePoint(0, -150, true);
+		
+		List<FellowPlayer> vListOfOpponents = new ArrayList<>();
+		vListOfOpponents.add(new FellowPlayer(1, "", true, 200, 100, 0));
+		vListOfOpponents.add(new FellowPlayer(2, "", true, 300, 90, 0));
+		vListOfOpponents.add(new FellowPlayer(3, "", true, 400, 80, 0));
+		
+		when(mWorldDataMock.getListOfOpponents()).thenReturn(vListOfOpponents);
+
+		assertThat(PlayersLib.isEnemyInCorridorBetweenTwoRefPoints(mWorldDataMock, testRefPoint1, testRefPoint2)).isFalse();
+	}
+	
+	@Test
+	public void testIsEnemyInCorridorBetweenTwoAnglesNoOpponentsInAngleBackwards()
+	{
+		List<FellowPlayer> vListOfOpponents = new ArrayList<>();
+		vListOfOpponents.add(new FellowPlayer(1, "", true, 200, 100, 0));
+		vListOfOpponents.add(new FellowPlayer(2, "", true, 300, 90, 0));
+		vListOfOpponents.add(new FellowPlayer(3, "", true, 400, 80, 0));
+		
+		when(mWorldDataMock.getListOfOpponents()).thenReturn(vListOfOpponents);
+
+		assertThat(PlayersLib.isEnemyInCorridorBetweenTwoAngles(mWorldDataMock, 170, -150)).isFalse();
+	}
+
+	@Test
+	public void testIsEnemyInCorridorBetweenTwoAnglesNoOpponentsInAngle()
+	{
+		List<FellowPlayer> vListOfOpponents = new ArrayList<>();
+		vListOfOpponents.add(new FellowPlayer(1, "", true, 200, 100, 0));
+		vListOfOpponents.add(new FellowPlayer(2, "", true, 300, 90, 0));
+		vListOfOpponents.add(new FellowPlayer(3, "", true, 400, 80, 0));
+		
+		when(mWorldDataMock.getListOfOpponents()).thenReturn(vListOfOpponents);
+
+		assertThat(PlayersLib.isEnemyInCorridorBetweenTwoAngles(mWorldDataMock, 130, 150)).isFalse();
+	}
+	
+	@Test
+	public void testIsEnemyInCorridorBetweenTwoRefPointsNoOpponentButMateInCorridor() 
+	{
+		ReferencePoint testRefPoint1 = new ReferencePoint(0, 130, true);
+		ReferencePoint testRefPoint2 = new ReferencePoint(0, 150, true);
+		
+		List<FellowPlayer> vListOfOpponents = new ArrayList<>();
+		vListOfOpponents.add(new FellowPlayer(1, "", true, 200, 100, 0));
+		vListOfOpponents.add(new FellowPlayer(2, "", true, 300, 90, 0));
+		vListOfOpponents.add(new FellowPlayer(3, "", true, 400, 80, 0));
+		
+		when(mWorldDataMock.getListOfOpponents()).thenReturn(vListOfOpponents);
+		
+		List<FellowPlayer> vListOfTeamMates = new ArrayList<>();
+		vListOfTeamMates.add(new FellowPlayer(1, "", true, 200, 140, 0));
+		
+		when(mWorldDataMock.getListOfTeamMates()).thenReturn(vListOfTeamMates);
+	
+		assertThat(PlayersLib.isEnemyInCorridorBetweenTwoRefPoints(mWorldDataMock, testRefPoint1, testRefPoint2)).isFalse();
+	}
+	
+	@Test
+	public void testIsEnemyInCorridorBetweenTwoAnglesNoOpponentButMateInCorridor() 
+	{
+		List<FellowPlayer> vListOfOpponents = new ArrayList<>();
+		vListOfOpponents.add(new FellowPlayer(1, "", true, 200, 100, 0));
+		vListOfOpponents.add(new FellowPlayer(2, "", true, 300, 90, 0));
+		vListOfOpponents.add(new FellowPlayer(3, "", true, 400, 160, 0));
+		
+		when(mWorldDataMock.getListOfOpponents()).thenReturn(vListOfOpponents);
+		
+		List<FellowPlayer> vListOfTeamMates = new ArrayList<>();
+		vListOfTeamMates.add(new FellowPlayer(1, "", true, 200, 140, 0));
+		
+		when(mWorldDataMock.getListOfTeamMates()).thenReturn(vListOfTeamMates);
+		assertThat(PlayersLib.isEnemyInCorridorBetweenTwoAngles(mWorldDataMock, 130, 150)).isFalse();
+	}
+	
+	@Test
+	public void testIsEnemyInCorridorBetweenTwoRefPointsWithOpponent()
+	{
+		ReferencePoint testRefPoint1 = new ReferencePoint(0, 130, true);
+		ReferencePoint testRefPoint2 = new ReferencePoint(0, 150, true);
+		
+		List<FellowPlayer> vListOfOpponents = new ArrayList<>();
+		vListOfOpponents.add(new FellowPlayer(1, "", true, 200, 140, 0));
+		
+		when(mWorldDataMock.getListOfOpponents()).thenReturn(vListOfOpponents);
+		
+		assertThat(PlayersLib.isEnemyInCorridorBetweenTwoRefPoints(mWorldDataMock, testRefPoint1, testRefPoint2)).isTrue();
+	}
+	
+	@Test
+	public void testIsEnemyInCorridorBetweenTwoAnglesWithOpponent()
+	{
+		
+		List<FellowPlayer> vListOfOpponents = new ArrayList<>();
+		vListOfOpponents.add(new FellowPlayer(1, "", true, 200, 140, 0));
+		
+		when(mWorldDataMock.getListOfOpponents()).thenReturn(vListOfOpponents);
+		
+		assertThat(PlayersLib.isEnemyInCorridorBetweenTwoAngles(mWorldDataMock, 130, 150)).isTrue();
+	}
+	
+	@Test
+	public void testIsEnemyInCorridorBetweenTwoRefPointsWithPositiveOpponentBehindPlayer()
+	{
+		ReferencePoint testRefPoint1 = new ReferencePoint(0, 170, true);
+		ReferencePoint testRefPoint2 = new ReferencePoint(0, -160, true);
+		
+		List<FellowPlayer> vListOfOpponents = new ArrayList<>();
+		vListOfOpponents.add(new FellowPlayer(1, "", true, 200, 175, 0));
+		
+		when(mWorldDataMock.getListOfOpponents()).thenReturn(vListOfOpponents);
+		
+		assertThat(PlayersLib.isEnemyInCorridorBetweenTwoRefPoints(mWorldDataMock, testRefPoint1, testRefPoint2)).isTrue();
+	}
+	
+	@Test
+	public void testIsEnemyInCorridorBetweenTwoAnglesWithPositiveOpponentBehindPlayer()
+	{
+		List<FellowPlayer> vListOfOpponents = new ArrayList<>();
+		vListOfOpponents.add(new FellowPlayer(1, "", true, 200, 175, 0));
+		
+		when(mWorldDataMock.getListOfOpponents()).thenReturn(vListOfOpponents);
+		
+		assertThat(PlayersLib.isEnemyInCorridorBetweenTwoAngles(mWorldDataMock, 170, -160)).isTrue();
+	}
+	
+	@Test
+	public void testIsEnemyInCorridorBetweenTwoRefPointsWithNegativeOpponentBehindPlayer()
+	{
+		ReferencePoint testRefPoint1 = new ReferencePoint(0, 170, true);
+		ReferencePoint testRefPoint2 = new ReferencePoint(0, -160, true);
+		
+		List<FellowPlayer> vListOfOpponents = new ArrayList<>();
+		vListOfOpponents.add(new FellowPlayer(1, "", true, 200, -175, 0));
+		
+		when(mWorldDataMock.getListOfOpponents()).thenReturn(vListOfOpponents);
+		
+		assertThat(PlayersLib.isEnemyInCorridorBetweenTwoRefPoints(mWorldDataMock, testRefPoint1, testRefPoint2)).isTrue();
+	}
+	
+	@Test
+	public void testIsEnemyInCorridorBetweenTwoAnglesWithNegativeOpponentBehindPlayer()
+	{
+		List<FellowPlayer> vListOfOpponents = new ArrayList<>();
+		vListOfOpponents.add(new FellowPlayer(1, "", true, 200, -175, 0));
+		
+		when(mWorldDataMock.getListOfOpponents()).thenReturn(vListOfOpponents);
+		
+		assertThat(PlayersLib.isEnemyInCorridorBetweenTwoAngles(mWorldDataMock, 170, -160)).isTrue();
+	}
+	
 
 	@Test
 	public void testIsSpecificEnemyInAngleBetweenTwoRefPoints() {

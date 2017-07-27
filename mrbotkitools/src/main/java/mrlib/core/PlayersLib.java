@@ -103,7 +103,6 @@ public class PlayersLib {
      */
 	@Deprecated
 	public static boolean isEnemyAround(RawWorldData vWorldState, BotInformation mSelf, double range){
-	
 		return isEnemyAround(vWorldState, range);
 	}
 	
