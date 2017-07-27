@@ -99,6 +99,13 @@ public class PlayersLibTests {
 		FellowPlayer returnPlayer = PlayersLib.getNearestOpponent(worldModel);
 		
 		assertThat(returnPlayer.getDistanceToPlayer()).isCloseTo(TestScenario.opponent1Distance,withinPercentage(1));
+
+		FellowPlayer o1 = new FellowPlayer(0, "NearerOpponent", true, TestScenario.opponent1Distance-300, TestScenario.fellow1Angle, 0.0);
+		worldModel.setOpponentPlayer(o1);
+		
+		returnPlayer = PlayersLib.getNearestOpponent(worldModel);
+		assertThat(returnPlayer.getDistanceToPlayer()).isCloseTo(o1.getDistanceToPlayer(),withinPercentage(1));
+		
 		
 
 		worldModel = new RawWorldData();
