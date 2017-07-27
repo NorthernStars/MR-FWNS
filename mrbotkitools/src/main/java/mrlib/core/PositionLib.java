@@ -282,22 +282,13 @@ public class PositionLib {
 	 */
 	public static boolean amINearestMateToPoint(RawWorldData vWorldState, ReferencePoint aRefPoint, BotInformation aSelf){
 		List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
-		vTeamMates.add(new FellowPlayer(vWorldState.getAgentId(),"me", true,0,0,0) );
 		
-		FellowPlayer closestPlayer = null;
+		FellowPlayer closestPlayer = new FellowPlayer(vWorldState.getAgentId(),"me", true,0,0,0);
 		for ( FellowPlayer p: vTeamMates){
-			
-                    if(closestPlayer != null)
-                    {
-                        double distNew = aRefPoint.sub(p).getDistanceToPoint();
-                        double distOld = aRefPoint.sub(closestPlayer).getDistanceToPoint();
+                    double distNew = new ReferencePoint(aRefPoint).sub(p).getDistanceToPoint();
+                    double distOld = new ReferencePoint(aRefPoint).sub(closestPlayer).getDistanceToPoint();
 
-                        if(distNew < distOld){
-                            closestPlayer = p;
-                        }
-                    }
-                    else
-                    {
+                    if(distNew < distOld){
                         closestPlayer = p;
                     }
 	
