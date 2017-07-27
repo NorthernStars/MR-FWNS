@@ -3,12 +3,19 @@ package mrlib.core;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.withinPercentage;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import essentials.communication.Action;
 import essentials.communication.WorldData;
@@ -21,13 +28,14 @@ import essentials.constants.Default;
 import essentials.core.BotInformation;
 import essentials.core.BotInformation.GamevalueNames;
 
+@RunWith(PowerMockRunner.class)
 public class PlayersLibTests {
 
 	RawWorldData worldModel;
 	BotInformation vBotInformation = new BotInformation();
-	
-	
-	
+
+	RawWorldData mWorldDataMock = mock(RawWorldData.class);;
+	BotInformation mSelfMock = mock(BotInformation.class);
 	
 	@Before
 	public void setUp() throws Exception {
@@ -237,8 +245,186 @@ public class PlayersLibTests {
 	}
 
 	@Test
+	public void testGetNearestMateWithoutEnemyAroundAllAlone(){
+
+		when(mWorldDataMock.getListOfTeamMates()).thenReturn(new ArrayList<>());
+		
+		when(mSelfMock.getRcId()).thenReturn(20);
+		when(mSelfMock.getVtId()).thenReturn(20);
+		
+		assertThat(PlayersLib.getNearestMateWithoutEnemyAround(mWorldDataMock, mSelfMock)).isNull();
+		
+	}
+
+	@Test
+	public void testGetNearestMateWithoutEnemyAroundWithoutMatesWithOpponents(){
+
+		when(mWorldDataMock.getListOfTeamMates()).thenReturn(new ArrayList<>());
+		
+		List<FellowPlayer> vListOfOpponents = new ArrayList<>();
+		vListOfOpponents.add(new FellowPlayer(1, "", true, 200, 0, 0));
+		vListOfOpponents.add(new FellowPlayer(2, "", true, 300, 0, 0));
+		vListOfOpponents.add(new FellowPlayer(3, "", true, 400, 0, 0));
+		
+		when(mWorldDataMock.getListOfOpponents()).thenReturn(vListOfOpponents);
+		
+		when(mSelfMock.getRcId()).thenReturn(20);
+		when(mSelfMock.getVtId()).thenReturn(20);
+		
+		assertThat(PlayersLib.getNearestMateWithoutEnemyAround(mWorldDataMock, mSelfMock)).isNull();
+		
+	}
+
+	@Test
+	public void testGetNearestMateWithoutEnemyAroundWithOrderedMatesWithoutOpponents(){
+
+		FellowPlayer vTheMate = new FellowPlayer(1, "", true, 200, 0, 0);
+		
+		List<FellowPlayer> vListOfMates = new ArrayList<>();
+		
+		vListOfMates.add(vTheMate);
+		vListOfMates.add(new FellowPlayer(2, "", true, 300, 0, 0));
+		vListOfMates.add(new FellowPlayer(3, "", true, 400, 0, 0));
+		
+		when(mWorldDataMock.getListOfTeamMates()).thenReturn(vListOfMates);
+		when(mWorldDataMock.getListOfOpponents()).thenReturn(new ArrayList<>());
+		
+		when(mSelfMock.getRcId()).thenReturn(20);
+		when(mSelfMock.getVtId()).thenReturn(20);
+		
+		assertThat(PlayersLib.getNearestMateWithoutEnemyAround(mWorldDataMock, mSelfMock)).isEqualTo(vTheMate);
+		
+	}
+
+	@Test
+	public void testGetNearestMateWithoutEnemyAroundWithUnorderedMatesWithoutOpponents(){
+
+		FellowPlayer vTheMate = new FellowPlayer(1, "", true, 200, 0, 0);
+		
+		List<FellowPlayer> vListOfMates = new ArrayList<>();
+		
+		vListOfMates.add(new FellowPlayer(2, "", true, 300, 0, 0));
+		vListOfMates.add(new FellowPlayer(3, "", true, 400, 0, 0));
+		vListOfMates.add(vTheMate);
+		
+		when(mWorldDataMock.getListOfTeamMates()).thenReturn(vListOfMates);
+		when(mWorldDataMock.getListOfOpponents()).thenReturn(new ArrayList<>());
+		
+		when(mSelfMock.getRcId()).thenReturn(20);
+		when(mSelfMock.getVtId()).thenReturn(20);
+		
+		assertThat(PlayersLib.getNearestMateWithoutEnemyAround(mWorldDataMock, mSelfMock)).isEqualTo(vTheMate);
+		
+	}
+
+	@Test
+	public void testGetNearestMateWithoutEnemyAroundWithouMatesWithoutOpponentsWithMeself(){
+
+		int vOwnId = 20;
+		FellowPlayer vMeself = new FellowPlayer(vOwnId, "", true, 0, 0, 0);
+		
+		List<FellowPlayer> vListOfMates = new ArrayList<>();
+		vListOfMates.add(vMeself);
+		
+		when(mWorldDataMock.getListOfTeamMates()).thenReturn(vListOfMates);
+		when(mWorldDataMock.getListOfOpponents()).thenReturn(new ArrayList<>());
+		when(mWorldDataMock.getAgentId()).thenReturn(vOwnId);
+		
+		when(mSelfMock.getRcId()).thenReturn(vOwnId);
+		when(mSelfMock.getVtId()).thenReturn(vOwnId);
+		
+		assertThat(PlayersLib.getNearestMateWithoutEnemyAround(mWorldDataMock, mSelfMock)).isNull();
+		
+	}
+
+	@Test
+	public void testGetNearestMateWithoutEnemyAroundWithMatesWithOpponentsWithOneMateFree(){
+
+		FellowPlayer vTheMate = new FellowPlayer(1, "", true, 300, 0, 0);
+		
+		List<FellowPlayer> vListOfMates = new ArrayList<>();
+		
+		vListOfMates.add(new FellowPlayer(2, "", true, 200, 0, 0));
+		vListOfMates.add(vTheMate);
+		vListOfMates.add(new FellowPlayer(3, "", true, 400, 0, 0));
+		
+		when(mWorldDataMock.getListOfTeamMates()).thenReturn(vListOfMates);
+		
+		List<FellowPlayer> vListOfOpponents = new ArrayList<>();
+		
+		vListOfOpponents.add(new FellowPlayer(4, "", true, 200, 0, 0));
+		vListOfOpponents.add(new FellowPlayer(5, "", true, 400, 0, 0));
+		vListOfOpponents.add(new FellowPlayer(6, "", true, 600, 0, 0));
+		
+		when(mWorldDataMock.getListOfOpponents()).thenReturn(vListOfOpponents);
+		
+		when(mSelfMock.getRcId()).thenReturn(20);
+		when(mSelfMock.getVtId()).thenReturn(20);
+		
+		assertThat(PlayersLib.getNearestMateWithoutEnemyAround(mWorldDataMock, mSelfMock)).isEqualTo(vTheMate);
+		
+	}
+
+	@Test
+	public void testGetNearestMateWithoutEnemyAroundWithMatesWithOpponentsWithTwoMatesFree(){
+
+		FellowPlayer vTheMate = new FellowPlayer(1, "", true, 100, 0, 0);
+		
+		List<FellowPlayer> vListOfMates = new ArrayList<>();
+		
+		vListOfMates.add(new FellowPlayer(2, "", true, 300, 0, 0));
+		vListOfMates.add(vTheMate);
+		vListOfMates.add(new FellowPlayer(3, "", true, 400, 0, 0));
+		
+		when(mWorldDataMock.getListOfTeamMates()).thenReturn(vListOfMates);
+		
+		List<FellowPlayer> vListOfOpponents = new ArrayList<>();
+		
+		vListOfOpponents.add(new FellowPlayer(4, "", true, 200, 0, 0));
+		vListOfOpponents.add(new FellowPlayer(5, "", true, 400, 0, 0));
+		vListOfOpponents.add(new FellowPlayer(6, "", true, 600, 0, 0));
+		
+		when(mWorldDataMock.getListOfOpponents()).thenReturn(vListOfOpponents);
+		
+		when(mSelfMock.getRcId()).thenReturn(20);
+		when(mSelfMock.getVtId()).thenReturn(20);
+		
+		assertThat(PlayersLib.getNearestMateWithoutEnemyAround(mWorldDataMock, mSelfMock)).isEqualTo(vTheMate);
+		
+	}
+
+	@Test
+	public void testGetNearestMateWithoutEnemyAroundWithMatesWithOpponentsWithNoMatesFree(){
+		
+		List<FellowPlayer> vListOfMates = new ArrayList<>();
+		
+		vListOfMates.add(new FellowPlayer(2, "", true, 200, 0, 0));
+		vListOfMates.add(new FellowPlayer(1, "", true, 300, 0, 0));
+		vListOfMates.add(new FellowPlayer(3, "", true, 400, 0, 0));
+		
+		when(mWorldDataMock.getListOfTeamMates()).thenReturn(vListOfMates);
+		
+		List<FellowPlayer> vListOfOpponents = new ArrayList<>();
+		
+		vListOfOpponents.add(new FellowPlayer(4, "", true, 200, 0, 0));
+		vListOfOpponents.add(new FellowPlayer(5, "", true, 300, 0, 0));
+		vListOfOpponents.add(new FellowPlayer(6, "", true, 400, 0, 0));
+		
+		when(mWorldDataMock.getListOfOpponents()).thenReturn(vListOfOpponents);
+		
+		when(mSelfMock.getRcId()).thenReturn(20);
+		when(mSelfMock.getVtId()).thenReturn(20);
+		
+		assertThat(PlayersLib.getNearestMateWithoutEnemyAround(mWorldDataMock, mSelfMock)).isNull();
+		
+	}
+	
+	
+	@Test
 	public void testGetNearestMateWithoutEnemyAround() {
 
+		
+		
 		FellowPlayer chosenOne = PlayersLib.getNearestMateWithoutEnemyAround(worldModel, vBotInformation);
 		assertThat(chosenOne.getDistanceToPlayer()).isCloseTo(PlayersLib.getNearestMate(worldModel, vBotInformation).getDistanceToPlayer(), withinPercentage(0.1));
 		FellowPlayer oldChosenOne = chosenOne;

@@ -524,5 +524,29 @@ public class ReferencePoint{
         return "ReferencePoint [mPointName=" + mPointName + ", mDistanceToPoint=" + mDistanceToPoint
                 + ", mAngleToPoint=" + mAngleToPoint + ", mX=" + mX + ", mY=" + mY + "]";
     }
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ReferencePoint other = (ReferencePoint) obj;
+		if (Double.doubleToLongBits(mAngleToPoint) != Double.doubleToLongBits(other.mAngleToPoint))
+			return false;
+		if (Double.doubleToLongBits(mDistanceToPoint) != Double.doubleToLongBits(other.mDistanceToPoint))
+			return false;
+		if (mPointName != other.mPointName)
+			return false;
+		if (Double.doubleToLongBits(mX) != Double.doubleToLongBits(other.mX))
+			return false;
+		if (Double.doubleToLongBits(mY) != Double.doubleToLongBits(other.mY))
+			return false;
+		return true;
+	}
+    
+    
     
 }
