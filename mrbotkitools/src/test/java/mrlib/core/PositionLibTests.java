@@ -22,6 +22,12 @@ public class PositionLibTests {
 	@After
 	public void tearDown() throws Exception {
 	}
+	
+	@SuppressWarnings("unused")
+	@Test
+	public void fuCC(){
+		PositionLib vUseless = new PositionLib();
+	}
 
 	@Test
 	public void testGetMiddleOfTwoReferencePoints() {
