@@ -366,7 +366,7 @@ public class PlayersLib {
 	 * 
 	 * @param aWorldState	{@link RawWorldData} from the server
 	 * @param refPoint		{@link ReferencePoint}
-	 * @param angle			{@link Double} angle
+	 * @param angle			{@link Double} angle tolerance (0 for straight line)
 	 * @returns 			{@code true} if enemy is in way from agent to {@code refPoint}, {@code false} othweise.
 	 * */
 	public static boolean isEnemyOnWayToRefPoint(RawWorldData aWorldState, ReferencePoint refPoint, double angle){		
@@ -374,6 +374,9 @@ public class PlayersLib {
 		double vAngleLeft = refPoint.getAngleToPoint()-angle;
 		double vAngleRight = refPoint.getAngleToPoint()+angle;
 		double distanceToRefPoint = refPoint.getDistanceToPoint();
+		
+		if(vAngleLeft<180) vAngleLeft+=360;
+		if(vAngleRight>180) vAngleRight-=360;
 		
 		// check if angles exceed maximum angles
 		
@@ -384,17 +387,7 @@ public class PlayersLib {
 			
 			if(distanceToRefPoint > a.getDistanceToPlayer())
 			{
-				if( vAngleToPlayer >= vAngleLeft && vAngleToPlayer <= vAngleRight ){
-					return true;
-				}
-			
-				if( vAngleRight > 180.0 && (vAngleToPlayer <= (-360+vAngleRight) || vAngleToPlayer >= vAngleLeft) ){
-					return true;
-				}
-			
-				if( vAngleLeft < -180.0 && (vAngleToPlayer >= (360+vAngleLeft) || vAngleToPlayer <= vAngleRight ) ){
-					return true;
-				}	
+				if(isSpecificEnemyInAngleBetweenTwoRefPoints(a, 1, pAngle2)) return true;
 			}
 		}
 		return false;
@@ -423,33 +416,33 @@ public class PlayersLib {
 	public static boolean isEnemyInCorridorBetweenTwoAngles(RawWorldData aWorldState, double pAngle1, double pAngle2)
 	{
 		//todo: throw if angle exceeds +-180
-		double angle1 = 0;
-		double angle2 = 0;
+		double angleHigh = 0;
+		double angleLow = 0;
 
 		if(pAngle1 > pAngle2)
 		{
-			angle1 = pAngle1;
-			angle2 = pAngle2;
+			angleHigh = pAngle1;
+			angleLow = pAngle2;
 		}
 		else 
 		{
-			angle1 = pAngle2;
-			angle2 = pAngle1;
+			angleHigh = pAngle2;
+			angleLow = pAngle1;
 		}
 	
 		
 		//Angle infront or behind
-		if(angle1 - angle2 > 180)
+		if(angleHigh - angleLow > 180)
 		{
-			return isEnemyInCorridorBetweenTwoAngles(aWorldState, 180, angle1)
-					|| isEnemyInCorridorBetweenTwoAngles(aWorldState, angle2, -180);
+			return isEnemyInCorridorBetweenTwoAngles(aWorldState, 180, angleHigh)
+					|| isEnemyInCorridorBetweenTwoAngles(aWorldState, angleLow, -180);
 		}
 		else
 		{
 			List<FellowPlayer> vOpponents = aWorldState.getListOfOpponents();
 			for(FellowPlayer a: vOpponents)
 			{
-				if(a.getAngleToPlayer() >= angle2 && a.getAngleToPlayer() <= angle1) return true;
+				if(a.getAngleToPlayer() >= angleLow && a.getAngleToPlayer() <= angleHigh) return true;
 			}
 		}
 		return false;
@@ -476,27 +469,27 @@ public class PlayersLib {
 	 * @returns 		{@code true} if {@code enemy} is in angle between {@code refPoint1} and {@code refPoint2}, {@code false} otherwise.A lways takes the small angle between the points.
 	 * */
 	public static boolean isSpecificEnemyInAngleBetweenTwoRefPoints(FellowPlayer enemy, double pAngle1, double pAngle2){
-		double angle1 = 0;
-		double angle2 = 0;
+		double angleHigh = 0;
+		double angleLow = 0;
 		
 		
 		if(pAngle1 > pAngle2)
 		{
-			angle1 = pAngle1;
-			angle2 = pAngle2;
+			angleHigh = pAngle1;
+			angleLow = pAngle2;
 		}
 		else 
 		{
-			angle1 = pAngle2;
-			angle2 = pAngle1;
+			angleHigh = pAngle2;
+			angleLow = pAngle1;
 		}
-		if(angle1-angle2 > 180){
-			return isSpecificEnemyInAngleBetweenTwoRefPoints(enemy, 180, angle1)
-					|| isSpecificEnemyInAngleBetweenTwoRefPoints(enemy, angle2, -180);
+		if(angleHigh-angleLow > 180){
+			return isSpecificEnemyInAngleBetweenTwoRefPoints(enemy, 180, angleHigh)
+					|| isSpecificEnemyInAngleBetweenTwoRefPoints(enemy, angleLow, -180);
 				
 		}
 		else{
-			return enemy.getAngleToPlayer() >= angle2 && enemy.getAngleToPlayer() <= angle1;
+			return enemy.getAngleToPlayer() >= angleLow && enemy.getAngleToPlayer() <= angleHigh;
 		}
 	}
 		
