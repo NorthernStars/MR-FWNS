@@ -171,14 +171,14 @@ public class MoveLib {
 	
     /**
      * Turn towards an angle (no movement).
-     * @param vAngle	{@link Double} angle to turn to.
+     * @param vAngle	{@link Double} angle to turn to. (-180 to 180)
      * @return			{@link Action}
      */
     public static Action turnTo(double vAngle){
 
         // no turn
         if(vAngle < moveAngleNoTurn && vAngle > -moveAngleNoTurn
-                        || vAngle > (180-moveAngleNoTurn) && vAngle < -(180-moveAngleNoTurn)){
+                        || vAngle > (180-moveAngleNoTurn) || vAngle < -(180-moveAngleNoTurn)){
                 return Movement.NO_MOVEMENT;
         }
 
