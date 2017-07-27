@@ -21,6 +21,12 @@ public class MoveLibTests {
 	public void tearDown() throws Exception {
 	}
 
+    @Test
+    @SuppressWarnings("unused")
+    public void fuCC(){
+        MoveLib vUseless = new MoveLib();
+    }
+
 	@Test
 	public void testRunToReferencePoint() {
 
