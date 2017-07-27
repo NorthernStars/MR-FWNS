@@ -75,7 +75,31 @@ public class FellowPlayer extends ReferencePoint{
         return "FellowPlayer [mId=" + mId + ", mNickname=" + mNickname + ", mStatus=" + mStatus + ", mOrientation="
                 + mOrientation + " " + super.toString() + "]";
     }
-	
-    
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		FellowPlayer other = (FellowPlayer) obj;
+		if (mId != other.mId)
+			return false;
+		if (mNickname == null) {
+			if (other.mNickname != null)
+				return false;
+		} else if (!mNickname.equals(other.mNickname))
+			return false;
+		if (Double.doubleToLongBits(mOrientation) != Double.doubleToLongBits(other.mOrientation))
+			return false;
+		if (mStatus == null) {
+			if (other.mStatus != null)
+				return false;
+		} else if (!mStatus.equals(other.mStatus))
+			return false;
+		return true;
+	} 
     
 }
