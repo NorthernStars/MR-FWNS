@@ -4,23 +4,46 @@ import essentials.communication.worlddata_server2008.BallPosition;
 import essentials.communication.worlddata_server2008.FellowPlayer;
 import essentials.communication.worlddata_server2008.RawWorldData;
 import essentials.communication.worlddata_server2008.ReferencePoint;
+import essentials.constants.Default;
 import essentials.core.BotInformation;
 import essentials.core.BotInformation.Teams;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.modules.junit4.PowerMockRunner;
 
+@RunWith(PowerMockRunner.class)
 public class PositionLibTests {
+
+
+    final int mOwnId = 20;
+    RawWorldData mWorldDataMock = mock(RawWorldData.class);
+    BotInformation mSelfMock = mock(BotInformation.class);
 
 	@Before
 	public void setUp() throws Exception {
+
+        when(mWorldDataMock.getAgentId()).thenReturn(mOwnId);
+
+        when(mSelfMock.getRcId()).thenReturn(mOwnId);
+        when(mSelfMock.getVtId()).thenReturn(mOwnId);
+        when(mSelfMock.getGamevalue(BotInformation.GamevalueNames.KickRange)).thenReturn(Default.KickRange);
 	}
 
 	@After
 	public void tearDown() throws Exception {
+	}
+	
+	@SuppressWarnings("unused")
+	@Test
+	public void fuCC(){
+		PositionLib vUseless = new PositionLib();
 	}
 
 	@Test
@@ -293,7 +316,7 @@ public class PositionLibTests {
             result = PositionLib.amINearestMateToPoint(testWorldData, testReferencePoint, testBotInfo);
             assertThat(result).isExactlyInstanceOf(Boolean.class);
             assertThat(result.booleanValue()).isEqualTo(false);
-            
+
 	}
 
 	@Test

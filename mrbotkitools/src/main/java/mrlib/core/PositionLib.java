@@ -282,7 +282,7 @@ public class PositionLib {
 	 */
 	public static boolean amINearestMateToPoint(RawWorldData vWorldState, ReferencePoint aRefPoint, BotInformation aSelf){
 		List<FellowPlayer> vTeamMates = vWorldState.getListOfTeamMates();
-		vTeamMates.add(new FellowPlayer(aSelf.getVtId(),"me", true,0,0,0) );
+		vTeamMates.add(new FellowPlayer(vWorldState.getAgentId(),"me", true,0,0,0) );
 		
 		FellowPlayer closestPlayer = null;
 		for ( FellowPlayer p: vTeamMates){
@@ -303,7 +303,7 @@ public class PositionLib {
 	
 		}
 		
-		return closestPlayer != null && closestPlayer.getId() == aSelf.getVtId();
+		return closestPlayer.getId() == vWorldState.getAgentId();
 	}
 
 
