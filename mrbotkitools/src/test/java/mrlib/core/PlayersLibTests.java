@@ -34,13 +34,20 @@ public class PlayersLibTests {
 	RawWorldData worldModel;
 	BotInformation vBotInformation = new BotInformation();
 
-	RawWorldData mWorldDataMock = mock(RawWorldData.class);;
+	final int mOwnId = 20;
+	RawWorldData mWorldDataMock = mock(RawWorldData.class);
 	BotInformation mSelfMock = mock(BotInformation.class);
 	
 	@Before
 	public void setUp() throws Exception {
 		worldModel = TestScenario.getExampleWorldModel();
 		vBotInformation.setVtId(100);
+		
+		when(mWorldDataMock.getAgentId()).thenReturn(mOwnId);
+		
+		when(mSelfMock.getRcId()).thenReturn(mWorldDataMock.getAgentId());
+		when(mSelfMock.getVtId()).thenReturn(mWorldDataMock.getAgentId());
+		when(mSelfMock.getGamevalue(GamevalueNames.KickRange)).thenReturn(Default.KickRange);
 	}
 
 	@After
@@ -249,9 +256,6 @@ public class PlayersLibTests {
 
 		when(mWorldDataMock.getListOfTeamMates()).thenReturn(new ArrayList<>());
 		
-		when(mSelfMock.getRcId()).thenReturn(20);
-		when(mSelfMock.getVtId()).thenReturn(20);
-		
 		assertThat(PlayersLib.getNearestMateWithoutEnemyAround(mWorldDataMock, mSelfMock)).isNull();
 		
 	}
@@ -267,9 +271,6 @@ public class PlayersLibTests {
 		vListOfOpponents.add(new FellowPlayer(3, "", true, 400, 0, 0));
 		
 		when(mWorldDataMock.getListOfOpponents()).thenReturn(vListOfOpponents);
-		
-		when(mSelfMock.getRcId()).thenReturn(20);
-		when(mSelfMock.getVtId()).thenReturn(20);
 		
 		assertThat(PlayersLib.getNearestMateWithoutEnemyAround(mWorldDataMock, mSelfMock)).isNull();
 		
@@ -289,9 +290,6 @@ public class PlayersLibTests {
 		when(mWorldDataMock.getListOfTeamMates()).thenReturn(vListOfMates);
 		when(mWorldDataMock.getListOfOpponents()).thenReturn(new ArrayList<>());
 		
-		when(mSelfMock.getRcId()).thenReturn(20);
-		when(mSelfMock.getVtId()).thenReturn(20);
-		
 		assertThat(PlayersLib.getNearestMateWithoutEnemyAround(mWorldDataMock, mSelfMock)).isEqualTo(vTheMate);
 		
 	}
@@ -310,9 +308,6 @@ public class PlayersLibTests {
 		when(mWorldDataMock.getListOfTeamMates()).thenReturn(vListOfMates);
 		when(mWorldDataMock.getListOfOpponents()).thenReturn(new ArrayList<>());
 		
-		when(mSelfMock.getRcId()).thenReturn(20);
-		when(mSelfMock.getVtId()).thenReturn(20);
-		
 		assertThat(PlayersLib.getNearestMateWithoutEnemyAround(mWorldDataMock, mSelfMock)).isEqualTo(vTheMate);
 		
 	}
@@ -328,10 +323,6 @@ public class PlayersLibTests {
 		
 		when(mWorldDataMock.getListOfTeamMates()).thenReturn(vListOfMates);
 		when(mWorldDataMock.getListOfOpponents()).thenReturn(new ArrayList<>());
-		when(mWorldDataMock.getAgentId()).thenReturn(vOwnId);
-		
-		when(mSelfMock.getRcId()).thenReturn(vOwnId);
-		when(mSelfMock.getVtId()).thenReturn(vOwnId);
 		
 		assertThat(PlayersLib.getNearestMateWithoutEnemyAround(mWorldDataMock, mSelfMock)).isNull();
 		
@@ -358,9 +349,6 @@ public class PlayersLibTests {
 		
 		when(mWorldDataMock.getListOfOpponents()).thenReturn(vListOfOpponents);
 		
-		when(mSelfMock.getRcId()).thenReturn(20);
-		when(mSelfMock.getVtId()).thenReturn(20);
-		
 		assertThat(PlayersLib.getNearestMateWithoutEnemyAround(mWorldDataMock, mSelfMock)).isEqualTo(vTheMate);
 		
 	}
@@ -386,9 +374,6 @@ public class PlayersLibTests {
 		
 		when(mWorldDataMock.getListOfOpponents()).thenReturn(vListOfOpponents);
 		
-		when(mSelfMock.getRcId()).thenReturn(20);
-		when(mSelfMock.getVtId()).thenReturn(20);
-		
 		assertThat(PlayersLib.getNearestMateWithoutEnemyAround(mWorldDataMock, mSelfMock)).isEqualTo(vTheMate);
 		
 	}
@@ -411,9 +396,6 @@ public class PlayersLibTests {
 		vListOfOpponents.add(new FellowPlayer(6, "", true, 400, 0, 0));
 		
 		when(mWorldDataMock.getListOfOpponents()).thenReturn(vListOfOpponents);
-		
-		when(mSelfMock.getRcId()).thenReturn(20);
-		when(mSelfMock.getVtId()).thenReturn(20);
 		
 		assertThat(PlayersLib.getNearestMateWithoutEnemyAround(mWorldDataMock, mSelfMock)).isNull();
 		
