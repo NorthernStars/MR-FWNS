@@ -104,6 +104,13 @@ public class MoveLibTests {
             returnAction = MoveLib.runTo(testRefPoint);
             assertThat(returnAction).isExactlyInstanceOf(Movement.class);
             assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
+
+            // Wrong value
+            testAngle = -190.0;
+            testRefPoint = new ReferencePoint(testDistance, testAngle, true);
+            returnAction = MoveLib.runTo(testRefPoint);
+            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
+            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
             
 	}
 
