@@ -62,7 +62,7 @@ public class MoveLib {
 	
     /**
      * Let the agent run into an specific direction.
-     * @param vAngle	{@link Double} direction angle to run to in degree
+     * @param vAngle	{@link Double} direction angle to run to in degree (-180 to 180)
      * @return Action	{@link Action}
      */
     public static Action runTo( double vAngle ) {
