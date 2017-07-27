@@ -103,6 +103,7 @@ public class PlayersLib {
      */
 	@Deprecated
 	public static boolean isEnemyAround(RawWorldData vWorldState, BotInformation mSelf, double range){
+	
 		return isEnemyAround(vWorldState, range);
 	}
 	
@@ -194,7 +195,9 @@ public class PlayersLib {
      * 
      * @param vWorldState	{@link RawWorldData} from the Server
      * @return 				Teammate {@link FellowPlayer} with a enemy around but the enemy furthest away
+     * @deprecated Legacy function without sense
      */
+	@Deprecated
 	public static FellowPlayer getMateWithEnemyNearButFurthestAway(RawWorldData vWorldState)
 	{
 		List<FellowPlayer> vOpponents = vWorldState.getListOfOpponents();
@@ -380,7 +383,8 @@ public class PlayersLib {
 		
 		List<FellowPlayer> vOpponents = aWorldState.getListOfOpponents();
 		for ( FellowPlayer a: vOpponents){
-			if(distanceToRefPoint > a.getDistanceToPlayer() && isSpecificEnemyInAngleBetweenTwoRefPoints(a, vAngleLeft, vAngleRight)) return true;
+			if(distanceToRefPoint > a.getDistanceToPlayer() && isSpecificEnemyInAngleBetweenTwoAngles(a, vAngleLeft, vAngleRight)) return true;
+			
 		}
 		return false;
 	}
@@ -450,7 +454,7 @@ public class PlayersLib {
 	 * @returns 		{@code true} if {@code enemy} is in angle between {@code refPoint1} and {@code refPoint2}, {@code false} otherwise.
 	 * */
 	public static boolean isSpecificEnemyInAngleBetweenTwoRefPoints(FellowPlayer enemy, ReferencePoint refPoint1, ReferencePoint refPoint2){
-		return isSpecificEnemyInAngleBetweenTwoRefPoints(enemy, refPoint1.getAngleToPoint(), refPoint2.getAngleToPoint());
+		return isSpecificEnemyInAngleBetweenTwoAngles(enemy, refPoint1.getAngleToPoint(), refPoint2.getAngleToPoint());
 	}
 	/**
 	 * Return if an specific enemy is corridor of two {@link ReferencePoint}s.
@@ -460,7 +464,7 @@ public class PlayersLib {
 	 * @param refPoint2 Seconds {@link ReferencePoint}
 	 * @returns 		{@code true} if {@code enemy} is in angle between {@code refPoint1} and {@code refPoint2}, {@code false} otherwise.A lways takes the small angle between the points.
 	 * */
-	public static boolean isSpecificEnemyInAngleBetweenTwoRefPoints(FellowPlayer enemy, double pAngle1, double pAngle2){
+	public static boolean isSpecificEnemyInAngleBetweenTwoAngles(FellowPlayer enemy, double pAngle1, double pAngle2){
 		double angleHigh = 0;
 		double angleLow = 0;
 		
@@ -476,8 +480,8 @@ public class PlayersLib {
 			angleLow = pAngle1;
 		}
 		if(angleHigh-angleLow > 180){
-			return isSpecificEnemyInAngleBetweenTwoRefPoints(enemy, 180, angleHigh)
-					|| isSpecificEnemyInAngleBetweenTwoRefPoints(enemy, angleLow, -180);
+			return isSpecificEnemyInAngleBetweenTwoAngles(enemy, 180, angleHigh)
+					|| isSpecificEnemyInAngleBetweenTwoAngles(enemy, angleLow, -180);
 				
 		}
 		else{

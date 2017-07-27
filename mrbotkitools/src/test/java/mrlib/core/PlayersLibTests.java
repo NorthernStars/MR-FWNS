@@ -809,48 +809,155 @@ public class PlayersLibTests {
 		
 		assertThat(PlayersLib.isEnemyInCorridorBetweenTwoAngles(mWorldDataMock, 170, -160)).isTrue();
 	}
-	
-
+	//'''''''''''''############################################################################################################
 	@Test
-	public void testIsSpecificEnemyInAngleBetweenTwoRefPoints() {
-		//Case 1: Player in small angle
+	public void testIsSpecificEnemyInAngleBetweenTwoAnglesSwitchedAngles()
+	{
+		FellowPlayer o1 = new FellowPlayer(1, "", true, 200, 100, 0);
+		
+		double angleLeft = TestScenario.opponent1Angle -10;
+		double angleRight = TestScenario.opponent1Angle +10;
+		assertThat(PlayersLib.isSpecificEnemyInAngleBetweenTwoAngles(o1, angleLeft, angleRight)==PlayersLib.isSpecificEnemyInAngleBetweenTwoAngles(o1, angleRight, angleLeft));
+		
+	}
+	
+	@Test
+	public void testIsSpecificEnemyInAngleBetweenTwoRefPointsNoOpponents()
+	{
+		FellowPlayer o1 = new FellowPlayer(1, "", true, 200, 100, 0);
+		
 		ReferencePoint testRefPoint1 = new ReferencePoint(0, TestScenario.opponent1Angle -10, true);
 		ReferencePoint testRefPoint2 = new ReferencePoint(0, TestScenario.opponent1Angle +10, true);
-		FellowPlayer o1 = new FellowPlayer();
-		o1 = worldModel.getListOfOpponents().get(0);
 
-		Boolean testBool = PlayersLib.isSpecificEnemyInAngleBetweenTwoRefPoints(o1, testRefPoint1.getAngleToPoint(), testRefPoint2.getAngleToPoint());
-		assertThat(testBool).isEqualTo(true);
+		when(mWorldDataMock.getListOfOpponents()).thenReturn(new ArrayList<>());
+		assertThat(PlayersLib.isSpecificEnemyInAngleBetweenTwoRefPoints(o1, testRefPoint1, testRefPoint2)).isFalse();
+	}
+	
+	@Test
+	public void testIsSpecificEnemyInAngleBetweenTwoAnglesNoOpponents()
+	{
+		FellowPlayer o1 = new FellowPlayer(1, "", true, 200, 100, 0);
 		
+		double angleLeft = TestScenario.opponent1Angle -10;
+		double angleRight = TestScenario.opponent1Angle +10;
+		
+		when(mWorldDataMock.getListOfOpponents()).thenReturn(new ArrayList<>());
+		assertThat(PlayersLib.isSpecificEnemyInAngleBetweenTwoAngles(o1, angleLeft, angleRight)).isFalse();
+	}
 
-		//Case 1.2: Player in small angle (switched RefPoints)
-		 testRefPoint1 = new ReferencePoint(0, TestScenario.opponent1Angle -10, true);
-		 testRefPoint2 = new ReferencePoint(0, TestScenario.opponent1Angle +10, true);
+	@Test
+	public void testIsSpecificEnemyInAngleBetweenTwoRefPointsNoOpponentsInAngle()
+	{
+		FellowPlayer o1 = new FellowPlayer(1, "", true, 200, 100, 0);
+		
+		ReferencePoint testRefPoint1 = new ReferencePoint(0, 130, true);
+		ReferencePoint testRefPoint2 = new ReferencePoint(0, 150, true);
 
-		testBool = PlayersLib.isSpecificEnemyInAngleBetweenTwoRefPoints(o1, testRefPoint2.getAngleToPoint(), testRefPoint1.getAngleToPoint());
-		assertThat(testBool).isEqualTo(true);
-		
-		//Case 2: Player not in angle
-		testRefPoint1.set(new ReferencePoint(0, TestScenario.opponent1Angle -20, true));
-		testRefPoint2.set(new ReferencePoint(0, TestScenario.opponent1Angle -30, true));
-		
-		testBool = PlayersLib.isSpecificEnemyInAngleBetweenTwoRefPoints(o1, testRefPoint1.getAngleToPoint(), testRefPoint2.getAngleToPoint());
-		assertThat(testBool).isEqualTo(false);
+		assertThat(PlayersLib.isSpecificEnemyInAngleBetweenTwoRefPoints(o1, testRefPoint1, testRefPoint2)).isFalse();
+	}
 
-		//Case 2.2: Player not in angle (other side)
-		testRefPoint1.set(new ReferencePoint(0, TestScenario.opponent1Angle +20, true));
-		testRefPoint2.set(new ReferencePoint(0, TestScenario.opponent1Angle +30, true));
+	@Test
+	public void testIsSpecificEnemyInAngleBetweenTwoRefPointsNoOpponentsInAngleBackwards()
+	{
+		FellowPlayer o1 = new FellowPlayer(1, "", true, 200, 100, 0);
 		
-		testBool = PlayersLib.isSpecificEnemyInAngleBetweenTwoRefPoints(o1, testRefPoint1.getAngleToPoint(), testRefPoint2.getAngleToPoint());
-		assertThat(testBool).isEqualTo(false);
-		
-		
-		//Case 3: Very large corridor - returns no because function takes the opposite angle
-		testRefPoint1 = new ReferencePoint(0, TestScenario.opponent1Angle-100, true);
-		testRefPoint2 = new ReferencePoint(0, TestScenario.opponent1Angle+100, true);
+		ReferencePoint testRefPoint1 = new ReferencePoint(0, 170, true);
+		ReferencePoint testRefPoint2 = new ReferencePoint(0, -150, true);
 
-		testBool = PlayersLib.isSpecificEnemyInAngleBetweenTwoRefPoints(o1, testRefPoint1.getAngleToPoint(), testRefPoint2.getAngleToPoint());
-		assertThat(testBool).isEqualTo(false);
+		assertThat(PlayersLib.isSpecificEnemyInAngleBetweenTwoRefPoints(o1, testRefPoint1, testRefPoint2)).isFalse();
+	}
+	
+	@Test
+	public void testIsSpecificEnemyInAngleBetweenTwoAnglesNoOpponentsInAngleBackwards()
+	{
+		FellowPlayer o1 = new FellowPlayer(1, "", true, 200, 100, 0);
+
+		assertThat(PlayersLib.isSpecificEnemyInAngleBetweenTwoAngles(o1, 170, -150)).isFalse();
+	}
+
+	@Test
+	public void testIsSpecificEnemyInAngleBetweenTwoAnglesNoOpponentsInAngle()
+	{
+		FellowPlayer o1 = new FellowPlayer(1, "", true, 200, 100, 0);
+		
+		assertThat(PlayersLib.isSpecificEnemyInAngleBetweenTwoAngles(o1, 130, 150)).isFalse();
+	}
+	
+	@Test
+	public void testIsSpecificEnemyInAngleBetweenTwoRefPointsNoOpponentButMateInAngle() 
+	{
+		FellowPlayer o1 = new FellowPlayer(1, "", true, 200, 100, 0);
+		
+		ReferencePoint testRefPoint1 = new ReferencePoint(0, 130, true);
+		ReferencePoint testRefPoint2 = new ReferencePoint(0, 150, true);
+		
+		assertThat(PlayersLib.isSpecificEnemyInAngleBetweenTwoRefPoints(o1, testRefPoint1, testRefPoint2)).isFalse();
+	}
+	
+	@Test
+	public void testIsSpecificEnemyInAngleBetweenTwoAnglesNoOpponentButMateInAngle() 
+	{
+		FellowPlayer o1 = new FellowPlayer(1, "", true, 200, 100, 0);
+		
+		assertThat(PlayersLib.isSpecificEnemyInAngleBetweenTwoAngles(o1, 130, 150)).isFalse();
+	}
+	
+	@Test
+	public void testIsSpecificEnemyInAngleBetweenTwoRefPointsWithOpponent()
+	{
+		FellowPlayer o1 = new FellowPlayer(1, "", true, 200, 140, 0);
+		
+		ReferencePoint testRefPoint1 = new ReferencePoint(0, 130, true);
+		ReferencePoint testRefPoint2 = new ReferencePoint(0, 150, true);
+
+		
+		assertThat(PlayersLib.isSpecificEnemyInAngleBetweenTwoRefPoints(o1, testRefPoint1, testRefPoint2)).isTrue();
+	}
+	
+	@Test
+	public void testIsSpecificEnemyInAngleBetweenTwoAnglesWithOpponent()
+	{
+		FellowPlayer o1 = new FellowPlayer(1, "", true, 200, 140, 0);
+		
+		assertThat(PlayersLib.isSpecificEnemyInAngleBetweenTwoAngles(o1, 130, 150)).isTrue();
+	}
+	
+	@Test
+	public void testIsSpecificEnemyInAngleBetweenTwoRefPointsWithPositiveOpponentBehindPlayer()
+	{
+		FellowPlayer o1 = new FellowPlayer(1, "", true, 200, 175, 0);
+		
+		ReferencePoint testRefPoint1 = new ReferencePoint(0, 170, true);
+		ReferencePoint testRefPoint2 = new ReferencePoint(0, -160, true);
+		
+		assertThat(PlayersLib.isSpecificEnemyInAngleBetweenTwoRefPoints(o1, testRefPoint1, testRefPoint2)).isTrue();
+	}
+	
+	@Test
+	public void testIsSpecificEnemyInAngleBetweenTwoAnglesWithPositiveOpponentBehindPlayer()
+	{
+		FellowPlayer o1 = new FellowPlayer(1, "", true, 200, 175, 0);
+		
+		assertThat(PlayersLib.isSpecificEnemyInAngleBetweenTwoAngles(o1, 170, -160)).isTrue();
+	}
+	
+	@Test
+	public void testIsSpecificEnemyInAngleBetweenTwoRefPointsWithNegativeOpponentBehindPlayer()
+	{
+		FellowPlayer o1 = new FellowPlayer(1, "", true, 200, -175, 0);
+		
+		ReferencePoint testRefPoint1 = new ReferencePoint(0, 170, true);
+		ReferencePoint testRefPoint2 = new ReferencePoint(0, -160, true);
+		
+		assertThat(PlayersLib.isSpecificEnemyInAngleBetweenTwoRefPoints(o1, testRefPoint1, testRefPoint2)).isTrue();
+	}
+	
+	@Test
+	public void testIsSpecificEnemyInAngleBetweenTwoAnglesWithNegativeOpponentBehindPlayer()
+	{
+		FellowPlayer o1 = new FellowPlayer(1, "", true, 200, -175, 0);
+		
+		assertThat(PlayersLib.isSpecificEnemyInAngleBetweenTwoAngles(o1, 170, -160)).isTrue();
 	}
 
 	@Test
