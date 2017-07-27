@@ -434,10 +434,6 @@ public class PlayersLibTests {
 
 		assertThat(testBool).isEqualTo(false);		
 		
-		testRefPoint.setAngleToPoint(179.0);
-		testBool = PlayersLib.isEnemyOnWayToRefPoint(worldModel, testRefPoint, 175.0);
-
-		assertThat(testBool).isEqualTo(true);
 		
 		
 	}
