@@ -21,8 +21,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @RunWith(PowerMockRunner.class)
 public class PositionLibTests {
 
-    RawWorldData worldModel;
-    BotInformation vBotInformation = new BotInformation();
 
     final int mOwnId = 20;
     RawWorldData mWorldDataMock = mock(RawWorldData.class);
@@ -30,8 +28,6 @@ public class PositionLibTests {
 
 	@Before
 	public void setUp() throws Exception {
-        worldModel = TestScenario.getExampleWorldModel();
-        vBotInformation.setVtId(100);
 
         when(mWorldDataMock.getAgentId()).thenReturn(mOwnId);
 
@@ -322,14 +318,6 @@ public class PositionLibTests {
             assertThat(result.booleanValue()).isEqualTo(false);
 
 	}
-
-	@Test
-    public void testAmINewestMateToPointWithoutMates()
-    {
-        Boolean result = PositionLib.amINearestMateToPoint(worldModel, new ReferencePoint(0,0, false), mSelfMock);
-        assertThat(result).isExactlyInstanceOf(Boolean.class);
-        assertThat(result.booleanValue()).isEqualTo(true);
-    }
 
 	@Test
 	public void testLawOfCosine() {
