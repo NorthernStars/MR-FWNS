@@ -87,7 +87,8 @@ public class FellowPlayer extends ReferencePoint{
 		FellowPlayer other = (FellowPlayer) obj;
 		if (mId != other.mId)
 			return false;
-		if (mNickname == null) {
+		if (mNickname == null) 
+		{
 			if (other.mNickname != null)
 				return false;
 		} else if (!mNickname.equals(other.mNickname))
