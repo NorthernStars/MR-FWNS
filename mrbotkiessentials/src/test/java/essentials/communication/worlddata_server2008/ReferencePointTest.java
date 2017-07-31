@@ -27,6 +27,9 @@ public class ReferencePointTest
     {
     }
 
+    /*
+    Tests setDistanceToPoint()
+     */
     @Test
     public void testSetDistanceToPointWithSetValues()
     {
@@ -52,6 +55,9 @@ public class ReferencePointTest
         assertThat(referencePoint.getDistanceToPoint()).isCloseTo(100.0,withinPercentage(1));
     }
 
+    /*
+    Tests setAngleToPoint()
+     */
     @Test
     public void testSetAngleToPointWithSetValues()
     {
@@ -76,4 +82,26 @@ public class ReferencePointTest
         referencePoint.setAngleToPoint(100.0);
         assertThat(referencePoint.getAngleToPoint()).isCloseTo(100.0,withinPercentage(1));
     }
+
+    /*
+    Tests set
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testSetWithPolarcoordinatesWithNegativeDistance()
+    {
+        ReferencePoint referencePoint = new ReferencePoint();
+        referencePoint.set(-5,25,true);
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testSetWithToSmallAngle()
+    {
+        ReferencePoint referencePoint = new ReferencePoint();
+        referencePoint.set(13,-190,true);
+    }
+
+
+
+
 }
