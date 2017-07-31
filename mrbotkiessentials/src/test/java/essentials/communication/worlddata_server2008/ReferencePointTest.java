@@ -52,4 +52,28 @@ public class ReferencePointTest
         assertThat(referencePoint.getDistanceToPoint()).isCloseTo(100.0,withinPercentage(1));
     }
 
+    @Test
+    public void testSetAngleToPointWithSetValues()
+    {
+        ReferencePoint referencePoint = new ReferencePoint(100.0,85.6,true);
+        referencePoint.setAngleToPoint(65.3);
+        assertThat(referencePoint.getAngleToPoint()).isCloseTo(65.3,withinPercentage(1));
+    }
+
+    @Test
+    public void testSetAngleToPointWithSetDistance()
+    {
+        ReferencePoint referencePoint = new ReferencePoint();
+        referencePoint.setDistanceToPoint(55.3);
+        referencePoint.setAngleToPoint(100.0);
+        assertThat(referencePoint.getAngleToPoint()).isCloseTo(100.0,withinPercentage(1));
+    }
+
+    @Test
+    public void testSetAngleToPointWithNothingSet()
+    {
+        ReferencePoint referencePoint = new ReferencePoint();
+        referencePoint.setAngleToPoint(100.0);
+        assertThat(referencePoint.getAngleToPoint()).isCloseTo(100.0,withinPercentage(1));
+    }
 }
