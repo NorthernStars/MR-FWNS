@@ -101,7 +101,7 @@ public class ReferencePoint{
     public void setDistanceToPoint( double aDistance ) {
 
         mDistanceToPoint = aDistance;
-        if( mAngleToPoint != Double.NaN && mDistanceToPoint != Double.NaN ){
+        if( getAngleToPoint() != Double.NaN && getDistanceToPoint() != Double.NaN ){
             set( mDistanceToPoint, mAngleToPoint, true );
         }
         
@@ -223,7 +223,7 @@ public class ReferencePoint{
                 throw new IllegalArgumentException( " Distance can not be smaller than 0! Distance:" + aFirstValue + " Angle: " + aSecondValue );
             }
             mDistanceToPoint = aFirstValue;
-            if( mAngleToPoint < -180 || mAngleToPoint > 180 ){
+            if( aSecondValue < -180 || aSecondValue > 180 ){
                 throw new IllegalArgumentException(" Angle must be between -180 and +180! Distance:" + aFirstValue + " Angle: " + aSecondValue);
             }
             mAngleToPoint = aSecondValue;
