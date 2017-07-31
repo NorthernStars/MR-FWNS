@@ -101,7 +101,7 @@ public class ReferencePoint{
     public void setDistanceToPoint( double aDistance ) {
 
         mDistanceToPoint = aDistance;
-        if( mAngleToPoint != Double.NaN && mDistanceToPoint != Double.NaN ){
+        if( getAngleToPoint() != Double.NaN && getDistanceToPoint() != Double.NaN ){
             set( mDistanceToPoint, mAngleToPoint, true );
         }
         
