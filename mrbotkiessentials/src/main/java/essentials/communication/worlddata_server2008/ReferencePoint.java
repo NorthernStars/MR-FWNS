@@ -294,7 +294,7 @@ public class ReferencePoint{
     public boolean epsilonEquals ( ReferencePoint aReferencePoint, double aEpsilon )
     {
 
-        return aReferencePoint != null && !(Math.abs(aReferencePoint.getXOfPoint() - mX) <= aEpsilon) && Math.abs(aReferencePoint.getYOfPoint() - mY) <= aEpsilon;
+        return aReferencePoint != null && (Math.abs(aReferencePoint.getXOfPoint() - mX) <= aEpsilon) && (Math.abs(aReferencePoint.getYOfPoint() - mY) <= aEpsilon);
 
     }
     
@@ -308,13 +308,11 @@ public class ReferencePoint{
      * 
      * @return ob die Referenzpunkte gleich sind. 
      */
-    public boolean epsilonEquals ( double aX, double aY, double aEpsilon ) {
-       
-        if ( Math.abs( aX - mX ) > aEpsilon ){
-            return false;
-        }
+    public boolean epsilonEquals ( double aX, double aY, double aEpsilon )
+    {
 
-        return !(Math.abs(aY - mY) > aEpsilon);
+        return Math.abs(aX - mX) <= aEpsilon && Math.abs(aY - mY) <= aEpsilon;
+
     }
 
     @Override

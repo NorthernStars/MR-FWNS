@@ -167,5 +167,38 @@ public class ReferencePointTest
         assertThat(referencePoint.getYOfPoint()).isCloseTo(40,Percentage.withPercentage(1));
     }
 
+    @Test
+    public void testEpsilonEqualsReferencePointExactCorrect()
+    {
+        ReferencePoint referencePoint = new ReferencePoint(50,20,false);
+        Boolean result = referencePoint.epsilonEquals(new ReferencePoint(50,20,false),0);
+        assertThat(result).isEqualTo(true);
+    }
+
+    @Test
+    public void testEpsilonEqualsReferencePointNotExactCorrect()
+    {
+        ReferencePoint referencePoint = new ReferencePoint(50,20,false);
+        Boolean result = referencePoint.epsilonEquals(new ReferencePoint(51,19,false),2);
+        assertThat(result).isEqualTo(true);
+    }
+
+    @Test
+    public void testEpsilonEqualsReferencePointExactNotCorrect()
+    {
+        ReferencePoint referencePoint = new ReferencePoint(50,20,false);
+        Boolean result = referencePoint.epsilonEquals(new ReferencePoint(100, 38, false), 0);
+        assertThat(result).isEqualTo(false);
+    }
+
+    @Test
+    public void testEpsilonEqualsReferencePointNotExactNotCorrect()
+    {
+        ReferencePoint referencePoint = new ReferencePoint(50,20, false);
+        Boolean result = referencePoint.epsilonEquals(new ReferencePoint(100,38,false), 2);
+        assertThat(result).isEqualTo(false);
+    }
+
+
 
 }
