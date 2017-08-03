@@ -199,6 +199,21 @@ public class ReferencePointTest
         assertThat(result).isEqualTo(false);
     }
 
+    @Test
+    public void testEpsilonEqualsReferencePointWithReferencePointIsNull()
+    {
+        ReferencePoint referencePoint = new ReferencePoint(50,20,false);
+        Boolean result = referencePoint.epsilonEquals(null,0);
+        assertThat(result).isEqualTo(false);
+    }
+
+    @Test
+    public void testEpsilonEqualsReferencePointYSmallerThanEpsilon()
+    {
+        ReferencePoint referencePoint = new ReferencePoint(50,20,false);
+        Boolean result = referencePoint.epsilonEquals(new ReferencePoint(50,0),1);
+        assertThat(result).isEqualTo(false);
+    }
 
 
 }

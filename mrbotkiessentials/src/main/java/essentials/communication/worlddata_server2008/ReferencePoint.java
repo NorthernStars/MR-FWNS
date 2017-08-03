@@ -294,7 +294,9 @@ public class ReferencePoint{
     public boolean epsilonEquals ( ReferencePoint aReferencePoint, double aEpsilon )
     {
 
-        return aReferencePoint != null && (Math.abs(aReferencePoint.getXOfPoint() - mX) <= aEpsilon) && (Math.abs(aReferencePoint.getYOfPoint() - mY) <= aEpsilon);
+        return aReferencePoint != null
+                && (Math.abs(aReferencePoint.getXOfPoint() - mX) <= aEpsilon)
+                && (Math.abs(aReferencePoint.getYOfPoint() - mY) <= aEpsilon);
 
     }
     
