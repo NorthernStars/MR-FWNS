@@ -319,4 +319,31 @@ public class ReferencePointTest
         assertThat(result).isEqualTo(false);
     }
 
+    /*
+    Tests equals
+     */
+    @Test
+    public void testEqualsSameObject()
+    {
+        ReferencePoint referencePoint = new ReferencePoint();
+        Boolean result = referencePoint.equals(referencePoint);
+        assertThat(result).isEqualTo(true);
+    }
+
+    @Test
+    public void testEqualsObjectIsNull()
+    {
+        ReferencePoint referencePoint = new ReferencePoint();
+        Boolean result = referencePoint.equals(null);
+        assertThat(result).isEqualTo(false);
+    }
+
+    @Test
+    public void testEqualsObjectIsOtherClass()
+    {
+        ReferencePoint referencePoint = new ReferencePoint();
+        Boolean result = referencePoint.equals(new Double(1.2));
+        assertThat(result).isEqualTo(false);
+    }
+
 }
