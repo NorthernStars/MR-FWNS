@@ -102,6 +102,13 @@ public class ReferencePointTest
         referencePoint.set(13,-190,true);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testSetWithPolarcoordinatesWithToBigAngle()
+    {
+        ReferencePoint referencePoint = new ReferencePoint();
+        referencePoint.set(13,190,true);
+    }
+
     @Test
     public void testSetWithPolarCoordinates()
     {
