@@ -211,9 +211,40 @@ public class ReferencePointTest
     public void testEpsilonEqualsReferencePointYSmallerThanEpsilon()
     {
         ReferencePoint referencePoint = new ReferencePoint(50,20,false);
-        Boolean result = referencePoint.epsilonEquals(new ReferencePoint(50,0),1);
+        Boolean result = referencePoint.epsilonEquals(new ReferencePoint(50,0,false),1);
         assertThat(result).isEqualTo(false);
     }
 
+    @Test
+    public void testEpsilonEqualsDoubleNotExactIsTrue()
+    {
+        ReferencePoint referencePoint = new ReferencePoint(50,20,false);
+        Boolean result = referencePoint.epsilonEquals(51.0,19.0,2);
+        assertThat(result).isEqualTo(true);
+    }
+
+    @Test
+    public void testEpsilonEqualsDoubleNotExactIsFalse()
+    {
+        ReferencePoint referencePoint = new ReferencePoint(50,20,false);
+        Boolean result = referencePoint.epsilonEquals(50.0,0.0,1);
+        assertThat(result).isEqualTo(false);
+    }
+
+    @Test
+    public void testEpsilonEqualsDoubleExactIsTrue()
+    {
+        ReferencePoint referencePoint = new ReferencePoint(50,20,false);
+        Boolean result = referencePoint.epsilonEquals(50.0,20.0,0);
+        assertThat(result).isEqualTo(true);
+    }
+
+    @Test
+    public void testEpsilonEqualsDoubleExactIsFalse()
+    {
+        ReferencePoint referencePoint = new ReferencePoint(50,20,false);
+        Boolean result = referencePoint.epsilonEquals(138.0,31.0,0);
+        assertThat(result).isEqualTo(false);
+    }
 
 }

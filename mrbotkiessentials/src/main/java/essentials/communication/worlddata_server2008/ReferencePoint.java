@@ -313,7 +313,8 @@ public class ReferencePoint{
     public boolean epsilonEquals ( double aX, double aY, double aEpsilon )
     {
 
-        return Math.abs(aX - mX) <= aEpsilon && Math.abs(aY - mY) <= aEpsilon;
+        return Math.abs(aX - mX) <= aEpsilon
+                && Math.abs(aY - mY) <= aEpsilon;
 
     }
 
