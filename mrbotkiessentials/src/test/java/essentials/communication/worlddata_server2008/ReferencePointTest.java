@@ -29,6 +29,57 @@ public class ReferencePointTest
     }
 
     /*
+    Tests Constructor
+     */
+
+    @Test
+    public void testCopyConstructor()
+    {
+        //Todo: Mock?
+        ReferencePoint referencePoint = new ReferencePoint(new ReferencePoint(20,50,false));
+        assertThat(referencePoint.getXOfPoint()).isCloseTo(20, Percentage.withPercentage(1));
+        assertThat(referencePoint.getYOfPoint()).isCloseTo(50, Percentage.withPercentage(1));
+    }
+
+    /*
+    Tests setXOfPoint
+     */
+
+    @Test
+    public void testSetXOfPoint()
+    {
+        ReferencePoint referencePoint = new ReferencePoint();
+        referencePoint.setXOfPoint(10);
+        assertThat(referencePoint.getXOfPoint()).isCloseTo(10, Percentage.withPercentage(1));
+    }
+
+    /*
+    Tests setYOfPoint
+     */
+
+    @Test
+    public void testSetYOfPoint()
+    {
+        ReferencePoint referencePoint = new ReferencePoint();
+        referencePoint.setYOfPoint(10);
+        assertThat(referencePoint.getYOfPoint()).isCloseTo(10, Percentage.withPercentage(1));
+    }
+
+    /*
+    Tests copy
+     */
+    @Test
+    public void testCopy()
+    {
+        ReferencePoint referencePoint = new ReferencePoint(10,15,false);
+        ReferencePoint copyOfReferencePoint = referencePoint.copy();
+        assertThat(copyOfReferencePoint).isNotNull();
+        assertThat(copyOfReferencePoint).isInstanceOf(ReferencePoint.class);
+        assertThat(copyOfReferencePoint.getXOfPoint()).isCloseTo(10, Percentage.withPercentage(1));
+        assertThat(copyOfReferencePoint.getYOfPoint()).isCloseTo(15, Percentage.withPercentage(1));
+    }
+
+    /*
     Tests setDistanceToPoint()
      */
     @Test
