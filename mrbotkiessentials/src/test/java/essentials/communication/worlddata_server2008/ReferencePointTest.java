@@ -128,6 +128,18 @@ public class ReferencePointTest
     }
 
     @Test
+    public void testSetReferencePoint()
+    {
+        ReferencePoint referencePoint = new ReferencePoint(50,20,false);
+        referencePoint.set(new ReferencePoint(20,30,false));
+        assertThat(referencePoint.getXOfPoint()).isCloseTo(20, Percentage.withPercentage(1));
+        assertThat(referencePoint.getYOfPoint()).isCloseTo(30, Percentage.withPercentage(1));
+    }
+
+    /*
+    Tests Sub
+     */
+    @Test
     public void testSubDouble()
     {
         ReferencePoint referencePoint = new ReferencePoint(50,20,false);
@@ -147,6 +159,9 @@ public class ReferencePointTest
         assertThat(referencePoint.getYOfPoint()).isCloseTo(10, Percentage.withPercentage(1));
     }
 
+    /*
+    Tests Add
+     */
     @Test
     public void testAdd()
     {
@@ -158,6 +173,9 @@ public class ReferencePointTest
         assertThat(referencePoint.getYOfPoint()).isCloseTo(30, Percentage.withPercentage(1));
     }
 
+    /*
+    Tests Multiply
+     */
     @Test
     public void testMultiply()
     {
@@ -167,6 +185,9 @@ public class ReferencePointTest
         assertThat(referencePoint.getYOfPoint()).isCloseTo(40,Percentage.withPercentage(1));
     }
 
+    /*
+    Tests EpsilonEquals
+     */
     @Test
     public void testEpsilonEqualsReferencePointExactCorrect()
     {
