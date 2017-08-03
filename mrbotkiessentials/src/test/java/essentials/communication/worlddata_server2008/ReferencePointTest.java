@@ -127,6 +127,45 @@ public class ReferencePointTest
         assertThat(referencePoint.getDistanceToPoint()).isCloseTo(9.22, Percentage.withPercentage(1));
     }
 
+    @Test
+    public void testSubDouble()
+    {
+        ReferencePoint referencePoint = new ReferencePoint(50,20,false);
+        referencePoint.sub(10);
+        assertThat(referencePoint.getXOfPoint()).isCloseTo(40,Percentage.withPercentage(1));
+        assertThat(referencePoint.getYOfPoint()).isCloseTo(10, Percentage.withPercentage(1));
+    }
+
+    @Test
+    public void testSubReferencePoint()
+    {
+        //Todo: Mock?
+        ReferencePoint referencePoint = new ReferencePoint(50,20,false);
+        ReferencePoint minusReferencePoint = new ReferencePoint(10,10, false);
+        referencePoint.sub(minusReferencePoint);
+        assertThat(referencePoint.getXOfPoint()).isCloseTo(40,Percentage.withPercentage(1));
+        assertThat(referencePoint.getYOfPoint()).isCloseTo(10, Percentage.withPercentage(1));
+    }
+
+    @Test
+    public void testAdd()
+    {
+        //Todo: Mock?
+        ReferencePoint referencePoint = new ReferencePoint(50,20,false);
+        ReferencePoint plusReferencePoint = new ReferencePoint(10,10, false);
+        referencePoint.add(plusReferencePoint);
+        assertThat(referencePoint.getXOfPoint()).isCloseTo(60,Percentage.withPercentage(1));
+        assertThat(referencePoint.getYOfPoint()).isCloseTo(30, Percentage.withPercentage(1));
+    }
+
+    @Test
+    public void testMultiply()
+    {
+        ReferencePoint referencePoint = new ReferencePoint(50,20, false);
+        referencePoint.multiply(2.0);
+        assertThat(referencePoint.getXOfPoint()).isCloseTo(100, Percentage.withPercentage(1));
+        assertThat(referencePoint.getYOfPoint()).isCloseTo(40,Percentage.withPercentage(1));
+    }
 
 
 }
