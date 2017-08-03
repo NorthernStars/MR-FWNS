@@ -293,19 +293,15 @@ public class ReferencePoint{
      */
     public boolean epsilonEquals ( ReferencePoint aReferencePoint, double aEpsilon ) {
         
-            if ( aReferencePoint == null ){
-                return false;
-            }
-            
-            if ( Math.abs( aReferencePoint.getXOfPoint() - mX ) > aEpsilon ){
-                return false;
-            }
-            
-            if ( Math.abs( aReferencePoint.getYOfPoint() - mY ) > aEpsilon ){
-                return false;
-            }
-            
-            return true;
+        if ( aReferencePoint == null ){
+            return false;
+        }
+
+        if ( Math.abs( aReferencePoint.getXOfPoint() - mX ) > aEpsilon ){
+            return false;
+        }
+
+        return !(Math.abs(aReferencePoint.getYOfPoint() - mY) > aEpsilon);
     }
     
     /** 
@@ -323,12 +319,8 @@ public class ReferencePoint{
         if ( Math.abs( aX - mX ) > aEpsilon ){
             return false;
         }
-        
-        if ( Math.abs( aY - mY ) > aEpsilon ){
-            return false;
-        }
-        
-        return true;
+
+        return !(Math.abs(aY - mY) > aEpsilon);
     }
 
     @Override
@@ -354,10 +346,8 @@ public class ReferencePoint{
 			return false;
 		if (Double.doubleToLongBits(mX) != Double.doubleToLongBits(other.mX))
 			return false;
-		if (Double.doubleToLongBits(mY) != Double.doubleToLongBits(other.mY))
-			return false;
-		return true;
-	}
+        return Double.doubleToLongBits(mY) == Double.doubleToLongBits(other.mY);
+    }
     
     
     
