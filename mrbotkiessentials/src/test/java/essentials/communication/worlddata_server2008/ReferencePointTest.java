@@ -1,5 +1,6 @@
 package essentials.communication.worlddata_server2008;
 
+import org.assertj.core.data.Percentage;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -95,12 +96,29 @@ public class ReferencePointTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testSetWithToSmallAngle()
+    public void testSetWithPolarcoordinatesWithToSmallAngle()
     {
         ReferencePoint referencePoint = new ReferencePoint();
         referencePoint.set(13,-190,true);
     }
 
+    @Test
+    public void testSetWithPolarCoordinates()
+    {
+        ReferencePoint referencePoint = new ReferencePoint();
+        referencePoint.set(50,20,true);
+        assertThat(referencePoint.getAngleToPoint()).isCloseTo(20, Percentage.withPercentage(1));
+        assertThat(referencePoint.getDistanceToPoint()).isCloseTo(50,Percentage.withPercentage(1));
+    }
+
+    @Test
+    public void testSetWithCartesianCoordinates()
+    {
+        ReferencePoint referencePoint = new ReferencePoint();
+        referencePoint.set(6,7,false);
+        assertThat(referencePoint.getAngleToPoint()).isCloseTo(49.398, Percentage.withPercentage(2));
+        assertThat(referencePoint.getDistanceToPoint()).isCloseTo(9.22, Percentage.withPercentage(1));
+    }
 
 
 
