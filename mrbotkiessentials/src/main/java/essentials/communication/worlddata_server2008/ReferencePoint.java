@@ -73,7 +73,7 @@ public class ReferencePoint{
      * @exception IllegalArgumentException
      *              Wenn die Parameter nicht in den erlaubten Bereichen liegen.
      */
-    public ReferencePoint( double aFirstValue, double aSecondValue, boolean aPolarcoordinates ) throws IllegalArgumentException{
+    public ReferencePoint( double aFirstValue, double aSecondValue, boolean aPolarcoordinates ){
         
         set( aFirstValue, aSecondValue, aPolarcoordinates );
         
