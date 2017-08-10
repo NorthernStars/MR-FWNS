@@ -346,4 +346,42 @@ public class ReferencePointTest
         assertThat(result).isEqualTo(false);
     }
 
+    @Test
+    public void testEqualsIsNameDifferent()
+    {
+        ReferencePoint referencePoint = new ReferencePoint();
+        referencePoint.setPointName(ReferencePointName.BlueFieldCornerBottom);
+
+        ReferencePoint referencePoint1 = new ReferencePoint();
+        referencePoint1.setPointName(ReferencePointName.YellowFieldCornerBottom);
+        Boolean result = referencePoint.equals(referencePoint1);
+        assertThat(result).isEqualTo(false);
+    }
+
+    @Test
+    public void testEqualsXIsDifferent()
+    {
+        ReferencePoint referencePoint = new ReferencePoint();
+        referencePoint.setXOfPoint(42);
+
+        ReferencePoint referencePoint1 = new ReferencePoint();
+        referencePoint1.setXOfPoint(7);
+
+        Boolean result = referencePoint.equals(referencePoint1);
+        assertThat(result).isEqualTo(false);
+    }
+
+    @Test
+    public void testEqualsYIsDifferent()
+    {
+        ReferencePoint referencePoint = new ReferencePoint();
+        referencePoint.setYOfPoint(42);
+
+        ReferencePoint referencePoint1 = new ReferencePoint();
+        referencePoint1.setYOfPoint(7);
+
+        Boolean result = referencePoint.equals(referencePoint1);
+        assertThat(result).isEqualTo(false);
+    }
+
 }
