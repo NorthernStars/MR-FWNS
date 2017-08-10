@@ -47,6 +47,7 @@ public class ReferencePoint{
      *              
      * @deprecated benutz {@link #ReferencePoint(double, double, boolean)}
      */
+	@Deprecated
     public ReferencePoint( double aDistanceToPoint, double aAngleToPoint ) throws IllegalArgumentException{
         
         this( aDistanceToPoint, aAngleToPoint, true );
