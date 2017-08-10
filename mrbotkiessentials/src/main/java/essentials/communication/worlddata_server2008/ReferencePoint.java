@@ -216,7 +216,7 @@ public class ReferencePoint{
      *              
      * @return dieser Referenzpunkt zum Verknüpfen von Methoden
      */
-    public ReferencePoint set( double aFirstValue, double aSecondValue, boolean aPolarcoordinates ) throws IllegalArgumentException {
+    public ReferencePoint set( double aFirstValue, double aSecondValue, boolean aPolarcoordinates ) {
         
         if( aPolarcoordinates ) {
 
