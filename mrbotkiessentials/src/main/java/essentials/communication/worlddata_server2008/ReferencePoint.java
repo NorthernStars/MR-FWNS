@@ -5,25 +5,30 @@ import javax.xml.bind.annotation.XmlElement;
 public class ReferencePoint{
 	
 	private ReferencePointName mPointName = ReferencePointName.NoFixedName;
-    /** 
-     * die Länge des ReferencePoints im polaren Koordinatensystem 
+
+    /**
+     * The length of ReferencePoints in polar coordinate system
      */
 	private double mDistanceToPoint = Double.NaN;
-	/** 
-     * der Winkel des ReferencePoints im polaren Koordinatensystem
+
+	/**
+     * The angle of the ReferencePoints in polar coordinate system
      */
 	private double mAngleToPoint = Double.NaN;
-    /** 
-     * der X-Wert des ReferencePoints im kartesischen Koordinatensystem 
+
+    /**
+     * The X-Value of ReferencePoints in cartesian coordinate system
      */
     private double mX = Double.NaN;
-    /** 
-     * der X-Wert des ReferencePoints im kartesischen Koordinatensystem 
+
+    /**
+     * The X-Value of ReferencePoints in cartesian coordinate system
      */
     private double mY = Double.NaN;
     
 	/**
-     * Der Default-Constructor für einen Referenzpunkt auf dem Spielfeld.
+     * Useless?
+     * The default constructor for a ReferencePoint on a matchfield.
      * 
      * Dieser Constructor ist package-private und sollte nie direkt genutzt werden. Er ist für
      * das dekodieren von XML mit JAXB gedacht.
@@ -33,19 +38,19 @@ public class ReferencePoint{
     ReferencePoint( ) {}
 	
 	/**
-     * Der Constructor für einen Referenzpunkt auf dem Spielfeld.
-     * 
-     * Dieser Referenzpunkt wird immer mit dem Namen "NoFixedName" und dem Winkel und der Distanz
-     * zu dem Bot erstellt. Dabei ist zu beachten, das der Winkel zwischen -180 und 180 Grad liegt und
-     * die Distanz nicht kleiner als 0 sein darf.
-     * 
+     * The construtor for a ReferencePoint on a matchfield.
+     *
+     * This ReferencePoint will allways get the name "NoFixedName". Additionally the angle and the distance
+     * to the bot will be setted. Be sure the angle is between -180 and 180 degree and the distance is not less
+     * than 0!
+     *
      * @since 0.9
-     * @param aDistanceToPoint Die Entfernung des Bots zum Referenzpunkt. Kann nicht kleiner als Null sein.
-     * @param aAngleToPoint Der Winkel des Referenzpunktes zum Bot. Muss zwischen -180 und +180 liegen.
+     * @param aDistanceToPoint The distance from bot to ReferencePoint. Can not be less than 0!
+     * @param aAngleToPoint The angle between the Reference and bot. Be sure its between -180 and 180 degree!
      * @exception IllegalArgumentException
-     *              Wenn die Parameter nicht in den erlaubten Bereichen liegen.
+     *              If one of the parameter is not in a legal range.
      *              
-     * @deprecated benutz {@link #ReferencePoint(double, double, boolean)}
+     * @deprecated use {@link #ReferencePoint(double, double, boolean)}
      */
 	@Deprecated
     public ReferencePoint( double aDistanceToPoint, double aAngleToPoint ){
@@ -55,23 +60,22 @@ public class ReferencePoint{
     }
     
     /**
-     * Der Constructor für einen Referenzpunkt auf dem Spielfeld.
+     * The construtor for a ReferencePoint on a matchfield.
      * 
-     * Dieser Referenzpunkt wird immer mit dem Namen "NoFixedName" erstellt.
-     * Er kann in Polarkoordinaten oder kartesischen Koordinaten angegeben werden. Der Bot ist dabei immer der Ursprung.
+     * This ReferencePoint will allways get the name "NoFixedName".
+     * You can set the ReferencePoint in polar or cartesian coordinate system. The bot will always be the point of origin.
      * 
-     * Bei Polarkoordinaten ist zu beachten, das der Winkel zwischen -180 und 180 Grad liegt und
-     * die Distanz nicht kleiner als 0 sein darf.
+     * Be sure the angle is between -180 and 180 degree and the distance is not less than 0!
      * 
      * @since 0.9
-     * @param aFirstValue Polarkoordinaten: Die Entfernung des Bots zum Referenzpunkt. Darf nicht kleiner als Null sein.
-     *                    kartesische Koordinaten: Der X-Wert des Punktes.
-     * @param aSecondValue Polarkoordinaten: Der Winkel des Referenzpunktes zum Bot. Muss zwischen -180 und +180 liegen.
-     *                     kartesische Koordinaten: Der Y-Wert des Punktes.
-     * @param aPolarcoordinates true die übergebenden Werte sind Polarkoordinaten
-     *                          false die übergebenden Werte sind kartesische Koordinaten
+     * @param aFirstValue Polar coordinate system: The distance between ReferencePoint and the bot. Can not be less than 0!
+     *                    Cartesian coordinate system: The X-value of the ReferencePoint.
+     * @param aSecondValue Polar coordinate system: Der Winkel des Referenzpunktes zum Bot. Muss zwischen -180 und +180 liegen.
+     *                     Cartesian coordinate system: The Y-value of the ReferencePoint.
+     * @param aPolarcoordinates true parameters are polar coordinates
+     *                          false parameters are in cartesian coordinates
      * @exception IllegalArgumentException
-     *              Wenn die Parameter nicht in den erlaubten Bereichen liegen.
+     *              If parameters are not in a legal range
      */
     public ReferencePoint( double aFirstValue, double aSecondValue, boolean aPolarcoordinates ){
         
@@ -153,9 +157,9 @@ public class ReferencePoint{
     }
     
     /** 
-     * Kopierkonstruktor
+     * Copy constructor
      * 
-     * @param aReferencePoint der zu kopierende Referenzpunkt
+     * @param aReferencePoint the ReferencePoint to copy
      */
     public ReferencePoint ( ReferencePoint aReferencePoint ) {
         
@@ -164,9 +168,9 @@ public class ReferencePoint{
     }
 
     /** 
-     * Erstellte eine Kopie diese Referenzpunktes
+     * Is making a copy of a ReferencePoint
      * 
-     * @return eine Kopie des Referenzpunktes 
+     * @return A copy of the ReferencePoint
      */
     public ReferencePoint copy () {
         
@@ -174,12 +178,12 @@ public class ReferencePoint{
             
     }
 
-    /** 
-     * Überschreibt die Werte des Referenzpunkts mit denen des übergebenden 
+    /**
+     * Overwrites the values of the ReferencePoint with the given ones.
      * 
-     * @param aReferencePoint der Referenzpunkt mit den gewünschten Werten
+     * @param aReferencePoint The ReferencePoint with the values which should be set.
      * 
-     * @return dieser Referenzpunkt zum Verknüpfen von Methoden 
+     * @return This ReferencePoint with the set values
      */
     public ReferencePoint set ( ReferencePoint aReferencePoint ) {
 
@@ -196,25 +200,25 @@ public class ReferencePoint{
     }
 
     /**
-     * Methode zum setzten der Werte des Referenzpunktes.
-     * 
-     * Dieser Referenzpunkt wird immer mit dem Namen "NoFixedName" erstellt.
-     * Er kann in Polarkoordinaten oder kartesischen Koordinaten angegeben werden. Der Bot ist dabei immer der Ursprung.
-     * 
-     * Bei Polarkoordinaten ist zu beachten, das der Winkel zwischen -180 und 180 Grad liegt und
-     * die Distanz nicht kleiner als 0 sein darf.
+     * Method to set the values of this ReferencePoint.
+     *
+     *
+     * This ReferencePoint will allways get the name "NoFixedName".
+     * You can set the ReferencePoint in polar or cartesian coordinate system. The bot will always be the point of origin.
+     *
+     * Polar coordinates: Be sure the angle is between -180 and 180 degree and the distance is not less than 0!
      * 
      * @since 0.9
-     * @param aFirstValue Polarkoordinaten: Die Entfernung des Bots zum Referenzpunkt. Darf nicht kleiner als Null sein.
-     *                    kartesische Koordinaten: Der X-Wert des Punktes.
-     * @param aSecondValue Polarkoordinaten: Der Winkel des Referenzpunktes zum Bot. Muss zwischen -180 und +180 liegen.
-     *                     kartesische Koordinaten: Der Y-Wert des Punktes.
-     * @param aPolarcoordinates true die übergebenden Werte sind Polarkoordinaten
-     *                          false die übergebenden Werte sind kartesische Koordinaten
+     * @param aFirstValue Polar coordinate system: The distance between ReferencePoint and the bot. Can not be less than 0!
+     *                    Cartesian coordinate system: The X-value of the ReferencePoint.
+     * @param aSecondValue Polar coordinate system: Der Winkel des Referenzpunktes zum Bot. Muss zwischen -180 und +180 liegen.
+     *                     Cartesian coordinate system: The Y-value of the ReferencePoint.
+     * @param aPolarcoordinates true parameters are polar coordinates
+     *                          false parameters are in cartesian coordinates
      * @exception IllegalArgumentException
-     *              Wenn die Parameter nicht in den erlaubten Bereichen liegen.
+     *              If parameters are not in a legal range
      *              
-     * @return dieser Referenzpunkt zum Verknüpfen von Methoden
+     * @return This ReferencePoint with the set values
      */
     public ReferencePoint set( double aFirstValue, double aSecondValue, boolean aPolarcoordinates ) {
         
@@ -283,14 +287,14 @@ public class ReferencePoint{
     }
 
     
-    /** 
-     * Vergleicht diesen Referenzpunkt mit dem übergebenden Referenzpunkt und 
-     * benutzt dabei das Epsilon zum festlegen der gewünschten Schärfe.
+    /**
+     * Compares this ReferencePoint with the ReferencePoint given as a parameter
+     * and use the epsilon to set the sharpness.
      * 
-     * @param aReferencePoint der zu vergleichende Referenzpunkt
-     * @param aEpsilon die gewünschte Schärfe ( 0 bedeute absolut gleich )
+     * @param aReferencePoint ReferencePoint to compare
+     * @param aEpsilon Sharpness (0 to compare precisely
      * 
-     * @return ob die Referenzpunkte gleich sind. 
+     * @return true if the ReferencePoints are equal
      */
     public boolean epsilonEquals ( ReferencePoint aReferencePoint, double aEpsilon )
     {
@@ -301,15 +305,15 @@ public class ReferencePoint{
 
     }
     
-    /** 
-     * Vergleicht diesen Referenzpunkt mit den übergebenden X- und Y-Koordinaten eines Referenzpunkt und 
-     * benutzt dabei das Epsilon zum festlegen der gewünschten Schürfe.
+    /**
+     * Compares this ReferencePoint with the given X- and Y-coordinates of a ReferencePoint as a parameter
+     * and use the epsilon to set the sharpness.
      * 
-     * @param aX der X-Wert des Referenzpunktes
-     * @param aY der Y-Wert des Referenzpunktes
-     * @param aEpsilon die gewünschte Schärfe ( 0 bedeute absolut gleich )
+     * @param aX X-value of ReferencePoint
+     * @param aY Y-value of ReferencePoint
+     * @param aEpsilon Sharpness (0 to compare precisely
      * 
-     * @return ob die Referenzpunkte gleich sind. 
+     * @return true if the ReferencePoints are equal
      */
     public boolean epsilonEquals ( double aX, double aY, double aEpsilon )
     {
