@@ -145,6 +145,11 @@ public class FellowPlayerTest
 	@Test
 	public void setPointNameText()
 	{
+		FellowPlayer fellowPlayer = new FellowPlayer();
+		int IDCountBefore = FellowPlayer.IDCOUNTER ;
+		fellowPlayer.setPointName(ReferencePointName.Ball);
+		int IDCountAfter = FellowPlayer.IDCOUNTER;
+		assert(IDCountBefore+1==IDCountAfter);
 		
 	}
 
