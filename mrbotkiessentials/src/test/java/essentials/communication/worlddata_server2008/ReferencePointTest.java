@@ -384,4 +384,31 @@ public class ReferencePointTest
         assertThat(result).isEqualTo(false);
     }
 
+    /*
+    Tests toString
+     */
+    @Test
+    public void testToString()
+    {
+        ReferencePoint referencePoint = new ReferencePoint();
+        referencePoint.setPointName(ReferencePointName.NoFixedName);
+        double distance = 1.41421356;
+        double angle = 45.0;
+
+        referencePoint.setDistanceToPoint(distance);
+        referencePoint.setAngleToPoint(angle);
+
+        double x = referencePoint.getDistanceToPoint() * Math.cos(Math.toRadians(referencePoint.getAngleToPoint()));
+        double y = referencePoint.getDistanceToPoint() * Math.sin(Math.toRadians(referencePoint.getAngleToPoint()));
+
+        String result = referencePoint.toString();
+
+        assertThat(result).isEqualTo((String) "ReferencePoint [mPointName=" + ReferencePointName.NoFixedName +
+                ", mDistanceToPoint=" + distance +
+                ", mAngleToPoint=" + angle +
+                ", mX=" + x +
+                ", mY=" + y + "]"
+        );
+    }
+
 }
