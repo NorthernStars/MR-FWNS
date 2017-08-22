@@ -41,13 +41,17 @@ public class FellowPlayer extends ReferencePoint{
     // Da unser Serverxmldocument scheiße ist, und ich keine schnelle bessere lösung finden konnte isses nu so
     static int IDCOUNTER = 0;
     
+    /**
+     * Always sets ReferencePointName.Player, ignores the parameter
+     * Needs to override the super function, otherwise FellowPlayers PointName could be set to anything other than Player, eg Ball
+     */
     @Override
     void setPointName( ReferencePointName aPointName ) {
         
         super.setPointName( ReferencePointName.Player );
         mId = IDCOUNTER++;
         
-    };
+    }
     
     @XmlTransient
     public String getNickname() {
