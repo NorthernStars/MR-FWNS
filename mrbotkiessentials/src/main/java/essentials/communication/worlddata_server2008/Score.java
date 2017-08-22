@@ -16,7 +16,27 @@ public class Score {
     public int ofBlueTeam() {
         return mBlueTeam;
     }
-    
+
+    public int getmYellowTeam()
+    {
+        return mYellowTeam;
+    }
+
+    public void setmYellowTeam(int mYellowTeam)
+    {
+        this.mYellowTeam = mYellowTeam;
+    }
+
+    public int getmBlueTeam()
+    {
+        return mBlueTeam;
+    }
+
+    public void setmBlueTeam(int mBlueTeam)
+    {
+        this.mBlueTeam = mBlueTeam;
+    }
+
     @Override
     public String toString() {
         return "Score [mYellowTeam=" + mYellowTeam + ", mBlueTeam=" + mBlueTeam + "]";
