@@ -213,12 +213,12 @@ public class RawWorldData implements WorldData{
 	
 	@XmlTransient
 	public void setOpponentPlayer(FellowPlayer player){
-		mListOfOpponents =  mListOfOpponents != null ? mListOfOpponents : new ArrayList<FellowPlayer>();
+		mListOfOpponents =  getListOfOpponents() != null ? getListOfOpponents() : new ArrayList<FellowPlayer>();
 		mListOfOpponents.add(player);
 	}
 	@XmlTransient
 	public void setFellowPlayer(FellowPlayer player){
-		mListOfTeamMates =  mListOfTeamMates != null ? mListOfTeamMates : new ArrayList<FellowPlayer>();
+		mListOfTeamMates =  getListOfTeamMates() != null ? getListOfTeamMates() : new ArrayList<FellowPlayer>();
 		mListOfTeamMates.add(player);
 	}
 	
