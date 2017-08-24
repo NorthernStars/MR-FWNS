@@ -101,7 +101,7 @@ public class BotInformation implements Serializable{
             return mValue;
             
         }
-        
+
         public static String getAllGamevalueNamesAsAString() {
 
             String vGamevalueNamesString = "";
@@ -342,21 +342,21 @@ public class BotInformation implements Serializable{
 
     public synchronized String toString() {
 
-        String vBotInformationString = "Bot " + mBotname + "(" + mRcId + "/" + mVtId + ")\n";
-        vBotInformationString += "with Address: " + mBotIP.toString() + " Port: " + mBotPort;
-        vBotInformationString += mReconnect?" (Reconnected)":"" + "\n";
-        vBotInformationString += "on Team  " + mTeamname + "(" + mTeam.toString() + ")" + " Port: " + mServerPort
+        String vBotInformationString = "Bot " + getBotname() + "(" + getRcId() + "/" + getVtId() + ")\n";
+        vBotInformationString += "with Address: " + getBotIP().toString() + " Port: " + getBotPort();
+        vBotInformationString += getReconnect()?" (Reconnected)":"" + "\n";
+        vBotInformationString += "on Team  " + getTeamname() + "(" + getTeam().toString() + ")" + " Port: " + getServerPort()
                 + "\n";
-        vBotInformationString += "on Server: " + mServerIP.toString() + "\n";
+        vBotInformationString += "on Server: " + getServerIP().toString() + "\n";
         vBotInformationString += "with Values:\n";
         for ( GamevalueNames aGamevalueName : GamevalueNames.values() ) {
 
             vBotInformationString += aGamevalueName.toString() + " = " + aGamevalueName.getValue() + "\n"; // ordinal siehe getter
 
         }
-        vBotInformationString += "Die AI " + mAIClassname + " startet von " + mAIArchive + " mit den Argumenten: \n";
-        vBotInformationString += mAIArgs + "\n";
-        vBotInformationString += mBotMemory!=null?mBotMemory.toString() + "\n":"";
+        vBotInformationString += "The AI " + getAIClassname() + " starts from " + getAIArchive() + " with parameters: \n";
+        vBotInformationString += getAIArgs() + "\n";
+        vBotInformationString += getBotMemory()!=null?getBotMemory().toString() + "\n":"";
 
         return vBotInformationString;
 
