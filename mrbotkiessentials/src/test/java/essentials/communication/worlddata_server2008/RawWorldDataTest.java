@@ -32,7 +32,7 @@ public class RawWorldDataTest {
 		rawWorldDataSpy.setOpponentPlayer(fp1);
 		
 		when(rawWorldDataSpy.getListOfOpponents()).thenCallRealMethod();
-		assert(rawWorldDataSpy.getListOfOpponents().size() == 1);
+		assert(rawWorldDataSpy.getListOfOpponents().get(rawWorldDataSpy.getListOfOpponents().size()-1).equals(fp1));
 	}
 	
 	@Test
@@ -48,7 +48,7 @@ public class RawWorldDataTest {
 		rawWorldDataSpy.setOpponentPlayer(fp2);
 		
 		when(rawWorldDataSpy.getListOfOpponents()).thenCallRealMethod();
-		assert(rawWorldDataSpy.getListOfOpponents().size() == 2);
+		assert(rawWorldDataSpy.getListOfOpponents().get(rawWorldDataSpy.getListOfOpponents().size()-1).equals(fp2));
 	}
 	
 
@@ -61,7 +61,7 @@ public class RawWorldDataTest {
 		rawWorldDataSpy.setFellowPlayer(fp1);
 		
 		when(rawWorldDataSpy.getListOfTeamMates()).thenCallRealMethod();
-		assert(rawWorldDataSpy.getListOfTeamMates().size() == 1);
+		assert(rawWorldDataSpy.getListOfTeamMates().get(rawWorldDataSpy.getListOfTeamMates().size()-1).equals(fp1));
 	}
 	
 	@Test
@@ -77,6 +77,13 @@ public class RawWorldDataTest {
 		rawWorldDataSpy.setFellowPlayer(fp2);
 		
 		when(rawWorldDataSpy.getListOfTeamMates()).thenCallRealMethod();
-		assert(rawWorldDataSpy.getListOfTeamMates().size() == 2);
+		assert(rawWorldDataSpy.getListOfTeamMates().get(rawWorldDataSpy.getListOfTeamMates().size()-1).equals(fp2));
+	}
+	
+	@Test
+	public void getReferencePointTest_bottom_center()
+	{
+		ReferencePoint refPointBottomCenter = rawWorldData.getReferencePoint(ReferencePointName.CenterLineBottom);
+		assert(refPointBottomCenter.getPointName().equals(ReferencePointName.CenterLineBottom));
 	}
 }
