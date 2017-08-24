@@ -141,6 +141,20 @@ public class FellowPlayerTest
 		FellowPlayer fellowPlayerOriginalLocal  = new FellowPlayer(5, "Bob", null, 130.7, 70.3, 0);
 		assert(fellowPlayerCompare.equals(fellowPlayerOriginalLocal));
 	}
+	
+	@Test
+	public void toStringTest() 
+	{
+		fellowPlayerOriginal = new FellowPlayer(5, "Bob", true, 130.7, 70.3, 0);
+		ReferencePoint rp = fellowPlayerOriginal;
+		String fpString = new String();
+		fpString = "FellowPlayer [mId=5, mNickname=Bob, mStatus=true, mOrientation=0.0 " + rp.toString() + "]";
+		
+		String returnString = fellowPlayerOriginal.toString();
+
+		assert(fellowPlayerCompare.toString().equals(fpString));
+		
+	}
 
 	@Test
 	public void setPointNameText()
