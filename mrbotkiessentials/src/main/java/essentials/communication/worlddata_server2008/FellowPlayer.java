@@ -44,6 +44,7 @@ public class FellowPlayer extends ReferencePoint{
     /**
      * Always sets ReferencePointName.Player, ignores the parameter
      * Needs to override the super function, otherwise FellowPlayers PointName could be set to anything other than Player, eg Ball
+     * @param aPointName is ignored and only used to override the same signature super function
      */
     @Override
     void setPointName( ReferencePointName aPointName ) {
