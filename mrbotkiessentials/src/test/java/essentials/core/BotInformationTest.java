@@ -34,4 +34,36 @@ public class BotInformationTest
         String[] teams = {"Yellow","Blue","NotSpecified"};
         assertThat(BotInformation.Teams.getTeamsAsStringArray()).isEqualTo(teams);
     }
+
+    /*
+    Tests GamevalueNames.getAllGamevalueNamesAsAString
+     */
+    @Test
+    public void testGetAllGamevalueNamesAsAString()
+    {
+        String gvString = new String();
+        for ( BotInformation.GamevalueNames vGamevalueName : BotInformation.GamevalueNames.values() )
+        {
+            gvString += vGamevalueName.toString() + " ";
+        }
+        assertThat(BotInformation.GamevalueNames.getAllGamevalueNamesAsAString()).isEqualTo(gvString);
+    }
+
+    /*
+    Tests GamevalueNames.getGamevalueNamesAsStringArray
+     */
+    @Test
+    public void testGetGamevalueNamesAsStringArray()
+    {
+        int i = 0;
+        String[] gvStrings= new String[BotInformation.GamevalueNames.values().length];
+        for ( BotInformation.GamevalueNames vGamevalueName : BotInformation.GamevalueNames.values() )
+        {
+            gvStrings[i] = vGamevalueName.toString();
+            i++;
+        }
+        assertThat(BotInformation.GamevalueNames.getGamevalueNamesAsStringArray()).isEqualTo(gvStrings);
+    }
+
+
 }
