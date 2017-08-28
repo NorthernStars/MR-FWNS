@@ -152,12 +152,12 @@ public class BotInformationTest
 
         assertThat(mockBotInformation.toString()).isEqualTo(expectedResult);
         */
-        fail("Not implemented yet!");
+        fail("Not yet implemented!");
 
     }
     public void testToStringWithReconnectTrueBotMemoryNull()
     {
-        fail("Not implemented yet!");
+        fail("Not yet implemented!");
     }
 
 }
