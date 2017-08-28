@@ -25,7 +25,7 @@ public class ObjectFactoryTest
     {
         ObjectFactory objectFactory = new ObjectFactory();
 
-        assertThat(objectFactory.createRawWorldData()).isNotInstanceOf(RawWorldData.class);
+        assertThat(objectFactory.createRawWorldData()).isInstanceOf(RawWorldData.class);
     }
 
 }
