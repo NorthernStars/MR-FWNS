@@ -3,12 +3,10 @@ package essentials.communication.action_server2008;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.MockGateway;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.powermock.api.mockito.PowerMockito.mock;
-import static org.powermock.api.mockito.PowerMockito.when;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 public class MovementTest
@@ -18,8 +16,7 @@ public class MovementTest
     @Before
     public void setUp() throws Exception
     {
-        MockGateway.MOCK_GET_CLASS_METHOD = true;
-        mockMovement = PowerMockito.mock(Movement.class);
+        mockMovement = mock(Movement.class);
     }
 
     @After
@@ -75,21 +72,29 @@ public class MovementTest
     public void testEqualsWithDifferentLeftWheelVelocity()
     {
 
-        /*PowerMockito.when(mockMovement.getmLeftWheelVelocity()).thenReturn(42);
+        //TODO Mock? getClass Problem
 
-        System.out.println(mockMovement.getClass());
+        Movement movement1 = new Movement(51,50);
+        Movement movement2 = new Movement(51,49);
 
-        Movement movement = new Movement(51,50);
-        assertThat(movement.equals(mockMovement)).isEqualTo(false);*/
+        assertThat(movement1.equals(movement2)).isEqualTo(false);
     }
 
     @Test
     public void testEqualsWithDifferentRightWheelVelocity()
     {
-        /*when(mockMovement.getmRightWheelVelocity()).thenReturn(42);
-        when(mockMovement.getmLeftWheelVelocity()).thenReturn(50);
+        Movement movement1 = new Movement(51,50);
+        Movement movement2 = new Movement(49,50);
 
-        Movement movement = new Movement(51,50);
-        assertThat(movement.equals(mockMovement)).isEqualTo(false);*/
+        assertThat(movement1.equals(movement2)).isEqualTo(false);
+    }
+
+    @Test
+    public void testEqualsWithSameValues()
+    {
+        Movement movement1 = new Movement(50,50);
+        Movement movement2 = new Movement(50,50);
+
+        assertThat(movement1.equals(movement2)).isEqualTo(true);
     }
 }
