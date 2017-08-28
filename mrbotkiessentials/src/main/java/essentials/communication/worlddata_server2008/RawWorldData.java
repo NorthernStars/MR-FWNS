@@ -21,10 +21,8 @@ public class RawWorldData implements WorldData{
 		
 	    FellowPlayer.IDCOUNTER = 0;
 	    
-		RawWorldData vWorldData = JAXB.unmarshal( new StringReader( aXMLData ), RawWorldData.class );
-		
-		return vWorldData;
-		
+	    return JAXB.unmarshal( new StringReader( aXMLData ), RawWorldData.class );
+				
 	}
     
     @XmlElement(name="time")
