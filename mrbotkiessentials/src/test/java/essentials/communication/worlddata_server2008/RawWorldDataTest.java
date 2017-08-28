@@ -83,7 +83,23 @@ public class RawWorldDataTest {
 	@Test
 	public void getReferencePointTest_bottom_center()
 	{
-		ReferencePoint refPointBottomCenter = rawWorldData.getReferencePoint(ReferencePointName.CenterLineBottom);
-		assert(refPointBottomCenter.getPointName().equals(ReferencePointName.CenterLineBottom));
+		ReferencePoint refPointBottomCenter = rawWorldData.getReferencePoint(ReferencePointName.Ball);
+		assert(refPointBottomCenter.getPointName().equals(ReferencePointName.Ball));
+	}
+	
+	@Test
+	public void setBallPositionTestNull()
+	{
+		rawWorldDataSpy.setBallPosition(null);
+		assert(rawWorldDataSpy.getBallPosition().equals(new BallPosition()));
+	}
+	
+	@Test
+	public void setBallPositionTest()
+	{
+		BallPosition bp = new BallPosition(30, 40, true);
+		
+		rawWorldDataSpy.setBallPosition(bp);
+		assert(rawWorldDataSpy.getBallPosition().equals(bp));
 	}
 }
