@@ -144,6 +144,17 @@ public class NetworkCommunication {
         return mSocketInitialized;
         
     }
+
+
+	public DatagramPacket getDataPaket()
+	{
+		return mDataPaket;
+	}
+
+	public DatagramSocket getToServerSocket()
+	{
+		return mToServerSocket;
+	}
     
     /**
      * Gibt die Serveradresse, den Serverport, die Clientadresse und den Clientport in einem

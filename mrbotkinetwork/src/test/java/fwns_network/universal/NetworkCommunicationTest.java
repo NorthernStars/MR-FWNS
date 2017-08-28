@@ -4,41 +4,38 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class NetworkCommunicationTest {
+import java.io.IOException;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import static org.assertj.core.api.Assertions.assertThat;
 
+public class NetworkCommunicationTest
+{
+
+	/*
+	Tests for NetworkCommuication
+	 */
 	@Test
-	public void testNetworkCommunicationInetAddressInt() {
-		fail("Not yet implemented");
+	public void testNetworkCommunication()
+	{
+		NetworkCommunication networkCommunication = null;
+
+		try
+		{
+
+			networkCommunication = new NetworkCommunication(InetAddress.getByName("127.0.0.1"), 80);
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+
+		assertThat(networkCommunication).isNotNull();
+		assertThat(networkCommunication).isInstanceOf(NetworkCommunication.class);
+		assertThat(networkCommunication.getToServerSocket()).isNotNull();
+		assertThat(networkCommunication.getToServerSocket()).isInstanceOf(DatagramSocket.class);
+		assertThat(networkCommunication.isConnected()).isTrue();
 	}
 
-	@Test
-	public void testNetworkCommunicationInetAddressIntInt() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testSendDatagramm() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetDatagramm() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testCloseConnection() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testIsConnected() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testToString() {
-		fail("Not yet implemented");
-	}
 
 }
