@@ -25,6 +25,11 @@
       <appender-ref ref="StubAppender"/>
       <appender-ref ref="ERROR" />
     </logger>
+    <logger name="BOTINFORMATION" level="info">
+      <appender-ref ref="Console"/>
+      <appender-ref ref="StubAppender"/>
+      <appender-ref ref="ERROR" />
+    </logger>
     <root level="error">
     </root>
   </loggers>

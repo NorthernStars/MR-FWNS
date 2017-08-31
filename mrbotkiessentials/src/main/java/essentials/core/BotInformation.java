@@ -9,6 +9,8 @@ import java.net.UnknownHostException;
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 import essentials.constants.Default;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 // TODO: final refactor comments singelton
 
@@ -28,6 +30,20 @@ import essentials.constants.Default;
  */
 @ThreadSafe
 public class BotInformation implements Serializable{
+
+    private static Logger sBOTINFORMATIONLOGGER = LogManager.getLogger("BOTINFORMATION");
+
+    public static synchronized Logger getLogger(){
+
+        return sBOTINFORMATIONLOGGER;
+
+    }
+
+    static synchronized void setLogger( Logger aLogger ){
+
+        sBOTINFORMATIONLOGGER = aLogger;
+
+    }
 
     @GuardedBy("this") private String mBotname;
 
@@ -132,7 +148,7 @@ public class BotInformation implements Serializable{
         }
     }
 
-    public BotInformation() {
+    public BotInformation(){
 
         mBotname = "DefaultBot";
         mTeam = Teams.NotSpecified;
@@ -140,16 +156,15 @@ public class BotInformation implements Serializable{
 
         try {
             mBotIP = InetAddress.getLocalHost();
-        } catch ( UnknownHostException e ) {
-            e.printStackTrace();
+        } catch ( UnknownHostException vException ) {
+            getLogger().error( "Error in BotInformation.BotInformation()", vException );
         }
         mBotPort = -1;
         
         try {
             mServerIP = InetAddress.getLocalHost();
-        } catch ( UnknownHostException e ) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch ( UnknownHostException vException ) {
+            getLogger().error( "Error in BotInformation.BotInformation()", vException );
         }
         
         mAIArchive = "";
