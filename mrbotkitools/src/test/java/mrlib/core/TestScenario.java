@@ -6,7 +6,7 @@ import essentials.communication.worlddata_server2008.RawWorldData;
 import essentials.communication.worlddata_server2008.ReferencePoint;
 import essentials.core.BotInformation;
 
-class TestScenario {
+public class TestScenario {
 	
 
 	//Test Values for worldModel

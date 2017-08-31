@@ -1,16 +1,15 @@
 package essentials.communication.worlddata_server2008;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.mock;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
-import static org.mockito.Mockito.spy;
 
 public class RawWorldDataTest {
 	
@@ -20,6 +19,7 @@ public class RawWorldDataTest {
 	@Before
 	public void setUp() throws Exception 
 	{
+		
 	}
 
 
@@ -81,13 +81,6 @@ public class RawWorldDataTest {
 	}
 	
 	@Test
-	public void getReferencePointTest_bottom_center()
-	{
-		ReferencePoint refPointBottomCenter = rawWorldData.getReferencePoint(ReferencePointName.Ball);
-		assert(refPointBottomCenter.getPointName().equals(ReferencePointName.Ball));
-	}
-	
-	@Test
 	public void setBallPositionTestNull()
 	{
 		rawWorldDataSpy.setBallPosition(null);
@@ -102,4 +95,63 @@ public class RawWorldDataTest {
 		rawWorldDataSpy.setBallPosition(bp);
 		assert(rawWorldDataSpy.getBallPosition().equals(bp));
 	}
+	
+	@Test
+	public void getReferencePointsTest()
+	{
+		List<ReferencePoint> refPoints = rawWorldData.getReferencePoints();
+		assert(refPoints==null);
+		
+		
+	}
+	
+	@Test
+	public void getReferencePointTestSorted()
+	{
+		ReferencePoint mockedBottomCenter = mock(ReferencePoint.class);
+		
+		rawWorldData.mReferencePoints = new ArrayList<>();
+		rawWorldData.mReferencePoints.add(ReferencePointName.CenterLineBottom.getPosition(), mockedBottomCenter);
+		
+		when(mockedBottomCenter.getPointName()).thenReturn((ReferencePointName.CenterLineBottom));
+		
+		ReferencePoint refPointBottomCenter = rawWorldData.getReferencePoint(ReferencePointName.CenterLineBottom);
+		assert(refPointBottomCenter.getPointName().equals(ReferencePointName.CenterLineBottom));
+	}
+	
+	@Test
+	public void getReferencePointTestUnsorted()
+	{
+		ReferencePoint mockedBottomCenter = mock(ReferencePoint.class);
+		
+		rawWorldData.mReferencePoints = new ArrayList<>();
+		rawWorldData.mReferencePoints.add(0, new ReferencePoint());
+		rawWorldData.mReferencePoints.add(ReferencePointName.CenterLineBottom.getPosition()+1, mockedBottomCenter);
+		
+		when(mockedBottomCenter.getPointName()).thenReturn((ReferencePointName.CenterLineBottom));
+		
+		ReferencePoint refPointBottomCenter = rawWorldData.getReferencePoint(ReferencePointName.CenterLineBottom);
+		assert(refPointBottomCenter.getPointName().equals(ReferencePointName.CenterLineBottom));
+		assertThat(refPointBottomCenter).isEqualTo(mockedBottomCenter);
+	}
+
+	
+	@Test
+	public void getReferencePointTestNA()
+	{
+		ReferencePoint mockedBottomCenter = mock(ReferencePoint.class);
+		
+		rawWorldData.mReferencePoints = new ArrayList<>();
+		rawWorldData.mReferencePoints.add(0, new ReferencePoint());
+		rawWorldData.mReferencePoints.add(0, new ReferencePoint());
+		
+		when(mockedBottomCenter.getPointName()).thenReturn((ReferencePointName.CenterLineBottom));
+		
+		ReferencePoint noRefPoint = rawWorldData.getReferencePoint(ReferencePointName.CenterLineBottom);
+		assertThat(noRefPoint).isNull();
+	}
+	
 }
+	
+	
+	
