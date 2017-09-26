@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 
 public class NetworkCommunicationTest
@@ -78,6 +79,7 @@ public class NetworkCommunicationTest
     public void testConnectToServerWithMToServerSocketAndMDataPaketAreNotNull()
     {
         // Todo: vHandshake.connect
+        fail("Not yet implemented!");
     }
 
 }
