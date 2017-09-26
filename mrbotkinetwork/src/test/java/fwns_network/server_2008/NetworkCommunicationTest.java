@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 public class NetworkCommunicationTest
 {
@@ -57,20 +57,6 @@ public class NetworkCommunicationTest
         }
     }
 
-//    Needed?
-    @Test
-    public void testConnectToServerWithMToServerSocketIsNotNull()
-    {
-
-    }
-
-//    Needed?
-    @Test
-    public void testConnectToServerWithMDataPaketIsNotNull()
-    {
-
-    }
-
     @Test
     public void testConnectToServerWithMToServerSocketAndMDataPaketAreNull()
     {
@@ -89,10 +75,11 @@ public class NetworkCommunicationTest
         }
     }
 
+
     @Test
     public void testConnectToServerWithMToServerSocketAndMDataPaketAreNotNull()
     {
-
+        // Todo: vHandshake.connect
     }
 
 }
