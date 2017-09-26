@@ -43,15 +43,28 @@ public class NetworkCommunicationTest
     @Test
     public void testConnectToServerWithMDataPaketIsNull()
     {
+        try
+        {
+            NetworkCommunication networkCommunication = new NetworkCommunication(InetAddress.getLoopbackAddress(),42);
+            networkCommunication.setmDataPaket(null);
+            networkCommunication.connectToServer(mockBotInformation);
 
+            assertThat(networkCommunication.ismEstablishedServerConnection()).isFalse();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
+//    Needed?
     @Test
     public void testConnectToServerWithMToServerSocketIsNotNull()
     {
 
     }
 
+//    Needed?
     @Test
     public void testConnectToServerWithMDataPaketIsNotNull()
     {

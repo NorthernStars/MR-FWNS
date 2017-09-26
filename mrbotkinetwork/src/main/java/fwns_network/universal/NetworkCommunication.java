@@ -160,7 +160,12 @@ public class NetworkCommunication {
 	{
 		this.mToServerSocket = mToServerSocket;
 	}
-    
+
+    public void setmDataPaket(DatagramPacket mDataPaket)
+    {
+        this.mDataPaket = mDataPaket;
+    }
+
     /**
      * Gibt die Serveradresse, den Serverport, die Clientadresse und den Clientport in einem
      * vorformatierten String aus.
