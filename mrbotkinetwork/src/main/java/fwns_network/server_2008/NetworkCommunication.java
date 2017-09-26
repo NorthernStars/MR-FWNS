@@ -83,5 +83,9 @@ public class NetworkCommunication extends fwns_network.universal.NetworkCommunic
         return mSocketInitialized && mEstablishedServerConnection;
         
     }
-	
+
+	public boolean ismEstablishedServerConnection()
+	{
+		return mEstablishedServerConnection;
+	}
 }
