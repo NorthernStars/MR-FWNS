@@ -155,6 +155,11 @@ public class NetworkCommunication {
 	{
 		return mToServerSocket;
 	}
+
+	public void setmToServerSocket(DatagramSocket mToServerSocket)
+	{
+		this.mToServerSocket = mToServerSocket;
+	}
     
     /**
      * Gibt die Serveradresse, den Serverport, die Clientadresse und den Clientport in einem
