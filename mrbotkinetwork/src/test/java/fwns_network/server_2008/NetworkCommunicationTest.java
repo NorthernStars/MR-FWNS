@@ -1,8 +1,6 @@
 package fwns_network.server_2008;
 
-import essentials.communication.worlddata_server2008.RawWorldData;
 import essentials.core.BotInformation;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,7 +8,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
 
 public class NetworkCommunicationTest
 {
