@@ -188,7 +188,7 @@ public class KickLibTests {
 		List<FellowPlayer> vListOfOpponents = new ArrayList<>();
 		vListOfOpponents.add(new FellowPlayer(1, "", true, 200, 0, 0));
 		vListOfOpponents.add(new FellowPlayer(2, "", true, 300, 50, 0));
-		vListOfOpponents.add(new FellowPlayer(3, "", true, 400, 500, 0));
+		vListOfOpponents.add(new FellowPlayer(3, "", true, 400, 70, 0));
 		
 		when(mWorldDataMock.getListOfOpponents()).thenReturn(vListOfOpponents);
 
@@ -229,7 +229,7 @@ public class KickLibTests {
 		List<FellowPlayer> vListOfOpponents = new ArrayList<>();
 		vListOfOpponents.add(new FellowPlayer(1, "", true, 200, 0, 0));
 		vListOfOpponents.add(new FellowPlayer(2, "", true, 300, 50, 0));
-		vListOfOpponents.add(new FellowPlayer(3, "", true, 400, 500, 0));
+		vListOfOpponents.add(new FellowPlayer(3, "", true, 400, 70, 0));
 		
 		when(mWorldDataMock.getListOfOpponents()).thenReturn(vListOfOpponents);
 
