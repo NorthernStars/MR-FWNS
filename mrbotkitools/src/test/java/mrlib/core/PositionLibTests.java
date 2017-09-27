@@ -118,22 +118,30 @@ public class PositionLibTests {
 	}
 
 	@Test
-	public void testGetMiddleOfOwnGoal() {
-            RawWorldData testWorldData = TestScenario.getExampleWorldModel(
-                    TestScenario.xmlExampleWorldData
-            );
-            ReferencePoint returnValue;
-            
-            returnValue = PositionLib.getMiddleOfOwnGoal(testWorldData, Teams.Yellow);
-            assertThat(returnValue).isExactlyInstanceOf(ReferencePoint.class);
-            assertThat(returnValue.getXOfPoint()).isCloseTo(-128.0, withinPercentage(1));
-            assertThat(returnValue.getYOfPoint()).isCloseTo(-35.0, withinPercentage(1));
-            
-            returnValue = PositionLib.getMiddleOfOwnGoal(testWorldData, Teams.Blue);
-            assertThat(returnValue).isExactlyInstanceOf(ReferencePoint.class);
-            assertThat(returnValue.getXOfPoint()).isCloseTo(653.0, withinPercentage(1));
-            assertThat(returnValue.getYOfPoint()).isCloseTo(-35.0, withinPercentage(1));
-	}
+    public void testGetMiddleOfOwnGoalTeamYellow()
+    {
+        RawWorldData mockRawWorldData = mock(RawWorldData.class);
+        when(mockRawWorldData.getYellowGoalCornerBottom()).thenReturn(new ReferencePoint(135.351,161.03,true));
+        when(mockRawWorldData.getYellowGoalCornerTop()).thenReturn(new ReferencePoint(171.406,-138.311,true));
+
+        ReferencePoint returnValue = PositionLib.getMiddleOfOwnGoal(mockRawWorldData,Teams.Yellow);
+        assertThat(returnValue).isExactlyInstanceOf(ReferencePoint.class);
+        assertThat(returnValue.getXOfPoint()).isCloseTo(-128.0, withinPercentage(1));
+        assertThat(returnValue.getYOfPoint()).isCloseTo(-35.0, withinPercentage(1));
+    }
+
+    @Test
+    public void testGetMiddleOfOwnGoalTeamBlue()
+    {
+        RawWorldData mockRawWorldData = mock(RawWorldData.class);
+        when(mockRawWorldData.getBlueGoalCornerBottom()).thenReturn(new ReferencePoint(654.481,3.85484,true));
+        when(mockRawWorldData.getBlueGoalCornerTop()).thenReturn(new ReferencePoint(662.872,-9.90283,true));
+
+        ReferencePoint returnValue = PositionLib.getMiddleOfOwnGoal(mockRawWorldData,Teams.Blue);
+        assertThat(returnValue).isExactlyInstanceOf(ReferencePoint.class);
+        assertThat(returnValue.getXOfPoint()).isCloseTo(653.0, withinPercentage(1));
+        assertThat(returnValue.getYOfPoint()).isCloseTo(-35.0, withinPercentage(1));
+    }
 
 	@Test
 	public void testIsBallInRangeOfRefPoint() {
