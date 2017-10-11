@@ -34,6 +34,26 @@ public class PositionLibTests {
         when(mSelfMock.getRcId()).thenReturn(mOwnId);
         when(mSelfMock.getVtId()).thenReturn(mOwnId);
         when(mSelfMock.getGamevalue(BotInformation.GamevalueNames.KickRange)).thenReturn(Default.KickRange);
+
+        when(mWorldDataMock.getFieldCenter()).thenReturn(new ReferencePoint(265.452,-7.79433,true));
+        when(mWorldDataMock.getCenterLineTop()).thenReturn(new ReferencePoint(383.419,-46.6909,true));
+        when(mWorldDataMock.getBluePenaltyAreaFrontTop()).thenReturn(new ReferencePoint(526.468,-22.3269, true));
+        when(mWorldDataMock.getBluePenaltyAreaFrontBottom()).thenReturn(new ReferencePoint(503.287,14.6161, true));
+        when(mWorldDataMock.getBlueGoalAreaFrontBottom()).thenReturn(new ReferencePoint(585.655,4.30866, true));
+        when(mWorldDataMock.getBlueGoalAreaFrontTop()).thenReturn(new ReferencePoint(595.023,-11.0456, true));
+        when(mWorldDataMock.getYellowPenaltyAreaFrontTop()).thenReturn(new ReferencePoint(203.578,-79.242, true));
+        when(mWorldDataMock.getYellowPenaltyAreaFrontBottom()).thenReturn(new ReferencePoint(132.563,73.3422, true));
+        when(mWorldDataMock.getYellowGoalAreaFrontBottom()).thenReturn(new ReferencePoint(73.6003,143.286, true));
+        when(mWorldDataMock.getYellowGoalAreaFrontTop()).thenReturn(new ReferencePoint(128.363,-117.364, true));
+        when(mWorldDataMock.getBallPosition()).thenReturn(new BallPosition(264.6,-8.03823, true));
+        when(mWorldDataMock.getCenterLineBottom()).thenReturn(new ReferencePoint(335.932,38.4734, true));
+        when(mWorldDataMock.getBlueFieldCornerBottom()).thenReturn(new ReferencePoint(685.631,17.7479,true));
+        when(mWorldDataMock.getBlueGoalCornerBottom()).thenReturn(new ReferencePoint(654.481,3.85484, true));
+        when(mWorldDataMock.getYellowFieldCornerBottom()).thenReturn(new ReferencePoint(306.961,-114.645,true));
+        when(mWorldDataMock.getYellowFieldCornerTop()).thenReturn(new ReferencePoint(306.961,-114.645,true));
+        when(mWorldDataMock.getYellowGoalCornerTop()).thenReturn(new ReferencePoint(171.406,-138.311,true));
+        when(mWorldDataMock.getBlueFieldCornerTop()).thenReturn(new ReferencePoint(710.106,-23.135,true));
+        when(mWorldDataMock.getBlueGoalCornerTop()).thenReturn(new ReferencePoint(662.876,-9.90283,true));
 	}
 
 	@After
@@ -101,11 +121,10 @@ public class PositionLibTests {
     @Test
     public void testGetMiddleOfGoalTeamYellow()
     {
-        RawWorldData mockRawWorldData = mock(RawWorldData.class);
-        when(mockRawWorldData.getYellowGoalCornerBottom()).thenReturn(new ReferencePoint(135.351,161.03,true));
-        when(mockRawWorldData.getYellowGoalCornerTop()).thenReturn(new ReferencePoint(171.406,-138.311,true));
+        when(mWorldDataMock.getYellowGoalCornerBottom()).thenReturn(new ReferencePoint(135.351,161.03,true));
+        when(mWorldDataMock.getYellowGoalCornerTop()).thenReturn(new ReferencePoint(171.406,-138.311,true));
 
-        ReferencePoint returnValue = PositionLib.getMiddleOfGoal(mockRawWorldData,Teams.Blue);
+        ReferencePoint returnValue = PositionLib.getMiddleOfGoal(mWorldDataMock,Teams.Blue);
         assertThat(returnValue).isExactlyInstanceOf(ReferencePoint.class);
         assertThat(returnValue.getXOfPoint()).isCloseTo(-128.0, withinPercentage(1));
         assertThat(returnValue.getYOfPoint()).isCloseTo(-35.0, withinPercentage(1));
@@ -114,11 +133,7 @@ public class PositionLibTests {
     @Test
     public void testGetMiddleOfGoalTeamBlue()
     {
-        RawWorldData mockRawWorldData = mock(RawWorldData.class);
-        when(mockRawWorldData.getBlueGoalCornerBottom()).thenReturn(new ReferencePoint(654.481,3.85484,true));
-        when(mockRawWorldData.getBlueGoalCornerTop()).thenReturn(new ReferencePoint(662.872,-9.90283,true));
-
-        ReferencePoint returnValue = PositionLib.getMiddleOfGoal(mockRawWorldData,Teams.Yellow);
+        ReferencePoint returnValue = PositionLib.getMiddleOfGoal(mWorldDataMock,Teams.Yellow);
         assertThat(returnValue).isExactlyInstanceOf(ReferencePoint.class);
         assertThat(returnValue.getXOfPoint()).isCloseTo(653.0, withinPercentage(1));
         assertThat(returnValue.getYOfPoint()).isCloseTo(-35.0, withinPercentage(1));
@@ -127,11 +142,10 @@ public class PositionLibTests {
 	@Test
     public void testGetMiddleOfOwnGoalTeamYellow()
     {
-        RawWorldData mockRawWorldData = mock(RawWorldData.class);
-        when(mockRawWorldData.getYellowGoalCornerBottom()).thenReturn(new ReferencePoint(135.351,161.03,true));
-        when(mockRawWorldData.getYellowGoalCornerTop()).thenReturn(new ReferencePoint(171.406,-138.311,true));
+        when(mWorldDataMock.getYellowGoalCornerBottom()).thenReturn(new ReferencePoint(135.351,161.03,true));
+        when(mWorldDataMock.getYellowGoalCornerTop()).thenReturn(new ReferencePoint(171.406,-138.311,true));
 
-        ReferencePoint returnValue = PositionLib.getMiddleOfOwnGoal(mockRawWorldData,Teams.Yellow);
+        ReferencePoint returnValue = PositionLib.getMiddleOfOwnGoal(mWorldDataMock,Teams.Yellow);
         assertThat(returnValue).isExactlyInstanceOf(ReferencePoint.class);
         assertThat(returnValue.getXOfPoint()).isCloseTo(-128.0, withinPercentage(1));
         assertThat(returnValue.getYOfPoint()).isCloseTo(-35.0, withinPercentage(1));
@@ -140,11 +154,7 @@ public class PositionLibTests {
     @Test
     public void testGetMiddleOfOwnGoalTeamBlue()
     {
-        RawWorldData mockRawWorldData = mock(RawWorldData.class);
-        when(mockRawWorldData.getBlueGoalCornerBottom()).thenReturn(new ReferencePoint(654.481,3.85484,true));
-        when(mockRawWorldData.getBlueGoalCornerTop()).thenReturn(new ReferencePoint(662.872,-9.90283,true));
-
-        ReferencePoint returnValue = PositionLib.getMiddleOfOwnGoal(mockRawWorldData,Teams.Blue);
+        ReferencePoint returnValue = PositionLib.getMiddleOfOwnGoal(mWorldDataMock,Teams.Blue);
         assertThat(returnValue).isExactlyInstanceOf(ReferencePoint.class);
         assertThat(returnValue.getXOfPoint()).isCloseTo(653.0, withinPercentage(1));
         assertThat(returnValue.getYOfPoint()).isCloseTo(-35.0, withinPercentage(1));
@@ -191,28 +201,10 @@ public class PositionLibTests {
 
     @Test
 	public void testGetBestPointAwayFromBall() {
-        RawWorldData mockRawWorldData = mock(RawWorldData.class);
-        when(mockRawWorldData.getFieldCenter()).thenReturn(new ReferencePoint(265.452,-7.79433,true));
-        when(mockRawWorldData.getCenterLineTop()).thenReturn(new ReferencePoint(383.419,-46.6909,true));
-        when(mockRawWorldData.getBluePenaltyAreaFrontTop()).thenReturn(new ReferencePoint(526.468,-22.3269, true));
-        when(mockRawWorldData.getBluePenaltyAreaFrontBottom()).thenReturn(new ReferencePoint(503.287,14.6161, true));
-        when(mockRawWorldData.getBlueGoalAreaFrontBottom()).thenReturn(new ReferencePoint(585.655,4.30866, true));
-        when(mockRawWorldData.getBlueGoalAreaFrontTop()).thenReturn(new ReferencePoint(595.023,-11.0456, true));
-        when(mockRawWorldData.getYellowPenaltyAreaFrontTop()).thenReturn(new ReferencePoint(203.578,-79.242, true));
-        when(mockRawWorldData.getYellowPenaltyAreaFrontBottom()).thenReturn(new ReferencePoint(132.563,73.3422, true));
-        when(mockRawWorldData.getYellowGoalAreaFrontBottom()).thenReturn(new ReferencePoint(73.6003,143.286, true));
-        when(mockRawWorldData.getYellowGoalAreaFrontTop()).thenReturn(new ReferencePoint(128.363,-117.364, true));
-        when(mockRawWorldData.getBallPosition()).thenReturn(new BallPosition(264.6,-8.03823, true));
-        when(mockRawWorldData.getCenterLineBottom()).thenReturn(new ReferencePoint(335.932,38.4734, true));
-        when(mockRawWorldData.getBlueFieldCornerBottom()).thenReturn(new ReferencePoint(685.631,17.7479,true));
-        when(mockRawWorldData.getBlueGoalCornerBottom()).thenReturn(new ReferencePoint(654.481,3.85484, true));
-        when(mockRawWorldData.getYellowFieldCornerBottom()).thenReturn(new ReferencePoint(306.961,-114.645,true));
-        when(mockRawWorldData.getYellowFieldCornerTop()).thenReturn(new ReferencePoint(306.961,-114.645,true));
-        when(mockRawWorldData.getYellowGoalCornerTop()).thenReturn(new ReferencePoint(171.406,-138.311,true));
-        when(mockRawWorldData.getBlueFieldCornerTop()).thenReturn(new ReferencePoint(710.106,-23.135,true));
-        when(mockRawWorldData.getBlueGoalCornerTop()).thenReturn(new ReferencePoint(662.876,-9.90283,true));
 
-        ReferencePoint result = PositionLib.getBestPointAwayFromBall(mockRawWorldData);
+
+        ReferencePoint result = PositionLib.getBestPointAwayFromBall(mWorldDataMock);
+
         assertThat(result).isExactlyInstanceOf(ReferencePoint.class);
         assertThat(result.getDistanceToPoint()).isCloseTo(585.66, withinPercentage(1));
         assertThat(result.getAngleToPoint()).isCloseTo(4.31, withinPercentage(1));
