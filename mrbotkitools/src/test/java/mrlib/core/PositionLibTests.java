@@ -189,24 +189,36 @@ public class PositionLibTests {
             assertThat(((Double) distance).doubleValue()).isCloseTo(5, withinPercentage(1));
 	}
 
-	@Test
+    @Test
 	public void testGetBestPointAwayFromBall() {
-            RawWorldData rawWorldData = TestScenario.getExampleWorldModel(TestScenario.xmlExampleWorldData);
-            ReferencePoint result;
-            BallPosition ballPos;
-            
-            result = PositionLib.getBestPointAwayFromBall(rawWorldData);
-            assertThat(result).isExactlyInstanceOf(ReferencePoint.class);
-            assertThat(result.getDistanceToPoint()).isCloseTo(585.66, withinPercentage(1));
-            assertThat(result.getAngleToPoint()).isCloseTo(4.31, withinPercentage(1));
-            
-            ballPos = new BallPosition(141.42, 225, true);
-            rawWorldData.setBallPosition(ballPos);
-            result = PositionLib.getBestPointAwayFromBall(rawWorldData);
-            assertThat(result).isExactlyInstanceOf(ReferencePoint.class);
-            assertThat(result.getDistanceToPoint()).isCloseTo(585.66, withinPercentage(1));
-            assertThat(result.getAngleToPoint()).isCloseTo(4.31, withinPercentage(1));
+        RawWorldData mockRawWorldData = mock(RawWorldData.class);
+        when(mockRawWorldData.getFieldCenter()).thenReturn(new ReferencePoint(265.452,-7.79433,true));
+        when(mockRawWorldData.getCenterLineTop()).thenReturn(new ReferencePoint(383.419,-46.6909,true));
+        when(mockRawWorldData.getBluePenaltyAreaFrontTop()).thenReturn(new ReferencePoint(526.468,-22.3269, true));
+        when(mockRawWorldData.getBluePenaltyAreaFrontBottom()).thenReturn(new ReferencePoint(503.287,14.6161, true));
+        when(mockRawWorldData.getBlueGoalAreaFrontBottom()).thenReturn(new ReferencePoint(585.655,4.30866, true));
+        when(mockRawWorldData.getBlueGoalAreaFrontTop()).thenReturn(new ReferencePoint(595.023,-11.0456, true));
+        when(mockRawWorldData.getYellowPenaltyAreaFrontTop()).thenReturn(new ReferencePoint(203.578,-79.242, true));
+        when(mockRawWorldData.getYellowPenaltyAreaFrontBottom()).thenReturn(new ReferencePoint(132.563,73.3422, true));
+        when(mockRawWorldData.getYellowGoalAreaFrontBottom()).thenReturn(new ReferencePoint(73.6003,143.286, true));
+        when(mockRawWorldData.getYellowGoalAreaFrontTop()).thenReturn(new ReferencePoint(128.363,-117.364, true));
+        when(mockRawWorldData.getBallPosition()).thenReturn(new BallPosition(264.6,-8.03823, true));
+        when(mockRawWorldData.getCenterLineBottom()).thenReturn(new ReferencePoint(335.932,38.4734, true));
+        when(mockRawWorldData.getBlueFieldCornerBottom()).thenReturn(new ReferencePoint(685.631,17.7479,true));
+        when(mockRawWorldData.getBlueGoalCornerBottom()).thenReturn(new ReferencePoint(654.481,3.85484, true));
+        when(mockRawWorldData.getYellowFieldCornerBottom()).thenReturn(new ReferencePoint(306.961,-114.645,true));
+        when(mockRawWorldData.getYellowFieldCornerTop()).thenReturn(new ReferencePoint(306.961,-114.645,true));
+        when(mockRawWorldData.getYellowGoalCornerTop()).thenReturn(new ReferencePoint(171.406,-138.311,true));
+        when(mockRawWorldData.getBlueFieldCornerTop()).thenReturn(new ReferencePoint(710.106,-23.135,true));
+        when(mockRawWorldData.getBlueGoalCornerTop()).thenReturn(new ReferencePoint(662.876,-9.90283,true));
+
+        ReferencePoint result = PositionLib.getBestPointAwayFromBall(mockRawWorldData);
+        assertThat(result).isExactlyInstanceOf(ReferencePoint.class);
+        assertThat(result.getDistanceToPoint()).isCloseTo(585.66, withinPercentage(1));
+        assertThat(result.getAngleToPoint()).isCloseTo(4.31, withinPercentage(1));
 	}
+
+
 
 	@Test
 	public void testGetAngleBetweenTwoReferencePoints() {
@@ -262,14 +274,15 @@ public class PositionLibTests {
 
 	@Test
 	public void testIsMeselfOutOfBounds() {
-            RawWorldData testWorldData = TestScenario.getExampleWorldModel(
-                    TestScenario.xmlExampleWorldData
-            );
-            Boolean result;
-            
-            result = PositionLib.isMeselfOutOfBounds(testWorldData);
-            assertThat(result).isExactlyInstanceOf(Boolean.class);
-            assertThat(result.booleanValue()).isEqualTo(true);
+
+        RawWorldData testWorldData = TestScenario.getExampleWorldModel(
+                TestScenario.xmlExampleWorldData
+        );
+        Boolean result;
+
+        result = PositionLib.isMeselfOutOfBounds(testWorldData);
+        assertThat(result).isExactlyInstanceOf(Boolean.class);
+        assertThat(result.booleanValue()).isEqualTo(true);
 	}
 
 	@Test
