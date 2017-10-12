@@ -255,5 +255,21 @@ public class CoreTest {
 		
 		verify(mLoggerMock).info( "Disposed AI " + mBotInformationMock.getAIClassname() + " from " + mBotInformationMock.getAIArchive() );
 	}
+	
+	@Test
+	public void testInitializeAIWithoutAI()
+	{
+		Boolean retVal;
+		when(mSUT.getAI()).thenReturn(null);
+		retVal = mSUT.initializeAI();
+		
+		if(retVal) assertThat(mSUT.getAI()).isNotNull();
+		else assertThat(mSUT.getAI()).isNull();
+		
+
+//	verify(mLoggerMock, never()).info( "Disposed AI " + mBotInformationMock.getAIClassname() + " from " + mBotInformationMock.getAIArchive() );
+		
+		
+	}
 
 }
