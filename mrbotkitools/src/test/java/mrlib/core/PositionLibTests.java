@@ -49,7 +49,7 @@ public class PositionLibTests {
         when(mWorldDataMock.getCenterLineBottom()).thenReturn(new ReferencePoint(335.932,38.4734, true));
         when(mWorldDataMock.getBlueFieldCornerBottom()).thenReturn(new ReferencePoint(685.631,17.7479,true));
         when(mWorldDataMock.getBlueGoalCornerBottom()).thenReturn(new ReferencePoint(654.481,3.85484, true));
-        when(mWorldDataMock.getYellowFieldCornerBottom()).thenReturn(new ReferencePoint(306.961,-114.645,true));
+        when(mWorldDataMock.getYellowFieldCornerBottom()).thenReturn(new ReferencePoint(245.082,121.485,true));
         when(mWorldDataMock.getYellowFieldCornerTop()).thenReturn(new ReferencePoint(306.961,-114.645,true));
         when(mWorldDataMock.getYellowGoalCornerTop()).thenReturn(new ReferencePoint(171.406,-138.311,true));
         when(mWorldDataMock.getBlueFieldCornerTop()).thenReturn(new ReferencePoint(710.106,-23.135,true));
@@ -267,12 +267,9 @@ public class PositionLibTests {
 	@Test
 	public void testIsMeselfOutOfBounds() {
 
-        RawWorldData testWorldData = TestScenario.getExampleWorldModel(
-                TestScenario.xmlExampleWorldData
-        );
         Boolean result;
 
-        result = PositionLib.isMeselfOutOfBounds(testWorldData);
+        result = PositionLib.isMeselfOutOfBounds(mWorldDataMock);
         assertThat(result).isExactlyInstanceOf(Boolean.class);
         assertThat(result.booleanValue()).isEqualTo(true);
 	}
