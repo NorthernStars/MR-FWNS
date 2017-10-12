@@ -149,14 +149,8 @@ public class Core {
 	public boolean initializeAI() {
         
         synchronized (this) {
-            
-            if( mAI == null ){
-                
-            } else if( mAI.isRunning() ){
-
-                disposeAI();
-                
-            }
+        	
+            if(getAI()!=null && mAI.isRunning()) disposeAI();
             
         }
            
