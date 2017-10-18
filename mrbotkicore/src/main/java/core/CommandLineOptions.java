@@ -20,7 +20,7 @@ import essentials.core.BotInformation.GamevalueNames;
 import essentials.core.BotInformation.Teams;
 
 /**
- * Klasse zum parsen und weiterverarbeiten der Commandline. Nutzt Apache-Cli. 
+ * Class to parse the Commandline. Uses Apache-Cli.
  * 
  * @author Eike Petersen
  * @since 0.4
@@ -347,14 +347,12 @@ class CommandLineOptions {
     }
     
     /**
-     * Verarbeitet die einzelnen Commandlineargumente. Dabei wird auch ueberprueft ob alle
-     * essentiellen Argumente vorhanden sind. Die einzelnen argumete wurden vorher in ihren
-     * respectiven Optionen definiert.
+     * Processes the single Commandlineparameters. Checks if everything is correct.
      * 
      * @since 0.4
-     * @param aArguments die Commandline als Stringarray
-     * 
-     * @return ob der Bot direkt starten oder auf den Startbefehl warten soll
+     * @param aArguments The Commandline as Stringarray
+     *
+     * @return If the Bot started directly or if the bot should wait for the start command
      */
     static boolean parseCommandLineArguments( String[] aArguments ) {
 
