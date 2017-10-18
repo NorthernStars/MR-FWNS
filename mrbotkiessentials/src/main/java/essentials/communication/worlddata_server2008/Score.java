@@ -1,6 +1,7 @@
 package essentials.communication.worlddata_server2008;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 public class Score {
 
@@ -16,23 +17,25 @@ public class Score {
     public int ofBlueTeam() {
         return mBlueTeam;
     }
-
-    public int getmYellowTeam()
+    
+    @XmlTransient 
+    public int getYellowTeam()
     {
         return mYellowTeam;
     }
 
-    public void setmYellowTeam(int mYellowTeam)
+    public void setYellowTeam(int mYellowTeam)
     {
         this.mYellowTeam = mYellowTeam;
     }
-
-    public int getmBlueTeam()
+    
+    @XmlTransient 
+    public int getBlueTeam()
     {
         return mBlueTeam;
     }
 
-    public void setmBlueTeam(int mBlueTeam)
+    public void setBlueTeam(int mBlueTeam)
     {
         this.mBlueTeam = mBlueTeam;
     }
