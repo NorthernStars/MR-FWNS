@@ -88,9 +88,8 @@ class CommandLineOptions {
     @SuppressWarnings("static-access")
     public void setHelpOption(){
         
-        OptionBuilder .withDescription(  "Diese Hilfe" );
-		mHelpOption = OptionBuilder
-                                    .create( "h" );
+        OptionBuilder.withDescription(  "Diese Hilfe" );
+		mHelpOption = OptionBuilder.create( "h" );
         mHelpOption.setLongOpt( "help" );
         
         mOptions.addOption( mHelpOption );
@@ -106,13 +105,10 @@ class CommandLineOptions {
     @SuppressWarnings("static-access")
     public void setBotNameOption(){
         
-        OptionBuilder  .withArgName( "name" );
-		OptionBuilder
-                                        .hasArg();
-		OptionBuilder
-                                        .withDescription(  "Der Name des Bots" );
-		mBotNameOption = OptionBuilder
-                                        .create( "bn" );
+        OptionBuilder.withArgName( "name" );
+		OptionBuilder.hasArg();
+		OptionBuilder.withDescription(  "Der Name des Bots" );
+		mBotNameOption = OptionBuilder.create( "bn" );
         mBotNameOption.setLongOpt( "botname" );
         
         mOptions.addOption( mBotNameOption );
@@ -127,22 +123,17 @@ class CommandLineOptions {
     
     @SuppressWarnings("static-access")
     public void setRcAndVtIdOption(){
-        
-        OptionBuilder.withArgName( "RcId:VtId" ) //TODO: Vc oder Vt
-;
-		OptionBuilder
-                                        .hasArgs();
-		OptionBuilder
-                                        .withValueSeparator(':');
-		OptionBuilder
-                                        .withDescription( "Die Rc- und VtId des Bots.\n" +
-                                                          "Wenn die RcId gleich der VtId ist (RcId=VcId)\n" +
-                                                          "kann nur ein Wert als Argument übergeben werden.\n" +
-                                                          "Bsp: \n" +
-                                                          "RcId = 1 und VcId = 4 -> -ids 1:4\n" +
-                                                          "RcId = 3 und VcId = 3 -> -ids 3:3 oder -ids 3\n");
-		mRcAndVtIdOption = OptionBuilder
-                                        .create( "ids" );
+
+        OptionBuilder.withArgName( "RcId:VtId" ); //TODO: Vc oder Vt
+		OptionBuilder.hasArgs();
+		OptionBuilder.withValueSeparator(':');
+		OptionBuilder.withDescription( "Die Rc- und VtId des Bots.\n" +
+                                       "Wenn die RcId gleich der VtId ist (RcId=VcId)\n" +
+                                       "kann nur ein Wert als Argument übergeben werden.\n" +
+                                       "Bsp: \n" +
+                                       "RcId = 1 und VcId = 4 -> -ids 1:4\n" +
+                                       "RcId = 3 und VcId = 3 -> -ids 3:3 oder -ids 3\n");
+		mRcAndVtIdOption = OptionBuilder.create( "ids" );
         mRcAndVtIdOption.setLongOpt( "rc_and_vt_id" );
         
         mOptions.addOption( mRcAndVtIdOption );
@@ -159,14 +150,10 @@ class CommandLineOptions {
     public void setServerAddressOption(){
         
         OptionBuilder .withArgName( "IP:Port" );
-		OptionBuilder
-                                            .hasArgs();
-		OptionBuilder
-                                            .withValueSeparator(':');
-		OptionBuilder
-                                            .withDescription( "Die Ip- und Team-Portadresse des Servers [IP:Port]" );
-		mServerAddressOption = OptionBuilder
-                                            .create( "s" );
+		OptionBuilder.hasArgs();
+		OptionBuilder.withValueSeparator(':');
+		OptionBuilder.withDescription( "Die Ip- und Team-Portadresse des Servers [IP:Port]" );
+		mServerAddressOption = OptionBuilder.create( "s" );
         mServerAddressOption.setLongOpt( "server" );
         
         mOptions.addOption( mServerAddressOption );
@@ -182,13 +169,10 @@ class CommandLineOptions {
     @SuppressWarnings("static-access")
     public void setBotPortOption(){
         
-        OptionBuilder .withArgName( "Port" );
-		OptionBuilder
-                                            .hasArg();
-		OptionBuilder
-                                            .withValueSeparator(':');
-		OptionBuilder
-                                            .withDescription( "Der Port des Bots. [Port]\n" +
+        OptionBuilder.withArgName( "Port" );
+		OptionBuilder.hasArg();
+		OptionBuilder.withValueSeparator(':');
+		OptionBuilder.withDescription( "Der Port des Bots. [Port]\n" +
                                                               "Wenn kein Port angegeben wird, wird ein freier ausgewählt." );
 		mBotPortOption = OptionBuilder
                                             .create( "bp" );
@@ -208,11 +192,10 @@ class CommandLineOptions {
     public void setReconnectOption(){
         
         OptionBuilder.withDescription( "Ob ein handschake mit dem Server ausgeführt werden soll " +
-        		"und eine unterbroche Verbindug wieder augenommen wird. Nur in Verbindung mit einem Botport nutzbar.\n" +
+                "und eine unterbroche Verbindug wieder augenommen wird. Nur in Verbindung mit einem Botport nutzbar.\n" +
         		"Bsp:\n" +
         		"-bp 4444 -rc -> nutzt den Port 4444 um sich von dort ohne Handschake zum Server zu verbinden." );
-		mReconnectOption = OptionBuilder
-                                        .create( "rc" );
+		mReconnectOption = OptionBuilder.create( "rc" );
         mReconnectOption.setLongOpt( "reconnect" );
         
         mOptions.addOption( mReconnectOption );
@@ -229,12 +212,9 @@ class CommandLineOptions {
     public void setTeamOption(){
         
         OptionBuilder .withArgName( "Team" );
-		OptionBuilder
-                                    .hasArg();
-		OptionBuilder
-                                    .withDescription( "Das Team des Bots [gelb,g,yellow,y,blau,b,blue]" );
-		mTeamOption = OptionBuilder
-                                    .create( "t" );
+		OptionBuilder.hasArg();
+		OptionBuilder.withDescription( "Das Team des Bots [gelb,g,yellow,y,blau,b,blue]" );
+		mTeamOption = OptionBuilder.create( "t" );
         mTeamOption.setLongOpt( "team" );
         
         mOptions.addOption( mTeamOption );
@@ -251,15 +231,11 @@ class CommandLineOptions {
     public void setGamevaluesOptions(){
         
         OptionBuilder   .withArgName( "Gamevalues" );
-		OptionBuilder
-                                            .hasArgs();
-		OptionBuilder
-                                            .withValueSeparator(':');
-		OptionBuilder
-                                            .withDescription( "Spezielle Werte des Spielservers die zum angepassten Spielen notwendig sind." +
+		OptionBuilder.hasArgs();
+		OptionBuilder.withValueSeparator(':');
+		OptionBuilder.withDescription( "Spezielle Werte des Spielservers die zum angepassten Spielen notwendig sind." +
                                                               "Momentane mögliche einstellbare Werte: " + GamevalueNames.getAllGamevalueNamesAsAString());
-		mGamevaluesOption = OptionBuilder
-                                            .create( "gv" );
+		mGamevaluesOption = OptionBuilder.create( "gv" );
         mGamevaluesOption.setLongOpt( "gamevalues" );
         
         mOptions.addOption( mGamevaluesOption );
@@ -276,12 +252,9 @@ class CommandLineOptions {
     public void setTeamNameOption(){
         
         OptionBuilder.withArgName( "Teamname" );
-		OptionBuilder
-                                    .hasArg();
-		OptionBuilder
-                                    .withDescription( "Der Name des Botteams." );
-		mTeamNameOption = OptionBuilder
-                                    .create( "tn" );
+		OptionBuilder.hasArg();
+		OptionBuilder.withDescription( "Der Name des Botteams." );
+		mTeamNameOption = OptionBuilder.create( "tn" );
         mTeamNameOption.setLongOpt( "teamname" );
         
         mOptions.addOption( mTeamNameOption );
@@ -298,13 +271,12 @@ class CommandLineOptions {
     public void setRemoteStartOption(){
         
         OptionBuilder.withDescription( " Verhindert das automatische Starten des Bots." +
-                                                                    " Die Verbindung zum Bot wird ueber die Bot-IP und" +
-                                                                    " den Namen zusammen mit der RcID und VcID hergestellt." +
-                                                                    " Bsp.: 127.0.0.1/MyBot-0-0 fuer den Bot MyBot mir RcId = 0 " +
-                                                                    " und VcId = 0") //TODO: Ueberpruefen 
+                                        " Die Verbindung zum Bot wird ueber die Bot-IP und" +
+                                        " den Namen zusammen mit der RcID und VcID hergestellt." +
+                                        " Bsp.: 127.0.0.1/MyBot-0-0 fuer den Bot MyBot mir RcId = 0 " +
+                                        " und VcId = 0") //TODO: Ueberpruefen
 ;
-		this.mRemoteStartOption = OptionBuilder
-                                        .create( "rs" );
+		this.mRemoteStartOption = OptionBuilder.create( "rs" );
         this.mRemoteStartOption.setLongOpt( "remote-start" );
         
         this.mOptions.addOption( mRemoteStartOption );
@@ -321,12 +293,9 @@ class CommandLineOptions {
     public void setAiArchiveOption(){
         
         OptionBuilder  .withArgName( "Ai Archiv" );
-		OptionBuilder
-                                            .hasArg();
-		OptionBuilder
-                                            .withDescription( "Die die AI enthaltende Datei mit absolutem oder relativem Pfad" );
-		this.mAiArchiveOption = OptionBuilder
-                                            .create( "aiarc" );
+		OptionBuilder.hasArg();
+		OptionBuilder.withDescription( "Die die AI enthaltende Datei mit absolutem oder relativem Pfad" );
+		this.mAiArchiveOption = OptionBuilder.create( "aiarc" );
         this.mAiArchiveOption.setLongOpt( "aiarchive" );
         
         this.mOptions.addOption( mAiArchiveOption );
@@ -343,12 +312,9 @@ class CommandLineOptions {
     public void setAiClassnameOption(){
         
         OptionBuilder  .withArgName( "Ai Klassenname" );
-		OptionBuilder
-                                            .hasArg();
-		OptionBuilder
-                                            .withDescription( "Der Klassenname der AI" );
-		this.mAiClassnameOption = OptionBuilder
-                                            .create( "aicl" );
+		OptionBuilder.hasArg();
+		OptionBuilder.withDescription( "Der Klassenname der AI" );
+		this.mAiClassnameOption = OptionBuilder.create( "aicl" );
         this.mAiClassnameOption.setLongOpt( "aiclassname" );
         
         this.mOptions.addOption( mAiClassnameOption );
@@ -365,12 +331,9 @@ class CommandLineOptions {
     public void setAiArgsOption(){
         
         OptionBuilder  .withArgName( "Ai Argumente" );
-		OptionBuilder
-                                            .hasArg();
-		OptionBuilder
-                                            .withDescription( "Der AI zu übergebende Argumente" );
-		this.mAiArgsOption = OptionBuilder
-                                            .create( "aiarg" );
+		OptionBuilder.hasArg();
+		OptionBuilder.withDescription( "Der AI zu übergebende Argumente" );
+		this.mAiArgsOption = OptionBuilder.create( "aiarg" );
         this.mAiArgsOption.setLongOpt( "aiarguments" );
         
         this.mOptions.addOption( mAiArgsOption );
