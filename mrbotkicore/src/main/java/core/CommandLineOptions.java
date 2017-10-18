@@ -389,7 +389,7 @@ class CommandLineOptions {
      * respectiven Optionen definiert.
      * 
      * @since 0.4
-     * @param aArgumente die Commandline als Stringarray
+     * @param aArguments die Commandline als Stringarray
      * 
      * @return ob der Bot direkt starten oder auf den Startbefehl warten soll
      */
@@ -450,23 +450,15 @@ class CommandLineOptions {
 
     private boolean checkForAndSetRemoteStart( CommandLine aCommandLine ) throws Exception {
         // Remotestart
-        if ( aCommandLine.hasOption( getRemoteStartOption().getOpt() ) ) {
+        return aCommandLine.hasOption(getRemoteStartOption().getOpt());
 
-            return true;
-            
-        }
-        
-        return false;
-        
     }
 
     /**
-     * @param aCommandLineOptions
      * @param aCommandLine
      * @throws Exception
      */
-    private void checkForAndSetAIClassname( CommandLine aCommandLine )
-            throws Exception {
+    private void checkForAndSetAIClassname( CommandLine aCommandLine ) throws Exception {
         // aiclassname
         if ( aCommandLine.hasOption( getAiClassnameOption().getOpt() ) ) {
 
@@ -476,7 +468,6 @@ class CommandLineOptions {
     }
     
     /**
-     * @param aCommandLineOptions
      * @param aCommandLine
      * @throws Exception
      */
@@ -491,7 +482,6 @@ class CommandLineOptions {
     }
     
     /**
-     * @param aCommandLineOptions
      * @param aCommandLine
      * @throws Exception
      */
@@ -506,7 +496,6 @@ class CommandLineOptions {
     }
 
     /**
-     * @param aCommandLineOptions
      * @param aCommandLine
      * @throws Exception
      */
@@ -521,7 +510,6 @@ class CommandLineOptions {
     }
 
     /**
-     * @param aCommandLineOptions
      * @param aCommandLine
      * @throws Exception
      */
@@ -545,7 +533,6 @@ class CommandLineOptions {
     }
 
     /**
-     * @param aCommandLineOptions
      * @param aCommandLine
      * @throws Exception
      */
@@ -571,8 +558,8 @@ class CommandLineOptions {
      * @throws Exception
      * @throws UnknownHostException
      */
-    private void checkForAndSetServerAddress( CommandLine aCommandLine )
-            throws Exception, UnknownHostException {
+    private void checkForAndSetServerAddress( CommandLine aCommandLine ) throws Exception
+    {
         // serveradresse
         if ( aCommandLine.hasOption( getServerAddressOption().getOpt() ) ) {
 
@@ -583,7 +570,6 @@ class CommandLineOptions {
     }
 
     /**
-     * @param aCommandLineOptions
      * @param aCommandLine
      * @throws Exception
      */
@@ -603,7 +589,6 @@ class CommandLineOptions {
     }
 
     /**
-     * @param aCommandLineOptions
      * @param aCommandLine
      * @throws Exception
      */
@@ -618,7 +603,6 @@ class CommandLineOptions {
     }
 
     /**
-     * @param aCommandLineOptions
      * @param aCommandLine
      * @throws MissingOptionException
      */
@@ -665,7 +649,6 @@ class CommandLineOptions {
     }
 
     /**
-     * @param aCommandLineOptions
      * @param aCommandLine
      */
     private void parseAndShowHelp( CommandLine aCommandLine ) {
