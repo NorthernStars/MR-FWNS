@@ -401,7 +401,7 @@ class CommandLineOptions {
 
     }
 
-    private boolean checkForAndSetRemoteStart( CommandLine aCommandLine ) throws Exception {
+    private boolean checkForAndSetRemoteStart( CommandLine aCommandLine ) {
         // Remotestart
         return aCommandLine.hasOption(getRemoteStartOption().getOpt());
 
@@ -411,7 +411,7 @@ class CommandLineOptions {
      * @param aCommandLine
      * @throws Exception
      */
-    private void checkForAndSetAIClassname( CommandLine aCommandLine ) throws Exception {
+    private void checkForAndSetAIClassname( CommandLine aCommandLine ) {
         // aiclassname
         if ( aCommandLine.hasOption( getAiClassnameOption().getOpt() ) ) {
 
@@ -424,8 +424,7 @@ class CommandLineOptions {
      * @param aCommandLine
      * @throws Exception
      */
-    private void checkForAndSetAIArchive( CommandLine aCommandLine )
-            throws Exception {
+    private void checkForAndSetAIArchive( CommandLine aCommandLine ) {
         // aiargumente
         if ( aCommandLine.hasOption( getAiArchiveOption().getOpt() ) ) {
 
@@ -438,8 +437,7 @@ class CommandLineOptions {
      * @param aCommandLine
      * @throws Exception
      */
-    private void checkForAndSetAIArguments( CommandLine aCommandLine )
-            throws Exception {
+    private void checkForAndSetAIArguments( CommandLine aCommandLine ){
         // aiargumente
         if ( aCommandLine.hasOption( getAiArgsOption().getOpt() ) ) {
 
@@ -452,8 +450,7 @@ class CommandLineOptions {
      * @param aCommandLine
      * @throws Exception
      */
-    private void checkForAndSetTeamname( CommandLine aCommandLine )
-            throws Exception {
+    private void checkForAndSetTeamname( CommandLine aCommandLine ){
         // teamname
         if ( aCommandLine.hasOption( getTeamNameOption().getOpt() ) ) {
 
@@ -466,8 +463,7 @@ class CommandLineOptions {
      * @param aCommandLine
      * @throws Exception
      */
-    private void checkForAndSetTeam( CommandLine aCommandLine )
-            throws Exception {
+    private void checkForAndSetTeam( CommandLine aCommandLine ){
         //team
         if ( aCommandLine.hasOption( getTeamOption().getOpt() ) ) {
 
@@ -489,8 +485,7 @@ class CommandLineOptions {
      * @param aCommandLine
      * @throws Exception
      */
-    private void checkForAndSetBotportAndReconnect( CommandLine aCommandLine )
-            throws Exception {
+    private void checkForAndSetBotportAndReconnect( CommandLine aCommandLine ){
         //botport
         if ( aCommandLine.hasOption( getBotPortOption().getOpt() ) ) {
 
@@ -511,7 +506,7 @@ class CommandLineOptions {
      * @throws Exception
      * @throws UnknownHostException
      */
-    private void checkForAndSetServerAddress( CommandLine aCommandLine ) throws Exception
+    private void checkForAndSetServerAddress( CommandLine aCommandLine ) throws UnknownHostException
     {
         // serveradresse
         if ( aCommandLine.hasOption( getServerAddressOption().getOpt() ) ) {
@@ -526,8 +521,7 @@ class CommandLineOptions {
      * @param aCommandLine
      * @throws Exception
      */
-    private void checkForAndSetBotIDs( CommandLine aCommandLine )
-            throws Exception {
+    private void checkForAndSetBotIDs( CommandLine aCommandLine ){
         // botids
         if ( aCommandLine.hasOption( getRcAndVtIdOption().getOpt() ) ) {
 
@@ -545,8 +539,7 @@ class CommandLineOptions {
      * @param aCommandLine
      * @throws Exception
      */
-    private void checkForAndSetBotname( CommandLine aCommandLine )
-            throws Exception {
+    private void checkForAndSetBotname( CommandLine aCommandLine ){
         // botname
         if ( aCommandLine.hasOption( getBotNameOption().getOpt() ) ) {
 
@@ -570,7 +563,7 @@ class CommandLineOptions {
                   ) 
                ) {
 
-            List<String> vMissingOptions = new ArrayList<String>();
+            List<String> vMissingOptions = new ArrayList<>();
 
             if ( !aCommandLine.hasOption( getServerAddressOption().getOpt() ) ) {
 
@@ -636,7 +629,7 @@ class CommandLineOptions {
         @SuppressWarnings("rawtypes")
 		@Override
         protected void processOption(final String aArgument, final ListIterator aIter) throws ParseException {
-            boolean hasOption = getOptions().hasOption( aArgument );
+            boolean hasOption = super.getOptions().hasOption( aArgument );
 
             if ( hasOption || !mIgnoreUnrecognizedOption ) {
                 super.processOption( aArgument, aIter );
