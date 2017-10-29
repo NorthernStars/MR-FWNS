@@ -409,7 +409,6 @@ class CommandLineOptions {
 
     /**
      * @param aCommandLine
-     * @throws Exception
      */
     private void checkForAndSetAIClassname( CommandLine aCommandLine ) {
         // aiclassname
@@ -422,7 +421,6 @@ class CommandLineOptions {
     
     /**
      * @param aCommandLine
-     * @throws Exception
      */
     private void checkForAndSetAIArchive( CommandLine aCommandLine ) {
         // aiargumente
@@ -435,7 +433,6 @@ class CommandLineOptions {
     
     /**
      * @param aCommandLine
-     * @throws Exception
      */
     private void checkForAndSetAIArguments( CommandLine aCommandLine ){
         // aiargumente
@@ -448,7 +445,6 @@ class CommandLineOptions {
 
     /**
      * @param aCommandLine
-     * @throws Exception
      */
     private void checkForAndSetTeamname( CommandLine aCommandLine ){
         // teamname
@@ -461,7 +457,6 @@ class CommandLineOptions {
 
     /**
      * @param aCommandLine
-     * @throws Exception
      */
     private void checkForAndSetTeam( CommandLine aCommandLine ){
         //team
@@ -483,7 +478,6 @@ class CommandLineOptions {
 
     /**
      * @param aCommandLine
-     * @throws Exception
      */
     private void checkForAndSetBotportAndReconnect( CommandLine aCommandLine ){
         //botport
@@ -503,7 +497,6 @@ class CommandLineOptions {
 
     /**
      * @param aCommandLine
-     * @throws Exception
      * @throws UnknownHostException
      */
     private void checkForAndSetServerAddress( CommandLine aCommandLine ) throws UnknownHostException
@@ -519,7 +512,6 @@ class CommandLineOptions {
 
     /**
      * @param aCommandLine
-     * @throws Exception
      */
     private void checkForAndSetBotIDs( CommandLine aCommandLine ){
         // botids
@@ -537,7 +529,6 @@ class CommandLineOptions {
 
     /**
      * @param aCommandLine
-     * @throws Exception
      */
     private void checkForAndSetBotname( CommandLine aCommandLine ){
         // botname
