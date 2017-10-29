@@ -1,13 +1,13 @@
 package core;
 
 import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.ParseException;
+import static org.assertj.core.api.Assertions.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class CommandLineOptionsTest
 {
@@ -23,5 +23,20 @@ public class CommandLineOptionsTest
     {
     }
 
+    @Test
+    public void testParseOptions()
+    {
+        CommandLineOptions commandLineOptions = new CommandLineOptions();
+        try
+        {
+            CommandLine commandLine = commandLineOptions.parseOptions(new String[]{"-bn","3", "-tn",  "\"Northern Stars\""});
+
+            assertThat(commandLine).isInstanceOf(CommandLine.class);
+        }
+        catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
 }

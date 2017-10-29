@@ -1,23 +1,14 @@
 package core;
 
+import essentials.core.BotInformation.GamevalueNames;
+import essentials.core.BotInformation.Teams;
+import org.apache.commons.cli.*;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
-
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.GnuParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.MissingOptionException;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-
-import essentials.core.BotInformation.GamevalueNames;
-import essentials.core.BotInformation.Teams;
 
 /**
  * Class to parse the Commandline. Uses Apache-Cli.
@@ -191,7 +182,7 @@ class CommandLineOptions {
     @SuppressWarnings("static-access")
     public void setReconnectOption(){
         
-        OptionBuilder.withDescription( "Ob ein handschake mit dem Server ausgeführt werden soll " +
+        OptionBuilder.withDescription( "Ob ein Handshake mit dem Server ausgeführt werden soll " +
                 "und eine unterbroche Verbindug wieder augenommen wird. Nur in Verbindung mit einem Botport nutzbar.\n" +
         		"Bsp:\n" +
         		"-bp 4444 -rc -> nutzt den Port 4444 um sich von dort ohne Handschake zum Server zu verbinden." );
@@ -353,6 +344,7 @@ class CommandLineOptions {
      * @param aArguments The Commandline as Stringarray
      *
      * @return If the Bot started directly or if the bot should wait for the start command
+     *
      */
     static boolean parseCommandLineArguments( String[] aArguments ) {
 
@@ -616,7 +608,8 @@ class CommandLineOptions {
         // Hilfe anzeigen
         if ( aCommandLine.hasOption( getHelpOption().getOpt() ) ) {
 
-            showCommandlineHelp( "FwNS Bot Commandlinehilfe\n Essentielle Argumente sind -ids und -s", getOptions() );
+            showCommandlineHelp( "FwNS Bot Commandlinehilfe\n " +
+                    "Essentielle Argumente sind -ids und -s", getOptions() );
 
         }
     }
