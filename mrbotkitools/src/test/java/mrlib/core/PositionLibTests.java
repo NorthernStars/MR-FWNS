@@ -1,5 +1,6 @@
 package mrlib.core;
 
+import essentials.TestScenario;
 import essentials.communication.worlddata_server2008.BallPosition;
 import essentials.communication.worlddata_server2008.FellowPlayer;
 import essentials.communication.worlddata_server2008.RawWorldData;

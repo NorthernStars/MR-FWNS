@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import essentials.TestScenario;
 import essentials.communication.Action;
 import essentials.communication.action_server2008.Kick;
 import essentials.communication.action_server2008.Movement;

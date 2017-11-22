@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import essentials.TestScenario;
 import essentials.communication.worlddata_server2008.BallPosition;
 import essentials.communication.worlddata_server2008.FellowPlayer;
 import essentials.communication.worlddata_server2008.RawWorldData;

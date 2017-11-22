@@ -1,33 +1,31 @@
-package mrlib.core;
+package essentials;
 
 import essentials.communication.worlddata_server2008.BallPosition;
 import essentials.communication.worlddata_server2008.FellowPlayer;
 import essentials.communication.worlddata_server2008.RawWorldData;
-import essentials.communication.worlddata_server2008.ReferencePoint;
-import essentials.core.BotInformation;
 
 public class TestScenario {
 	
 
 	//Test Values for worldModel
-	static double fellow1Distance = 200.0;
-	static double fellow1Angle = -90.0;
+	public static double fellow1Distance = 200.0;
+	public static double fellow1Angle = -90.0;
 	
-	static double fellow2Distance = 300.0;
-	static double fellow2Angle = -80.0;
-	
-	
-	static double opponent1Distance = 800.0;
-	static double opponent1Angle = 55.0;
-	
-	static double opponent2Distance = 900.0;
-	static double opponent2Angle = 66.0;
+	public static double fellow2Distance = 300.0;
+	public static double fellow2Angle = -80.0;
 	
 	
-	static double ballDistance = 20.0;
-	static double ballAngle = 45.0;
+	public static double opponent1Distance = 800.0;
+	public static double opponent1Angle = 55.0;
+	
+	public static double opponent2Distance = 900.0;
+	public static double opponent2Angle = 66.0;
+	
+	
+	public static double ballDistance = 20.0;
+	public static double ballAngle = 45.0;
         
-        static String xmlExampleWorldData = "<rawWorldData>\n" +
+	public static String xmlExampleWorldData = "<rawWorldData>\n" +
                         "    <time>0</time>\n" +
                         "    <agent_id>20</agent_id>\n" +
                         "    <nickname>TestBot</nickname>\n" +
@@ -299,9 +297,7 @@ public class TestScenario {
                         "    </flag>\n" +
                         "</rawWorldData>";
 	
-	
-
-	static RawWorldData getExampleWorldModel(){
+	public static RawWorldData getExampleWorldModel(){
 		
 		RawWorldData rawWorldData = new RawWorldData();
 		FellowPlayer player1 = new FellowPlayer(0, "TestBot", true, fellow1Distance, fellow1Angle, 0.0);
@@ -322,7 +318,7 @@ public class TestScenario {
 	}
 	
 	static RawWorldData getExampleWorldModel(String xmlString)
-        {
-            return RawWorldData.createRawWorldDataFromXML(xmlString);
-        }
+    {
+        return RawWorldData.createRawWorldDataFromXML(xmlString);
+    }
 }
