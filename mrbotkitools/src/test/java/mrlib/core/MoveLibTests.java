@@ -103,21 +103,31 @@ public class MoveLibTests {
             assertThat(returnAction).isExactlyInstanceOf(Movement.class);
             assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(-100);
             assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(-100);
-            
-            // Wrong value
-            testAngle = 190.0;
-            testRefPoint = new ReferencePoint(testDistance, testAngle, true);
-            returnAction = MoveLib.runTo(testRefPoint);
-            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
-            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
+                     
+	}
 
-            // Wrong value
-            testAngle = -190.0;
+	@Test(expected = IllegalArgumentException.class)
+	public void testRunToReferencePointIllegalArgumentTooLeft() {
+
+            final double testDistance = 10.0;
+            Action returnAction; 
+            double testAngle = 190.0;
+            ReferencePoint testRefPoint = new ReferencePoint(testDistance, testAngle, true);
+
             testRefPoint = new ReferencePoint(testDistance, testAngle, true);
-            returnAction = MoveLib.runTo(testRefPoint);
-            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
-            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
-            
+            returnAction = MoveLib.runTo(testRefPoint);      
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testRunToReferencePointIllegalArgumentTooRight() {
+
+            final double testDistance = 10.0;
+            Action returnAction; 
+            double testAngle = -190.0;
+            ReferencePoint testRefPoint = new ReferencePoint(testDistance, testAngle, true);
+
+            testRefPoint = new ReferencePoint(testDistance, testAngle, true);
+            returnAction = MoveLib.runTo(testRefPoint);      
 	}
 
 	@Test
@@ -202,21 +212,39 @@ public class MoveLibTests {
             assertThat(returnAction).isExactlyInstanceOf(Movement.class);
             assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(-100);
             assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(-100);
+                
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testRunToFellowPlayerIllegalExceptionTooLeft() {            
+            FellowPlayer testFellowPlayer;
+            final int testAId = 0;
+            final String testANickname = "Test Fellow Player";
+            final Boolean testAStatus = true;
+            final double testADistanceToPlayer = 10.0;
+            double testAAngleToPlayer;
+            double testAOrientation = 0.0;
+            Action returnAction;
             
-            // Wrong value
             testAAngleToPlayer = 190.0;
             testFellowPlayer = new FellowPlayer(testAId, testANickname, testAStatus, testADistanceToPlayer, testAAngleToPlayer, testAOrientation);
             returnAction = MoveLib.runTo(testFellowPlayer);
-            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
-            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
-
-            // Wrong value
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testRunToFellowPlayerIllegalExceptionTooRight() {            
+            FellowPlayer testFellowPlayer;
+            final int testAId = 0;
+            final String testANickname = "Test Fellow Player";
+            final Boolean testAStatus = true;
+            final double testADistanceToPlayer = 10.0;
+            double testAAngleToPlayer;
+            double testAOrientation = 0.0;
+            Action returnAction;
+            
             testAAngleToPlayer = -190.0;
             testFellowPlayer = new FellowPlayer(testAId, testANickname, testAStatus, testADistanceToPlayer, testAAngleToPlayer, testAOrientation);
             returnAction = MoveLib.runTo(testFellowPlayer);
-            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
-            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
-                
 	}
 
 	@Test
@@ -297,21 +325,31 @@ public class MoveLibTests {
             assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(-100);
             assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(-100);
             
-            // Wrong value
+
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testRunToBallPositionIllegalArgumentTooRight() {
+            final double testDistance = 10.0;
+            double testAngle;
+            BallPosition testBallPosition;
+            Action returnAction;
+            
             testAngle = 190.0;
             testBallPosition = new BallPosition(testDistance, testAngle, true);
             returnAction = MoveLib.runTo(testBallPosition);
-            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
-            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
-
-            // Wrong value
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testRunToBallPositionIllegalArgumentTooLeft() {
+            final double testDistance = 10.0;
+            double testAngle;
+            BallPosition testBallPosition;
+            Action returnAction;
+            
             testAngle = -190.0;
             testBallPosition = new BallPosition(testDistance, testAngle, true);
-            returnAction = MoveLib.runTo(testBallPosition);
-            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
-            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
-                
-                
+            returnAction = MoveLib.runTo(testBallPosition);   
 	}
 
 	@Test
@@ -491,20 +529,32 @@ public class MoveLibTests {
             assertThat(returnAction).isExactlyInstanceOf(Movement.class);
             assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(25);
             assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(-25);
-            
-            // Wrong value
-            testAngle = 190.0;
-            testRefPoint = new ReferencePoint(testDistance, testAngle, true);
-            returnAction = MoveLib.turnTo(testRefPoint);
-            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
-            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
-
-            // Wrong value
-            testAngle = -190.0;
-            testRefPoint = new ReferencePoint(testDistance, testAngle, true);
-            returnAction = MoveLib.turnTo(testRefPoint);
-            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
-            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
+	}
+    
+	@Test(expected = IllegalArgumentException.class)
+	public void testTurnToReferencePointIllegalArgumentTooLeft() {
+	        final double testDistance = 10.0;
+	        
+	        // no turn
+	        double testAngle = 5.0;
+	        ReferencePoint testRefPoint;
+	        Action returnAction;
+	        testAngle = 190.0;
+	        testRefPoint = new ReferencePoint(testDistance, testAngle, true);
+	        returnAction = MoveLib.turnTo(testRefPoint);;
+	}
+    
+	@Test(expected = IllegalArgumentException.class)
+	public void testTurnToReferencePointIllegalArgumentTooRight() {
+	        final double testDistance = 10.0;
+	        
+	        // no turn
+	        double testAngle = 5.0;
+	        ReferencePoint testRefPoint;
+	        Action returnAction;
+	        testAngle = -190.0;
+	        testRefPoint = new ReferencePoint(testDistance, testAngle, true);
+	        returnAction = MoveLib.turnTo(testRefPoint);
 	}
 
 	@Test
@@ -611,20 +661,41 @@ public class MoveLibTests {
             assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(25);
             assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(-25);
             
-            // Wrong value
+
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testTurnToFellowPlayerIllegalArgumentTooLeft() {
+            FellowPlayer testFellowPlayer;
+            final int testAId = 0;
+            final String testANickname = "Test Fellow Player";
+            final Boolean testAStatus = true;
+            final double testADistanceToPlayer = 10.0;
+            double testAAngleToPlayer;
+            double testAOrientation = 0.0;
+            Action returnAction;
+            
             testAAngleToPlayer = 190.0;
             testFellowPlayer = new FellowPlayer(testAId, testANickname, testAStatus, testADistanceToPlayer, testAAngleToPlayer, testAOrientation);
             returnAction = MoveLib.turnTo(testFellowPlayer);
-            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
-            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
+	}
 
-            // Wrong value
+	@Test(expected = IllegalArgumentException.class)
+	public void testTurnToFellowPlayerIllegalArgumentTooLRight() {
+            FellowPlayer testFellowPlayer;
+            final int testAId = 0;
+            final String testANickname = "Test Fellow Player";
+            final Boolean testAStatus = true;
+            final double testADistanceToPlayer = 10.0;
+            double testAAngleToPlayer;
+            double testAOrientation = 0.0;
+            Action returnAction;
+            
             testAAngleToPlayer = -190.0;
             testFellowPlayer = new FellowPlayer(testAId, testANickname, testAStatus, testADistanceToPlayer, testAAngleToPlayer, testAOrientation);
             returnAction = MoveLib.turnTo(testFellowPlayer);
-            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
-            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
 	}
+	
 
 	@Test
 	public void testTurnToBallPosition() {
@@ -726,20 +797,32 @@ public class MoveLibTests {
             assertThat(((Movement) returnAction).getmRightWheelVelocity()).isEqualTo(25);
             assertThat(((Movement) returnAction).getmLeftWheelVelocity()).isEqualTo(-25);
             
-            // Wrong value
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testTurnToBallPositionIllegalExceptinTooLeft() {
+            final double testDistance = 10.0;
+            double testAngle;
+            BallPosition testBallPosition;
+            Action returnAction;
+            
             testAngle = 190.0;
             testBallPosition = new BallPosition(testDistance, testAngle, true);
-            returnAction = MoveLib.turnTo(testBallPosition);
-            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
-            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
+            returnAction = MoveLib.turnTo(testBallPosition);        
+	}
 
-            // Wrong value
+	@Test(expected = IllegalArgumentException.class)
+	public void testTurnToBallPositionIllegalExceptinTooRight() {
+            final double testDistance = 10.0;
+            double testAngle;
+            BallPosition testBallPosition;
+            Action returnAction;
+            
             testAngle = -190.0;
             testBallPosition = new BallPosition(testDistance, testAngle, true);
-            returnAction = MoveLib.turnTo(testBallPosition);
-            assertThat(returnAction).isExactlyInstanceOf(Movement.class);
-            assertThat((Movement) returnAction).isEqualTo(Movement.NO_MOVEMENT);
+            returnAction = MoveLib.turnTo(testBallPosition);      
 	}
+	
 
 	@Test
 	public void testTurnToDouble() {
