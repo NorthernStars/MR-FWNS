@@ -330,6 +330,23 @@ public class ReferencePoint{
     }
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(mAngleToPoint);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(mDistanceToPoint);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + ((mPointName == null) ? 0 : mPointName.hashCode());
+		temp = Double.doubleToLongBits(mX);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(mY);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -346,8 +363,10 @@ public class ReferencePoint{
 			return false;
 		if (Double.doubleToLongBits(mX) != Double.doubleToLongBits(other.mX))
 			return false;
-        return Double.doubleToLongBits(mY) == Double.doubleToLongBits(other.mY);
-    }
+		if (Double.doubleToLongBits(mY) != Double.doubleToLongBits(other.mY))
+			return false;
+		return true;
+	}
     
     
     

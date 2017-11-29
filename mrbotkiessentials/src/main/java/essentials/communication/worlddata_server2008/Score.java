@@ -44,6 +44,29 @@ public class Score {
     public String toString() {
         return "Score [mYellowTeam=" + mYellowTeam + ", mBlueTeam=" + mBlueTeam + "]";
     }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + mBlueTeam;
+		result = prime * result + mYellowTeam;
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Score other = (Score) obj;
+		if (mBlueTeam != other.mBlueTeam)
+			return false;
+		if (mYellowTeam != other.mYellowTeam)
+			return false;
+		return true;
+	}
 	
 	
 }

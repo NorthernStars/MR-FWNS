@@ -277,27 +277,17 @@ public class RawWorldData implements WorldData{
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + mAgentId;
-		result = prime * result
-				+ ((mAgentNickname == null) ? 0 : mAgentNickname.hashCode());
-		result = prime * result
-				+ ((mAgentStatus == null) ? 0 : mAgentStatus.hashCode());
-		result = prime * result
-				+ ((mBallPosition == null) ? 0 : mBallPosition.hashCode());
-		result = prime
-				* result
-				+ ((mListOfOpponents == null) ? 0 : mListOfOpponents.hashCode());
-		result = prime
-				* result
-				+ ((mListOfTeamMates == null) ? 0 : mListOfTeamMates.hashCode());
+		result = prime * result + ((mAgentNickname == null) ? 0 : mAgentNickname.hashCode());
+		result = prime * result + ((mAgentStatus == null) ? 0 : mAgentStatus.hashCode());
+		result = prime * result + ((mBallPosition == null) ? 0 : mBallPosition.hashCode());
+		result = prime * result + ((mListOfOpponents == null) ? 0 : mListOfOpponents.hashCode());
+		result = prime * result + ((mListOfTeamMates == null) ? 0 : mListOfTeamMates.hashCode());
 		result = prime * result + mMaxNumberOfAgents;
-		result = prime * result
-				+ ((mPlayMode == null) ? 0 : mPlayMode.hashCode());
+		result = prime * result + ((mPlayMode == null) ? 0 : mPlayMode.hashCode());
 		long temp;
 		temp = Double.doubleToLongBits(mPlayTime);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime
-				* result
-				+ ((mReferencePoints == null) ? 0 : mReferencePoints.hashCode());
+		result = prime * result + ((mReferencePoints == null) ? 0 : mReferencePoints.hashCode());
 		result = prime * result + ((mScore == null) ? 0 : mScore.hashCode());
 		return result;
 	}
@@ -342,8 +332,7 @@ public class RawWorldData implements WorldData{
 			return false;
 		if (mPlayMode != other.mPlayMode)
 			return false;
-		if (Double.doubleToLongBits(mPlayTime) != Double
-				.doubleToLongBits(other.mPlayTime))
+		if (Double.doubleToLongBits(mPlayTime) != Double.doubleToLongBits(other.mPlayTime))
 			return false;
 		if (mReferencePoints == null) {
 			if (other.mReferencePoints != null)
