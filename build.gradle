@@ -95,6 +95,18 @@ clean {
 
 project(':mrbotkiessentials'){
 
+	configurations{
+	    testArtifacts
+	}
+	
+	task testJar (type: Jar) {
+	    baseName = "${project.name}-test"
+	    from sourceSets.test.output
+	}
+	
+	artifacts{
+	    testArtifacts testJar
+	}
 }
  
 project(':mrbotkinetwork'){
@@ -119,6 +131,7 @@ project(':mrbotkitools'){
     dependencies {
         compile project(':mrbotkiessentials')
 		testCompile 'org.assertj:assertj-core:3.+'
+        testCompile project (path: ":mrbotkiessentials", configuration: 'testArtifacts')
         
     }
 
@@ -132,4 +145,5 @@ project(':mrbotkiexample'){
     }
 
 }
+
 
