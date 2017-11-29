@@ -4,12 +4,14 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@PowerMockIgnore("javax.management.*")
 public class NetworkCommunicationTest
 {
 
