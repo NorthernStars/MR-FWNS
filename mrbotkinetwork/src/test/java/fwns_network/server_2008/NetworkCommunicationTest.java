@@ -33,7 +33,7 @@ public class NetworkCommunicationTest
         try
         {
             NetworkCommunication networkCommunication = new NetworkCommunication(InetAddress.getLoopbackAddress(),42);
-            networkCommunication.setmToServerSocket(null);
+            networkCommunication.setToServerSocket(null);
             networkCommunication.connectToServer(mockBotInformation);
 
             assertThat(networkCommunication.ismEstablishedServerConnection()).isFalse();
@@ -50,7 +50,7 @@ public class NetworkCommunicationTest
         try
         {
             NetworkCommunication networkCommunication = new NetworkCommunication(InetAddress.getLoopbackAddress(),42);
-            networkCommunication.setmDataPaket(null);
+            networkCommunication.setDataPaket(null);
             networkCommunication.connectToServer(mockBotInformation);
 
             assertThat(networkCommunication.ismEstablishedServerConnection()).isFalse();
@@ -67,8 +67,8 @@ public class NetworkCommunicationTest
         try
         {
             NetworkCommunication networkCommunication = new NetworkCommunication(InetAddress.getLoopbackAddress(),42);
-            networkCommunication.setmDataPaket(null);
-            networkCommunication.setmToServerSocket(null);
+            networkCommunication.setDataPaket(null);
+            networkCommunication.setToServerSocket(null);
             networkCommunication.connectToServer(mockBotInformation);
 
             assertThat(networkCommunication.ismEstablishedServerConnection()).isFalse();

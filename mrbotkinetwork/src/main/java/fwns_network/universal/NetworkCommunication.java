@@ -156,12 +156,12 @@ public class NetworkCommunication {
 		return mToServerSocket;
 	}
 
-	public void setmToServerSocket(DatagramSocket mToServerSocket)
+	public void setToServerSocket(DatagramSocket mToServerSocket)
 	{
 		this.mToServerSocket = mToServerSocket;
 	}
 
-    public void setmDataPaket(DatagramPacket mDataPaket)
+    public void setDataPaket(DatagramPacket mDataPaket)
     {
         this.mDataPaket = mDataPaket;
     }
