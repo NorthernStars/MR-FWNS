@@ -154,61 +154,6 @@ public class RawWorldDataTest {
 		assertThat(noRefPoint).isNull();
 	}
 	
-	@Test
-	public void equalsTestWithSelf()
-	{
-		RawWorldData emptyRawWorldData = new RawWorldData();
-		assertThat(emptyRawWorldData.equals(emptyRawWorldData)).isTrue();	
-	}
-	
-	@Test
-	public void equalsTestbothEmpty()
-	{
-		RawWorldData emptyRawWorldData = new RawWorldData();
-		RawWorldData emptyRawWorldDataCopy = new RawWorldData();
-		assertThat(emptyRawWorldData.equals(emptyRawWorldDataCopy)).isTrue();	
-	}
-
-	
-	@Test
-	public void equalsTestEmptyVsNull()
-	{
-		RawWorldData emptyRawWorldData = new RawWorldData();
-		RawWorldData nullRawWorldData = null;
-		assertThat(emptyRawWorldData.equals(nullRawWorldData)).isFalse();	
-	}
-
-	
-	@Test
-	public void equalsTestEmptyVsOtherClassObject()
-	{
-		RawWorldData emptyRawWorldData = new RawWorldData();
-		BallPosition ballPosition = new BallPosition();
-		assertThat(emptyRawWorldData.equals(ballPosition)).isFalse();	
-	}
-
-//	
-//	@Test
-//	public void equalsTestEqualExampleValue()
-//	{
-//		//todo TestScenario aus kitools benutzen!
-//		RawWorldData exampleRawWorldData = TestScenarioRawWorldData.getExampleWorldModel();
-//		RawWorldData anotherExampleRawWorldData = TestScenarioRawWorldData.getExampleWorldModel();
-//
-//		assertThat(exampleRawWorldData.equals(anotherExampleRawWorldData)).isTrue();	
-//	}
-//	
-//	@Test
-//	public void equalsTestExampleValueVsEmpty()
-//	{
-//		//todo TestScenario aus kitools benutzen!
-//		RawWorldData exampleRawWorldData = TestScenarioRawWorldData.getExampleWorldModel();
-//		RawWorldData anotherExampleRawWorldData = new RawWorldData();
-//
-//		assertThat(exampleRawWorldData.equals(anotherExampleRawWorldData)).isFalse();	
-//	}
-//	
-//	
 }
 	
 	
