@@ -5,6 +5,7 @@ import essentials.core.BotInformation.Teams;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Option;
@@ -25,7 +26,6 @@ class CommandLineOptions{
     @Option(names={"-bn", "-botname", "--botname"}, description="Der Name des Bots")
     private String botname;
 
-    //TODO: Über Array unschön
     @Option(names={"-ids","-rc_and_vt_id", "--rc_and_vt_id"},
             description = "Die Rc- und VtId des Bots.\n" +
                             "Wenn die RcId gleich der VtId ist (RcId=VcId) " +
@@ -37,14 +37,12 @@ class CommandLineOptions{
             required = true)
     private int[] rcAndVtIdOption;
 
-    //TODO: Über Array unschön
     @Option(names={"-s", "-server", "--server"}, description = "Die Ip- und Team-Portadresse des Servers [IP:Port]", required = true, split=":")
     private String[] serverPortAndAddress;
 
     @Option(names = {"-bp", "-botport", "--botport"}, description = "Der Port des Bots. [Port] Wenn kein Port angegeben wird, wird ein freier ausgewählt.")
-    private int botPort;
+    private int botPort = -1;
 
-    //TODO: Abhaengigkeit von botPort
     @Option(names={"-rc", "-reconnect", "--reconnect"}, description = "Ob ein Handshake mit dem Server ausgeführt werden soll " +
                                                                         "und eine unterbroche Verbindug wieder augenommen wird. Nur in Verbindung mit einem Botport nutzbar.\n" +
                                                                         "Bsp:\n" +
@@ -101,7 +99,10 @@ class CommandLineOptions{
                         .registerConverter(BotInformation.Teams.class, new TeamConverter());
 
             commandLine.parse(aArguments);
-            System.out.println(commandLineOptions.team);
+
+            if (!commandLineOptions.reconnect && commandLineOptions.botPort != -1)
+                throw new CommandLine.MissingParameterException(commandLine, "Wenn der Botport gesetzt wurde, muss auch reconnect gesetzt werden!");
+
             commandLineOptions.parseAndShowHelp();
             commandLineOptions.setOptions();
 
@@ -142,7 +143,7 @@ class CommandLineOptions{
 
         botInformation.setAIClassname(this.aiClassname);
         botInformation.setAIArchive(this.aiArchive);
-        botInformation.setAIArgs(this.aiArguments.toString());
+        botInformation.setAIArgs(Arrays.toString(this.aiArguments));
         botInformation.setTeamname(this.teamName);
         botInformation.setTeam(this.team);
         botInformation.setBotPort(this.botPort);
