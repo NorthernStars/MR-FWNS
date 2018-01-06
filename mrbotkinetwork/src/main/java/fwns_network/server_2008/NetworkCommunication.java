@@ -30,7 +30,7 @@ public class NetworkCommunication extends fwns_network.universal.NetworkCommunic
 
     }
 	
-	public void connectToServer( BotInformation aBot) throws IOException, SocketTimeoutException, SocketException
+	public void connectToServer( BotInformation aBot) throws IOException
 	{
 		
 	    

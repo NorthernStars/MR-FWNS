@@ -11,18 +11,20 @@ import net.jcip.annotations.ThreadSafe;
 import essentials.constants.Default;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import picocli.CommandLine;
+import picocli.CommandLine.ITypeConverter;
 
 // TODO: final refactor comments singelton
 
 
 /**
- * Speichert alle wichtigen Daten des Bots. 
- * Enthaelt zusaetzlich ein Objekt-"Speicherplatz" um die Kommunikation zwischen AIs zu erleichtern 
+ * Speichert alle wichtigen Daten des Bots.
+ * Enthaelt zusaetzlich ein Objekt-"Speicherplatz" um die Kommunikation zwischen AIs zu erleichtern
  * Das Serialisieren ignoriert den Objekt-"Speicherplatz".
- * 
- * Beachte das die Serialisation ueber einen SerialisationsProxy geschieht, der bei Aenderungen an der 
+ *
+ * Beachte das die Serialisation ueber einen SerialisationsProxy geschieht, der bei Aenderungen an der
  * Ursprungsklasse auch angepasst werden muss.
- * 
+ *
  * @author Eike Petersen
  * @since 0.1
  * @version 0.9
@@ -81,16 +83,16 @@ public class BotInformation implements Serializable{
     @GuardedBy("this") private Teams mTeam;
     @GuardedBy("this") private String mTeamname;
 
-    
+
     @GuardedBy("this") private String mAIArchive;
     @GuardedBy("this") private String mAIClassname;
     @GuardedBy("this") private String mAIArgs;
-    
+
     @GuardedBy("this") private Object mBotMemory;
-    
+
     public enum GamevalueNames {
-        
-        KickRange( Default.KickRange ), 
+
+        KickRange( Default.KickRange ),
         MaximumKickTravelDistance( Default.MaximumKickTravelDistance ),
         Halftime( Default.Halftime ),
         BotWidth( Default.BotWidth ),
@@ -99,23 +101,23 @@ public class BotInformation implements Serializable{
         Attrition( Default.Attrition ),
         VelocityPerPixel( Default.VelocityPerPixel ),
         MaxFieldLength(Default.MaxFieldLength);
-   
+
         @GuardedBy("this") private float mValue;
-        
+
         private GamevalueNames( float aValue ) {
             this.mValue = aValue;
         }
-        
+
         public synchronized void setValue( float aValue ){
-            
+
             mValue = aValue;
-            
+
         }
-        
+
         public synchronized float getValue(){
-            
+
             return mValue;
-            
+
         }
 
         public static String getAllGamevalueNamesAsAString() {
@@ -131,7 +133,7 @@ public class BotInformation implements Serializable{
             return vGamevalueNamesString;
 
         }
-        
+
         public static String[] getGamevalueNamesAsStringArray() {
 
             String[] vGamevalueNamesString = new String[GamevalueNames.values().length];
@@ -160,17 +162,17 @@ public class BotInformation implements Serializable{
             getLogger().error( "Error in BotInformation.BotInformation()", vException );
         }
         mBotPort = -1;
-        
+
         try {
             mServerIP = InetAddress.getLocalHost();
         } catch ( UnknownHostException vException ) {
             getLogger().error( "Error in BotInformation.BotInformation()", vException );
         }
-        
+
         mAIArchive = "";
         mAIClassname = "";
         mAIArgs = "";
-        
+
         mBotMemory = null;
 
     }
@@ -218,7 +220,7 @@ public class BotInformation implements Serializable{
     }
 
     public synchronized Teams getTeam() {
-        
+
         return mTeam;
 
     }
@@ -232,19 +234,19 @@ public class BotInformation implements Serializable{
     public synchronized float getGamevalue( GamevalueNames aGamevalueName ) {
 
         return aGamevalueName.getValue();
-        
+
     }
 
     public synchronized boolean getReconnect() {
 
         return mReconnect;
-        
+
     }
 
     public synchronized String getAIArgs() {
 
         return mAIArgs;
-        
+
     }
 
     public synchronized void setAIArgs( String aAiArgs ) {
@@ -252,49 +254,49 @@ public class BotInformation implements Serializable{
         mAIArgs = aAiArgs;
 
     }
-    
+
     public synchronized String getAIArchive() {
-        
+
         return mAIArchive;
-        
+
     }
 
     public synchronized void setAIArchive( String aAIArchive ) {
-        
+
         mAIArchive = aAIArchive;
-        
+
     }
 
     public synchronized String getAIClassname() {
-        
+
         return mAIClassname;
-        
+
     }
-    
+
     public synchronized Object getBotMemory() {
-        
+
         return mBotMemory;
-        
+
     }
 
     public synchronized void setBotMemory( Object aBotMemory ) {
-        
+
         mBotMemory = aBotMemory;
-        
+
     }
 
     public synchronized void setAIClassname( String aAIClassname ) {
-        
+
         mAIClassname = aAIClassname;
-        
+
     }
-    
+
     public synchronized void setReconnect( boolean aReconnect) {
 
         mReconnect = aReconnect;
 
     }
-    
+
     public synchronized void setGamevalue( GamevalueNames aGamevalueName, float aGamevalue ) {
 
         aGamevalueName.setValue( aGamevalue );
@@ -376,24 +378,24 @@ public class BotInformation implements Serializable{
         return vBotInformationString;
 
     }
-    
+
     /**
      *  Serialisation
      */
     private static final long serialVersionUID = -7956774328001848340L;
-    
+
     private Object writeReplace() {
-        
+
         return new BotInformationSerialisationProxy(this);
-        
+
     }
-    
+
     private void readObject( ObjectInputStream aStream ) throws InvalidObjectException{
-        
+
         throw new InvalidObjectException( " Need a Proxy for Serialisation" );
-        
+
     }
-    
+
     private static class BotInformationSerialisationProxy implements Serializable {
 
         private static final long serialVersionUID = -2371276572775298909L;
@@ -416,11 +418,11 @@ public class BotInformation implements Serializable{
         private final String mAIArchive;
         private final String mAIClassname;
         private final String mAIArgs;
-        
+
         //No! private Object mBotMemory;
-        
+
         BotInformationSerialisationProxy( BotInformation aBotInformation ) {
-            
+
             mBotname = aBotInformation.mBotname;
             mRcId = aBotInformation.mRcId;
             mVtId = aBotInformation.mVtId;
@@ -434,13 +436,13 @@ public class BotInformation implements Serializable{
             mAIArchive = aBotInformation.mAIArchive;
             mAIClassname = aBotInformation.mAIClassname;
             mAIArgs = aBotInformation.mAIArgs;
-            
+
         }
-        
+
         private Object readResolve(){
-            
+
             BotInformation vBotInformation = new BotInformation();
-            
+
             vBotInformation.mBotname = mBotname;
             vBotInformation.mRcId = mRcId;
             vBotInformation.mVtId = mVtId;
@@ -454,11 +456,11 @@ public class BotInformation implements Serializable{
             vBotInformation.mAIArchive = mAIArchive;
             vBotInformation.mAIClassname = mAIClassname;
             vBotInformation.mAIArgs = mAIArgs;
-            
+
             return vBotInformation;
-            
+
         }
 
     }
-    
+
 }

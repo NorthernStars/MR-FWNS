@@ -26,17 +26,6 @@ public class CommandLineOptionsTest
     @Test
     public void testParseOptions()
     {
-        CommandLineOptions commandLineOptions = new CommandLineOptions();
-        try
-        {
-            CommandLine commandLine = commandLineOptions.parseOptions(new String[]{"-bn","3", "-tn",  "\"Northern Stars\""});
-
-            assertThat(commandLine).isInstanceOf(CommandLine.class);
-        }
-        catch (ParseException e)
-        {
-            e.printStackTrace();
-        }
     }
 
 }
