@@ -160,11 +160,14 @@ public class Core {
             
             Core.getLogger().trace( "Loading AI " + mBotinformation.getAIClassname() + " from " + mBotinformation.getAIArchive() );
             URL vUniformResourceLocator = new File( mBotinformation.getAIArchive() ).toURI().toURL();
-            URLClassLoader vClassloader = new URLClassLoader( new URL[]{ vUniformResourceLocator } );
-            synchronized (this) {
-                
-                mAI = (ArtificialIntelligence) vClassloader.loadClass( mBotinformation.getAIClassname() ).newInstance();
-                
+            try (URLClassLoader vClassloader = new URLClassLoader(new URL[]{vUniformResourceLocator}))
+            {
+                synchronized (this)
+                {
+
+                    mAI = (ArtificialIntelligence) vClassloader.loadClass(mBotinformation.getAIClassname()).newInstance();
+
+                }
             }
             Core.getLogger().info( "Loaded AI " + mBotinformation.getAIClassname() + " from " + mBotinformation.getAIArchive() );
             // vClassloader.close(); <- verursacht Fehler
@@ -338,16 +341,22 @@ public class Core {
         
     }
 
-    /**
-     * @param aServerConnection
-     */
     public void startServermanagements() {
 
         stopServermanagements(); 
 
         Core.getLogger().info( "Start Servermanagements." );
-        FromServerManagement.getInstance().start();
-        ToServerManagement.getInstance().start();
+        try
+        {
+            FromServerManagement.getInstance().start();
+            ToServerManagement.getInstance().start();
+        }
+        catch(Exception e)
+        {
+            Core.getLogger().error(e.getMessage());
+        }
+
+
         
         
     }

@@ -84,9 +84,9 @@ public class FromServerManagement extends Thread{
 	public void startManagement(){
 
 		if( Core.getInstance().getServerConnection() == null ) {
-			
+
 			throw new NullPointerException( "NetworkCommunication cannot be NULL when starting FromServerManagement." ) ;
-			
+
 		} else if ( isAlive() ){
 			
 			throw new IllegalThreadStateException( "FromServerManagement can not be started again." );
