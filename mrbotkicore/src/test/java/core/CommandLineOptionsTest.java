@@ -2,21 +2,15 @@ package core;
 
 import essentials.core.BotInformation;
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.MissingArgumentException;
-import org.apache.commons.cli.MissingOptionException;
-import org.apache.commons.cli.ParseException;
-import static org.assertj.core.api.Assertions.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 
 public class CommandLineOptionsTest
 {
@@ -51,7 +45,7 @@ public class CommandLineOptionsTest
     @Test
     public void testParseCommandLineArgumentsWithNoExceptionsWithMissingArgument()
     {
-        String[] args = {"-bn","3","-tn","Northern Stars","-t","blau","-ids","13","-s","-aiarc","../mrbotkiexample/bin/exampleai/brain","-aicl","exampleai.brain.Striker","-aiarg","0"};
+        String[] args = {"-bn","3","-tn","Northern Stars","-t","blau","-ids","13","-s","localhost:3310","-aiarc","../mrbotkiexample/bin/exampleai/brain","-aicl","exampleai.brain.Striker","-aiarg","0"};
         boolean result = CommandLineOptions.parseCommandLineArguments(args);
         assertThat(result).isFalse();
     }
@@ -64,7 +58,7 @@ public class CommandLineOptionsTest
         BotInformation botInformation = Core.getInstance().getBotinformation();
 
         assertThat(botInformation.getAIArchive()).isEqualTo("../mrbotkiexample/bin/exampleai/brain");
-        assertThat(botInformation.getAIArgs()).isEqualTo("0");
+        assertThat(botInformation.getAIArgs()).isEqualTo("[0]");
         assertThat(botInformation.getAIClassname()).isEqualTo("exampleai.brain.Striker");
         try
         {
