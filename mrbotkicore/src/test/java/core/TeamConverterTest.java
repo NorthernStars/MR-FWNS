@@ -63,4 +63,12 @@ public class TeamConverterTest
         BotInformation.Teams result = teamConverter.convert("b");
         assertThat(result).isEqualTo(BotInformation.Teams.Blue);
     }
+
+    @Test
+    public void testConvertWithValueIsSomething() throws Exception
+    {
+        TeamConverter teamConverter = new TeamConverter();
+        BotInformation.Teams result = teamConverter.convert("something");
+        assertThat(result).isEqualTo(BotInformation.Teams.NotSpecified);
+    }
 }
