@@ -50,6 +50,14 @@ public class CommandLineOptionsTest
         assertThat(result).isFalse();
     }
 
+    //TODO: Fehlerfall richtig abfangen
+    @Test(expected= picocli.CommandLine.MissingParameterException.class)
+    public void testParseCommandLineArgunmentsWithBotPortAndWithoutReconnenct()
+    {
+        String[] args = {"-bn","3","-tn","Northern Stars","-t","blau","-ids","13","-s","localhost:3310","-aiarc","../mrbotkiexample/bin/exampleai/brain","-aicl","exampleai.brain.Striker","-aiarg","0","-rc"};
+        boolean result = CommandLineOptions.parseCommandLineArguments(args);
+    }
+
     @Test
     public void testSetOptions()
     {

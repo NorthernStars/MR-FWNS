@@ -44,7 +44,7 @@ class CommandLineOptions{
     private int botPort = -1;
 
     @Option(names={"-rc", "-reconnect", "--reconnect"}, description = "Ob ein Handshake mit dem Server ausgeführt werden soll " +
-                                                                        "und eine unterbroche Verbindug wieder augenommen wird. Nur in Verbindung mit einem Botport nutzbar.\n" +
+                                                                        "und eine unterbrochene Verbindung wieder angenommen wird. Nur in Verbindung mit einem Botport nutzbar.\n" +
                                                                         "Bsp:\n" +
                                                                         "-bp 4444 -rc -> nutzt den Port 4444 um sich von dort ohne Handshake zum Server zu verbinden.")
     private boolean reconnect;
@@ -100,7 +100,7 @@ class CommandLineOptions{
 
             commandLine.parse(aArguments);
 
-            if (!commandLineOptions.reconnect && commandLineOptions.botPort != -1)
+            if (commandLineOptions.reconnect && commandLineOptions.botPort == -1)
                 throw new CommandLine.MissingParameterException(commandLine, "Wenn der Botport gesetzt wurde, muss auch reconnect gesetzt werden!");
 
             commandLineOptions.parseAndShowHelp();
@@ -114,7 +114,7 @@ class CommandLineOptions{
             CommandLine.usage(commandLineOptions, System.out, CommandLine.Help.Ansi.AUTO);
             System.exit( 0 );
         }
-        catch (UnknownHostException e)
+        catch (Exception e)
         {
             Core.getLogger().error(e);
         }
