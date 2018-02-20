@@ -10,5 +10,8 @@ public class ObjectFactory {
     public RawWorldData createRawWorldData() {
         return new RawWorldData();
     }
+    public Position createPosition() {
+        return new Position();
+    }
     
 }
