@@ -8,14 +8,20 @@ import java.util.Arrays;
 public class Position implements WorldData {
 
     @XmlElement(name="position")
-	int[][] posi = {{-1, 0,-1},
+	public int[][] posi = {{-1, 0,-1},
 					{ 0, 1, 0},
 					{-1, 0,-1}};
-	@XmlElement(name="mXPositionInTile")
-	double mXPositionInTile;
-	@XmlElement(name="mYPositionInTile")
-	double mYPositionInTile;
+	@XmlElement(name="xpositionintile")
+	public double mXPositionInTile;
+	@XmlElement(name="ypositionintile")
+	public double mYPositionInTile;
 
-	@XmlElement(name="mOrientation")
-	double mOrientation;
+	@XmlElement(name="orientation")
+	public double mOrientation;
+
+
+	@XmlElement(name="tilewidth")
+	public double mTileWidth;
+	@XmlElement(name="tileweight")
+	public double mTileHeight;
 }
