@@ -101,7 +101,7 @@ class CommandLineOptions{
             commandLine.parse(aArguments);
 
 
-            if (!(commandLineOptions.reconnect && commandLineOptions.botPort == -1))
+            if (commandLineOptions.reconnect && commandLineOptions.botPort != -1)
                 throw new CommandLine.MissingParameterException(commandLine, "Wenn der Botport gesetzt wurde, muss auch reconnect gesetzt werden!");
 
             commandLineOptions.parseAndShowHelp();
