@@ -100,7 +100,8 @@ class CommandLineOptions{
 
             commandLine.parse(aArguments);
 
-            if (commandLineOptions.reconnect && commandLineOptions.botPort == -1)
+
+            if (!(commandLineOptions.reconnect && commandLineOptions.botPort == -1))
                 throw new CommandLine.MissingParameterException(commandLine, "Wenn der Botport gesetzt wurde, muss auch reconnect gesetzt werden!");
 
             commandLineOptions.parseAndShowHelp();
@@ -114,6 +115,7 @@ class CommandLineOptions{
             CommandLine.usage(commandLineOptions, System.out, CommandLine.Help.Ansi.AUTO);
             System.exit( 0 );
         }
+        //TODO: Sinn hinter einer generellen Exception?
         catch (Exception e)
         {
             Core.getLogger().error(e);
@@ -130,6 +132,7 @@ class CommandLineOptions{
      */
     private void parseAndShowHelp()
     {
+        //TODO Wie testen?
         if (help)
         {
             CommandLine.usage(this, System.out, CommandLine.Help.Ansi.AUTO);
