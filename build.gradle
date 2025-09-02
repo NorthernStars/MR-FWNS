@@ -1,20 +1,9 @@
 plugins {
   id "java"
-  id "eclipse"
   id "jacoco"
-  id "org.sonarqube" version "2.3"
   id 'net.nemerosa.versioning' version '2.0.0'
 }
 
-sonarqube {
-    properties {
-        property "sonar.projectName", "MixedReality :: Client"
-        property "sonar.projectKey", "werthersechte-github:mrClient"
-        property "sonar.jacoco.reportPaths", "${rootProject.buildDir}/jacoco/test.exec"
-		property "sonar.projectVersion", versioning.info.full
-		property "sonar.tests", "junit"
-    }
-}
 
 versioning {
    scm = 'git'
@@ -23,31 +12,25 @@ versioning {
 allprojects {
     
     apply plugin: 'java'
-    apply plugin: 'eclipse'
 	apply plugin: 'jacoco'
     
     version = versioning.info.full
     
     repositories {
-        jcenter()
         mavenCentral()
-        maven {
-            url "https://maven.repository.redhat.com/ga/"
-        }
-        
     }
     
     dependencies {
-        compile 'org.apache.logging.log4j:log4j-api:2.7'
-        compile 'org.apache.logging.log4j:log4j-core:2.7'
-        compile 'net.jcip:jcip-annotations:1.0.0.redhat-8'
-        compile 'info.picocli:picocli:2.2.1'
+        implementation 'org.apache.logging.log4j:log4j-api:2.25.1'
+        implementation 'org.apache.logging.log4j:log4j-core:2.25.1'
+        implementation 'net.jcip:jcip-annotations:1.0'
+        implementation 'info.picocli:picocli:2.2.1'
         
-        testCompile 'junit:junit:4.12'
-        testCompile 'org.mockito:mockito-core:1.+'
-        testCompile 'org.powermock:powermock-mockito-release-full:1.+'
-        testCompile 'org.assertj:assertj-core:3.+'
-        testCompile 'org.awaitility:awaitility:3.+'
+        testImplementation 'junit:junit:4.12'
+        testImplementation 'org.mockito:mockito-core:1.+'
+        testImplementation 'org.powermock:powermock-mockito-release-full:1.+'
+        testImplementation 'org.assertj:assertj-core:3.+'
+        testImplementation 'org.awaitility:awaitility:3.+'
     }
 
     test {
@@ -61,10 +44,10 @@ project(':mrbotkicore'){
 	mainClassName = "core.Main"
 
     dependencies {
-        compile project(':mrbotkiessentials')
-        compile project(':mrbotkinetwork')
-        compile project(':mrbotkiexample')
-        compile 'commons-cli:commons-cli:1.2+'
+        implementation project(':mrbotkiessentials')
+        implementation project(':mrbotkinetwork')
+        implementation project(':mrbotkiexample')
+        implementation 'commons-cli:commons-cli:1.2+'
     }
     
     sourceSets {
@@ -113,7 +96,7 @@ project(':mrbotkiessentials'){
 project(':mrbotkinetwork'){
 
     dependencies {
-        compile project(':mrbotkiessentials')
+        implementation project(':mrbotkiessentials')
     }
 
 }
@@ -121,8 +104,8 @@ project(':mrbotkinetwork'){
 project(':mrbotkiremotecontrol'){
 
     dependencies {
-        compile project(':mrbotkinetwork')
-        compile project(':mrbotkiessentials')
+        implementation project(':mrbotkinetwork')
+        implementation project(':mrbotkiessentials')
     }
 
 }
@@ -130,9 +113,9 @@ project(':mrbotkiremotecontrol'){
 project(':mrbotkitools'){
 
     dependencies {
-        compile project(':mrbotkiessentials')
-		testCompile 'org.assertj:assertj-core:3.+'
-        testCompile project (path: ":mrbotkiessentials", configuration: 'testArtifacts')
+        implementation project(':mrbotkiessentials')
+        testImplementation 'org.assertj:assertj-core:3.+'
+        testImplementation project (path: ":mrbotkiessentials", configuration: 'testArtifacts')
         
     }
 
@@ -141,8 +124,8 @@ project(':mrbotkitools'){
 project(':mrbotkiexample'){
 
     dependencies {
-        compile project(':mrbotkitools')
-        compile project(':mrbotkiessentials')
+        implementation project(':mrbotkitools')
+        implementation project(':mrbotkiessentials')
     }
 
 }
